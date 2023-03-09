@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/checkout"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+
+                <RelativeLayout
+                    android:id="@+id/addoffer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_file" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottumlay"
+            android:layout_below="@+id/mainlay"
+            android:layout_marginBottom="10dp"
+            android:fillViewport="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/vv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/greyborder"></View>
+
+
+                <main.com.ngrewards.constant.ExpandableHeightListView
+                    android:id="@+id/mycartlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vv"
+                    android:layout_margin="5dp"></main.com.ngrewards.constant.ExpandableHeightListView>
+
+
+                <View
+                    android:id="@+id/vvv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/mycartlist"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/vvv"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+
+                        android:id="@+id/addaddressdlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/addlay"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/add" />
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toLeftOf="@+id/forwardarrow_a"
+                            android:layout_toRightOf="@+id/addlay"
+                            android:text="@string/selectashipadd"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:id="@+id/forwardarrow_a"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/next" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/selectedaddlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/shiptv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shipto"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/updateadd"
+                            android:layout_toRightOf="@+id/shiptv"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/fullname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:hint="@string/fullname"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+                            <TextView
+                                android:id="@+id/address1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:hint=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+                            <TextView
+                                android:id="@+id/address2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:hint=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+                            <TextView
+                                android:id="@+id/statecityadd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:hint=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+                            <TextView
+                                android:id="@+id/countrytv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:hint=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+                            <TextView
+                                android:id="@+id/phonetv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:hint=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/updateadd"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/next" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/greyborder"></View>
+
+                    <RelativeLayout
+                        android:id="@+id/addcardlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="5dp"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/adddlay"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/add" />
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toLeftOf="@+id/forwardarrow_ab"
+                            android:layout_toRightOf="@+id/adddlay"
+                            android:text="@string/selpaymeth"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:id="@+id/forwardarrow_ab"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/next" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+
+                        android:id="@+id/paywithlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
+                        android:visibility="gone">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/paywits"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:text="@string/paywith"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/cardnumber_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_toLeftOf="@+id/forpayment"
+                            android:layout_toRightOf="@+id/paywits"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:id="@+id/forpayment"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/next" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/greyborder"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/readimcash"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NormalEditText
+                                android:id="@+id/applyamtcash"
+                                android:layout_width="90dp"
+                                android:layout_height="33dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="2"
+                                android:background="@color/darkgrey"
+                                android:gravity="center"
+                                android:hint="$0.00"
+                                android:inputType="numberDecimal"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/white"
+                                android:textSize="@dimen/small" />
+
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/avbngcash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="$0.00 Available"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/ngapply_tv"
+                                android:layout_width="90dp"
+                                android:layout_height="33dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="2"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text="@string/apply"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/greyborder"
+                        android:visibility="gone"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:orientation="vertical">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/ngcash"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/avilbamt"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.8">
+
+                            <main.com.ngrewards.fonttypeclasses.NormalEditText
+                                android:id="@+id/ngcashavb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="33dp"
+                                android:layout_weight="2"
+                                android:background="@color/darkgrey"
+                                android:gravity="center"
+                                android:hint="$0.00"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/white"
+                                android:textSize="@dimen/small" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="33dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="2"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text="@string/apply"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/greyborder"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/itemcount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="Items(0)"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/total_item_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="$0.00"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/shipping"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/shipping_price_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="$0.00"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/ngcash"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:id="@+id/finalngcashredeem"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:hint="-$0.00"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.6dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/black"></View>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/ordertotal"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/large"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/total_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="$0.00"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/large"
+                                android:textStyle="bold" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:text="@string/stripemessage"
+                        android:layout_margin="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/bottumlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:id="@+id/pricelay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/subtotal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="10dp"
+                    android:text="$0.00"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/large"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:id="@+id/place_order_but"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pricelay"
+                android:background="@color/pinkborder"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/confirmpay"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

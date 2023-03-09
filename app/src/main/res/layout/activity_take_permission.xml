@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_back"
+    tools:context=".activity.TakePermissionAct">
+
+     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/onelast"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/onelastthing"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp">
+
+                <ImageView
+                    android:id="@+id/locic"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/locaton" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+
+                    android:layout_toLeftOf="@+id/locationchaeeck"
+                    android:layout_toRightOf="@+id/locic"
+                    android:orientation="vertical">
+
+                    <main.com.ngrewards.fonttypeclasses.BoldTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/locationaccess1"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/locationchaeeck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="@string/locationaccess"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/camera"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/camera_sm" />
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toLeftOf="@+id/cameras"
+                    android:layout_toRightOf="@+id/camera"
+                    android:text="@string/camera"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <CheckBox
+                    android:id="@+id/cameras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="@string/camera1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/contacts"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/contacts_p" />
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toLeftOf="@+id/contactss"
+                    android:layout_toRightOf="@+id/contacts"
+                    android:text="@string/contacts"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <CheckBox
+                    android:id="@+id/contactss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="@string/contactss"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/start_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/pink_border"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/getstarted"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

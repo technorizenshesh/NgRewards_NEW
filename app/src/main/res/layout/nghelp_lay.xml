@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_back"
+    >
+    <RelativeLayout
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Spinner
+            android:visibility="gone"
+            android:id="@+id/country_spn"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Spinner>
+<LinearLayout
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_centerInParent="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+
+        android:src="@drawable/logo"
+        android:layout_width="170dp"
+        android:layout_height="160dp" />
+    <main.com.ngrewards.fonttypeclasses.BoldTextView
+        android:layout_width="match_parent"
+        android:textSize="@dimen/large"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="@string/nghelpsyou1"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:layout_width="match_parent"
+            android:textSize="@dimen/medium"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="35dp"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:text="@string/slidetostart"
+            android:layout_height="wrap_content" />
+
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progresbar"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

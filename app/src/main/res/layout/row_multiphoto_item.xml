@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layoutDirection="ltr"
+
+    android:layout_height="wrap_content">
+    <main.com.ngrewards.SquareImageView
+        android:id="@+id/imageView1"
+        android:src="@drawable/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/imageView11"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/placeholder" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <main.com.ngrewards.SquareImageView
+            android:id="@+id/blur_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/selectedview"
+            android:src="@drawable/selectitem"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="3dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>

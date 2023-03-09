@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        app:cardCornerRadius="5dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3.4">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5">
+
+                <ImageView
+                    android:id="@+id/product_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="160dp"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:src="@drawable/placeholder" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.9"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="5dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium"
+                    android:textStyle="bold" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/merchant_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="1dp"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.LightTextView
+                    android:id="@+id/product_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/mainprice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="5dp"
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                    <TextView
+                        android:id="@+id/price_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/mainprice"
+                        android:text=""
+                        android:textColor="@color/darkgrey"
+                        android:textSize="@dimen/small"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressDrawable="@drawable/ratingsmalldra"
+                        android:scaleX="1"
+                        android:scaleY="1"
+                        android:transformPivotX="5dp"
+                        android:transformPivotY="5dp" />
+
+                    <TextView
+                        android:id="@+id/rating_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <main.com.ngrewards.fonttypeclasses.LightTextView
+                    android:id="@+id/shipping_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:text=""
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/total_bought"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="5dp"
+                        android:text="100+ bought this"
+                        android:textColor="@color/black"
+                        android:textSize="10sp" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:background="@color/pinkborder"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="@string/buy"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

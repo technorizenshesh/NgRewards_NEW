@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/awesome"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/whatper"
+                android:textColor="@color/black"
+                android:textSize="@dimen/large" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/minus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/delete" />
+                <SeekBar
+                    android:id="@+id/seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:min="6"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/add"
+                    android:layout_toRightOf="@+id/minus"
+
+                    android:maxHeight="7dip"
+                    android:minHeight="7dip"
+                    android:padding="5dp"
+                    android:elevation="5dp"
+                    android:thumbTint="@color/greyborder"
+                    android:progress="6"
+                    android:splitTrack="false"
+                    android:progressDrawable="@drawable/seekbar_progressbar"
+                    android:thumb="@drawable/red_cir"
+                    android:thumbTintMode="multiply" />
+
+
+                <ImageView
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/add" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/percantae"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="6%"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

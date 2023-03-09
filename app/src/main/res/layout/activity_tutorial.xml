@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.TutorialAct">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/tutorial"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <View
+            android:id="@+id/eee"
+            android:layout_below="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/greyborder"></View>
+
+        <LinearLayout
+            android:layout_below="@+id/eee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+<android.support.v7.widget.CardView
+    android:visibility="gone"
+    android:layout_marginRight="15dp"
+    app:cardUseCompatPadding="true"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:background="@color/greyborder"
+
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/play_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <main.com.ngrewards.fonttypeclasses.BoldTextView
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:padding="3dp"
+            android:background="@color/red"
+            android:textSize="@dimen/medium"
+            android:layout_alignParentBottom="true"
+            android:text="@string/howtomake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:visibility="gone"
+                    android:layout_marginRight="15dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:background="@color/greyborder"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp">
+                        <ImageView
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="50dp"
+                            android:src="@drawable/play_button"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+                        <main.com.ngrewards.fonttypeclasses.BoldTextView
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:padding="3dp"
+                            android:textSize="@dimen/medium"
+                            android:background="@color/red"
+                            android:layout_alignParentBottom="true"
+                            android:text="@string/whyinvite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+            <com.google.android.youtube.player.YouTubePlayerView
+                android:layout_width="match_parent"
+                android:id="@+id/youtube1"
+                android:visibility="gone"
+                android:layout_height="250dp"></com.google.android.youtube.player.YouTubePlayerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:visibility="visible"
+                android:id="@+id/playerapi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+<ProgressBar
+    android:visibility="gone"
+    android:id="@+id/progressbar"
+    android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

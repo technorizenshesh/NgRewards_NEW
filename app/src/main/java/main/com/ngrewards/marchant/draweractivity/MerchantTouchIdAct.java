@@ -1,0 +1,193 @@
+package main.com.ngrewards.marchant.draweractivity;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.R;
+
+public class MerchantTouchIdAct extends AppCompatActivity {
+private RelativeLayout backlay;
+    private TextView usefingerprint;
+    private Switch member_touch_id;
+    MySession mySession;
+    private ProgressBar progresbar;
+    private String user_id="",status_touchid="";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_touch_id);
+        mySession = new MySession(this);
+        String user_log_data = mySession.getKeyAlldata();
+        Log.e("User Login Data",">> "+user_log_data);
+        if (user_log_data == null) {
+
+        } else {
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                    status_touchid = jsonObject1.getString("touch_status");
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        idint();
+        clickeet();
+    }
+
+    private void clickeet() {
+        backlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        member_touch_id.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    mySession.touchid(true);
+                    status_touchid ="yes";
+                    new UpdateToychId().execute();
+                }
+                else {
+                    status_touchid ="no";
+                    mySession.touchid(false);
+                    new UpdateToychId().execute();
+                }
+            }
+        });
+    }
+
+    private void idint() {
+        progresbar = findViewById(R.id.progresbar);
+        usefingerprint = findViewById(R.id.usefingerprint);
+        member_touch_id = findViewById(R.id.member_touch_id);
+        if (status_touchid.equalsIgnoreCase("Yes")){
+            member_touch_id.setChecked(true);
+
+        }
+        else {
+            member_touch_id.setChecked(false);
+
+        }
+
+        String first = getResources().getString(R.string.youusefing);
+        String second = getResources().getString(R.string.appand);
+        String next = "<font color='#f60241'>" + getResources().getString(R.string.ngrewars) + "</font>";
+        usefingerprint.setText(Html.fromHtml(first + " " + next+" "+second));
+        backlay = findViewById(R.id.backlay);
+    }
+
+    private class UpdateToychId extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+//https://myngrewards.com/demo/wp-content/plugins/webservice/update_merchant_touch_id.php?merchant_id=376&touch_status=Yes
+            try {
+                String postReceiverUrl = BaseUrl.baseurl + "update_merchant_touch_id.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("merchant_id", user_id);
+                params.put("touch_status", status_touchid);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e("Update", ">>>>>>>>>>>>" + response);
+                return response;
+            } catch (UnsupportedEncodingException e1) {
+
+                e1.printStackTrace();
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String result_chk = jsonObject.getString("status");
+                if (result_chk.equalsIgnoreCase("1")) {
+                    mySession.setlogindata(result);
+                    if (status_touchid.equalsIgnoreCase("No")){
+                        mySession.touchid(false);
+                    }
+                    else {
+                        mySession.touchid(true);
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+}

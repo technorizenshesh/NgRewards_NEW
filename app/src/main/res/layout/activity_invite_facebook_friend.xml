@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".settingclasses.InviteFacebookFriend">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/invitefbfriend"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/v"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/black"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2.5">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:gravity="center_vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+
+                        android:layout_width="33dp"
+                        android:layout_height="33dp"
+                        app:srcCompat="@drawable/grey_con" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Charly"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1.3"
+                    android:gravity="center_vertical|right">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+
+                        android:background="@color/pinkborder"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="13dp"
+                        android:paddingRight="13dp"
+                        android:paddingTop="2dp"
+                        android:text="@string/invite"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="10dp"
+                        app:srcCompat="@drawable/cross" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_below="@+id/mainlay"
+                android:background="@color/black"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2.5">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:gravity="center_vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+
+                        android:layout_width="33dp"
+                        android:layout_height="33dp"
+                        app:srcCompat="@drawable/grey_con" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Jessica"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1.3"
+                    android:gravity="center_vertical|right">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+
+                        android:background="@color/pinkborder"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="13dp"
+                        android:paddingRight="13dp"
+                        android:paddingTop="2dp"
+                        android:text="@string/invite"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="10dp"
+                        app:srcCompat="@drawable/cross" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

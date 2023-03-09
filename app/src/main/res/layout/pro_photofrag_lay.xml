@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/vv"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <main.com.ngrewards.constant.ExpandableHeightGridView
+                    android:id="@+id/product_photo"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:numColumns="3"
+                    android:layout_height="wrap_content">
+
+                </main.com.ngrewards.constant.ExpandableHeightGridView>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/product_photo_rec"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/pinkborder_rectangle"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/paybill_t"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/large" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:visibility="gone"
+                android:id="@+id/progresbar"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </ScrollView>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/nophototv"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textSize="@dimen/medium"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:text="@string/nophotoavab"
+                android:background="@color/darkgrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <main.com.ngrewards.constant.ExpandableHeightListView
+            android:id="@+id/product_offer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:visibility="gone">
+
+        </main.com.ngrewards.constant.ExpandableHeightListView>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/offers_product_rec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/pinkborder_rectangle"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/paybill_t"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/noofferstv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/darkgrey"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="@string/noofferavab"
+            android:textColor="@color/white"
+            android:textSize="@dimen/medium"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

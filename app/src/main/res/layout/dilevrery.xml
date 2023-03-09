@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:text="Add Dilevery Charge">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/cancle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cancel_button">
+
+        </ImageView>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextDialogOtpInput"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:textAlignment="textStart"
+        android:inputType="numberDecimal"
+        android:singleLine="true">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/fix_perchant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:textColor="#E91E63"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Fix Charge">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/fix_perchant1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:textColor="#E91E63"
+        android:visibility="gone"
+        android:textSize="18dp"
+        android:layout_gravity="center_horizontal"
+        android:text="%">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E91E63"
+        android:text="Save"
+        android:textColor="#fff"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center">
+
+    </Button>
+
+</LinearLayout>

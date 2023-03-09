@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true">
+
+     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                     <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                 <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/editprofile"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                 <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/update_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/update"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainlay"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+
+                <RelativeLayout
+                    android:id="@+id/editlay"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/grey_circle">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/user_img"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="@string/uploadbusipic"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="78dp"
+                        android:background="@drawable/add" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/businessdetial"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/businessname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/busname"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/bus_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/busiphone"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/busines_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/busemail"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/businesadd"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/streetaddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@color/greyborder"
+                        android:hint="@string/streetadd"
+                        android:inputType="textNoSuggestions"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/addopt"
+                    android:padding="6dp"
+                    android:textColor="@color/black"
+
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="7dp"
+
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+
+                        android:id="@+id/country_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="7dp"
+
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+
+                        android:id="@+id/state_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="7dp"
+
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+
+                        android:id="@+id/city_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/zipcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/zipcode2"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/businesdes"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/businessdescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greyborder"
+                    android:gravity="start"
+                    android:hint="@string/businesdes"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/keywordss"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/businesskeywords"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greyborder"
+                    android:gravity="start"
+                    android:hint="@string/keywordss"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/openinghours"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Sunday"
+
+                        android:textColor="@color/black" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/sunday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/sunday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/sundayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:textSize="@dimen/extrasmall"
+                            android:background="@drawable/border_grey_whtstroke"
+
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/sundayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Monday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                       android:id="@+id/monday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/monday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/mondayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/mondayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Tuesday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/tuesday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/tuesday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/tuesdayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/tuesdayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Wednesday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/wednesday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+
+                            android:id="@+id/wednesday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/wednesdayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/wednesdayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Thursday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/thursday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/thursday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/thursdayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/thursdayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Friday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/friday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/friday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/fridayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/fridayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:weightSum="3">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Saturday"
+                        android:textColor="@color/black" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/saturday_full_day"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:textSize="@dimen/extrasmall"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:background="@drawable/bordr_dark_grey"
+                        android:text="@string/fulldayopen"
+                        android:textColor="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/saturday_status"
+                            android:layout_width="51dp"
+                            android:textSize="@dimen/extrasmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="1dp"
+                            android:background="@drawable/pink_border"
+                            android:text="@string/open"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/saturdayopen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="06:00 am"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="1dp"
+                            android:layout_margin="2dp"
+                            android:background="@color/greyborder"></View>
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:textSize="@dimen/extrasmall"
+
+                            android:id="@+id/saturdayclose"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="10:00 pm"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+
+                            android:paddingTop="2dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/busnesswebsite"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/bus_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="myngrewards.com"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/facebooklink"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/facebooklink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="facebook.com/ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/twiterlink"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/twittelink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="twitter.com/ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/linkedinlink"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/linkedinlink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="linkedin.com/ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/googlelink"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/googlelink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="plus.google.com/+ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/instagram"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/instalink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="instagram.com/ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/youtube"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/youtubelink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="youtube.com/ngrewardsllc"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/buscategory"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:padding="5dp">
+
+                    <Spinner
+                        android:id="@+id/category_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></Spinner>
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/selectcat"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/down_arrow"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="@string/addremimg"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ImageView
+                    android:id="@+id/uploadimg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/camera" />
+
+
+                <RelativeLayout
+                    android:id="@+id/top_pro_img_lay"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/business_galleryimage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context=".marchant.MarchantLogin">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_back">
+
+        <ScrollView
+            android:layout_marginBottom="10dp"
+            android:layout_above="@+id/botumlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/backlay"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/ic_back_black_arrow" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+                <Spinner
+                    android:id="@+id/country_spn"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="13dp"
+                    android:src="@drawable/logo" />
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/marchantlogin1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/extralarge" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/mobilenum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/border_rounded"
+                    android:gravity="center"
+                    android:hint="@string/merchantnum"
+                    android:padding="7dp"
+                    android:textColor="@color/black" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintAnimationEnabled="false"
+                    app:hintEnabled="false"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/black">
+
+                    <EditText
+                        android:id="@+id/password_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:background="@drawable/border_rounded"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:padding="5dp"
+                        android:imeOptions="actionDone"
+
+                        android:textSize="@dimen/medium" />
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/login_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border"
+                    android:gravity="center"
+                    android:padding="7dp"
+                    android:text="@string/logintxt"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium" />
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/login_with_touch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/pink_border"
+                    android:gravity="center"
+                    android:padding="7dp"
+                    android:text="@string/loginwithtouch"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium" />
+
+                <TextView
+                    android:id="@+id/marforgot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:gravity="center"
+                    android:text="@string/forgotpass"
+                    android:textSize="@dimen/small" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/facebook_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/border_rounded"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="7dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/fb" />
+
+                    <main.com.ngrewards.fonttypeclasses.LightTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/connectfacebook"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </LinearLayout>
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:padding="3dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/dontaccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:padding="3dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/bytaping"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/privacy_policy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="dfg"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+            </LinearLayout>
+        </ScrollView>
+
+<ProgressBar
+    android:visibility="gone"
+    android:id="@+id/progresbar"
+    android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:padding="3dp"
+            android:visibility="gone"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/businesslogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/busineslogin"
+            android:textColor="@color/darkgrey"
+            android:textSize="@dimen/medium" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button_fb"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

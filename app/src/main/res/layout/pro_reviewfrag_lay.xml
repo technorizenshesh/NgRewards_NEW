@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:id="@+id/swipeToRefresh"
+            android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/allrating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:numStars="5"
+                        android:progressDrawable="@drawable/ratingmediumdrable"
+                        android:scaleX="1"
+                        android:scaleY="1"
+                        android:isIndicator="true"
+                        android:transformPivotX="5dp"
+                        android:transformPivotY="5dp" />
+
+                    <TextView
+                        android:id="@+id/total_review_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="0"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/medium" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/outofstar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="0 out of 5 stars"
+                    android:textColor="@color/black" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/fivstars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="5 stars"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+                    <ProgressBar
+                        android:id="@+id/fivestrPrgbar"
+                        style="@style/tallerBarStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/fivper"
+                        android:layout_toRightOf="@+id/fivstars"
+                        android:max="100"
+                        android:padding="0dp"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/greyborder"
+                        android:progressTint="@color/pinkborder"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/fivper"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="0%"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/forstars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="4 stars"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+                    <ProgressBar
+                        android:id="@+id/fourstrProgbr"
+                        style="@style/tallerBarStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/forper"
+                        android:layout_toRightOf="@+id/forstars"
+                        android:max="100"
+                        android:padding="0dp"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/greyborder"
+                        android:progressTint="@color/pinkborder"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/forper"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="0%"
+                        android:gravity="center"
+
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/theestars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="3 stars"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+                    <ProgressBar
+                        android:id="@+id/threestrprogbar"
+                        style="@style/tallerBarStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/theeper"
+                        android:layout_toRightOf="@+id/theestars"
+                        android:max="100"
+                        android:padding="0dp"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/greyborder"
+                        android:progressTint="@color/pinkborder"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/theeper"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="0%"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/tostars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="2 stars"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+                    <ProgressBar
+                        android:id="@+id/twostarProgbar"
+                        style="@style/tallerBarStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/twoper"
+                        android:layout_toRightOf="@+id/tostars"
+                        android:max="100"
+                        android:padding="0dp"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/greyborder"
+                        android:progressTint="@color/pinkborder"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/twoper"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="0%"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/onestars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="1 stars"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+                    <ProgressBar
+                        android:id="@+id/onestarProgressbar"
+                        style="@style/tallerBarStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/oneper"
+                        android:layout_toRightOf="@+id/onestars"
+                        android:max="100"
+                        android:padding="0dp"
+                        android:progress="0"
+                        android:progressBackgroundTint="@color/greyborder"
+                        android:progressTint="@color/pinkborder"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/oneper"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="0%"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/small" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/seeallreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:text="See all 0 customers reviews"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/medium" />
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/done_review_lay"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/donereview_tv"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+                        android:gravity="center"
+                        android:text="ddd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <RatingBar
+                        android:id="@+id/rating_done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:numStars="5"
+                        android:progressDrawable="@drawable/ratingmediumdrable"
+                        android:scaleX="1"
+                        android:isIndicator="true"
+                        android:stepSize="1.0"
+                        android:scaleY="1"
+                        android:transformPivotX="5dp"
+                        android:transformPivotY="5dp" />
+                    <main.com.ngrewards.fonttypeclasses.BoldTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:gravity="center"
+
+                        android:text="@string/reviewposted"
+                        android:textColor="@color/pinkborder"
+                        android:textSize="@dimen/medium" />
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+    android:id="@+id/post_review_lay"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/sharethoughts"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small" />
+
+    <RatingBar
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        android:progressDrawable="@drawable/ratingmediumdrable"
+        android:scaleX="1"
+        android:stepSize="1.0"
+        android:scaleY="1"
+        android:transformPivotX="5dp"
+        android:transformPivotY="5dp" />
+
+    <main.com.ngrewards.fonttypeclasses.NormalEditText
+        android:id="@+id/comment_et"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/box"
+        android:gravity="start"
+        android:hint="@string/writecusrev"
+        android:padding="5dp" />
+
+    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:id="@+id/submit_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/pinkborder"
+        android:paddingBottom="2dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="2dp"
+        android:text="@string/submitreview"
+        android:textColor="@color/white" />
+
+</LinearLayout>
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/topcustomerreview"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.constant.ExpandableHeightListView
+                    android:id="@+id/topreviewlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></main.com.ngrewards.constant.ExpandableHeightListView>
+
+
+            </LinearLayout>
+        </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

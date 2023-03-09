@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/add_menu_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/addnewmenu"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <View    android:layout_below="@+id/mainlay"
+            android:id="@+id/vv"
+            android:background="@color/greyborder"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"></View>
+
+        <ScrollView
+            android:layout_below="@+id/vv"
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Title"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                 <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/tital_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:hint="Title"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:padding="5dp" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/offerdesc"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/offer_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:hint="Description"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:padding="5dp" />
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Image"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <ImageView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/uploadimg"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/add_photo" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/orignalprice"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/offer_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:hint="$0.00"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:padding="5dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp">
+
+                </RelativeLayout>
+
+
+                  <Button
+                    android:textAllCaps="false"
+                    android:id="@+id/publish_product"
+                    android:text="@string/publish"
+                    android:textSize="@dimen/medium"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/pink_border"
+                    android:layout_below="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progresbar"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/offerimage"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@color/white"
+                        android:src="@drawable/placeholder" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday - Friday"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/medium"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/merchant_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/extralarge"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp">
+
+                        <TextView
+                            android:id="@+id/offername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/distance_tv"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <TextView
+                            android:id="@+id/distance_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/offer_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/extrasmall" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/real_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="2dp"
+                            android:layout_toLeftOf="@+id/ddd"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/large" />
+
+                        <LinearLayout
+                            android:id="@+id/ddd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/pricediscount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="5dp"
+                                android:text=""
+                                android:textColor="@color/black"
+
+                                android:textSize="@dimen/large"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/discounts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/red_trans"
+                                android:gravity="right"
+                                android:paddingLeft="5dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="5dp"
+                                android:paddingBottom="2dp"
+                                android:text=""
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/small"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.6dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/greyborder"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:id="@+id/likebut"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/liketv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/like"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <ImageView
+                                android:id="@+id/likeimg"
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="20dp"
+                                android:layout_marginLeft="5dp"
+                                app:srcCompat="@drawable/ic_like" />
+
+                            <TextView
+                                android:id="@+id/likecount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sharelay"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/share"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="20dp"
+                                android:layout_marginLeft="5dp"
+                                app:srcCompat="@drawable/ic_share" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

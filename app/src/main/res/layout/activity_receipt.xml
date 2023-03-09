@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context=".placeorderclasses.ReceiptActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/receipt"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                 <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/notification" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/dss"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/greyborder"></View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dss"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/order_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/orders"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/merchantinfo"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:id="@+id/busseness_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#000"
+                    android:text=""
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/merchant_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#000"
+                    android:text=""
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/merchant_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:visibility="gone"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Merchant No. :- 2345555"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/date_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Date:- 4 jun 2018 ,03:45:12 pm"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/address_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Address:- "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"></View>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/billsummary"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/due_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Amount Due :- #"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/tipamount_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Tip :- # 0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/total_amt_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Total :- #"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"></View>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/ngcashredeem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/ngcashredeem"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/ngcash_tv"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="NGCash :- # 0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/paymentmethod_sm"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/visa" />
+
+                    <TextView
+                        android:id="@+id/cardnumber_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Visa **** **** 5068"
+                        android:textColor="@color/black" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/li_memberinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/greyborder"/>
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/memberinfo"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/member_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Name :-"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Username :- "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/username_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Employee :- "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/li_order_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"></View>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Order Info"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Date: "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Time: "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/tv_guest_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Guest User"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/tv_table_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Table No:"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+                </LinearLayout>
+
+
+                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"></View>
+
+                 <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/special_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Special Request:"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    android:textSize="@dimen/small"/>
+
+                  <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/employee_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="Employee:"
+                      android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <Button
+                    android:id="@+id/btn_strip_receipt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/red"
+                    android:layout_margin="10dp"
+                    android:text="Stripe Receipt"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"/>
+
+                 <Button
+                    android:id="@+id/btn_order123"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/red"
+                    android:layout_margin="10dp"
+                    android:text="Order Cart"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"/>
+
+                <ImageView
+                    android:id="@+id/sharebut"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_share"/>
+
+
+                 <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/pinkborder"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="@string/continues"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/large" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

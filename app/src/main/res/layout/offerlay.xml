@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_marginRight="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:singleLine="true"
+                    android:id="@+id/offername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stove"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/extralarge" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Monday - Friday"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/medium" />
+
+                <TextView
+                    android:id="@+id/offer_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/extrasmall" />
+
+                <TextView
+                    android:id="@+id/pricediscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="$ 212 (50% off)"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:id="@+id/likebut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/liketv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/like"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:id="@+id/likeimg"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="5dp"
+                            app:srcCompat="@drawable/ic_like" />
+                        <TextView
+                            android:id="@+id/likecount"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium"
+                            android:gravity="center"
+                            android:text="0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sharelay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/share"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="5dp"
+                            app:srcCompat="@drawable/ic_share" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:scaleType="fitXY"
+                    android:id="@+id/offerimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:src="@drawable/stove" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

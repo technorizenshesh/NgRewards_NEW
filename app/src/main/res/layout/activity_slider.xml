@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_slider"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+android:background="@drawable/splash_back"
+    tools:context=".activity.SliderActivity">
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/backlay"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/ic_back_black_arrow" />
+            </RelativeLayout>
+
+             <main.com.ngrewards.constant.CustomViewPager
+                android:layout_marginTop="70dp"
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+            <com.viewpagerindicator.CirclePageIndicator
+                android:layout_marginTop="55dp"
+                android:id="@+id/indicatortwo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:padding="10dip"
+                app:centered="false"
+                app:fillColor="@color/pinkborder"
+                app:pageColor="@color/greyborder"
+                app:snap="false" />
+
+            <Button
+                android:textAllCaps="false"
+                android:id="@+id/continue_button"
+                android:text="@string/next"
+                android:textSize="@dimen/medium"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/pink_border"
+                android:layout_below="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+<ProgressBar
+    android:visibility="gone"
+    android:id="@+id/progresbar"
+    android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+</RelativeLayout>

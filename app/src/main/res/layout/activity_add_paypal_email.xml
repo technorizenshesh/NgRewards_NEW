@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="main.com.ngrewards.marchant.draweractivity.AddPaypalEmail">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/newpaymentmeth"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/v"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/black"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="@string/addpaypalemail"
+                android:textColor="@color/red"
+                android:textSize="@dimen/medium" />
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/ngacceptmost"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+            <LinearLayout
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/grey_strok_border"
+                android:orientation="vertical">
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/paypal_email_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@null"
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone"
+                    android:hint="@string/entervalidpaypalemail"
+                    android:padding="5dp" />
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:id="@+id/addpaypal"
+            android:layout_width="match_parent"
+            android:text="@string/add"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_margin="15dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/large"
+            android:background="@drawable/pinkborder_rectangle"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

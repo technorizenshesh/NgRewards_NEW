@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/parent_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+     <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Dine In"
+        android:textSize="18dp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:background="@color/grey"
+        android:textColor="@color/black"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_sub_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical">
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

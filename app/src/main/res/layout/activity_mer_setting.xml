@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/settings"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/v"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/black"></View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="8dp"
+                    android:background="@color/greyborder"
+                    android:text="@string/createexpres"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/genrateloginlinklay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/ddd"
+                        android:text="@string/genratestripelink"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/ddd"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/seestripedashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/dddd"
+                        android:text="@string/seestripedashboard"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/dddd"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/addstripeact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/addstr"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        app:srcCompat="@drawable/add" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/forwardarrow_ab"
+                        android:layout_toRightOf="@+id/addstr"
+                        android:text="@string/addstripemerchantaccount"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/forwardarrow_ab"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+
+                </RelativeLayout>
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    android:text="@string/merchantprocess"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/addcardlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/addlay"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        app:srcCompat="@drawable/add" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/forwardarrow_a"
+                        android:layout_toRightOf="@+id/addlay"
+                        android:text="@string/addnewprovider"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/forwardarrow_a"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/greyborder"
+                    android:padding="8dp"
+                    android:text="@string/genral"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <RelativeLayout
+                    android:id="@+id/touchidlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/ft"
+                        android:text="@string/enabletouchid"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/ft"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+
+                <RelativeLayout
+                    android:id="@+id/aboutng_rew"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/abtngt"
+                        android:text="@string/aboutngrew"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/abtngt"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+
+                <RelativeLayout
+                    android:id="@+id/career_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/cart"
+                        android:text="@string/careers"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/cart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/greyborder"
+                    android:padding="8dp"
+                    android:text="@string/supports"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+
+                <RelativeLayout
+                    android:id="@+id/helpcenter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/hh"
+                        android:text="@string/helpcenter"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/hh"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+                <RelativeLayout
+                    android:id="@+id/changepass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/hsh"
+                        android:text="@string/changepass"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/hsh"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+
+                <RelativeLayout
+                    android:id="@+id/reportproblem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/rep"
+                        android:text="@string/repotprob"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/rep"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+
+
+                <RelativeLayout
+                    android:id="@+id/deleteAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toLeftOf="@+id/delete"
+                        android:text="@string/deleteAccount"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/medium" />
+
+                    <ImageView
+                        android:id="@+id/delete"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/next" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/black"></View>
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+<ProgressBar
+    android:visibility="gone"
+    android:layout_centerInParent="true"
+    android:id="@+id/progresbar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

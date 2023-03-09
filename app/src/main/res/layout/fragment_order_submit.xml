@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragments.FragmentOrderSubmit">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true">
+
+        <Button
+            android:id="@+id/btn_continue"
+            style="@style/btn_red"
+            android:layout_alignParentBottom="true"
+            android:text="Continue" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_continue"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Date"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/tv_select_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_date"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="Select"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Time"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/tv_select_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_time"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="Select"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/li_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_guests"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Guests"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_guests"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_guests"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="No."
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_table_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Table No"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/et_table_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_table_no"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:gravity="center"
+                            android:hint="No."
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tv_merchant_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Merchant Mobile Number- 1234567892"
+                    android:textColor="@color/red"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Contact Info"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/border_grey_whtstroke"
+                    android:padding="8dp"
+                    android:text="ZZZ"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/border_grey_whtstroke"
+                    android:padding="8dp"
+                    android:text="1234567890"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:id="@+id/li_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Address"
+                            android:textColor="@color/black"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_add_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="Add"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/li_selected_addess"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_address_line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:padding="8dp"
+                            android:text="ZZZ"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/tv_address_line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:padding="8dp"
+                            android:text="ZZZ"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_country"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_grey_whtstroke"
+                                android:padding="8dp"
+                                android:text="ZZZ"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:id="@+id/tv_state"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_grey_whtstroke"
+                                android:padding="8dp"
+                                android:text="ZZZ"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_contact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_grey_whtstroke"
+                            android:padding="8dp"
+                            android:text="ZZZ"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                 <EditText
+                    android:id="@+id/et_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/border_grey_whtstroke"
+                    android:gravity="left"
+                    android:hint="Write Your special request"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context=".settingclasses.ReportProblem">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/mainlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/toobarcolor"
+
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/backlay"
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ic_back_black_arrow" />
+
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/repotprob"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/v"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/mainlay"
+        android:background="@color/black"></View>
+<LinearLayout
+    android:layout_margin="15dp"
+    android:layout_below="@+id/v"
+    android:orientation="vertical"
+    android:background="@drawable/grey_strok_border"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/cancel"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small" />
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:text="@string/send"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small" />
+
+    </LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <main.com.ngrewards.fonttypeclasses.NormalEditText
+        android:layout_width="wrap_content"
+        android:background="@null"
+        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="To: info@myngrewards.com"
+        android:textColor="@color/black"
+        android:textSize="@dimen/medium" />
+    <View
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <main.com.ngrewards.fonttypeclasses.NormalEditText
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:background="@null"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="CC/BCC,form:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small" />
+    <View
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <main.com.ngrewards.fonttypeclasses.NormalEditText
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:background="@null"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="@string/subject"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small" />
+    <View
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
+
+    <main.com.ngrewards.fonttypeclasses.NormalEditText
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:gravity="start"
+        android:background="@null"
+        android:layout_height="100dp"
+        android:layout_weight="2"
+        android:text="@string/letusnow"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small" />
+    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+ android:paddingLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/allfeedbackap"
+        android:textColor="@color/black"
+        android:textSize="@dimen/small" />
+
+
+</LinearLayout>
+</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

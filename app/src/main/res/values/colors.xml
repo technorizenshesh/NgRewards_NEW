@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="toobarcolor">#ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#f70101</color>
+    <color name="red_trans">#28f70101</color>
+    <color name="green">#05ce02</color>
+    <color name="darkgreen">#07ab05</color>
+    <color name="greyborder">#e0e0e0</color>
+    <color name="grey">#c7c6c6</color>
+    <color name="darkgrey">#4d4b4b</color>
+    <color name="pinkborder">#f60241</color>
+    <color name="pinkborder11">#ff5a85</color>
+    <color name="trans">#00000000</color>
+    <color name="back_pop_col">#94939191</color>
+    <color name="blue">#0046f9</color>
+</resources>

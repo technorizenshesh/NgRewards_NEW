@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:background="@null"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    android:padding="6dp"
+    android:background="@null"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/marchant_img"
+        android:src="@drawable/user_propf"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="7dp"
+        android:layout_toRightOf="@+id/marchant_img"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <main.com.ngrewards.fonttypeclasses.BoldTextView
+           android:id="@+id/mer_name_tv"
+            android:layout_width="match_parent"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/medium"
+            android:layout_height="wrap_content" />
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+           android:id="@+id/number_tv"
+            android:layout_width="match_parent"
+            android:text="1234512345"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small"
+            android:layout_height="wrap_content" />
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:id="@+id/locationtv"
+            android:layout_width="match_parent"
+            android:text="indore 0.5 km"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

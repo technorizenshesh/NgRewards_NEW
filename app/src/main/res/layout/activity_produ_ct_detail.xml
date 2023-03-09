@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    tools:context=".activity.ProduCtDetailAct">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/mainlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/toobarcolor"
+
+                    android:minHeight="?attr/actionBarSize"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/backlay"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/ic_back_black_arrow" />
+
+                    </RelativeLayout>
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/product_name_head"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Product Name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <View
+                android:background="@color/greyborder"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"></View>
+
+            <ImageView
+                android:src="@drawable/logo"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:text="Product Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/large" />
+            <TextView
+                android:id="@+id/product_number"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="12345677"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+            <TextView
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="indore 0.2 mi"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:tabMode="fixed"
+                app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                app:tabBackground="@drawable/custom_indicator"
+                android:background="@null"
+                app:tabTextColor="@color/darkgrey"
+                app:tabSelectedTextColor="@color/black"
+                app:tabGravity="fill"
+                />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+<ProgressBar
+    android:id="@+id/progresbar"
+    android:visibility="gone"
+    android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

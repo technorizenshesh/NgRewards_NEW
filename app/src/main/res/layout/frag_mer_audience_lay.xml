@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_below="@+id/vvv"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:padding="3dp"
+                android:text="@string/gender"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/history" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/menpercant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="0%"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:text="@string/men"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/greyborder"></View>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/womenpercant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="0%"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="1dp"
+                        android:text="@string/women"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/greyborder"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/agerange"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/alltv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/all"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <View
+                            android:id="@+id/allview"
+                            android:layout_width="40dp"
+                            android:layout_height="1dp"
+                            android:background="@color/red"></View>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/menlay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/men"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <View
+                            android:id="@+id/mainview"
+                            android:layout_width="40dp"
+                            android:layout_height="1dp"
+                            android:background="@color/red"
+                            android:visibility="gone"></View>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                           android:id="@+id/womentv"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/women"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <View
+                            android:id="@+id/womenview"
+                            android:layout_width="80dp"
+                            android:layout_height="1dp"
+                            android:background="@color/red"
+                            android:visibility="gone"></View>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="18-24"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range1progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="25-34"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range2progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="35-44"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range3progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="45-54"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range4progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="00"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="55-64"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range5progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="64+  "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <ProgressBar
+                    android:id="@+id/range6progress"
+                    style="@style/tallerBarStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="23dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:max="100"
+                    android:padding="0dp"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/greyborder"
+                    android:progressTint="@color/pinkborder"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/greyborder"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/toplocation"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/citytv"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:text="@string/cities"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <View
+                            android:id="@+id/cityview"
+                            android:layout_width="70dp"
+                            android:layout_height="1dp"
+                            android:background="@color/red"
+                            android:visibility="visible"></View>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                            android:id="@+id/state"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:text="@string/state"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <View
+                            android:id="@+id/stateview"
+                            android:layout_width="70dp"
+                            android:layout_height="1dp"
+                            android:background="@color/red"
+                            android:visibility="gone"></View>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+<main.com.ngrewards.constant.ExpandableHeightListView
+    android:id="@+id/locationlist"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"></main.com.ngrewards.constant.ExpandableHeightListView>
+
+     </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/greyborder"></View>
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/whatdothismean"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/genage"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/thegenderage"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium" />
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/wherefrom"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small" />
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</ScrollView>
+
+</android.support.constraint.ConstraintLayout>

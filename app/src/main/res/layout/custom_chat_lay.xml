@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/conversationtime"
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp" />
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:id="@+id/conversationtime"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:text="date"
+                android:gravity="center"
+                android:textColor="@color/red"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/conversationtime"
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp" />
+
+        </RelativeLayout>
+
+<main.com.ngrewards.constant.ExpandableHeightListView
+    android:id="@+id/chatlist"
+    android:divider="@null"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+</main.com.ngrewards.constant.ExpandableHeightListView>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

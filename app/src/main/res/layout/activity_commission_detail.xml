@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="main.com.ngrewards.activity.CommissionDetail">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/weekdatemont_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="Week 10/53\nmarch 04 - march 10"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/vv"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/greyborder"></View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_below="@+id/vv"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <main.com.ngrewards.constant.ExpandableHeightListView
+                    android:id="@+id/commision_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"></main.com.ngrewards.constant.ExpandableHeightListView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/mainlay"
+                    android:background="@color/greyborder"></View>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/totalcommisions"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/total_week_commision"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/mainlay"
+                    android:background="@color/greyborder"></View>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/chooseanamount"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <Spinner
+                    android:id="@+id/amountpercant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"></Spinner>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/paypal"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/medium" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/withdraw_bank_amt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ngcash"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/medium" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:id="@+id/ngcash_remain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="$0.00"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/mainlay"
+                    android:background="@color/greyborder"></View>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:text="@string/bytapingwithdraw"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="@string/stripemessage"
+                    android:textColor="@color/black" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/withdraw_amount_but"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/pink_border"
+                    android:gravity="center"
+                    android:text="@string/withdraw"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressabar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

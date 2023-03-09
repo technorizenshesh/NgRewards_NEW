@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="10dp"
+        tools:ignore="MissingConstraints">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tellsubusiness"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+                <RelativeLayout
+                    android:id="@+id/editlay"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/grey_circle">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/merchant_img"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="@string/uploadbusipic"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="78dp"
+                        android:background="@drawable/add" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/businessdetial"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/businessname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/legelbusname"
+                    android:imeOptions="actionNext"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <main.com.ngrewards.fonttypeclasses.NormalEditText
+                    android:id="@+id/phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:hint="@string/busiphone"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:padding="6dp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/buscategory"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:padding="5dp">
+
+                    <Spinner
+                        android:id="@+id/category_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></Spinner>
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/selectcat"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/down_arrow"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/businesadd"
+                    android:textColor="@color/pinkborder"
+                    android:textSize="@dimen/medium" />
+
+
+                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                     <CheckBox
+                        android:id="@+id/check_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:text="Share my physical location in directory">
+
+                     </CheckBox>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+
+                        <AutoCompleteTextView
+                            android:id="@+id/streetaddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:background="@color/greyborder"
+                            android:hint="@string/streetadd"
+                            android:imeOptions="actionNext"
+                            android:inputType="textNoSuggestions"
+                            android:padding="6dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                    </RelativeLayout>
+
+                    <main.com.ngrewards.fonttypeclasses.NormalEditText
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:background="@color/greyborder"
+                        android:gravity="center_vertical"
+                        android:hint="@string/streetaddopt"
+                        android:imeOptions="actionNext"
+                        android:padding="6dp"
+                        android:textColor="@color/black"
+                        android:visibility="visible" />
+
+                    <main.com.ngrewards.fonttypeclasses.NormalEditText
+                        android:id="@+id/zipcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/greyborder"
+                        android:gravity="center_vertical"
+                        android:hint="@string/zipcode2"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:padding="6dp"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+
+                        android:id="@+id/country_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="7dp"
+
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/state_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/greyborder"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/city_spn"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"></Spinner>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/vv">
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearFour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#d0d3d4"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/name_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=" Sides"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+
+           <LinearLayout
+            android:id="@+id/InearLinearLayoutFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+
+             <TextView
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="50dp"
+                android:text=" Edit "
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"/>
+
+              <ImageButton
+                android:id="@+id/add_menu_img_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_control_point_black_24dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/menu_list_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:id="@+id/InearLinearLayoutCards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/dish_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Edit Soup"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:maxLines="2"
+                android:text="Description: sajsiosn jdnjdd jadnjakdioa sjasj..."
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/price_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="$2.50"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+
+             <ImageView
+                 android:id="@+id/image_menu_item"
+                android:layout_width="120dp"
+                android:layout_height="130dp"
+                android:layout_marginLeft="16dp"
+                android:padding="5dp"
+                android:src="@drawable/bgg" />
+
+
+            <ImageButton
+                android:id="@+id/mImageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_more_vert_black_24dp"
+                android:padding="5dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- Inear Main Linear Layout close. -->
+
+</LinearLayout>

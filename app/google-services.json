@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "151174205102",
+    "project_id": "ngrewards-d3f9c",
+    "storage_bucket": "ngrewards-d3f9c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151174205102:android:7b149355cfd07b0a7c273f",
+        "android_client_info": {
+          "package_name": "main.com.ngrewards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151174205102-iquoc6gdsdag0v38pmemr2vfd8er6iqk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "main.com.ngrewards",
+            "certificate_hash": "6190513275cab95d19dfc589af64305d6b3dcf0f"
+          }
+        },
+        {
+          "client_id": "151174205102-df54ne0cab7k7gfs64ji94dp6t0a1kbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKqnyk5GCSLkJMlmFofnYAxG1PiJ20uW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151174205102-df54ne0cab7k7gfs64ji94dp6t0a1kbm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "151174205102-4b4j2dehui2a0gs0ar0d2b51nd2hng0b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ios.ngreward",
+                "app_store_id": "1468289927"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

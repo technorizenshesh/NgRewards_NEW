@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/user_pic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toLeftOf="@+id/ratelay"
+            android:layout_toRightOf="@+id/user_img"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+               android:id="@+id/membername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/medium"
+                android:textColor="@color/black" />
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_marginTop="5dp"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:progressDrawable="@drawable/ratingsmalldra"
+                android:scaleX="1"
+                android:scaleY="1"
+                android:transformPivotX="5dp"
+                android:transformPivotY="5dp" />
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+               android:id="@+id/created_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/darkgrey" />
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:id="@+id/review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/darkgrey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ratelay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"></LinearLayout>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

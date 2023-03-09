@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:layoutDirection="ltr"
+
+    android:orientation="vertical">
+
+    <RelativeLayout
+
+        android:id="@+id/mylayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+
+        android:visibility="gone"
+        android:weightSum="5">
+<RelativeLayout
+    android:id="@+id/fddd"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:textIsSelectable="true"
+        android:id="@+id/mymessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/my_profile"
+        android:background="@drawable/border_rounded_chat_light"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text=""
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:background="@color/greyborder"
+        android:id="@+id/myimage"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
+        android:layout_marginRight="10dp"
+
+        android:layout_toLeftOf="@+id/my_profile"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:background="@drawable/grey_strok_border"
+        android:visibility="gone"
+        android:id="@+id/myfilelay"
+        android:layout_toLeftOf="@+id/my_profile"
+        android:layout_marginRight="10dp"
+        android:padding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/fileimg"
+            android:layout_marginLeft="5dp"
+            app:srcCompat="@drawable/ic_file"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:id="@+id/filename"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/fileimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:id="@+id/download"
+            android:layout_marginRight="5dp"
+            app:srcCompat="@drawable/ic_down_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/my_video_lay"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/my_profile"
+        android:background="@color/greyborder"
+        android:visibility="gone">
+
+
+        <ImageView
+            android:id="@+id/myvideo_thumb"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/trans">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/play_button"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/my_profile"
+        android:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/user_pic" />
+</RelativeLayout>
+
+        <TextView
+            android:gravity="right|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="@dimen/extrasmall"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/fddd"
+            android:id="@+id/mymessagetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/otheruserlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:weightSum="5">
+        <RelativeLayout
+            android:id="@+id/ddd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/otherimage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/user_pic" />
+
+            <TextView
+                android:textIsSelectable="true"
+                android:id="@+id/othermsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/otherimage"
+                android:background="@drawable/border_rounded_chat_dark"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text=""
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:background="@color/greyborder"
+                android:id="@+id/othersendimgimage"
+                android:layout_width="120dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="10dp"
+
+                android:layout_toRightOf="@+id/otherimage"
+                android:visibility="gone" />
+            <RelativeLayout
+                android:background="@drawable/grey_strok_border"
+
+                android:visibility="gone"
+                android:id="@+id/otherfilelay"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/otherimage"
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/otherfileimg"
+                    android:layout_marginLeft="5dp"
+                    app:srcCompat="@drawable/ic_file"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+                <TextView
+                    android:id="@+id/otherfilename"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/otherfileimg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:visibility="visible"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/otherdownload"
+                    android:layout_marginRight="5dp"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/other_video_lay"
+                android:layout_width="120dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/otherimage"
+
+                android:background="@color/greyborder"
+                android:visibility="gone">
+
+
+                <ImageView
+                    android:id="@+id/othervideo_thumb"
+                    android:layout_width="120dp"
+
+                    android:layout_height="150dp"
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/trans">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/play_button"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+<TextView
+    android:textColor="@color/black"
+    android:textSize="@dimen/extrasmall"
+    android:layout_marginTop="3dp"
+    android:layout_below="@+id/ddd"
+    android:id="@+id/othermessagetime"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/onelast"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/onelastthig1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/picked_user_img"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="80dp"
+                    android:src="@drawable/user_pic" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="0.8"
+                        android:background="@drawable/border_rounded">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/whoinvite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/checkic"
+                            android:background="@null"
+                            android:gravity="center"
+                            android:hint="@string/username"
+                            android:padding="6dp"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:id="@+id/checkic"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/cancelcheck"
+                            android:visibility="visible" />
+
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/qrcode"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="0.2"
+                        android:padding="10dp"
+                        android:src="@drawable/red_qr" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progresbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

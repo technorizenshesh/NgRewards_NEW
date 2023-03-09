@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context="main.com.ngrewards.placeorderclasses.PlaceOrderAct">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/toobarcolor"
+
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/backlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_back_black_arrow" />
+
+                </RelativeLayout>
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/placeorder"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+
+                <RelativeLayout
+                    android:id="@+id/addoffer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_file" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/vv"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/mainlay"
+            android:background="@color/greyborder"></View>
+
+
+        <RelativeLayout
+            android:id="@+id/addresslay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vv">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="@string/enterdeladd"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:id="@+id/dd"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/add"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/red_circle"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/pickuplocation_auto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toLeftOf="@+id/clear_pick_ic"
+                            android:background="@null"
+                            android:hint="@string/setdelorder"
+                            android:inputType="textNoSuggestions"
+                            android:padding="5dp"
+
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                        <ImageView
+                            android:id="@+id/favourite_ic"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="8dp"
+                            android:visibility="gone"></ImageView>
+
+                        <ImageView
+                            android:id="@+id/clear_pick_ic"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:visibility="visible"
+                            app:srcCompat="@drawable/ic_cancel" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@+id/dd"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/pick_marker" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dd"
+                    android:orientation="vertical">
+
+                    <main.com.ngrewards.fonttypeclasses.NormalEditText
+                        android:id="@+id/optionaladdress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:background="@color/greyborder"
+                        android:gravity="center_vertical"
+                        android:hint="@string/streetaddopt"
+                        android:imeOptions="actionNext"
+                        android:padding="6dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+
+                        android:visibility="visible" />
+
+                    <main.com.ngrewards.fonttypeclasses.NormalEditText
+                        android:id="@+id/zipcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:background="@color/greyborder"
+                        android:gravity="center_vertical"
+                        android:hint="@string/zipcode2"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:padding="6dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottumlay"
+            android:layout_below="@+id/addresslay"
+            android:layout_marginTop="10dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mycartlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottumlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:id="@+id/pricelay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/subtotal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="10dp"
+                    android:text="$0.00"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/large"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <main.com.ngrewards.fonttypeclasses.BoldTextView
+                android:id="@+id/place_order_but"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pricelay"
+                android:background="@color/pinkborder"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/placeorder"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progresbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

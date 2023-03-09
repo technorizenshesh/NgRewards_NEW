@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".bottumtab.InviteActMain">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="@string/invfrd"
+                android:textColor="@color/black"
+                android:textSize="@dimen/extralarge" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/grey_strok_border"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/yourusername"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/medium" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/usernametv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/usena"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/invitefriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@color/pinkborder"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="@string/invitefriend"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large" />
+
+
+            <ImageView
+                android:id="@+id/myqrview"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp" />
+
+            <ProgressBar
+                android:id="@+id/progresbar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

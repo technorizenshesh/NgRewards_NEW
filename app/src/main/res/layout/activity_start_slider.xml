@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.StartSliderAct">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <main.com.ngrewards.constant.CustomViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></main.com.ngrewards.constant.CustomViewPager>
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/indicatortwo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp"
+            android:gravity="center"
+            android:padding="10dip"
+            app:centered="true"
+            app:fillColor="@color/pinkborder"
+            app:pageColor="@color/greyborder"
+            app:snap="false" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="main.com.ngrewards">
+
+    <application
+        android:name="android.support.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:grantUriPermissions="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:launchMode="singleInstance"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:allowClearUserData= "true"
+        tools:replace="android:icon"
+       >
+        <activity
+            android:name=".activity.WebViewAc"
+            android:exported="false" />
+        <activity
+            android:name=".draweractivity.AddMenuPublish"
+            android:exported="false" />
+        <activity
+            android:name=".draweractivity.Die_TakeOut"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.AlertDailoge"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ItemOrderPaySuccessFully"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.ManualPaybillSucess"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MerchantMenuSetting"
+            android:exported="false" />
+        <activity
+            android:name=".marchant.draweractivity.MarchantMenu"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WebViewCalled"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OrderPaidSuccesfully"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EmployeesalesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".settingclasses.ChangePasswordAct"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TransferSuccesfully"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".placeorderclasses.TransferRequestDetActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".marchant.activity.SoldProductsAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SaledItemDetailAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.AllMerchantReviewActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <!--<meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>-->
+
+        <activity
+            android:name=".placeorderclasses.MerchantReceiptActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MemberMessageAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NetworkActFirst"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".showzoomableimages.FullScreenImagesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".draweractivity.BaseActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.UnsoldProductsAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.UpdateListingProduct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.MerchantTouchIdAct"
+            android:exported="false" />
+        <activity
+            android:name=".marchant.draweractivity.MerchantBaseActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.MerProfileActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.MerSettingActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".showzoomableimages.FullScreenActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".placeorderclasses.CheckOutAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".placeorderclasses.UpdateShipingAddress"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bottumtab.MainTabActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NewMemberMessageActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MerchantDetailAct"
+            android:exported="false" />
+        <activity
+            android:name=".bottumtab.TrasActivityPrevious"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".constant.CropActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MemberForgotPass"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bottumtab.HomeActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <!--
+      Send
+         action required to display activity in share list
+                -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!--           Make activity default to launch -->
+                <!-- Mime type i.e. what can be shared with this activity only image and text -->
+                <data android:mimeType="image/*" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="ngtechn.page.link"
+                    android:pathPattern=".*"
+                    android:scheme="http" />
+                <data
+                    android:host="ngtechn.page.link"
+                    android:pathPattern=".*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".marchant.merchantbottum.MultiPhotoSelectActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SliderActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".draweractivity.ProfileActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".draweractivity.SettingActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bottumtab.PayBillAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".bottumtab.TrasActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScanQrCodeAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ManualActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.CareeersAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.ReportProblem"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.NgHelpCenter"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.AboutNgReward"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.TouchIdAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.InviteFacebookFriend"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddMemberCard"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.InviteContacts"
+            android:exported="false" />
+        <activity
+            android:name=".bottumtab.InviteActMain"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProduCtDetailAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.MarchantLogin"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.merchantbottum.MerchantBottumAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.MerchantSignupSlider"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddCreditCardAct"
+            android:exported="false" />
+        <activity
+            android:name=".marchant.merchantbottum.MerHomeActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AccountTypeSelectionAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MemberWelLogSignAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MerchantWelLogSig"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UpdateMemberCard"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.merchantbottum.MerStatusAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.merchantbottum.MerMessageAct"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.MerChatActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.merchantbottum.NewMessageActivity"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".placeorderclasses.ReceiptActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FragItemDetails"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MemberTransfer"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TransferToaFriend"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InternationalTransAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.merchantbottum.MerchantBotSell"
+            android:exported="false"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.StartYourListing"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.ForgotPass"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StartSliderAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TakePermissionAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settingclasses.UpdateCard"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".QrCodeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TermsAndCondition"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PrivacyPolicy"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NetworkAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TutorialAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.OffersActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.AddOffersAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.ReviewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.MerchantNotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.UpdateOfferProduct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.MyQrCodeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.CommentActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.activity.ActiveProductsAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MemberChatAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CommisionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CommissionDetail"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.draweractivity.AddPaypalEmail"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyCartDetail"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VideoPlayActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SingleImageViewAct"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SeeDocumentUrl"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".marchant.stripemerchantclasses.AddStripeConnectAccount"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".placeorderclasses.PlaceOrderAct"
+            android:exported="false" />
+        <activity
+            android:name=".placeorderclasses.AddShipingAddress"
+            android:exported="false" />
+
+        <activity
+            android:name=".placeorderclasses.AllAddedAddressAct"
+            android:exported="false" />
+        <activity
+            android:name=".placeorderclasses.SelectPaymentMethodAct"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.PurchasedItemDetailAct"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TestingStripeActivity"
+            android:exported="false" />
+
+        <!-- <activity
+             android:exported="false"
+             android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+             android:launchMode="singleTask"
+             android:screenOrientation="portrait">
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <category android:name="android.intent.category.BROWSABLE" />
+                 <data android:scheme="${applicationId}.braintree" />
+             </intent-filter>
+         </activity>-->
+
+        <activity
+            android:name=".activity.StripeExpressAcountAct"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SeeMyStripeDashBoardAct"
+            android:exported="false" />
+        <activity
+            android:name=".activity.memberstripe.MemberStripeExpressAcountAct"
+            android:exported="false" />
+        <activity
+            android:name=".activity.memberstripe.SeeMemberMyStripeDashBoardAct"
+            android:exported="false" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoInitEnabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="false" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/googlekey" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="main.com.ngrewards"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".service.MyFirebaseInstanceIDService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <provider
+            android:name=".UncaughtExceptionHandlerContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:initOrder="101"
+            android:grantUriPermissions="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+    </application>
+
+    <permission
+        android:name="main.com.ngrewards.googlemapsv2.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" /> <!-- Required OpenGL ES 2.0. for Maps V2 -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <uses-permission android:name="main.com.ngrewards.googlemapsv2.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+</manifest>

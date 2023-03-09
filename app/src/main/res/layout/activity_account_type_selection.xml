@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AccountTypeSelectionAct">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/backlay"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_back_black_arrow"/>
+
+        </RelativeLayout>
+
+        <main.com.ngrewards.fonttypeclasses.BoldTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/welcome"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large" />
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+             <LinearLayout
+                android:background="@drawable/grey_rectangle"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/member_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/member_img"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/member_new_ic" />
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:id="@+id/memtxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="@string/member"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/member_txt_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/memearn1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+
+            </LinearLayout>
+
+             <LinearLayout
+                android:background="@drawable/grey_rectangle"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/merchant_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/marchant_img"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/marchant_new_ic"/>
+
+                <main.com.ngrewards.fonttypeclasses.BoldTextView
+                    android:id="@+id/martxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="@string/merchant"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/large" />
+
+                <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                    android:id="@+id/marchant_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/bussell1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/medium" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <main.com.ngrewards.fonttypeclasses.NoramlTextView
+            android:id="@+id/next_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/pink_border"
+            android:gravity="center"
+            android:padding="7dp"
+            android:text="@string/next"
+            android:textColor="@color/white"
+            android:textSize="@dimen/medium"/>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

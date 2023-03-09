@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+    <main.com.ngrewards.constant.MyViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_plan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+<RelativeLayout
+    android:id="@+id/backlay"
+    android:layout_marginTop="10dp"
+    android:layout_width="40dp"
+    android:layout_height="40dp">
+    <ImageView
+        android:layout_centerInParent="true"
+        android:id="@+id/finish_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_back_black_arrow" />
+
+
+</RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+    <!--  <main.privatclon.com.privatclon.constant.ExtendedViewPager
+          android:id="@+id/pager"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+
+          android:layout_centerInParent="true" />-->
+
+
+
+
+    <!--  <main.privatclon.com.privatclon.constant.ZoomableImageView
+          android:id="@+id/zoom"
+          android:layout_width="match_parent"
+
+          android:layout_height="match_parent"
+
+          android:layout_centerInParent="true"
+          android:scaleType="matrix" />
+  -->
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/fullscreen_indecator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pager"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="bottom"
+        android:padding="10dip"
+        app:centered="true"
+        app:fillColor="@color/pinkborder"
+        app:pageColor="@color/darkgrey"
+        app:snap="false" />
+
+</RelativeLayout>
