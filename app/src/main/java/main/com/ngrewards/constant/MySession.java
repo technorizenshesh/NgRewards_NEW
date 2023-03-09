@@ -37,7 +37,9 @@ public class MySession {
     public static final String KEY_PRODUCTCATE = "product_category";
     public static final String KEY_TOUCH_ENABLED = "touchid";
     public static final String APP_UPDATE = "appupdates";
-
+    public static final String admin_created_password = "admin_created_password";
+    public static final String sell_items_reomve_access = "sell_items_reomve_access";
+    public static final String PassSet = "pass_set";
 
     public MySession(Context context) {
         this._context = context;
@@ -45,12 +47,49 @@ public class MySession {
         editor = pref.edit();
     }
 
+    public void setsell_items_reomve_access(String appupdate) {
+        editor.putString(sell_items_reomve_access, appupdate);
+        //editor.putString(KEY_TYPE, type);
+        editor.commit();
+
+    }
+
+    public String getsell_items_reomve_access() {
+        return pref.getString(sell_items_reomve_access, "");
+    }
+    public void setPassSet(String appupdate) {
+        editor.putString(PassSet, appupdate);
+        editor.commit();
+
+    }
+
+    public String getPassSet() {
+        return pref.getString(PassSet, "");
+    }
+
+    public void setadmin_created_password(String appupdate) {
+        editor.putString(admin_created_password, appupdate);
+        //editor.putString(KEY_TYPE, type);
+        editor.commit();
+
+    }
+
+    public String getadmin_created_password() {
+        return pref.getString(admin_created_password, "");
+    }
+
+
     public void setuserId(String uid) {
         editor.putString(KEY_ID, uid);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
     }
+
+    public String getId() {
+        return pref.getString(KEY_ID, null);
+    }
+
     public void setAppUpdate(String appupdate) {
         editor.putString(APP_UPDATE, appupdate);
         //editor.putString(KEY_TYPE, type);
@@ -61,30 +100,36 @@ public class MySession {
     public String getAppUpdate() {
         return pref.getString(APP_UPDATE, "cancel");
     }
+
     public void setProductdata(String productdata) {
         editor.putString(KEY_PRODUCTCATE, productdata);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
     }
+
     public void setMerchantcat(String merchantdata) {
         editor.putString(KEY_MERCHANTCATE, merchantdata);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
     }
+
     public void setCountrydata(String countrydata) {
         editor.putString(KEY_COUNTRY, countrydata);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
     }
+
     public String getKeyCountry() {
         return pref.getString(KEY_COUNTRY, null);
     }
+
     public String getKeyMerchantcate() {
         return pref.getString(KEY_MERCHANTCATE, null);
     }
+
     public String getProductdata() {
         return pref.getString(KEY_PRODUCTCATE, null);
     }
@@ -95,21 +140,24 @@ public class MySession {
         editor.commit();
 
     }
-    public void pushnotificationofoff(boolean val){
+
+    public void pushnotificationofoff(boolean val) {
         editor.putBoolean(KEY_PUSH_NOTIFICATION, val);
         editor.commit();
 
     }
-    public boolean isPushOn(){
+
+    public boolean isPushOn() {
         return pref.getBoolean(KEY_PUSH_NOTIFICATION, true);
     }
-    public void touchid(boolean val){
+
+    public void touchid(boolean val) {
         editor.putBoolean(KEY_TOUCH_ENABLED, val);
         editor.commit();
 
     }
 
-    public boolean isTouchOn(){
+    public boolean isTouchOn() {
         return pref.getBoolean(KEY_TOUCH_ENABLED, false);
     }
 
@@ -171,18 +219,19 @@ public class MySession {
         return user;
     }
 
-    public void signinusers(boolean val){
+    public void signinusers(boolean val) {
         editor.putBoolean(IS_LOGIN, val);
         editor.commit();
 
     }
-    public void prouser(boolean val){
+
+    public void prouser(boolean val) {
         editor.putBoolean(KEY_PRO_WEL, val);
         editor.commit();
 
     }
-    public boolean Isprouser()
-    {
+
+    public boolean Isprouser() {
         return pref.getBoolean(KEY_PRO_WEL, false);
     }
 
@@ -190,15 +239,14 @@ public class MySession {
         editor.clear();
         editor.commit();
     }
+
     public void onlineUser(boolean val) {
         editor.putBoolean(IS_ONLINE, val);
         editor.commit();
 
     }
 
-    public boolean IsLoggedIn()
-
-    {
+    public boolean IsLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }
 
@@ -216,11 +264,6 @@ public class MySession {
 
     public String getEmail() {
         return pref.getString(KEY_EMAIL, null);
-    }
-
-
-    public String getId() {
-        return pref.getString(KEY_ID, null);
     }
 
 

@@ -159,13 +159,20 @@ public class MerchantBottumAct extends TabActivity {
 
                 try {
                     JSONObject jsonObject = new JSONObject(result);
+                   // Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: "+jsonObject.toString() );
                     String message = jsonObject.getString("status");
-
                     reqcounft.setVisibility(View.GONE);
-
                     if (message.equalsIgnoreCase("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                         String unseen_count = jsonObject1.getString("unseen_count");
+                        String admin_created_password    = jsonObject1.getString("admin_created_password");
+                        String sell_items_reomve_access = jsonObject1.getString("sell_items_reomve_access");
+                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: sell_items_reomve_access"+sell_items_reomve_access );
+                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject:admin_created_password "+admin_created_password );
+mySession.setsell_items_reomve_access(sell_items_reomve_access);
+mySession.setadmin_created_password(admin_created_password);
+                        mySession.setPassSet("");
+
                         if (unseen_count.equals("0")) {
                             reqcounft.setVisibility(View.GONE);
                         } else {
