@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import main.com.ngrewards.activity.SliderActivity;
 import main.com.ngrewards.R;
+import main.com.ngrewards.activity.SliderActivity;
 
 /**
  * Created by technorizen on 13/7/18.

@@ -2,9 +2,9 @@ package main.com.ngrewards.marchant.draweractivity;
 
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,28 +18,32 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.OfferBeanList;
 import main.com.ngrewards.beanclasses.Offerbean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class OffersActivity extends AppCompatActivity {
 

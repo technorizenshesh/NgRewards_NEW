@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -42,21 +41,16 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.AddMemberCard;
 import main.com.ngrewards.activity.ItemOrderPaySuccessFully;
-import main.com.ngrewards.activity.ManualActivity;
-import main.com.ngrewards.activity.MyCartDetail;
 import main.com.ngrewards.beanclasses.CartBean;
 import main.com.ngrewards.beanclasses.CartListBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -69,7 +63,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import www.develpoeramit.mapicall.ApiCallBuilder;
 
 public class CheckOutAct extends AppCompatActivity {
 

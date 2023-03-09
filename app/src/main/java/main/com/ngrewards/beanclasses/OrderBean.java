@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import main.com.ngrewards.activity.MerchantDetailAct;
-
 /**
  * Created by technorizen on 28/11/18.
  */

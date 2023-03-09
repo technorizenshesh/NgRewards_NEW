@@ -1,11 +1,11 @@
 package main.com.ngrewards.activity;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -19,14 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.com.ngrewards.start_fragment.DiscoverFrag;
-import main.com.ngrewards.start_fragment.EarnFriendCash;
-import main.com.ngrewards.start_fragment.NgHelpFrag;
-import main.com.ngrewards.start_fragment.SliderLastFrag;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.CustomViewPager;
@@ -34,7 +26,15 @@ import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.start_fragment.BecontrolFrag;
+import main.com.ngrewards.start_fragment.DiscoverFrag;
+import main.com.ngrewards.start_fragment.EarnFriendCash;
 import main.com.ngrewards.start_fragment.Easyfrag;
+import main.com.ngrewards.start_fragment.NgHelpFrag;
+import main.com.ngrewards.start_fragment.SliderLastFrag;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StartSliderAct extends AppCompatActivity {
     private Button continue_button;

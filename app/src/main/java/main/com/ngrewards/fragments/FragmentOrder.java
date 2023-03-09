@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -25,13 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.pedant.SweetAlert.Constants;
 import main.com.ngrewards.Models.ModelItem;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;

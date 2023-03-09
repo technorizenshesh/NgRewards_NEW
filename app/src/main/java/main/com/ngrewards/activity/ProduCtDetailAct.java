@@ -1,12 +1,12 @@
 package main.com.ngrewards.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.DetailList;
 import main.com.ngrewards.beanclasses.ProductDetail;
 import main.com.ngrewards.productfragment.ProAboutFrag;
@@ -34,7 +35,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
 
 public class ProduCtDetailAct extends AppCompatActivity {
 

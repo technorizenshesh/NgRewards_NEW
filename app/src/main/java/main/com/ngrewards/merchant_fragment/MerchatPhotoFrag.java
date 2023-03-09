@@ -27,15 +27,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import main.com.ngrewards.beanclasses.GalleryBean;
-import main.com.ngrewards.beanclasses.MerchantListBean;
-import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.constant.ExpandableHeightGridView;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MerchantDetailAct;
+import main.com.ngrewards.beanclasses.GalleryBean;
+import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.ExpandableHeightGridView;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.fragments.NearbyFrag;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.showzoomableimages.FullScreenActivity;
 import okhttp3.ResponseBody;

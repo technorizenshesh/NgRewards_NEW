@@ -3,8 +3,8 @@ package main.com.ngrewards.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,7 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.placeorderclasses.AllAddedAddressAct;
-import main.com.ngrewards.placeorderclasses.CheckOutAct;
 import main.com.ngrewards.placeorderclasses.SelectPaymentMethodAct;
 
 public class ItemOrderPaySuccessFully extends AppCompatActivity {

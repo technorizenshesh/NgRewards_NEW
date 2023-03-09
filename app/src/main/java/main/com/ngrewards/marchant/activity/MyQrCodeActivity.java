@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,9 +33,9 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.BuildConfig;
+import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.R;
 
 public class MyQrCodeActivity extends AppCompatActivity {
 
@@ -218,7 +218,8 @@ public class MyQrCodeActivity extends AppCompatActivity {
                 jsonObject.put("murchant_name", "" + murchant_name);
                 jsonObject.put("merchant_number", "" + merchant_number);
                 jsonObject.put("merchant_id", "" + user_id);
-                bitmap = TextToImageEncode(jsonObject.toString());
+                String s =  murchant_name+","+merchant_number+","+user_id;
+                        bitmap = TextToImageEncode(s);
                 myqrview.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();

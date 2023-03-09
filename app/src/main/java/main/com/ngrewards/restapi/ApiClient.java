@@ -1,6 +1,7 @@
 package main.com.ngrewards.restapi;
 
 import java.util.concurrent.TimeUnit;
+
 import main.com.ngrewards.constant.BaseUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

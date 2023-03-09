@@ -1,5 +1,7 @@
 package main.com.ngrewards.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -33,8 +35,6 @@ import java.util.Date;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SliderActivity;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by technorizen on 13/6/18.

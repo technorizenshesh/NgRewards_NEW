@@ -24,8 +24,6 @@ import java.util.List;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.FragItemDetails;
-import main.com.ngrewards.activity.MerchantDetailAct;
-import main.com.ngrewards.beanclasses.GalleryBean;
 import main.com.ngrewards.beanclasses.ProductImage;
 
 public class FullScreenImagesActivity extends AppCompatActivity {

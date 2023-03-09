@@ -7,7 +7,6 @@ package main.com.ngrewards.qrcodes;
 import android.os.Handler;
 import android.os.Looper;
 
-
 import java.util.concurrent.CountDownLatch;
 
 import main.com.ngrewards.QrCodeActivity;

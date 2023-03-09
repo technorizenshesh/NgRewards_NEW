@@ -3,9 +3,9 @@ package main.com.ngrewards.activity;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -13,10 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.bottumtab.HomeActivity;
 import main.com.ngrewards.bottumtab.MainTabActivity;
-import main.com.ngrewards.bottumtab.TrasActivity;
-import main.com.ngrewards.draweractivity.BaseActivity;
 
 public class WebViewCalled extends AppCompatActivity {
 

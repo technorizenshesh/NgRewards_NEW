@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,7 +15,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,12 +30,11 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.draweractivity.BaseActivity;
-import main.com.ngrewards.R;
-import main.com.ngrewards.draweractivity.ProfileActivity;
 
 public class InviteActMain extends BaseActivity {
 
@@ -86,7 +83,7 @@ public class InviteActMain extends BaseActivity {
 
                     Log.e("Json_Result_Test>>>", "" + jsonObject1);
 
-                    username = jsonObject1.getString("affiliate_name");
+                    username = jsonObject1.getString("fullname");
                     affiliate_number = jsonObject1.getString("affiliate_number");
                     how_invited_you = jsonObject1.getString("how_invited_you");
                     username_s = jsonObject1.getString("username");
@@ -103,7 +100,8 @@ public class InviteActMain extends BaseActivity {
                             jsonObject12.put("affiliate_number", "" + jsonObject1.getString("affiliate_number"));
                             jsonObject12.put("fullname", "" + jsonObject1.getString("fullname"));
                             jsonObject12.put("id", "" + jsonObject1.getString("id"));
-                            String s = "Member," + jsonObject1.getString("affiliate_name") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
+                         //   String s = "Member," + jsonObject1.getString("affiliate_name") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
+                            String s = "Member," + jsonObject1.getString("username") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
                             //bitmap = TextToImageEncode(jsonObject12.toString());
                             bitmap = TextToImageEncode(s);
                             myqrview.setImageBitmap(bitmap);

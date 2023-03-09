@@ -2,52 +2,34 @@ package main.com.ngrewards.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class StripeExpressAcountAct extends AppCompatActivity {
     ScheduledExecutorService scheduleTaskExecutor;

@@ -1,9 +1,9 @@
 package main.com.ngrewards.marchant.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,16 +29,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.MerchantItem;
+import main.com.ngrewards.beanclasses.MerchantItemList;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.beanclasses.MerchantItemList;
-import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class ActiveProductsAct extends AppCompatActivity {
 

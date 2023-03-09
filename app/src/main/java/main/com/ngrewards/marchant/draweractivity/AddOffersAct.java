@@ -12,16 +12,15 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,21 +55,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.draweractivity.AddMenuPublish;
-import main.com.ngrewards.marchant.activity.StartYourListing;
+import main.com.ngrewards.constant.MultipartUtility;
+import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.constant.MultipartUtility;
-import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class AddOffersAct extends AppCompatActivity {
 

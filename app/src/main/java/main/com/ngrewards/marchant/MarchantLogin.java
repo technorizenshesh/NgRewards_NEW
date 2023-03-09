@@ -16,13 +16,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +52,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -86,21 +85,19 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.FingerprintHandler;
-import main.com.ngrewards.activity.LoginActivity;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.TermsAndCondition;
 import main.com.ngrewards.activity.app.Config;
-import main.com.ngrewards.beanclasses.MerchantDetail;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.activity.ForgotPass;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
-import main.com.ngrewards.R;
-import main.com.ngrewards.constant.CountryBean;
-import main.com.ngrewards.constant.Myapisession;
 
 public class MarchantLogin extends AppCompatActivity {
     private RelativeLayout backlay;

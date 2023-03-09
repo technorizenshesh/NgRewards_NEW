@@ -3,11 +3,13 @@ package main.com.ngrewards.beanclasses;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by technorizen on 21/7/18.
  */
 
-public class MemberDetail {
+public class MemberDetail  implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;
@@ -188,5 +190,27 @@ public class MemberDetail {
 
     public void setMemberImage(String memberImage) {
         this.memberImage = memberImage;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberDetail{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", fullname='" + fullname + '\'' +
+                ", username='" + username + '\'' +
+                ", b_name='" + b_name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", affiliateName='" + affiliateName + '\'' +
+                ", howInvitedYou='" + howInvitedYou + '\'' +
+                ", affiliateNumber='" + affiliateNumber + '\'' +
+                ", userType='" + userType + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", memberImage='" + memberImage + '\'' +
+                ", business_name='" + business_name + '\'' +
+                ", order_id='" + order_id + '\'' +
+                ", order_date='" + order_date + '\'' +
+                '}';
     }
 }

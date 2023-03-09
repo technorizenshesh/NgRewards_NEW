@@ -15,13 +15,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,10 +38,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -52,19 +50,18 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
-import main.com.ngrewards.R;
 
 public class SplashActivity extends AppCompatActivity implements
         //http://main.com.ngrewards/?productId=1

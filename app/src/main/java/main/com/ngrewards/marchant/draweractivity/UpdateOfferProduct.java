@@ -11,9 +11,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -36,11 +36,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -57,20 +52,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import main.com.ngrewards.activity.MemberChatAct;
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class UpdateOfferProduct extends AppCompatActivity {
     private EditText tital_name_et, offer_desc, offer_price;

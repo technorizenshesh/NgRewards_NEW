@@ -3,8 +3,6 @@ package main.com.ngrewards.constant;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.numetriclabz.numandroidcharts.ChartData;
-
 import java.util.List;
 
 /**

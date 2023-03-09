@@ -11,10 +11,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
@@ -41,12 +40,10 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,19 +51,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class StartYourListing extends AppCompatActivity {
     public static ArrayList<String> ImagePathArrayList;

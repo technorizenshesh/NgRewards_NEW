@@ -1,6 +1,5 @@
 package main.com.ngrewards.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -25,10 +24,8 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.Models.ModalMenuList;
@@ -38,9 +35,6 @@ import main.com.ngrewards.activity.IMethodCaller;
 import main.com.ngrewards.activity.MerchantMenuSetting;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.draweractivity.AddMenuPublish;
-import main.com.ngrewards.marchant.activity.ActiveProductsAct;
-import main.com.ngrewards.marchant.activity.UpdateListingProduct;
-import main.com.ngrewards.marchant.draweractivity.OffersActivity;
 
 /**
  * Created by admin4 on 11/5/2016.

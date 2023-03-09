@@ -2,7 +2,8 @@ package main.com.ngrewards.bottumtab;
 
 import android.content.Context;
 import android.os.Bundle;
-
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.CustomViewPager;

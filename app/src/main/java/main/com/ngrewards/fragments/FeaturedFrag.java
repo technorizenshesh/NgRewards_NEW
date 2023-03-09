@@ -27,6 +27,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.com.ngrewards.R;
+import main.com.ngrewards.activity.ManualActivity;
+import main.com.ngrewards.activity.ProduCtDetailAct;
+import main.com.ngrewards.beanclasses.Product;
+import main.com.ngrewards.beanclasses.Productlistbean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
@@ -34,11 +39,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.activity.ManualActivity;
-import main.com.ngrewards.activity.ProduCtDetailAct;
-import main.com.ngrewards.beanclasses.Product;
-import main.com.ngrewards.beanclasses.Productlistbean;
 
 /**
  * Created by technorizen on 14/6/18.

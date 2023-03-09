@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.memberstripe.MemberStripeExpressAcountAct;
 import main.com.ngrewards.activity.memberstripe.SeeMemberMyStripeDashBoardAct;

@@ -8,13 +8,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,23 +46,23 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import main.com.ngrewards.R;
+import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.marchant.fragments.MerBusinessFrag;
 import main.com.ngrewards.marchant.fragments.MerEnterEmailFrag;
 import main.com.ngrewards.marchant.fragments.MerEnterPassFrag;
+import main.com.ngrewards.marchant.fragments.MerGiveNgReward;
 import main.com.ngrewards.marchant.fragments.MerUploadImageNameFrag;
 import main.com.ngrewards.marchant.fragments.MerWhoInvitedFrag;
 import main.com.ngrewards.marchant.fragments.WelcomeFragMerchant;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
-import main.com.ngrewards.R;
-import main.com.ngrewards.activity.SplashActivity;
-import main.com.ngrewards.constant.CustomViewPager;
-import main.com.ngrewards.marchant.MarchantLogin;
-import main.com.ngrewards.marchant.fragments.MerGiveNgReward;
 
 public class MerchantSignupSlider extends AppCompatActivity {
 

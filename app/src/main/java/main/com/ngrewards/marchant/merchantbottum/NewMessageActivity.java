@@ -3,8 +3,8 @@ package main.com.ngrewards.marchant.merchantbottum;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
@@ -30,13 +29,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.ManualActivity;
 import main.com.ngrewards.activity.MemberChatAct;
-import main.com.ngrewards.activity.MemberMessageAct;
-import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
-import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
@@ -148,11 +143,10 @@ private AutoCompleteTextView merchant_number;
                         MemberDetail memberlist = new MemberDetail();
                         memberlist.setAffiliateName(s.toString());
                         l1.add(memberlist);
-
-                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(NewMessageActivity.this, l1, "", "");
+                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(
+                                NewMessageActivity.this, l1, "", "");
                         merchant_number.setAdapter(ga);
                         ga.notifyDataSetChanged();
-
                     }
 
                 }
@@ -199,7 +193,7 @@ private AutoCompleteTextView merchant_number;
             view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
             TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
             try {
-                geo_search_result_text.setText(l2.get(i).getAffiliateName());
+                geo_search_result_text.setText(l2.get(i).getUsername());
                 geo_search_result_text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -209,24 +203,25 @@ private AutoCompleteTextView merchant_number;
 
                         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                                 InputMethodManager.HIDE_NOT_ALWAYS);
-
                         // checkic.setImageResource(R.drawable.check);
                         if (l2!=null&&l2.get(i)!=null)
                         {
-                            if (l2!=null&&l2.get(i).getAffiliateName()!=null){
-                                merchant_number.setText(l2.get(i).getAffiliateName());
+                            Log.e("TAG", "l2l2l2l2l2l2l2: "+l2.get(i).toString() );
+                            MemberDetail memberDetail =l2.get(i);
+                            if (memberDetail.getUsername() != null){
+                                merchant_number.setText(memberDetail.getUsername());
                             }
-                            if (l2!=null&&l2.get(i).getId()!=null){
-                                receiver_id = l2.get(i).getId();
+                            if (memberDetail.getId()!=null){
+                                receiver_id = memberDetail.getId();
                             }
-                            if (l2!=null&&l2.get(i).getMemberImage()!=null){
-                                receiver_img = l2.get(i).getMemberImage();
+                            if (memberDetail.getMemberImage()!=null){
+                                receiver_img = memberDetail.getMemberImage();
                             }
-                            if (l2!=null&&l2.get(i).getAffiliateName()!=null){
-                                receiver_name = l2.get(i).getAffiliateName();
+                            if (memberDetail.getUsername()!=null){
+                                receiver_name = memberDetail.getUsername();
                             }
-                            if (l2!=null&&l2.get(i).getFullname()!=null){
-                                receiver_fullname = l2.get(i).getFullname();
+                            if (memberDetail.getFullname()!=null){
+                                receiver_fullname = memberDetail.getFullname();
                             }
                             type = "Merchant";
                             Log.e("NewMemberActivity", "onClick: "+"NewMemberActivityNewMemberActivity" );
@@ -234,7 +229,6 @@ private AutoCompleteTextView merchant_number;
                             i.putExtra("receiver_id",receiver_id);
                             i.putExtra("type","Merchant");
                             i.putExtra("receiver_fullname",receiver_fullname);
-
                             i.putExtra("receiver_type","Member");
                             i.putExtra("receiver_img", BaseUrl.image_baseurl+receiver_img);
                             i.putExtra("receiver_name",receiver_name);
@@ -246,7 +240,7 @@ private AutoCompleteTextView merchant_number;
                 });
 
             } catch (Exception e) {
-
+e.printStackTrace();
             }
 
             return view;
@@ -265,7 +259,7 @@ private AutoCompleteTextView merchant_number;
                         } else {
                             l2.clear();
                             for (MemberDetail wp : memberDetailArrayList) {
-                                if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
+                                if (wp.getUsername().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
                                 {
                                     l2.add(wp);
                                 }

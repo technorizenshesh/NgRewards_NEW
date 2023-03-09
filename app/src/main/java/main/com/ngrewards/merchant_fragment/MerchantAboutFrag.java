@@ -13,12 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,19 +24,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONObject;
-
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import main.com.ngrewards.beanclasses.MerchantDetail;
-import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MerchantDetailAct;
 import main.com.ngrewards.activity.SplashActivity;
+import main.com.ngrewards.constant.GPSTracker;
 
 public class MerchantAboutFrag extends Fragment implements OnMapReadyCallback {
     MapView mapview;

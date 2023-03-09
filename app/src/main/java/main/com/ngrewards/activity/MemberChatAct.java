@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -17,11 +16,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
@@ -30,7 +29,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +59,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -70,7 +67,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -88,7 +84,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import cz.msebera.android.httpclient.entity.mime.content.ByteArrayBody;
 import cz.msebera.android.httpclient.extras.Base64;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.gauriinfotech.commons.Commons;
@@ -99,15 +94,9 @@ import main.com.ngrewards.beanclasses.ChatBeanMain;
 import main.com.ngrewards.beanclasses.ConverSession;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
-import main.com.ngrewards.constant.FileUtils;
 import main.com.ngrewards.constant.GetFilePathFromDevice;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.constant.PathUtil;
-import main.com.ngrewards.draweractivity.BaseActivity;
-import main.com.ngrewards.draweractivity.ProfileActivity;
-import main.com.ngrewards.marchant.activity.MerChatActivity;
-import main.com.ngrewards.marchant.merchantbottum.MerMessageAct;
 
 public class MemberChatAct extends AppCompatActivity {
     ConversessionAdapter conversessionAdapter;
@@ -213,7 +202,6 @@ public class MemberChatAct extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-
         scheduleTaskExecutor.shutdown();
         isInFront = false;
     }

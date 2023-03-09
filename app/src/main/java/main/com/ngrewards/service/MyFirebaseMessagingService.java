@@ -4,6 +4,8 @@ package main.com.ngrewards.service;
  * Created by ritesh on 20/3/17.
  */
 
+import static main.com.ngrewards.activity.app.NotificationUtils.isAppIsInBackground;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +30,6 @@ import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
-
-import static main.com.ngrewards.activity.app.NotificationUtils.isAppIsInBackground;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

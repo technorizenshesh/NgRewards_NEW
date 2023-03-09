@@ -19,13 +19,13 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -58,8 +58,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.LoggingBehavior;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -103,7 +101,6 @@ import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.marchant.MarchantLogin;
 
 public class LoginActivity extends AppCompatActivity {

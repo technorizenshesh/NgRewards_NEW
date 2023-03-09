@@ -1,8 +1,8 @@
 package main.com.ngrewards.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -17,15 +17,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.com.ngrewards.R;
+import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.beanclasses.MemberBean;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class MemberTransfer extends AppCompatActivity {
 

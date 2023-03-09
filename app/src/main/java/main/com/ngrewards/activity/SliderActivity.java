@@ -44,20 +44,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.EnterEmailFrag;
-import main.com.ngrewards.fragments.LetsPicUserFrag;
-import main.com.ngrewards.fragments.UploadImageNameFrag;
-import main.com.ngrewards.R;
-
-import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.fragments.EnterMobfrag;
 import main.com.ngrewards.fragments.EnterPassFrag;
+import main.com.ngrewards.fragments.LetsPicUserFrag;
+import main.com.ngrewards.fragments.UploadImageNameFrag;
 import main.com.ngrewards.fragments.WhoInvitedFrag;
 
 public class SliderActivity extends AppCompatActivity {

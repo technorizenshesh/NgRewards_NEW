@@ -54,7 +54,6 @@ import main.com.ngrewards.activity.EmployeesalesActivity;
 import main.com.ngrewards.activity.MemberMessageAct;
 import main.com.ngrewards.activity.MyCartDetail;
 import main.com.ngrewards.activity.NetworkAct;
-import main.com.ngrewards.activity.NotificationActivity;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.activity.TransferToaFriend;
 import main.com.ngrewards.activity.TutorialAct;
@@ -65,8 +64,6 @@ import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
-
-import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
 
 
 public class BaseActivity extends AppCompatActivity {

@@ -25,8 +25,8 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.R;
+import main.com.ngrewards.constant.BaseUrl;
 
 public class MemberForgotPass extends AppCompatActivity {
 

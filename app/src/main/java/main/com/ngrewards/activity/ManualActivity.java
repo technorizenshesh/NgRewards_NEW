@@ -15,13 +15,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -82,6 +82,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -99,7 +100,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
 
 public class ManualActivity extends AppCompatActivity {
 

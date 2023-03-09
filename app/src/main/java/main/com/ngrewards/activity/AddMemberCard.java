@@ -26,7 +26,6 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -26,9 +26,9 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.R;
 
 public class MerchantTouchIdAct extends AppCompatActivity {
 private RelativeLayout backlay;

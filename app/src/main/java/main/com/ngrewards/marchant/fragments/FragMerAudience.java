@@ -7,28 +7,20 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.beanclasses.AddressBean;
 import main.com.ngrewards.beanclasses.CityLoc;
 import main.com.ngrewards.beanclasses.State;
-import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.marchant.merchantbottum.MerStatusAct;
-import main.com.ngrewards.placeorderclasses.AllAddedAddressAct;
-import main.com.ngrewards.placeorderclasses.UpdateShipingAddress;
 
 /**
  * Created by technorizen on 21/6/18.

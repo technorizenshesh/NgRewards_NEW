@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -50,17 +50,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
-import main.com.ngrewards.R;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.stripepaymentclasses.CreditCardFormatTextWatcher;
 import okhttp3.ResponseBody;
@@ -262,28 +261,32 @@ public class TransferToaFriend extends AppCompatActivity {
                      //   JSONObject jsonObject = new JSONObject(result);
                      //   String murchant_name = jsonObject.getString("murchant_name");
                         member_id    = arr[4];
-                        usernameauto.setText(arr[1]);
-                        memname   .setText((arr[2]));
+                        memname  .setText(arr[2]);
+                        usernameauto  .setText((arr[1]));
 
 
                     } catch (Exception e) {
-                         JSONObject jsonObject = null;
-                        try {
-                            jsonObject = new JSONObject(result);
-                            String murchant_name = jsonObject.getString("murchant_name");
-                            String merchant_number = jsonObject.getString("merchant_number");
-                            String merchant_id = jsonObject.getString("merchant_id");
-                            usernameauto.setText(""+merchant_number);
-                            memname   .setText((""+murchant_name));
-                            member_id    = merchant_id;
-                        } catch (JSONException ex) {
+
+                        Toast.makeText(TransferToaFriend.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+
+                      /*  try {
+                            Log.e("TAG", "onActivityResultresultresultresult: "+ result);
+                            *//*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*//*
+                            String arr[] = result.split(",");
+                            //   JSONObject jsonObject = new JSONObject(result);
+                            //   String murchant_name = jsonObject.getString("murchant_name");
+                            member_id    = arr[2];
+                            usernameauto.setText(arr[0]);
+                            memname   .setText((arr[1]));
+
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                             Toast.makeText(TransferToaFriend.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
                             usernameauto.setText("");
                             memname   .setText("");
                             member_id    = "";
                         }
-
+*/
 
 
                     }

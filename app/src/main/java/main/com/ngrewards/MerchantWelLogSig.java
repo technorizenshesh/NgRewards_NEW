@@ -1,12 +1,11 @@
 package main.com.ngrewards;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;

@@ -1,4 +1,7 @@
 package main.com.ngrewards.restapi;
+
+import static okhttp3.internal.platform.Platform.INFO;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,8 +20,6 @@ import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.platform.Platform;
 import okio.Buffer;
 import okio.BufferedSource;
-
-import static okhttp3.internal.platform.Platform.INFO;
 
 public class HttpLoggingInterceptor implements Interceptor {
 

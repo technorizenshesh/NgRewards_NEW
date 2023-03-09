@@ -10,12 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.LoginActivity;
 import main.com.ngrewards.activity.TermsAndCondition;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 

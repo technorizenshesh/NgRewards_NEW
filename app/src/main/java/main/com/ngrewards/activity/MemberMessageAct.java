@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -239,7 +240,7 @@ public class MemberMessageAct extends BaseActivity {
 
 
         @Override
-        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             if (converSessionArrayList.get(position).getFullname()==null||converSessionArrayList.get(position).getFullname().equalsIgnoreCase("")){
                 holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
             }
@@ -417,7 +418,7 @@ public class MemberMessageAct extends BaseActivity {
                             if (jsonObject2.getString("type").equalsIgnoreCase("Merchant")) {
                                 conversession.setSenderid(jsonObject2.getString("id"));
                                 conversession.setSenderimg(jsonObject2.getString("merchant_image"));
-                                conversession.setSendername(jsonObject2.getString("business_name"));
+                                conversession.setSendername(jsonObject2.getString("business_no"));
                                 conversession.setFullname(jsonObject2.getString("business_name"));
                             } else
                             {
@@ -425,12 +426,23 @@ public class MemberMessageAct extends BaseActivity {
                                 if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")) {
                                     conversession.setSenderid(jsonObject2.getString("tid"));
                                     conversession.setSenderimg(jsonObject2.getString("member_image"));
-                                    conversession.setSendername(jsonObject2.getString("affiliate_name"));
+                                    conversession.setSendername(jsonObject2.getString("username"));
                                     conversession.setFullname(jsonObject2.getString("fullname"));
                                 } else {
                                     conversession.setSenderid(jsonObject2.getString("id"));
                                     conversession.setSenderimg(jsonObject2.getString("merchant_image"));
-                                    conversession.setSendername(jsonObject2.getString("business_name"));
+                                     if (jsonObject2.has("username")){
+                                         conversession.setSendername(jsonObject2.getString("username"));
+
+                                     }else {
+                                         if (jsonObject2.has("business_no")){
+                                             conversession.setSendername(jsonObject2.getString("business_no"));
+
+                                         }else{
+                                             conversession.setSendername(jsonObject2.getString("business_name"));
+
+                                         }
+                                     }
                                     conversession.setFullname(jsonObject2.getString("business_name"));
                                 }
                             }
@@ -460,6 +472,7 @@ public class MemberMessageAct extends BaseActivity {
                             }
 
                             converSessionArrayList.add(conversession);
+                            Log.e("TAG", "converSessionArrayListconverSessionArrayList:---     "+conversession.toString());
                         }
 
                     }

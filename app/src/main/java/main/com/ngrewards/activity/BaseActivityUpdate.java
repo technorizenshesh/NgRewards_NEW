@@ -1,4 +1,5 @@
 package main.com.ngrewards.activity;
+
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,18 +23,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.QrCodeActivity;
+import main.com.ngrewards.R;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.R;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.draweractivity.SettingActivity;

@@ -2,14 +2,16 @@ package main.com.ngrewards.activity;
 
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import java.util.Random;
+
 import ir.alirezabdn.wp7progress.WP10ProgressBar;
 import main.com.ngrewards.R;
 

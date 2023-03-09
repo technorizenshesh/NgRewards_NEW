@@ -2,17 +2,15 @@ package main.com.ngrewards.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.constant.BaseUrl;
 
 public class TestingStripeActivity extends AppCompatActivity {
     String url ="http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";

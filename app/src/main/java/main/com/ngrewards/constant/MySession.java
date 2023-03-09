@@ -2,6 +2,7 @@ package main.com.ngrewards.constant;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import java.util.HashMap;
 
 /**

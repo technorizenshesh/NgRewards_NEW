@@ -11,11 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import main.com.ngrewards.QrCodeActivity;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.ManualActivity;

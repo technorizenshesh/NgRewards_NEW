@@ -1,9 +1,7 @@
 package main.com.ngrewards.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -11,11 +9,14 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
+
 import main.com.ngrewards.Interfaces.onNotify;
 import main.com.ngrewards.Models.ModelItem;
 import main.com.ngrewards.R;

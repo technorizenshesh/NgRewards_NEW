@@ -17,10 +17,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 import main.com.ngrewards.R;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 /**
  * Created by technorizen on 7/8/18.

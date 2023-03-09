@@ -75,26 +75,26 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import main.com.ngrewards.beanclasses.CategoryBean;
-import main.com.ngrewards.beanclasses.CategoryBeanList;
-import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.drawlocation.WebOperations;
-import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SplashActivity;
+import main.com.ngrewards.beanclasses.CategoryBean;
+import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.beanclasses.GalleryBean;
+import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.drawlocation.MyTask;
+import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
+import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
 import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MerProfileActivity extends AppCompatActivity {
     MySession mySession;

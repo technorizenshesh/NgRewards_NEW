@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,7 +38,6 @@ import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.merchantbottum.NewMessageActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -173,7 +171,8 @@ private AutoCompleteTextView merchant_number;
                         memberlist.setBusinessNo(s.toString());
                         l1.add(memberlist);
 
-                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(NewMemberMessageActivity.this, l1, "", "");
+                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(
+                                NewMemberMessageActivity.this, l1, "", "");
                         merchant_number.setAdapter(ga);
                         ga.notifyDataSetChanged();
 
@@ -260,10 +259,10 @@ private AutoCompleteTextView merchant_number;
                             if (l2!=null&&l2.get(i).getMerchantImage()!=null){
                                 receiver_img = l2.get(i).getMerchantImage();
                             }
-                            if (l2!=null&&!l2.isEmpty()&&l2.get(i).getBusinessName()!=null){
+                            if (l2!=null&&!l2.isEmpty()&&l2.get(i).getBusinessNo()!=null){
 
                                 if(l2.size()!=0){
-                                    receiver_name = l2.get(i).getBusinessName();
+                                    receiver_name = l2.get(i).getBusinessNo();
                                 }
                                 else {
                                     Toast.makeText(getApplicationContext(),"sucess!!!",Toast.LENGTH_SHORT).show();
@@ -285,7 +284,7 @@ private AutoCompleteTextView merchant_number;
                             type = "Member";
                             if (l2==null||l2.get(i).getReceiver_type()==null||l2.get(i).getReceiver_type().equalsIgnoreCase("")){
                                 receiver_type_str = "Merchant";
-                                receiver_fullname=receiver_name;
+                                receiver_fullname=l2.get(i).getBusinessName();;
                             }
                             else {
                                 receiver_type_str = l2.get(i).getReceiver_type();
@@ -333,8 +332,6 @@ e.printStackTrace();
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
-
-
                         if (constraint.length() == 0) {
                         } else {
                             l2.clear();
@@ -354,15 +351,15 @@ e.printStackTrace();
                             }
 
                             for (MemberDetail mem : memberDetailArrayList) {
-                                if (mem.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
+                                if (mem.getUsername().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
                                 {
                                     Log.e("NewMembers", "performFiltering: " );
                                     MerchantListBean memberDetail = new MerchantListBean();
                                     memberDetail.setId(mem.getId());
-                                    memberDetail.setBusinessName(mem.getAffiliateName());
+                                    memberDetail.setBusinessName(mem.getUsername());
                                     memberDetail.setMerchantImage(mem.getMemberImage());
-                                    memberDetail.setBusinessNo(mem.getAffiliateName());
-                                    memberDetail.setContactName(mem.getAffiliateName());
+                                    memberDetail.setBusinessNo(mem.getUsername());
+                                    memberDetail.setContactName(mem.getFullname());
                                     memberDetail.setReceiver_type("Member");
                                     l2.add(memberDetail);
                                 }
@@ -453,9 +450,7 @@ e.printStackTrace();
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 }

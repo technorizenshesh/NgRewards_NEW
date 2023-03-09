@@ -16,8 +16,6 @@ import java.util.Date;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.fragments.FragmentWebView;
-import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
-import main.com.ngrewards.marchant.merchantbottum.MerMessageAct;
 
 public class SaledItemDetailAct extends AppCompatActivity {
 

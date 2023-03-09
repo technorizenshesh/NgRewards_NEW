@@ -1,16 +1,10 @@
 package main.com.ngrewards.qrcodes;
 
 import android.os.Handler;
-
-import main.com.ngrewards.QrCodeActivity;
-
-/**
- * Created by technorizen on 13/7/18.
- */
-
 import android.os.Looper;
 import android.os.Message;
 
+import com.blikoon.qrcodescanner.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -19,11 +13,12 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
-import com.blikoon.qrcodescanner.R;
 
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
+
+import main.com.ngrewards.QrCodeActivity;
 final class DecodeHandler extends Handler {
 
     private final QrCodeActivity mActivity;

@@ -2,12 +2,13 @@ package main.com.ngrewards.beanclasses;
 
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by technorizen on 19/12/17.
  */
 
-public class ConverSession {
+public class ConverSession  implements Serializable {
     String message;
     String chat_id;
     String image;
@@ -260,5 +261,39 @@ public class ConverSession {
 
     public void setChat_id(String chat_id) {
         this.chat_id = chat_id;
+    }
+
+    @Override
+    public String toString() {
+        return "ConverSession{" +
+                "message='" + message + '\'' +
+                ", chat_id='" + chat_id + '\'' +
+                ", image='" + image + '\'' +
+                ", statuss='" + statuss + '\'' +
+                ", msg_type='" + msg_type + '\'' +
+                ", chat_video='" + chat_video + '\'' +
+                ", video_thumb_img='" + video_thumb_img + '\'' +
+                ", file_name='" + file_name + '\'' +
+                ", attach_file_name='" + attach_file_name + '\'' +
+                ", no_of_message='" + no_of_message + '\'' +
+                ", file_path='" + file_path + '\'' +
+                ", fullname='" + fullname + '\'' +
+                ", fileIsAvb=" + fileIsAvb +
+                ", file=" + file +
+                ", id='" + id + '\'' +
+                ", senderid='" + senderid + '\'' +
+                ", reciverid='" + reciverid + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", time='" + time + '\'' +
+                ", senderimg='" + senderimg + '\'' +
+                ", reciverimg='" + reciverimg + '\'' +
+                ", sendername='" + sendername + '\'' +
+                ", recname='" + recname + '\'' +
+                ", sender_online_status='" + sender_online_status + '\'' +
+                ", userimg='" + userimg + '\'' +
+                ", username='" + username + '\'' +
+                ", chat_image='" + chat_image + '\'' +
+                ", receiver_type='" + receiver_type + '\'' +
+                '}';
     }
 }

@@ -20,12 +20,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import main.com.ngrewards.Models.MenuModal;
-import main.com.ngrewards.Models.ModalMenuList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.RecyclerViewClickListener1;
 import main.com.ngrewards.constant.BaseUrl;

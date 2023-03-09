@@ -9,10 +9,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import com.numetriclabz.numandroidcharts.AxisFormatter;
-import com.numetriclabz.numandroidcharts.BarChart;
-import com.numetriclabz.numandroidcharts.ChartHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 

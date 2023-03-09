@@ -47,7 +47,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,31 +57,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import main.com.ngrewards.BuildConfig;
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.ManualActivity;
+import main.com.ngrewards.activity.MerchantDetailAct;
 import main.com.ngrewards.activity.OrderActivity;
+import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.beanclasses.MarchantBean;
-import main.com.ngrewards.beanclasses.MerchantBean;
 import main.com.ngrewards.beanclasses.MerchantListBean;
-import main.com.ngrewards.beanclasses.OrderBean;
-import main.com.ngrewards.bottumtab.HomeActivity;
-import main.com.ngrewards.bottumtab.PayBillAct;
 import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.marchant.fragments.MerBusinessFrag;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.activity.MerchantDetailAct;
-import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by technorizen on 14/6/18.

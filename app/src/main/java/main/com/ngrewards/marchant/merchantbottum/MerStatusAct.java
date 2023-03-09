@@ -1,13 +1,12 @@
 package main.com.ngrewards.marchant.merchantbottum;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,20 +19,17 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import main.com.ngrewards.beanclasses.OrderMerchantAct;
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.SalesAudienceBean;
 import main.com.ngrewards.beanclasses.SalesBean;
 import main.com.ngrewards.beanclasses.SalesBeanList;
 import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.R;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity;
-import main.com.ngrewards.marchant.fragments.FragMerAudience;
 import main.com.ngrewards.marchant.fragments.FragMerSales;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;

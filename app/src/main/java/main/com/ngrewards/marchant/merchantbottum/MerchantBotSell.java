@@ -1,8 +1,8 @@
 package main.com.ngrewards.marchant.merchantbottum;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.MerchantItem;
 import main.com.ngrewards.beanclasses.MerchantItemList;
 import main.com.ngrewards.constant.MySession;
@@ -31,7 +32,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
 
 public class MerchantBotSell extends MerchantBaseActivity {
     FrameLayout contentFrameLayout;

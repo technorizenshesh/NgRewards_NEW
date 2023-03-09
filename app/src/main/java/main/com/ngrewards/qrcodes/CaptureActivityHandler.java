@@ -3,13 +3,14 @@ package main.com.ngrewards.qrcodes;
 /**
  * Created by technorizen on 13/7/18.
  */
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.zxing.Result;
 import com.blikoon.qrcodescanner.R;
 import com.blikoon.qrcodescanner.camera.CameraManager;
+import com.google.zxing.Result;
 
 import main.com.ngrewards.QrCodeActivity;
 

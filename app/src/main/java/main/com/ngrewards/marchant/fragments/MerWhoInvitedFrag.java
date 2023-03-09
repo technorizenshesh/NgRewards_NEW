@@ -1,5 +1,7 @@
 package main.com.ngrewards.marchant.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,18 +32,16 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.restapi.ApiClient;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by technorizen on 13/6/18.

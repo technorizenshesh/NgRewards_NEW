@@ -34,7 +34,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -51,7 +50,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +60,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -78,7 +76,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
 
 public class MerchantDetailAct extends AppCompatActivity {
 

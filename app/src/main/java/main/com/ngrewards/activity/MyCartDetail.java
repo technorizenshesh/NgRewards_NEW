@@ -1,9 +1,9 @@
 package main.com.ngrewards.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -25,7 +24,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.CartBean;
@@ -39,7 +37,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import www.develpoeramit.mapicall.ApiCallBuilder;
 
 public class MyCartDetail extends AppCompatActivity {
 

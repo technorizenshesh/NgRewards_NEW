@@ -1,14 +1,14 @@
 package main.com.ngrewards.marchant.merchantbottum;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -53,13 +53,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MemberChatAct;
 import main.com.ngrewards.beanclasses.ConverSession;
-import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.activity.MerChatActivity;
 import main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
@@ -250,7 +248,7 @@ public class MerMessageAct extends MerchantBaseActivity {
 
 
         @Override
-        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             ConverSession item = converSessionArrayList.get(position);
             if (converSessionArrayList.get(position).getNo_of_message()!=null&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("")&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("0")){
                 holder.reqcount.setVisibility(View.VISIBLE);
@@ -303,22 +301,19 @@ public class MerMessageAct extends MerchantBaseActivity {
                         .into(holder.propic);
 
             }
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("TAG", "onClick:  getSenderid"+converSessionArrayList.get(position).getSenderid() );
-                    Log.e("TAG", "onClick:  getReciverid "+converSessionArrayList.get(position).getReciverid() );
-                    Intent i = new Intent(MerMessageAct.this, MemberChatAct.class);
-                    i.putExtra("receiver_id",converSessionArrayList.get(position).getSenderid());
-                    i.putExtra("type","Merchant");
-                   // i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-                    i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-                    i.putExtra("receiver_type",converSessionArrayList.get(position).getReceiver_type());
-                    i.putExtra("receiver_img",BaseUrl.image_baseurl+converSessionArrayList.get(position).getSenderimg());
-                    i.putExtra("receiver_name",converSessionArrayList.get(position).getSendername());
-                    startActivity(i);
+            holder.itemView.setOnClickListener(v -> {
+                Log.e("TAG", "onClick:  getSenderid"+converSessionArrayList.get(position).getSenderid() );
+                Log.e("TAG", "onClick:  getReciverid "+converSessionArrayList.get(position).getReciverid() );
+                Intent i = new Intent(MerMessageAct.this, MemberChatAct.class);
+                i.putExtra("receiver_id",converSessionArrayList.get(position).getSenderid());
+                i.putExtra("type","Merchant");
+               // i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+                i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+                i.putExtra("receiver_type",converSessionArrayList.get(position).getReceiver_type());
+                i.putExtra("receiver_img",BaseUrl.image_baseurl+converSessionArrayList.get(position).getSenderimg());
+                i.putExtra("receiver_name",converSessionArrayList.get(position).getSendername());
+                startActivity(i);
 
-                }
             });
             holder.deletecon.setOnClickListener(new View.OnClickListener() {
                 @Override

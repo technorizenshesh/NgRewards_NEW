@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,13 +25,11 @@ import main.com.ngrewards.Models.ModelItem;
 import main.com.ngrewards.Models.ModelItemList;
 import main.com.ngrewards.Models.ModelMenuSetting;
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.MyCartDetail;
 import main.com.ngrewards.activity.OrderActivity;
 import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.databinding.FragmentMemberMenuBinding;
-import main.com.ngrewards.placeorderclasses.AllAddedAddressAct;
 import www.develpoeramit.mapicall.ApiCallBuilder;
 
 /**

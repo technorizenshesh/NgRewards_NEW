@@ -25,9 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,14 +46,11 @@ import java.util.Map;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SaledItemDetailAct;
-import main.com.ngrewards.beanclasses.CategoryBean;
-import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.beanclasses.GalleryBean;
 import main.com.ngrewards.beanclasses.MerOrderBean;
 import main.com.ngrewards.beanclasses.OrderMerchantAct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.marchant.draweractivity.MerProfileActivity;
 import main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity;
 import main.com.ngrewards.placeorderclasses.MerchantReceiptActivity;
 import main.com.ngrewards.restapi.ApiClient;

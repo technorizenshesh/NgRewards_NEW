@@ -2,6 +2,7 @@ package main.com.ngrewards;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+
 import main.com.ngrewards.draweractivity.BaseActivity;
 
 public class MainActivity extends BaseActivity {

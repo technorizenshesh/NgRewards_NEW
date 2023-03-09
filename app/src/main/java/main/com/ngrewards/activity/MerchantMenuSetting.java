@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
@@ -32,9 +33,11 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import main.com.ngrewards.Adapter.AdapterMenu;
 import main.com.ngrewards.Models.ModalMenuList;
 import main.com.ngrewards.R;

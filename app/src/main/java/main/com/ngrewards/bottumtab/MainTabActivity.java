@@ -1,14 +1,13 @@
 package main.com.ngrewards.bottumtab;
 
+import static android.content.ContentValues.TAG;
+import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TabActivity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -37,7 +36,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -47,13 +45,8 @@ import java.util.concurrent.TimeUnit;
 import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MemberMessageAct;
-import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
-
-import static android.content.ContentValues.TAG;
-import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
 
 
 public class MainTabActivity extends TabActivity {

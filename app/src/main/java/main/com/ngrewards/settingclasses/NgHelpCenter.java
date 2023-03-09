@@ -1,15 +1,10 @@
 package main.com.ngrewards.settingclasses;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.net.http.SslError;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;

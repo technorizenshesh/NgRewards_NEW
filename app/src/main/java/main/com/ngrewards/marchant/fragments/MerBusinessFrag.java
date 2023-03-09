@@ -1,5 +1,7 @@
 package main.com.ngrewards.marchant.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -42,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -71,25 +72,22 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import main.com.ngrewards.R;
+import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.drawlocation.WebOperations;
-import main.com.ngrewards.R;
-import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
+import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.drawlocation.MyTask;
+import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.marchant.draweractivity.MerProfileActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by technorizen on 13/6/18.

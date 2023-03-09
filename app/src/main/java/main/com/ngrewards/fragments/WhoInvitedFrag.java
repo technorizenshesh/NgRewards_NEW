@@ -1,5 +1,7 @@
 package main.com.ngrewards.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -42,8 +44,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by sagar technorizen on 13/6/18.

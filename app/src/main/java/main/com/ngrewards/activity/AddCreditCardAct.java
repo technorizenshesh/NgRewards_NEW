@@ -3,10 +3,8 @@ package main.com.ngrewards.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,17 +22,7 @@ import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
-import com.stripe.android.view.CardInputWidget;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,9 +38,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;

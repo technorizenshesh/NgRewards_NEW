@@ -10,14 +10,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,6 +67,7 @@ import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.BuildConfig;
+import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.DetailList;
 import main.com.ngrewards.beanclasses.ProductDetail;
 import main.com.ngrewards.beanclasses.ProductImage;
@@ -76,19 +75,15 @@ import main.com.ngrewards.beanclasses.ProductTopReview;
 import main.com.ngrewards.beanclasses.SimilarProduct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightGridView;
+import main.com.ngrewards.constant.ExpandableHeightListView;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.ProfileActivity;
-import main.com.ngrewards.marchant.activity.ForgotPass;
-import main.com.ngrewards.merchant_fragment.MerchantReviewsFrag;
+import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.showzoomableimages.FullScreenImagesActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.constant.ExpandableHeightListView;
-import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.restapi.ApiClient;
 
 public class FragItemDetails extends AppCompatActivity {
     private RelativeLayout backlay;

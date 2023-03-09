@@ -1,4 +1,5 @@
 package main.com.ngrewards.placeorderclasses;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentOrder;

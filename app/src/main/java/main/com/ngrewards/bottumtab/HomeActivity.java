@@ -1,13 +1,14 @@
 package main.com.ngrewards.bottumtab;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,17 +16,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.com.ngrewards.fragments.NearbyFrag;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.fragments.ItemsFrag;
+import main.com.ngrewards.fragments.NearbyFrag;
 import main.com.ngrewards.fragments.OffersFrag;
 import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
 

@@ -9,9 +9,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -60,8 +60,6 @@ import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
-import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.marchant.fragments.MerBusinessFrag;
 
 public class AddShipingAddress extends AppCompatActivity {
     private Integer THRESHOLD = 2;

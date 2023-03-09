@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -44,7 +43,6 @@ import main.com.ngrewards.beanclasses.NotificationBeanNew;
 import main.com.ngrewards.beanclasses.NotificationListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;

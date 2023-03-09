@@ -1,22 +1,15 @@
 package main.com.ngrewards.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.http.SslError;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.bottumtab.MainTabActivity;
 
 public class TermsAndCondition extends AppCompatActivity {
 

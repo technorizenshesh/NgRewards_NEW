@@ -1,8 +1,8 @@
 package main.com.ngrewards.marchant.activity;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -25,8 +25,8 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.R;
+import main.com.ngrewards.constant.BaseUrl;
 
 public class ForgotPass extends AppCompatActivity {
     private ProgressBar progresbar;

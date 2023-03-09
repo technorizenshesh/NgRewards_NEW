@@ -37,12 +37,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import main.com.ngrewards.activity.AccountTypeSelectionAct;
-import main.com.ngrewards.activity.AddCreditCardAct;
-import main.com.ngrewards.activity.MerchantMenuSetting;
-import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.R;
+import main.com.ngrewards.activity.AccountTypeSelectionAct;
+import main.com.ngrewards.activity.MerchantMenuSetting;
 import main.com.ngrewards.activity.TutorialAct;
+import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;

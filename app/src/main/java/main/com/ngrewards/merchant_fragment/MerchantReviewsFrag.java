@@ -1,5 +1,7 @@
 package main.com.ngrewards.merchant_fragment;
 
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -43,24 +45,18 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.AllMerchantReviewActivity;
-import main.com.ngrewards.activity.LoginActivity;
 import main.com.ngrewards.activity.MerchantDetailAct;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.beanclasses.MerchantTopReview;
-import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.fragments.NearbyFrag;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by technorizen on 13/6/18.

@@ -12,9 +12,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -49,7 +49,6 @@ import java.util.List;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MerchantMenuSetting;
-import main.com.ngrewards.beanclasses.MerchantDetail;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;

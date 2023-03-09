@@ -1,5 +1,7 @@
 package main.com.ngrewards.marchant.merchantbottum;
 
+import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
+
 import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.BroadcastReceiver;
@@ -50,8 +52,6 @@ import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.beanclasses.GalleryBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-
-import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
 
 public class MerchantBottumAct extends TabActivity {
 

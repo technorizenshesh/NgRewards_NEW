@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,7 +38,6 @@ import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,24 +55,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import main.com.ngrewards.BuildConfig;
-import main.com.ngrewards.activity.FragItemDetails;
+import main.com.ngrewards.R;
 import main.com.ngrewards.activity.MerchantDetailAct;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
+import main.com.ngrewards.beanclasses.OfferBeanList;
 import main.com.ngrewards.beanclasses.Offerbean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.GPSTracker;
+import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import main.com.ngrewards.R;
-import main.com.ngrewards.beanclasses.OfferBeanList;
-import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.restapi.ApiClient;
 
 /**
  * Created by technorizen on 14/6/18.

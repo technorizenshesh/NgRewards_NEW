@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 import main.com.ngrewards.R;
+import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 
 /**
  * Created by technorizen on 13/6/18.
