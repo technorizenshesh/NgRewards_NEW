@@ -192,7 +192,8 @@ public class ItemsFrag extends Fragment {
         ArrayList<MerchantItemList> searchsoldItemListArrayList;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView merchant_name, rating_count, product_desc, shipping_info, product_name, mainprice, price_discount, total_bought;
+            TextView price_split,merchant_name, rating_count, product_desc, shipping_info,
+                    product_name, mainprice, price_discount, total_bought;
             ImageView product_img;
             RatingBar rating;
 
@@ -205,6 +206,7 @@ public class ItemsFrag extends Fragment {
                 this.mainprice = itemView.findViewById(R.id.mainprice);
                 this.product_img = itemView.findViewById(R.id.product_img);
                 this.shipping_info = itemView.findViewById(R.id.shipping_info);
+                this.price_split = itemView.findViewById(R.id.price_split);
                 this.rating = itemView.findViewById(R.id.rating);
                 this.rating_count = itemView.findViewById(R.id.rating_count);
                 this.merchant_name = itemView.findViewById(R.id.merchant_name);
@@ -243,12 +245,13 @@ public class ItemsFrag extends Fragment {
                         }
                     }
                 }
+
                 notifyDataSetChanged();
             }
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView")  int listPosition) {
             holder.product_name.setText("" + soldItemListArrayList.get(listPosition).getProductName());
             holder.product_desc.setText("" + soldItemListArrayList.get(listPosition).getProductDescription());
             holder.price_discount.setText("$" + soldItemListArrayList.get(listPosition).getPrice());
@@ -278,10 +281,23 @@ public class ItemsFrag extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String EMi = "NO";
+                    try {
+                        String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
+                        if (spliting!=null &&!spliting.equalsIgnoreCase("")) {
+                            EMi="YES";
+                        }}catch (Exception e){
+                        Log.e("TAG", "EMiEMiEMi: "+e.getLocalizedMessage());
+                        Log.e("TAG", "EMiEMiEMi: "+e.getMessage());
+                    }
+
                     Log.e("PRO ID", " >" + soldItemListArrayList.get(listPosition).getShare_link());
                     Log.e("PRO ss", " >" + soldItemListArrayList.get(listPosition).getProductName());
                     Intent i = new Intent(getActivity(), FragItemDetails.class);
+                    Log.e("TAG", "EMiEMiEMi: "+EMi);
+
                     i.putExtra("product_id", soldItemListArrayList.get(listPosition).getId());
+                    i.putExtra("EMI",EMi);
                     i.putExtra("product_name", soldItemListArrayList.get(listPosition).getProductName());
                     i.putExtra("product_description", soldItemListArrayList.get(listPosition).getProductDescription());
                     i.putExtra("product_thumbimg", soldItemListArrayList.get(listPosition).getThumbnailImage());
@@ -291,6 +307,27 @@ public class ItemsFrag extends Fragment {
                     startActivity(i);
                 }
             });
+            Log.e("TAG",
+                    "onBindViewHolder:listPositionlistPosition" +soldItemListArrayList.get(listPosition).getSplit_amount());
+
+
+            try {
+                String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +spliting);
+                if (spliting!=null &&!spliting.equalsIgnoreCase("")){
+                    String []  splitings = spliting.split(",",1);
+                    Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
+                    Log.e("TAG", "onBindViewHolder:splitingssplitings " +soldItemListArrayList.get(listPosition).getProductId()+"  " +
+                                    " ghdfhjgjmfj   "+soldItemListArrayList.get(listPosition).getId());
+                    holder.price_split.setVisibility(View.VISIBLE);
+                    holder.price_split.setText(R.string.or_in_5_easy_payments);
+
+                }
+            }catch (Exception e){
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +e.getMessage());
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +e.getLocalizedMessage());
+
+            }
         }
 
         @Override
@@ -377,7 +414,21 @@ public class ItemsFrag extends Fragment {
 
         if(soldItem!=null)
         {
+            String EMi = "NO";
+            try {
+                Log.e("TAG", "EMiEMiEMi: "+EMi);
+
+                String spliting = soldItem.getSplit_amount();
+                if (spliting!=null &&!spliting.equalsIgnoreCase("")) {
+                    EMi="YES";
+                }}catch (Exception e){
+                Log.e("TAG", "EMiEMiEMi: "+e.getLocalizedMessage());
+                Log.e("TAG", "EMiEMiEMi: "+e.getMessage());
+            }
             Intent i = new Intent(getActivity(), FragItemDetails.class);
+            Log.e("TAG", "EMiEMiEMi: "+EMi);
+
+            i.putExtra("EMI", EMi);
             i.putExtra("product_id", soldItem.getId());
             i.putExtra("product_name", soldItem.getProductName());
             i.putExtra("product_description", soldItem.getProductDescription());

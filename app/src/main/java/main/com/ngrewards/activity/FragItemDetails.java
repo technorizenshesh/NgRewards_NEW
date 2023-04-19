@@ -100,12 +100,14 @@ public class FragItemDetails extends AppCompatActivity {
     private CircleImageView user_img;
     private ImageView like_buton, shareproduct, description_arrow, itemarrow, shipingarrow, proimg;
     private MySession mySession;
-    private String stockcount = "", time_zone = "", size_select_str = "", color_select_str = "", user_id = "", comment_str = "", like_count = "0", merchant_name_str = "", product_price = "", like_status = "", share_url_str = "", price_str, product_thumbimg;
+    private String EMI = "",   stockcount = "", time_zone = "", size_select_str = "", color_select_str = "", user_id = "", comment_str = "", like_count = "0", merchant_name_str = "", product_price = "", like_status = "", share_url_str = "", price_str, product_thumbimg;
     private LinearLayout description_lay, shipping_lay, itemspeclay;
     private RelativeLayout description_info, shipinfo_but, item_info, colorlay, sizelay;
     private RatingBar rating, rating_done, averagerating;
     private EditText comment_et;
-    private TextView shipping_price, buynow_tv, addtocart_tv, submit_review, donereview_tv, rating_count, color_tv_head, sizes_tv_head, price_tv, quant_tv, instock_tv;
+    private TextView   buyon_emi_tv, shipping_price, buynow_tv, addtocart_tv, submit_review,
+            donereview_tv,
+            rating_count, color_tv_head, sizes_tv_head, price_tv, quant_tv, instock_tv;
     private float rating_val;
     private LinearLayout done_review_lay, post_review_lay;
     CirclePageIndicator fullscreen_indecator;
@@ -124,61 +126,120 @@ public class FragItemDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frag_item_details);
-        sizelist = new ArrayList<>();
-        colorlist = new ArrayList<>();
-        sizelist_sel = new ArrayList<>();
-        colorlist_sel = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        TimeZone tz = c.getTimeZone();
-        time_zone = tz.getID();
-        mySession = new MySession(this);
-        myapisession = new Myapisession(this);
-        String user_log_data = mySession.getKeyAlldata();
-        if (user_log_data == null) {
-        } else {
-            try {
-                JSONObject jsonObject = new JSONObject(user_log_data);
-                String message = jsonObject.getString("status");
-                if (message.equalsIgnoreCase("1")) {
-                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    user_id = jsonObject1.getString("id");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        idinit();
-        clickevent();
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            Log.e("PRO BUNDLE DATA", " >> " + product_id + " >" + product_name + " <>" + product_description);
-            product_id = bundle.getString("product_id");
-            product_name = bundle.getString("product_name");
-            product_thumbimg = bundle.getString("product_thumbimg");
-            product_description = bundle.getString("product_description");
-            product_price = bundle.getString("product_price");
-            share_url_str = bundle.getString("share_link");
-            merchant_name_str = bundle.getString("merchant_name_str");
-            Log.e("share_url_str >>", "dd" + share_url_str);
-            item_name.setText("" + product_name);
-            item_description.setText("" + product_description);
-            description_tv.setText("" + product_description);
-            if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("")) {
-                merchant_name.setText(getResources().getString(R.string.staticmerchantname));
-                merchant_name_sec.setText(getResources().getString(R.string.staticmerchantname));
+         try {
+             buyon_emi_tv = findViewById(R.id.buyon_emi_tv);
+             shipping_price = findViewById(R.id.shipping_price);
+             sizelay = findViewById(R.id.sizelay);
+             colorlay = findViewById(R.id.colorlay);
+             buynow_tv = findViewById(R.id.buynow_tv);
+             addtocart_tv = findViewById(R.id.addtocart_tv);
+             instock_tv = findViewById(R.id.instock_tv);
+             quant_tv = findViewById(R.id.quant_tv);
+             minusq = findViewById(R.id.minusq);
+             plusq = findViewById(R.id.plusq);
+             color_tv_head = findViewById(R.id.color_tv_head);
+             price_tv = findViewById(R.id.price_tv);
+             sizes_tv_head = findViewById(R.id.sizes_tv_head);
+             rating_count = findViewById(R.id.rating_count);
+             averagerating = findViewById(R.id.averagerating);
+             fullscreen_indecator = findViewById(R.id.fullscreen_indecator);
+             donereview_tv = findViewById(R.id.donereview_tv);
+             rating_done = findViewById(R.id.rating_done);
+             post_review_lay = findViewById(R.id.post_review_lay);
+             done_review_lay = findViewById(R.id.done_review_lay);
+             rating = findViewById(R.id.rating);
+             submit_review = findViewById(R.id.submit_review);
+             comment_et = findViewById(R.id.comment_et);
+             proimg = findViewById(R.id.proimg);
+             colors_tv = findViewById(R.id.colors_tv);
+             item_info = findViewById(R.id.item_info);
+             shipinfo_but = findViewById(R.id.shipinfo_but);
+             description_info = findViewById(R.id.description_info);
+             itemarrow = findViewById(R.id.itemarrow);
+             itemspeclay = findViewById(R.id.itemspeclay);
+             shipingarrow = findViewById(R.id.shipingarrow);
+             shipping_lay = findViewById(R.id.shipping_lay);
+             description_lay = findViewById(R.id.description_lay);
+             description_arrow = findViewById(R.id.description_arrow);
+             description_tv = findViewById(R.id.description_tv);
+             sizes_tv = findViewById(R.id.sizes_tv);
+             shareproduct = findViewById(R.id.shareproduct);
+             like_buton = findViewById(R.id.like_buton);
+             user_img = findViewById(R.id.user_img);
+             progresbar = findViewById(R.id.progresbar);
+             productimage_pager = findViewById(R.id.productimage_pager);
+             merchant_name_sec = findViewById(R.id.merchant_name_sec);
+             discountprice = findViewById(R.id.discountprice);
+             real_price = findViewById(R.id.real_price);
+             shipping_info = findViewById(R.id.shipping_info);
+             feedback_type = findViewById(R.id.feedback_type);
+             merchant_name = findViewById(R.id.merchant_name);
+             item_description = findViewById(R.id.item_description);
+             item_name = findViewById(R.id.item_name);
+             backlay = findViewById(R.id.backlay);
+             review_list = findViewById(R.id.review_list);
+             similar_item_list = findViewById(R.id.similar_item_list);
+             Bundle bundle = getIntent().getExtras();
+             if (bundle != null) {
+                 Log.e("PRO BUNDLE DATA", " >> " + product_id + " >" + product_name + " <>" + product_description);
 
-            } else {
-                merchant_name.setText("" + merchant_name_str);
-                merchant_name_sec.setText("" + merchant_name_str);
+                 EMI = bundle.getString("EMI");
+                 product_id = bundle.getString("product_id");
+                 product_name = bundle.getString("product_name");
+                 product_thumbimg = bundle.getString("product_thumbimg");
+                 product_description = bundle.getString("product_description");
+                 product_price = bundle.getString("product_price");
+                 share_url_str = bundle.getString("share_link");
+                 merchant_name_str = bundle.getString("merchant_name_str");
+                 Log.e("share_url_str >>", "dd" + share_url_str);
+                 item_name.setText("" + product_name);
+                 item_description.setText("" + product_description);
+                 description_tv.setText("" + product_description);
+                 if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("")) {
+                     merchant_name.setText(getResources().getString(R.string.staticmerchantname));
+                     merchant_name_sec.setText(getResources().getString(R.string.staticmerchantname));
 
-            }
+                 } else {
+                     merchant_name.setText("" + merchant_name_str);
+                     merchant_name_sec.setText("" + merchant_name_str);
 
-            getFeaturedProductsDetail(product_id);
-            Picasso.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
+                 }
 
-        }
+                 getFeaturedProductsDetail(product_id);
+                 Picasso.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
+
+             }
 
 
+             sizelist = new ArrayList<>();
+             colorlist = new ArrayList<>();
+             sizelist_sel = new ArrayList<>();
+             colorlist_sel = new ArrayList<>();
+             Calendar c = Calendar.getInstance();
+             TimeZone tz = c.getTimeZone();
+             time_zone = tz.getID();
+             mySession = new MySession(this);
+             myapisession = new Myapisession(this);
+             String user_log_data = mySession.getKeyAlldata();
+             if (user_log_data == null) {
+             } else {
+                 try {
+                     JSONObject jsonObject = new JSONObject(user_log_data);
+                     String message = jsonObject.getString("status");
+                     if (message.equalsIgnoreCase("1")) {
+                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                         user_id = jsonObject1.getString("id");
+                     }
+                 } catch (JSONException e) {
+                     e.printStackTrace();
+                 }
+             }
+             idinit();
+             clickevent();
+
+         }catch (Exception e
+         ){e.printStackTrace();
+         }
     }
 
     private void getFeaturedProductsDetail(String product_id) {
@@ -1030,57 +1091,7 @@ public class FragItemDetails extends AppCompatActivity {
     }
 
     private void idinit() {
-        shipping_price = findViewById(R.id.shipping_price);
-        sizelay = findViewById(R.id.sizelay);
-        colorlay = findViewById(R.id.colorlay);
-        buynow_tv = findViewById(R.id.buynow_tv);
-        addtocart_tv = findViewById(R.id.addtocart_tv);
-        instock_tv = findViewById(R.id.instock_tv);
-        quant_tv = findViewById(R.id.quant_tv);
-        minusq = findViewById(R.id.minusq);
-        plusq = findViewById(R.id.plusq);
-        color_tv_head = findViewById(R.id.color_tv_head);
-        price_tv = findViewById(R.id.price_tv);
-        sizes_tv_head = findViewById(R.id.sizes_tv_head);
-        rating_count = findViewById(R.id.rating_count);
-        averagerating = findViewById(R.id.averagerating);
-        fullscreen_indecator = findViewById(R.id.fullscreen_indecator);
-        donereview_tv = findViewById(R.id.donereview_tv);
-        rating_done = findViewById(R.id.rating_done);
-        post_review_lay = findViewById(R.id.post_review_lay);
-        done_review_lay = findViewById(R.id.done_review_lay);
-        rating = findViewById(R.id.rating);
-        submit_review = findViewById(R.id.submit_review);
-        comment_et = findViewById(R.id.comment_et);
-        proimg = findViewById(R.id.proimg);
-        colors_tv = findViewById(R.id.colors_tv);
-        item_info = findViewById(R.id.item_info);
-        shipinfo_but = findViewById(R.id.shipinfo_but);
-        description_info = findViewById(R.id.description_info);
-        itemarrow = findViewById(R.id.itemarrow);
-        itemspeclay = findViewById(R.id.itemspeclay);
-        shipingarrow = findViewById(R.id.shipingarrow);
-        shipping_lay = findViewById(R.id.shipping_lay);
-        description_lay = findViewById(R.id.description_lay);
-        description_arrow = findViewById(R.id.description_arrow);
-        description_tv = findViewById(R.id.description_tv);
-        sizes_tv = findViewById(R.id.sizes_tv);
-        shareproduct = findViewById(R.id.shareproduct);
-        like_buton = findViewById(R.id.like_buton);
-        user_img = findViewById(R.id.user_img);
-        progresbar = findViewById(R.id.progresbar);
-        productimage_pager = findViewById(R.id.productimage_pager);
-        merchant_name_sec = findViewById(R.id.merchant_name_sec);
-        discountprice = findViewById(R.id.discountprice);
-        real_price = findViewById(R.id.real_price);
-        shipping_info = findViewById(R.id.shipping_info);
-        feedback_type = findViewById(R.id.feedback_type);
-        merchant_name = findViewById(R.id.merchant_name);
-        item_description = findViewById(R.id.item_description);
-        item_name = findViewById(R.id.item_name);
-        backlay = findViewById(R.id.backlay);
-        review_list = findViewById(R.id.review_list);
-        similar_item_list = findViewById(R.id.similar_item_list);
+
         review_list.setExpanded(true);
         similar_item_list.setExpanded(true);
         sizelay.setOnClickListener(new View.OnClickListener() {
@@ -1094,6 +1105,59 @@ public class FragItemDetails extends AppCompatActivity {
             public void onClick(View v) {
                 selectColor();
             }
+        });
+        Log.e("TAG", "EMIEMIEMIEMI: "+EMI );
+        if(EMI.equalsIgnoreCase("YES")){
+            buyon_emi_tv.setVisibility(View.VISIBLE);
+        }
+
+        buyon_emi_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+                {
+                    click_sts = true;
+                    if (stockcount != null && !stockcount.equalsIgnoreCase("")) {
+                        if (sumcount != 0) {
+                            if (productDetailArrayList != null && !productDetailArrayList.isEmpty()) {
+                                if (productDetailArrayList.get(0).getCart_status() != null && productDetailArrayList.get(0).getCart_status().equalsIgnoreCase("In Cart")) {
+                                    Intent i = new Intent(FragItemDetails.this, MyCartDetail.class);
+                                    startActivity(i);
+                                } else {
+                                    if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
+                                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
+                                    } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
+                                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
+
+                                    } else {
+                                        new AddTocartAsc().execute();
+                                    }
+                                    // new AddTocartAsc().execute();
+                                }
+                            } else {
+                                if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
+                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
+                                } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
+                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    new AddTocartAsc().execute();
+                                }
+
+                                //new AddTocartAsc().execute();
+                            }
+                            //  new AddTocartAsc().execute();
+
+                        } else {
+                            Toast.makeText(FragItemDetails.this, getResources().getString(R.string.selproductquant), Toast.LENGTH_LONG).show();
+
+                        }
+                    } else {
+                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.outstk), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
         });
         merchant_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1137,7 +1201,8 @@ public class FragItemDetails extends AppCompatActivity {
 //https://myngrewards.com/demo/wp-content/plugins/webservice/add_to_cart.php?user_id=23&product_id=5658&quantity=4
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_to_cart.php?";
-                Log.e("ADD CART URL", " >> " + postReceiverUrl + "user_id=" + user_id + "&product_id=" + product_id + "&quantity=" + sumcount + "&size=" + size_select_str + "&color=" + color_select_str);
+                Log.e("ADD CART URL", " >> " + postReceiverUrl + "user_id=" + user_id +
+                        "&product_id=" + product_id + "&quantity=" + sumcount + "&size=" + size_select_str + "&color=" + color_select_str+"&pay_by_emi="+EMI);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("user_id", user_id);
@@ -1146,6 +1211,7 @@ public class FragItemDetails extends AppCompatActivity {
                 params.put("timezone", time_zone);
                 params.put("size", size_select_str);
                 params.put("color", color_select_str);
+                params.put("pay_by_emi", EMI);
                 StringBuilder postData = new StringBuilder();
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');
@@ -1236,7 +1302,6 @@ public class FragItemDetails extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             // return 3;
             return productTopReview == null ? 0 : productTopReview.size();
         }

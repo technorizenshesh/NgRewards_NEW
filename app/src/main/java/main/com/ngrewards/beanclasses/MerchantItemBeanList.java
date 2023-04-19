@@ -59,6 +59,28 @@ public class MerchantItemBeanList {
     @SerializedName("product_images")
     @Expose
     private List<ProductImage> productImages = null;
+    @SerializedName("split_payments")
+    @Expose
+    private String split_payments;
+    @SerializedName("split_amount")
+    @Expose
+    private String split_amount;
+
+    public String getSplit_payments() {
+        return split_payments;
+    }
+
+    public void setSplit_payments(String split_payments) {
+        this.split_payments = split_payments;
+    }
+
+    public String getSplit_amount() {
+        return split_amount;
+    }
+
+    public void setSplit_amount(String split_amount) {
+        this.split_amount = split_amount;
+    }
 
     public Integer getCategoryId() {
         return categoryId;

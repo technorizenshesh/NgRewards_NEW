@@ -25,8 +25,11 @@
     <string name="creataccount">Create an Account</string>
     <string name="or">Or</string>
     <string name="connectfacebook">Connect With Facebook</string>
-    <string name="byregistering">By registerning you agree to our Terms of Service</string>
-    <string name="byreg">By registerning you agree to our</string>
+    <string name="byregistering">By registering you agree to our Terms of Service</string>
+    <string name="easy_pay">I want to mack\'n Easy Payments</string>
+    <string name="notices">Total payment is divide by 5 easy Emi you can see text payment invoice
+        in order details after purchase item successfully</string>
+    <string name="byreg">By registering you agree to our</string>
     <string name="termsser">Terms of Service</string>
     <string name="privacy">Privacy Policy</string>
     <string name="allready">Already have an account?</string>
@@ -447,6 +450,7 @@
     <string name="gotocart">Go To Cart</string>
     <string name="nomerchantavab">No Merchant Available.</string>
     <string name="buynow">Buy Now</string>
+    <string name="pay_with_emi">Make Emi Payments</string>
     <string name="nofriends">No Friends</string>
     <string name="pleassend">Please Send Allready Typed Message</string>
     <string name="video">Video</string>
@@ -578,4 +582,5 @@
     <string name="please_contact_admin"> Please contact  info@myngrewards.com to receive approved password to sell item online</string>
     <string name="wrong_password"> Wrong password please contact info@myngrewards.com to receive approved password to sell item online</string>
     <string name="tnc"> Please accept our Terms of Service to continue</string>
+    <string name="or_in_5_easy_payments">Or in 5 easy Payments</string>
 </resources>

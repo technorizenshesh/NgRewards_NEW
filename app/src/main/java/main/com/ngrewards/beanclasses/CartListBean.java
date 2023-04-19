@@ -48,6 +48,62 @@ public class CartListBean {
     @SerializedName("estimated_delivery_date")
     @Expose
     private String estimated_delivery_date;
+    @SerializedName("split_amount")
+    @Expose
+    private String split_amount;
+    @SerializedName("split_payment")
+    @Expose
+    private String split_payment;
+    @SerializedName("pay_by_emi")
+    @Expose
+    private String pay_by_emi;
+    @SerializedName("split_date")
+    @Expose
+    private String split_date;
+    @SerializedName("split_invoice")
+    @Expose
+    private String split_invoice;
+
+
+    public String getSplit_amount() {
+        return split_amount;
+    }
+
+    public void setSplit_amount(String split_amount) {
+        this.split_amount = split_amount;
+    }
+
+    public String getSplit_payment() {
+        return split_payment;
+    }
+
+    public void setSplit_payment(String split_payment) {
+        this.split_payment = split_payment;
+    }
+
+    public String getPay_by_emi() {
+        return pay_by_emi;
+    }
+
+    public void setPay_by_emi(String pay_by_emi) {
+        this.pay_by_emi = pay_by_emi;
+    }
+
+    public String getSplit_date() {
+        return split_date;
+    }
+
+    public void setSplit_date(String split_date) {
+        this.split_date = split_date;
+    }
+
+    public String getSplit_invoice() {
+        return split_invoice;
+    }
+
+    public void setSplit_invoice(String split_invoice) {
+        this.split_invoice = split_invoice;
+    }
 
     public String getShipping_price() {
         return shipping_price;

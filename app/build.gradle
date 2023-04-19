@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "main.com.ngrewards"
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 32
         versionCode 55
         versionName "10.7"
@@ -52,10 +52,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dataBinding {
-        enabled true
-    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
+    buildFeatures {
 
+        dataBinding = true
+    }
     allprojects {
         repositories {
             maven {
@@ -93,8 +96,10 @@ dependencies {
     implementation 'com.github.f0ris.sweetalert:library:1.5.6'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.0.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
+
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
     implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
@@ -125,7 +130,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.developeramit3:ApiCall:d8a713a9c4'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
 
     //MyListener
 }

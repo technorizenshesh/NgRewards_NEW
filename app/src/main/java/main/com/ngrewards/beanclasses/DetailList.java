@@ -84,6 +84,9 @@ public class DetailList {
     @SerializedName("average_rating")
     @Expose
     private String averageRating;
+    @SerializedName("split_amount")
+    @Expose
+    private String split_amount;
     @SerializedName("product_top_review")
     @Expose
     private List<ProductTopReview> productTopReview = null;
@@ -94,6 +97,14 @@ public class DetailList {
 
     public void setProductTopReview(List<ProductTopReview> productTopReview) {
         this.productTopReview = productTopReview;
+    }
+
+    public String getSplit_amount() {
+        return split_amount;
+    }
+
+    public void setSplit_amount(String split_amount) {
+        this.split_amount = split_amount;
     }
 
     public String getProduct_cart_price() {

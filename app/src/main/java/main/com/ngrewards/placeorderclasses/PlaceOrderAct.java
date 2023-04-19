@@ -870,7 +870,6 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
                 Log.e("Place URL", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + order_address + "&address_2=" + streat_address + "&city=&state=&postcode=" + zipcode_code_str + "&timezone=" + time_zone);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
-
                 params.put("user_id", user_id);
                 params.put("product_id", product_id_comma);
                 params.put("quantity", product_quantity_comm);

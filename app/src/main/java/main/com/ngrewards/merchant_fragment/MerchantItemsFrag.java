@@ -1,5 +1,6 @@
 package main.com.ngrewards.merchant_fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -182,7 +183,7 @@ public class MerchantItemsFrag extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
             holder.product_name.setText("" + soldItemListArrayList.get(listPosition).getProductName());
             holder.product_desc.setText("" + soldItemListArrayList.get(listPosition).getProductDescription());
             holder.price_discount.setText("$" + soldItemListArrayList.get(listPosition).getPrice());
@@ -214,8 +215,20 @@ public class MerchantItemsFrag extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
+                    String EMi = "NO";
+                    try {
+                        String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
+                        if (spliting!=null &&!spliting.equalsIgnoreCase("")) {
+                            EMi="YES";
+                        }}catch (Exception e){
+                        Log.e("TAG", "onClick: ");
+                    }
                     Log.e("PRO ss"," >"+soldItemListArrayList.get(listPosition).getProductName());
                     Intent i = new Intent(getActivity(), FragItemDetails.class);
+                    Log.e("TAG", "EMiEMiEMi: "+EMi);
+                    i.putExtra("EMI",EMi);
                     i.putExtra("product_id",soldItemListArrayList.get(listPosition).getId());
                     i.putExtra("product_name",soldItemListArrayList.get(listPosition).getProductName());
                     i.putExtra("product_description",soldItemListArrayList.get(listPosition).getProductDescription());

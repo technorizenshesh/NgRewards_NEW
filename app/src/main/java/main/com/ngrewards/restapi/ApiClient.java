@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.constant.BaseUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -17,14 +18,16 @@ public class ApiClient {
     public static final String BASE_URL = BaseUrl.baseurl;
     private static Retrofit retrofit = null;
     private static ApiInterface apiInterface = null;
-    static final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
-    private static OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(100, TimeUnit.SECONDS)
-            .addInterceptor(interceptor)
-            .readTimeout(100,TimeUnit.SECONDS).build();
       public static Retrofit getClient() {
         if (retrofit==null) {
+            final HttpLoggingInterceptor interceptor =  new  HttpLoggingInterceptor();
+
+            final OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(100, TimeUnit.SECONDS)
+                    .addInterceptor(interceptor)
+                    .readTimeout(100,TimeUnit.SECONDS).build();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL).client(client)
                     .addConverterFactory(GsonConverterFactory.create())

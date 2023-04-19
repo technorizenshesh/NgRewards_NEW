@@ -1,5 +1,6 @@
 package main.com.ngrewards.placeorderclasses;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,16 +83,21 @@ public class CheckOutAct extends AppCompatActivity {
     private ArrayList<CartListBean> cartListBeanArrayList;
     private MycartAdapter mycartAdapter;
     private MycartAdapterExpand mycartAdapterExpand;
-    private TextView total_amount, nocartitem, place_order_but, avbngcash;
+    private TextView   notice , total_amount, nocartitem, place_order_but, avbngcash;
     private RelativeLayout backlay, addaddressdlay, addcardlay;
     private EditText optionaladdress, zipcode, applyamtcash;
-    private String email_str = "", shipping_price = "", time_zone = "", ngcash_send_str = "0", apply_ngcassh = "0", member_ngcash = "", phone_str = "", total_amount_str = "", fullname_str = "", order_address = "", streat_address = "", zipcode_code_str = "", product_id_comma = "", merchant_id_comma_sep = "", product_quantity_comm = "";
+    private String email_str = "", shipping_price = "", time_zone = "", ngcash_send_str = "0",
+            apply_ngcassh = "0", member_ngcash = "", phone_str = "", total_amount_str = "",
+            emi_amount_str = "", fullname_str = "", order_address = "", streat_address = "",
+            zipcode_code_str = "", product_id_comma = "", merchant_id_comma_sep = "", product_quantity_comm = "";
     private RelativeLayout selectedaddlay, paywithlay;
     private TextView shipping_price_tv, finalngcashredeem, itemcount, ngapply_tv, fullname, total_item_price, address1, address2, statecityadd, countrytv, phonetv, cardnumber_tv;
     private Myapisession myapisession;
     private boolean apickeck = false;
     private double ngcash_val = 0;
-
+    private LinearLayout emi_lay;
+    private   boolean IS =false;
+CheckBox termscheck1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,14 +144,33 @@ public class CheckOutAct extends AppCompatActivity {
                 cartListBeanArrayList = new ArrayList<>();
                 String responseData = myapisession.getKeyCartitem();
                 JSONObject object = new JSONObject(responseData);
-                Log.e("My Cart Items >", " >" + responseData);
                 if (object.getString("status").equals("1")) {
-
                     CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                     cartListBeanArrayList.addAll(successData.getResult());
                     total_amount_str = successData.getTotal_with_shipping_price();
+                    if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")){
+                        emi_lay.setVisibility(View.VISIBLE);
+                    }else {
+                        emi_lay.setVisibility(View.GONE);
+
+                    }
+                    String spliting =cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
+                    if (spliting!=null &&!spliting.equalsIgnoreCase("")){
+                        Log.e("TAG", "onBindViewHolder:zzzzzzzzzzzzzzzzzzzzzzz " +spliting);
+                        String []  splitings = spliting.split(",");
+                        Log.e("TAG", "onBindViewHolder:xxxxxxxxxxxxxxxxxxxxxxx " +splitings[0]);
+                        Log.e("TAG", "onBindViewHolder:yyyyyyyyyyyyyyyyyyyyyyy " +splitings[0]);
+                        String str =splitings[0];
+                        if (str.contains("$")) {
+                          str=  str.replace("$","");
+                        }
+                        emi_amount_str = str;
+                    }
+                    Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
                     shipping_price = successData.getTotal_shipping_price();
-                    total_amount.setText("$" + successData.getTotal_with_shipping_price());
+
+                   if (!IS)total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                   else total_amount.setText("$" + emi_amount_str);
                     total_item_price.setText("$" + successData.getTotalPrice());
                     shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
                     itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
@@ -151,6 +179,7 @@ public class CheckOutAct extends AppCompatActivity {
                     // nocartitem.setVisibility(View.VISIBLE);
                     total_amount.setText("$ 0.00");
                     total_amount_str = "0";
+                    emi_amount_str = "0";
                     shipping_price = "0";
                     total_item_price.setText("$ 0.00");
                     itemcount.setText("Items(0)");
@@ -351,7 +380,7 @@ public class CheckOutAct extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
             holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
             holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
             holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
@@ -424,14 +453,32 @@ public class CheckOutAct extends AppCompatActivity {
                     try {
                         String responseData = response.body().string();
                         JSONObject object = new JSONObject(responseData);
-                        Log.e("My Cart Items >", " >" + responseData);
+                        Log.e("My Cart Items >", " ItemsItemsItemsItems>" + responseData);
                         if (object.getString("status").equals("1")) {
                             myapisession.setKeyCartitem(responseData);
                             CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                             cartListBeanArrayList.addAll(successData.getResult());
                             total_amount_str = successData.getTotal_with_shipping_price();
+                            String spliting =cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
+                            if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")){
+                                emi_lay.setVisibility(View.VISIBLE);
+                            }else {
+                                emi_lay.setVisibility(View.GONE);
+
+                            }
+                            if (spliting!=null &&!spliting.equalsIgnoreCase("")){
+                                String []  splitings = spliting.split(",");
+                                Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
+                                String str =splitings[0];
+                                if (str.contains("$")) {
+                                    str=  str.replace("$","");
+                                }
+                                emi_amount_str = str;
+                            }
+                            Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
                             shipping_price = successData.getTotal_shipping_price();
-                            total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                            if (!IS)total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                            else total_amount.setText("$" + emi_amount_str);
                             total_item_price.setText("$" + successData.getTotalPrice());
                             shipping_price_tv.setText("$" + successData.getTotal_with_shipping_price());
                             itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
@@ -537,34 +584,73 @@ public class CheckOutAct extends AppCompatActivity {
                         finalngcashredeem.setHint("-$0.00");
                         finalngcashredeem.setText("");
                     } else {
-                        ngapply_tv.setText("" + getResources().getString(R.string.applied));
-                        double tot = 0;
-                        if (total_amount_str == null || total_amount_str.equalsIgnoreCase("")) {
-                            total_amount_str = "0.0";
+
+                        if (!IS){
+                            ngapply_tv.setText("" + getResources().getString(R.string.applied));
+                            double tot = 0;
+                            if (total_amount_str == null || total_amount_str.equalsIgnoreCase("")) {
+                                total_amount_str = "0.0";
+
+                            }
+                            if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("")) {
+                                apply_ngcassh = "0.0";
+                            }
+
+                            double cart_tot_dob = Double.parseDouble(total_amount_str);
+                            double apply_ng_dob = Double.parseDouble(apply_ngcassh);
+
+                            if (cart_tot_dob > apply_ng_dob) {
+                                tot = cart_tot_dob - apply_ng_dob;
+                                //finalngcashredeem.setText("-$ " + apply_ng_dob);
+                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+
+
+                            } else {
+                                tot = 0;
+                                //finalngcashredeem.setText("-$ "+cart_tot_dob);
+                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
+
+                            }
+
+                            //  grandtotal.setText(" " + tot);
+                            total_amount.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                        }
+                        else {
+
+                            ngapply_tv.setText("" + getResources().getString(R.string.applied));
+                            double tot = 0;
+                            if (emi_amount_str == null || emi_amount_str.equalsIgnoreCase("")) {
+                                emi_amount_str = "0.0";
+
+                            }
+                            if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("")) {
+                                apply_ngcassh = "0.0";
+                            }
+
+                            double cart_tot_dob = Double.parseDouble(emi_amount_str);
+                            double apply_ng_dob = Double.parseDouble(apply_ngcassh);
+
+                            if (cart_tot_dob > apply_ng_dob) {
+                                tot = cart_tot_dob - apply_ng_dob;
+                                //finalngcashredeem.setText("-$ " + apply_ng_dob);
+                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+
+
+                            } else {
+                                tot = 0;
+                                //finalngcashredeem.setText("-$ "+cart_tot_dob);
+                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
+
+                            }
+
+                            //  grandtotal.setText(" " + tot);
+                            total_amount.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+
+
 
                         }
-                        if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("")) {
-                            apply_ngcassh = "0.0";
-                        }
-
-                        double cart_tot_dob = Double.parseDouble(total_amount_str);
-                        double apply_ng_dob = Double.parseDouble(apply_ngcassh);
-
-                        if (cart_tot_dob > apply_ng_dob) {
-                            tot = cart_tot_dob - apply_ng_dob;
-                            //finalngcashredeem.setText("-$ " + apply_ng_dob);
-                            finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
 
 
-                        } else {
-                            tot = 0;
-                            //finalngcashredeem.setText("-$ "+cart_tot_dob);
-                            finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
-
-                        }
-
-                        //  grandtotal.setText(" " + tot);
-                        total_amount.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
                     }
                 }
             }
@@ -727,6 +813,9 @@ public class CheckOutAct extends AppCompatActivity {
 
     private void idinits() {
 
+        emi_lay = findViewById(R.id.emi_lay);
+        notice = findViewById(R.id.notice);
+        termscheck1 = findViewById(R.id.termscheck1);
         shipping_price_tv = findViewById(R.id.shipping_price_tv);
         finalngcashredeem = findViewById(R.id.finalngcashredeem);
         ngapply_tv = findViewById(R.id.ngapply_tv);
@@ -756,7 +845,20 @@ public class CheckOutAct extends AppCompatActivity {
         total_amount = findViewById(R.id.total_amount);
         mycartlist = findViewById(R.id.mycartlist);
         mycartlist.setExpanded(true);
+        termscheck1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+             if (isChecked){
+                 IS = true;
+                 notice.setVisibility(View.VISIBLE);
+                 total_amount.setText("$" + emi_amount_str  );
 
+             }else {
+                 IS = false;
+                 notice.setVisibility(View.GONE);
+                 total_amount.setText("$" + total_amount_str);
+
+             }
+
+        });
         if (BaseActivity.member_ngcash == null || BaseActivity.member_ngcash.equalsIgnoreCase("0") || BaseActivity.member_ngcash.equalsIgnoreCase("null") || BaseActivity.member_ngcash.equalsIgnoreCase("") || BaseActivity.member_ngcash.equalsIgnoreCase("0.0")) {
             avbngcash.setText("$0.00 Available");
         } else {
@@ -792,7 +894,9 @@ public class CheckOutAct extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                total_amount.setText("$ " + total_amount_str);
+                if (!IS)total_amount.setText("$" + total_amount_str);
+                else total_amount.setText("$" + emi_amount_str);
+              //  total_amount.setText("$ " + total_amount_str);
                 finalngcashredeem.setText("-$ 0.00");
             }
         });
