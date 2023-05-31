@@ -315,12 +315,12 @@ public class ItemsFrag extends Fragment {
                 String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
                 Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +spliting);
                 if (spliting!=null &&!spliting.equalsIgnoreCase("")){
-                    String []  splitings = spliting.split(",",1);
+                    String []  splitings = spliting.split(",");
                     Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
                     Log.e("TAG", "onBindViewHolder:splitingssplitings " +soldItemListArrayList.get(listPosition).getProductId()+"  " +
                                     " ghdfhjgjmfj   "+soldItemListArrayList.get(listPosition).getId());
                     holder.price_split.setVisibility(View.VISIBLE);
-                    holder.price_split.setText(R.string.or_in_5_easy_payments);
+                    holder.price_split.setText("Or in "+splitings.length+" easy Payments");
 
                 }
             }catch (Exception e){

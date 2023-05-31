@@ -160,6 +160,11 @@ CheckBox termscheck1;
                         String []  splitings = spliting.split(",");
                         Log.e("TAG", "onBindViewHolder:xxxxxxxxxxxxxxxxxxxxxxx " +splitings[0]);
                         Log.e("TAG", "onBindViewHolder:yyyyyyyyyyyyyyyyyyyyyyy " +splitings[0]);
+                      notice.setText("Total payment is divide by "+splitings.length+" easy Emi " +
+                              "you can " +
+                              "see text " +
+                              "payment invoice in order details after purchase item successfully");
+
                         String str =splitings[0];
                         if (str.contains("$")) {
                           str=  str.replace("$","");
@@ -169,10 +174,17 @@ CheckBox termscheck1;
                     Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
                     shipping_price = successData.getTotal_shipping_price();
 
-                   if (!IS)total_amount.setText("$" + successData.getTotal_with_shipping_price());
-                   else total_amount.setText("$" + emi_amount_str);
+                   if (!IS) {
+                       total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                       shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
+
+
+                   } else {
+                       shipping_price_tv.setText("Included In EMI");
+
+                       total_amount.setText("1st EMI - $" + emi_amount_str);}
                     total_item_price.setText("$" + successData.getTotalPrice());
-                    shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
+                   // shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
                     itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                 }
                 if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
@@ -469,7 +481,13 @@ CheckBox termscheck1;
                             if (spliting!=null &&!spliting.equalsIgnoreCase("")){
                                 String []  splitings = spliting.split(",");
                                 Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
+                                notice.setText("Total payment is divide by "+splitings.length+" easy Emi " +
+                                        "you can " +
+                                        "see text " +
+                                        "payment invoice in order details after purchase item successfully");
+
                                 String str =splitings[0];
+
                                 if (str.contains("$")) {
                                     str=  str.replace("$","");
                                 }
@@ -477,10 +495,19 @@ CheckBox termscheck1;
                             }
                             Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
                             shipping_price = successData.getTotal_shipping_price();
-                            if (!IS)total_amount.setText("$" + successData.getTotal_with_shipping_price());
-                            else total_amount.setText("$" + emi_amount_str);
+                            if (!IS) {
+                                total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                                shipping_price_tv.setText("Include in EMI");
+
+                            }  else {
+                                total_amount.setText("1st EMI - $" + emi_amount_str);
+                                shipping_price_tv.setText("$" + successData.getTotal_with_shipping_price());
+
+                            }
+
                             total_item_price.setText("$" + successData.getTotalPrice());
-                            shipping_price_tv.setText("$" + successData.getTotal_with_shipping_price());
+                          //  shipping_price_tv.setText("$" + successData
+                            //  .getTotal_with_shipping_price());
                             itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                         } else {
                             myapisession.setKeyCartitem("");
@@ -643,8 +670,8 @@ CheckBox termscheck1;
 
                             }
 
-                            //  grandtotal.setText(" " + tot);
-                            total_amount.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                            //  grandtotal.setText(" " + tot);hereeeee
+                            total_amount.setText("1st EMI - $"+ String.format("%.2f", new BigDecimal(tot)));
 
 
 
@@ -670,7 +697,6 @@ CheckBox termscheck1;
                     StringBuilder merchantid = new StringBuilder();
 
                     for (int i = 0; i < cartListBeanArrayList.size(); i++) {
-
                         productid.append(cartListBeanArrayList.get(i).getProductId());
                         quantity.append(cartListBeanArrayList.get(i).getQuantity());
                         merchantid.append(cartListBeanArrayList.get(i).getUserDetails().get(0).getId());
@@ -765,8 +791,22 @@ CheckBox termscheck1;
         intent.putExtra("card_brand", SelectPaymentMethodAct.card_brand);
         intent.putExtra("shipping_price", shipping_price);
         intent.putExtra("timezone", time_zone);
-        intent.putExtra("timezone", time_zone);
-        intent.putExtra("amount", total_amount_str);
+         if (IS){
+            String amnt =  total_amount.getText().toString();
+            if (amnt.contains("1st EMI - $")){
+                amnt = amnt.replace("1st EMI - $"," ");
+            }
+             Log.e("TAG", "Item_Oreder_Pay_Successfully1: "+amnt.trim() );
+             intent.putExtra("amount", amnt.trim());
+             intent.putExtra("payment_made_by_emi","Yes");
+             //purchase_date=\(Date())&payment_made_by_emi=\(ischeckYes!)
+
+            // return;
+         }else {
+             intent.putExtra("payment_made_by_emi", "No");
+             intent.putExtra("amount", total_amount_str);
+
+         }
 
         startActivity(intent);
 
@@ -849,7 +889,7 @@ CheckBox termscheck1;
              if (isChecked){
                  IS = true;
                  notice.setVisibility(View.VISIBLE);
-                 total_amount.setText("$" + emi_amount_str  );
+                 total_amount.setText("1st EMI - $"  + emi_amount_str  );
 
              }else {
                  IS = false;
@@ -895,7 +935,7 @@ CheckBox termscheck1;
             public void afterTextChanged(Editable s) {
                 ngapply_tv.setText("" + getResources().getString(R.string.apply));
                 if (!IS)total_amount.setText("$" + total_amount_str);
-                else total_amount.setText("$" + emi_amount_str);
+                else total_amount.setText("1st EMI - $" + emi_amount_str);
               //  total_amount.setText("$ " + total_amount_str);
                 finalngcashredeem.setText("-$ 0.00");
             }

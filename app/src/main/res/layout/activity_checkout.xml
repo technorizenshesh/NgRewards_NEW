@@ -614,7 +614,6 @@ android:visibility="gone"
                             android:layout_margin="5dp"
                             android:gravity="center"
                             android:padding="3dp"
-                            android:text="@string/notices"
                             android:textColor="@color/black"
                             android:textSize="@dimen/small"/>
                         <View

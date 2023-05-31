@@ -20,6 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,8 +35,7 @@ import main.com.ngrewards.placeorderclasses.SelectPaymentMethodAct;
 
 public class ItemOrderPaySuccessFully extends AppCompatActivity {
 
-    private String user_id, product_id, quantity, merchant_id, email, first_name, last_name,
-            company, phone, address_1, address_2, city, state, postcode, payment_method, ngcash, country, card_id, customer_id,
+    private String payment_made_by_emi, user_id, product_id, quantity, merchant_id, email, first_name, last_name, company, phone, address_1, address_2, city, state, postcode, payment_method, ngcash, country, card_id, customer_id,
             card_number, card_brand, shipping_price, timezone;
     private String reciept_url;
     private String amount;
@@ -41,6 +43,7 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
     private Myapisession myapisession;
     private SweetAlertDialog pDialog;
     private String status;
+    private String   dateToStr ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
 
         if (bundle != null && !bundle.isEmpty()) {
 
+            payment_made_by_emi = bundle.getString("payment_made_by_emi");
             user_id = bundle.getString("user_id");
             product_id = bundle.getString("product_id");
             quantity = bundle.getString("quantity");
@@ -83,7 +87,11 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
         //  PayitemOrderBill();
 
         if (!(customer_id == "" && customer_id == "" && card_number == "" && card_brand == "")) {
+            Date today = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss ");
+             dateToStr = format.format(today);
 
+            Log.e("TAG", "dateToStrdateToStrdateToStrdateToStrdateToStr"+dateToStr);
             new PlaceOrderAsc1().execute();
 
         } else {
@@ -121,9 +129,18 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
+         String   postReceiverUrl= "";
+
             try {
 
-                String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
+                if (payment_made_by_emi.equalsIgnoreCase("Yes"))
+                {
+                    postReceiverUrl= BaseUrl.baseurl + "place_order_emi.php?";
+                }else {
+                    postReceiverUrl=    BaseUrl.baseurl + "place_order.php?";
+                }
+
+              //  String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
                 Log.e("PlaceOrderURL4"," URL TRUE "+postReceiverUrl+"user_id="+user_id+"&merchant_id="+merchant_id
                         +"&product_id="+product_id+"&quantity="+quantity+"&email="+email+"&first_name="+
                         AllAddedAddressAct.fullname_str+"&last_name=&company=&phone="+
@@ -135,12 +152,12 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
                         "&card_number="+SelectPaymentMethodAct.card_number+"&card_brand="+
                         SelectPaymentMethodAct.card_brand+"&shipping_price="+
                         shipping_price+"&customer_id="+
-                        SelectPaymentMethodAct.customer_id+"&country="+
-                        AllAddedAddressAct.countrytv_str);
+                        SelectPaymentMethodAct.customer_id
+                        +"&payment_made_by_emi="+payment_made_by_emi
+                        +"&country=" + AllAddedAddressAct.countrytv_str);
 
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
-
                 params.put("user_id", user_id);
                 params.put("product_id", product_id);
                 params.put("quantity", quantity);
@@ -165,9 +182,9 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
                 params.put("shipping_price", shipping_price);
                 params.put("timezone", timezone);
                 params.put("f_amount", amount);
-
+                params.put("payment_made_by_emi", payment_made_by_emi);
+                params.put("purchase_date", dateToStr);
                 Log.e("paramsss", "" + params);
-
                 StringBuilder postData = new StringBuilder();
 
                 for (Map.Entry<String, Object> param : params.entrySet()) {
@@ -310,3 +327,27 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

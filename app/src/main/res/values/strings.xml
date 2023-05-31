@@ -26,10 +26,8 @@
     <string name="or">Or</string>
     <string name="connectfacebook">Connect With Facebook</string>
     <string name="byregistering">By registering you agree to our Terms of Service</string>
-    <string name="easy_pay">I want to mack\'n Easy Payments</string>
-    <string name="notices">Total payment is divide by 5 easy Emi you can see text payment invoice
-        in order details after purchase item successfully</string>
-    <string name="byreg">By registering you agree to our</string>
+    <string name="easy_pay">I want to make\'n\' Easy Payments</string>
+        <string name="byreg">By registering you agree to our</string>
     <string name="termsser">Terms of Service</string>
     <string name="privacy">Privacy Policy</string>
     <string name="allready">Already have an account?</string>

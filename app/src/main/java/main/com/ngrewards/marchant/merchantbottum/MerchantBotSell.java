@@ -61,6 +61,7 @@ public class MerchantBotSell extends MerchantBaseActivity {
         contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame);
         getLayoutInflater().inflate(R.layout.activity_merchant_bot_sell, contentFrameLayout);
         mySession = new MySession(this);
+        Log.e("TAG", "onCreate: "+mySession.getadmin_created_password() );
         idinits();
         clickevent();
         String user_log_data = mySession.getKeyAlldata();

@@ -1,5 +1,6 @@
 package main.com.ngrewards.marchant.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -13,11 +14,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,8 +30,10 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -44,6 +49,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,13 +82,19 @@ public class StartYourListing extends AppCompatActivity {
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private CategoryAdpters categoryAdpters;
     private String category_id = "";
-    private EditText shipping_price_et,stock_et,tital_name_et, description_et, price_et, shipping_et,sizes_et,colors_et;
-    private String user_id = "",stripe_account_id="",time_zone="",shipping_price_str="",stock_str="", tital_name_str = "", description_str = "", price_str = "",sizes_str="",colors_str="", shipping_str = "";
+           private String   split_amount= "";
+           private String  split_payments= "";
+           boolean IsSplited  = false;
+    private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
+    private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
     private TextView list_item_tv;
     File[] filearray;
     MySession mySession;
+    LinearLayout split_lay;
+    CheckBox split_check;
     Myapisession myapisession;
     Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,6 +246,8 @@ public class StartYourListing extends AppCompatActivity {
 
     private void idinti() {
 
+        split_lay = findViewById(R.id.split_lay);
+        split_check = findViewById(R.id.split_check);
         shipping_price_et = findViewById(R.id.shipping_price_et);
         stock_et = findViewById(R.id.stock_et);
         colors_et = findViewById(R.id.colors_et);
@@ -299,7 +313,148 @@ public class StartYourListing extends AppCompatActivity {
                     }
                 }
         });
+        split_lay.setOnClickListener(v -> {
 
+             if (IsSplited){
+                 split_amount ="";
+                 IsSplited = false;
+                 split_check.setChecked(false);
+                 Toast.makeText(StartYourListing.this, "Split Payments Removed",
+                         Toast.LENGTH_SHORT).show();
+             }
+             else {
+            if (price_et.getText().toString().equalsIgnoreCase("")) {
+                Toast.makeText(StartYourListing.this, "Please Enter Amount First",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                enterNoOfSplits(price_et.getText().toString());
+            }}
+
+        });
+
+
+    }
+
+    private void enterNoOfSplits(String amount) {
+        try {
+            final Dialog dialogSts = new Dialog(StartYourListing.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.enter_no_of_split_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            Button cancel = (Button) dialogSts.findViewById(R.id.cancel);
+            EditText no_of_pay = (EditText) dialogSts.findViewById(R.id.no_of_pay);
+            submitt.setOnClickListener(v -> {
+                try {
+                    if (no_of_pay.getText().toString().equalsIgnoreCase("")) {
+                        no_of_pay.setError("Empty");
+                    } else {
+
+                        if (shipping_price_et.getText().toString().equalsIgnoreCase("")) {
+                            dialogSts.dismiss();
+                            listSplits(Double.parseDouble(amount), Double.parseDouble(no_of_pay.getText().toString()));
+                        } else {
+                            dialogSts.dismiss();
+                            double ship = Double.parseDouble(shipping_price_et.getText().toString());
+                            double price = Double.parseDouble(amount);
+                            double price2 = ship + price;
+                            listSplits(price2, Double.parseDouble(no_of_pay.getText().toString()));
+                        }
+
+
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(StartYourListing.this, e.getLocalizedMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    dialogSts.dismiss();
+                }
+
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void listSplits(double price, double noofemi) {
+        try {
+            Log.e("TAG", "listSplits:priceprice " + price);
+            Log.e("TAG", "listSplits: noofemi " + noofemi);
+            Log.e("TAG", "listSplits: noofemi " + price / noofemi);
+            double data = price / noofemi;
+            ArrayList<String> peopleList = new ArrayList<>();
+            for (int i = 0; i < noofemi; i++) {
+                DecimalFormat f = new DecimalFormat("##.00");
+
+                peopleList.add("" + f.format(data));
+            }
+            FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(peopleList);
+            final Dialog dialogSts = new Dialog(StartYourListing.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.split__list_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            RecyclerView recy_list = dialogSts.findViewById(R.id.recy_list);
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView cancel = (TextView) dialogSts.findViewById(R.id.cancel);
+            recy_list.hasFixedSize();
+            recy_list.setLayoutManager(new LinearLayoutManager(this));
+            recy_list.setAdapter(finalPuzzelAdapter);
+            submitt.setOnClickListener(v -> {
+                split_amount   =     TextUtils.join(", ", peopleList);
+                Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
+                IsSplited = true ;
+                split_check.setChecked(true);
+                dialogSts.dismiss();
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("TAG", "listSplits: " + e.getMessage());
+            Log.e("TAG", "listSplits: " + e.getLocalizedMessage());
+        }
+
+    }
+
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
+        private ArrayList<String> peopleList;
+
+        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
+            this.peopleList = peopleList;
+        }
+
+        @NonNull
+        @Override
+        public SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
+            SelectTimeViewHolder viewHolder = new SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            int prop = position + 1;
+            ivFinalImage.setText("Payment " + prop + " - $ " + peopleList.get(position));
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
     }
 
     private void selectImage() {
@@ -412,7 +567,7 @@ public class StartYourListing extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             if (ImagePathArrayList_adp.get(position) != null) {
                 holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArrayList_adp.get(position))));
 
@@ -420,13 +575,13 @@ public class StartYourListing extends AppCompatActivity {
             holder.removeimages.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (ImagePathArrayList!=null&&!ImagePathArrayList.isEmpty()){
+                    if (ImagePathArrayList != null && !ImagePathArrayList.isEmpty()) {
                         ImagePathArrayList.remove(position);
 
                         horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
                         add_product_list.setAdapter(horizontalAdapter);
                         horizontalAdapter.notifyDataSetChanged();
-                        if (ImagePathArrayList==null||ImagePathArrayList.isEmpty()){
+                        if (ImagePathArrayList == null || ImagePathArrayList.isEmpty()) {
                             add_product_list.setVisibility(View.GONE);
                         }
                     }
@@ -491,6 +646,7 @@ public class StartYourListing extends AppCompatActivity {
 
     }
 
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -686,6 +842,9 @@ public class StartYourListing extends AppCompatActivity {
                 multipart.addFormField("size", sizes_str);
                 multipart.addFormField("stock", stock_str);
                 multipart.addFormField("timezone", time_zone);
+                 multipart.addFormField("split_amount",    split_amount);
+                multipart.addFormField("split_payments", split_payments);
+                multipart.addFormField("tax_price", " ");
                 if (shipping_price_str==null){
                     multipart.addFormField("shipping_price", "");
                 }
@@ -746,6 +905,7 @@ public class StartYourListing extends AppCompatActivity {
 
 
     }
+
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(contentUri, proj, null, null, null);
@@ -753,4 +913,211 @@ public class StartYourListing extends AppCompatActivity {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+
+    //package com.technorizen.healthcare.adapters;
+//
+//import android.content.Context;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.AdapterView;
+//import android.widget.ArrayAdapter;
+//import android.widget.Spinner;
+//import android.widget.TextView;
+//
+//import androidx.annotation.NonNull;
+//import androidx.recyclerview.widget.RecyclerView;
+//
+//import com.technorizen.healthcare.R;
+//import com.technorizen.healthcare.databinding.ContentMainBinding;
+//import com.technorizen.healthcare.models.Date;
+//import com.technorizen.healthcare.util.StartTimeAndTimeInterface;
+//
+//import java.util.HashMap;
+//import java.util.LinkedList;
+//import java.util.List;
+//import java.util.Map;
+//
+//import static com.technorizen.healthcare.util.DataManager.subArray;
+//
+///**
+// * Created by Ravindra Birla on 05,August,2021
+// */
+//public class SelectTimeAdapter extends RecyclerView.Adapter<SelectTimeAdapter.SelectTimeViewHolder> {
+//
+//    ArrayAdapter ad;
+//    private List<String> dates;
+//    private Context context;
+//    private List<Date> dateList = new LinkedList<>();
+//    private Map<Integer,String> startTime = new HashMap<>();
+//    private Map<Integer,String> endTime = new HashMap<>();
+//    private StartTimeAndTimeInterface startTimeAndTimeInterface;
+//
+//    String[] start = {"12:00 AM","12:15 AM","12:30 AM","12:45 AM","01:00 AM",
+//            "01:15 AM","01:30 AM","01:45 AM","02:00 AM",
+//            "02:15 AM","02:30 AM","02:45 AM","03:00 AM",
+//            "03:15 AM","03:30 AM","03:45 AM","04:00 AM",
+//            "04:15 AM","04:30 AM","04:45 AM","05:00 AM",
+//            "05:15 AM","05:30 AM","05:45 AM","06:00 AM",
+//            "06:15 AM","06:30 AM","06:45 AM","07:00 AM",
+//            "07:15 AM","07:30 AM","07:45 AM","08:00 AM",
+//            "08:15 AM","08:30 AM","08:45 AM","09:00 AM",
+//            "09:15 AM","09:30 AM","09:45 AM","10:00 AM",
+//            "10:15 AM","10:30 AM","10:45 AM","11:00 AM",
+//            "11:15 AM","11:30 AM","11:45 AM",
+//            "12:00 PM","12:15 PM","12:30 PM","12:45 PM","01:00 PM",
+//            "01:15 PM","01:30 PM","01:45 PM","02:00 PM",
+//            "02:15 PM","02:30 PM","02:45 PM","03:00 PM",
+//            "03:15 PM","03:30 PM","03:45 PM","04:00 PM",
+//            "04:15 PM","04:30 PM","04:45 PM","05:00 PM",
+//            "05:15 PM","05:30 PM","05:45 PM","06:00 PM",
+//            "06:15 PM","06:30 PM","06:45 PM","07:00 PM",
+//            "07:15 PM","07:30 PM","07:45 PM","08:00 PM",
+//            "08:15 PM","08:30 PM","08:45 PM","09:00 PM",
+//            "09:15 PM","09:30 PM","09:45 PM","10:00 PM",
+//            "10:15 PM","10:30 PM","10:45 PM","11:00 PM",
+//            "11:15 PM","11:30 PM","11:45 PM"
+//    };
+//    String[] end = {"12:00 AM","12:15 AM","12:30 AM","12:45 AM","01:00 AM",
+//            "01:15 AM","01:30 AM","01:45 AM","02:00 AM",
+//            "02:15 AM","02:30 AM","02:45 AM","03:00 AM",
+//            "03:15 AM","03:30 AM","03:45 AM","04:00 AM",
+//            "04:15 AM","04:30 AM","04:45 AM","05:00 AM",
+//            "05:15 AM","05:30 AM","05:45 AM","06:00 AM",
+//            "06:15 AM","06:30 AM","06:45 AM","07:00 AM",
+//            "07:15 AM","07:30 AM","07:45 AM","08:00 AM",
+//            "08:15 AM","08:30 AM","08:45 AM","09:00 AM",
+//            "09:15 AM","09:30 AM","09:45 AM","10:00 AM",
+//            "10:15 AM","10:30 AM","10:45 AM","11:00 AM",
+//            "11:15 AM","11:30 AM","11:45 AM",
+//            "12:00 PM","12:15 PM","12:30 PM","12:45 PM","01:00 PM",
+//            "01:15 PM","01:30 PM","01:45 PM","02:00 PM",
+//            "02:15 PM","02:30 PM","02:45 PM","03:00 PM",
+//            "03:15 PM","03:30 PM","03:45 PM","04:00 PM",
+//            "04:15 PM","04:30 PM","04:45 PM","05:00 PM",
+//            "05:15 PM","05:30 PM","05:45 PM","06:00 PM",
+//            "06:15 PM","06:30 PM","06:45 PM","07:00 PM",
+//            "07:15 PM","07:30 PM","07:45 PM","08:00 PM",
+//            "08:15 PM","08:30 PM","08:45 PM","09:00 PM",
+//            "09:15 PM","09:30 PM","09:45 PM","10:00 PM",
+//            "10:15 PM","10:30 PM","10:45 PM","11:00 PM",
+//            "11:15 PM","11:30 PM","11:45 PM"
+//    };
+//
+//    public SelectTimeAdapter(List<String> dates,Context context,StartTimeAndTimeInterface startTimeAndTimeInterface)
+//    {
+//        this.dates = dates;
+//        this.context = context;
+//        this.startTimeAndTimeInterface = startTimeAndTimeInterface;
+//    }
+//
+//    @NonNull
+//    @Override
+//    public SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+//        View listItem= layoutInflater.inflate(R.layout.time_item, parent, false);
+//        SelectTimeViewHolder viewHolder = new SelectTimeViewHolder(listItem);
+//        return viewHolder;
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull SelectTimeViewHolder holder, int position) {
+//        Date date = new Date();
+//        int myPosition = position;
+//        date.setDate(dates.get(position));
+//        date.setStartDate("12:00 AM");
+//        date.setEndDate("12:00 AM");
+//        startTime.put(position,"12:00 AM");
+//        endTime.put(position,"12:00 AM");
+//        Spinner spinnerStart,spinnerEnd;
+//        spinnerStart = holder.itemView.findViewById(R.id.spinnerStartTime);
+//        spinnerEnd = holder.itemView.findViewById(R.id.spinnerEndTime);
+//        TextView tvDate = holder.itemView.findViewById(R.id.tvDate);
+//        TextView tvDay = holder.itemView.findViewById(R.id.tvDay);
+//        tvDate.setText(dates.get(position));
+//        tvDay.setText(position+1+"");
+///*
+//        tvDay.setText(position+1);
+//*/
+//        ad = new ArrayAdapter(
+//                context,
+//                android.R.layout.simple_spinner_item,
+//                start);
+//
+//        ad.setDropDownViewResource(
+//                android.R.layout
+//                        .simple_spinner_dropdown_item);
+//        spinnerStart.setAdapter(ad);
+//        spinnerStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                startTimeAndTimeInterface.startTime(dates.get(myPosition),spinnerStart.getSelectedItem().toString());
+//                int subEnd = start.length-1;
+//                int myPosition1 = position + 1;
+//                String[] subarray = subArray(end, myPosition1, subEnd);
+//
+//                ad = new ArrayAdapter(
+//                        context,
+//                        android.R.layout.simple_spinner_item,
+//                        subarray);
+//                ad.setDropDownViewResource(
+//                        android.R.layout
+//                                .simple_spinner_dropdown_item);
+//                spinnerEnd.setAdapter(ad);
+//                if(subarray.length==0)
+//                {
+//                    startTimeAndTimeInterface.endTime(dates.get(myPosition),"");
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        spinnerEnd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                startTimeAndTimeInterface.endTime(dates.get(myPosition),spinnerEnd.getSelectedItem().toString());
+//
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        ad = new ArrayAdapter(
+//                context,
+//                android.R.layout.simple_spinner_item,
+//                end);
+//
+//        ad.setDropDownViewResource(
+//                android.R.layout
+//                        .simple_spinner_dropdown_item);
+//
+//        spinnerEnd.setAdapter(ad);
+//
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return dates.size();
+//    }
+//
+//    public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+//        public SelectTimeViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//        }
+//    }
+//
+//}
+
+//Original
+
 }
+
+
