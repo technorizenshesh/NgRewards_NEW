@@ -1,23 +1,59 @@
 package main.com.ngrewards.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import main.com.ngrewards.Models.SplitList;
 import main.com.ngrewards.R;
+import main.com.ngrewards.RecyclerViewClickListener1;
+import main.com.ngrewards.RecyclerViewClickListenerSplit;
+import main.com.ngrewards.beanclasses.OrderMerchantAct;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentWebView;
+import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
+import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class SaledItemDetailAct extends AppCompatActivity {
+public class SaledItemDetailAct extends AppCompatActivity implements RecyclerViewClickListenerSplit {
+    private MySession mySession;
 
     private RelativeLayout backlay;
     private ImageView product_img;
@@ -36,19 +72,49 @@ public class SaledItemDetailAct extends AppCompatActivity {
             shipadd_opt_str = "";
 
     private String order_date;
-    private TextView strip_recipt;
+    private TextView strip_recipt, show_remaining_payments, send_reminder, download_invoice;
     private String reciept_url;
     private String post_code;
     private String created_date;
+    private String split_invoice = "",cart_id = "";
+    private String split_date = "";
+    private String split_payment = "";
 
+    private String payment_made_by_emi = "";
+    private String split_amount = "";
+    private BottomSheetBehavior<View> behavior;
+    private Dialog dialogSts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saled_item_detail);
+        mySession = new MySession(this);
+        mySession = new MySession(this);
+        String user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+        } else {
+            try {
+
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                }
+            } catch (JSONException ee) {
+                ee.printStackTrace();
+            }
+        }
         Bundle bundle = getIntent().getExtras();
         if (bundle == null || bundle.isEmpty()) {
 
         } else {
+            cart_id = bundle.getString("cart_id");
+            split_invoice = bundle.getString("split_invoice");
+            split_date = bundle.getString("split_date");
+            payment_made_by_emi = bundle.getString("payment_made_by_emi");
+            split_payment = bundle.getString("split_payment");
+            split_amount = bundle.getString("split_amount");
             product_id = bundle.getString("product_id");
             member_id = bundle.getString("member_id");
             order_id_str = bundle.getString("order_id");
@@ -62,11 +128,11 @@ public class SaledItemDetailAct extends AppCompatActivity {
             shipping_price = bundle.getString("shipping_price");
             mainprice_str = bundle.getString("mainprice");
             member_name_str = bundle.getString("member_name");
-            created_date = bundle.getString("created_date");
+            created_date    = bundle.getString("created_date");
             product_name_str = bundle.getString("product_name");
             product_img_str = bundle.getString("product_img_str");
             member_contact_name = bundle.getString("member_contact_name");
-            quantity_str = bundle.getString("quantity");
+            quantity_str      = bundle.getString("quantity");
             order_date = bundle.getString("order_date");
             reciept_url = bundle.getString("reciept_url");
             post_code = bundle.getString("post_code");
@@ -99,7 +165,43 @@ public class SaledItemDetailAct extends AppCompatActivity {
         });
     }
 
+    private void listSplits(ArrayList<SplitList> splitLists, String type) {
+        try {
+
+            FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(splitLists,
+                    SaledItemDetailAct.this, type,this::onClick1);
+             dialogSts = new Dialog(SaledItemDetailAct.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.bottem_split__list_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            RecyclerView recy_list = dialogSts.findViewById(R.id.recy_list);
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView cancel = (TextView) dialogSts.findViewById(R.id.cancel);
+            recy_list.hasFixedSize();
+            recy_list.setLayoutManager(new LinearLayoutManager(this));
+            recy_list.setAdapter(finalPuzzelAdapter);
+            submitt.setOnClickListener(v -> {
+                // split_amount = TextUtils.join(", ", peopleList);
+                //  Log.e("TAG", "listSplits:split_amountsplit_amount " + split_amount);
+                // IsSplited = true ;
+                //  split_check.setChecked(true);
+                dialogSts.dismiss();
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("TAG", "listSplits: " + e.getMessage());
+            Log.e("TAG", "listSplits: " + e.getLocalizedMessage());
+        }
+
+    }
+
     private void idinit() {
+        send_reminder = findViewById(R.id.send_reminder);
+        show_remaining_payments = findViewById(R.id.show_remaining_payments);
+        download_invoice = findViewById(R.id.download_invoice);
         shipprice = findViewById(R.id.shipprice);
         estdeliver = findViewById(R.id.estdeliver);
         backlay = findViewById(R.id.backlay);
@@ -137,7 +239,55 @@ public class SaledItemDetailAct extends AppCompatActivity {
         order_id.setText("" + order_id_str);
         estdeliver.setText("Est. Delivery " + delivery_date_str);
         purchasedate.setText("" + created_date);
+        download_invoice.setVisibility(View.VISIBLE);
+        download_invoice.setOnClickListener(v -> {
+            new FragmentWebView().setData("Receipt", reciept_url).show(getSupportFragmentManager(), "");
 
+        });
+        Log.e("TAG", "idinit: +payment_made_by_emi" + payment_made_by_emi);
+        Log.e("TAG", "idinit: +split_amount       " + split_amount);
+        Log.e("TAG", "idinit: +split_invoice      " + split_invoice);
+        Log.e("TAG", "idinit: +   split_date      " + split_date);
+        Log.e("TAG", "idinit: +split_payment      " + split_payment);
+        if (payment_made_by_emi != null && payment_made_by_emi.equalsIgnoreCase("Yes")) {
+            try {
+                ArrayList<String> split_invoicess =
+                        new ArrayList<String>(Arrays.asList(split_invoice.split(",")));
+                ArrayList<String> amountss = new ArrayList<String>(Arrays.asList(split_amount.split(",")));
+                ArrayList<String> datess = new ArrayList<String>(Arrays.asList(split_date.split(",")));
+                ArrayList<String> ispaid = new ArrayList<String>(Arrays.asList(split_payment.split(",")));
+                ArrayList<SplitList> splitLists = new ArrayList<>();
+                for (int i = 0; i < ispaid.size(); i++) {
+                    int ie = i + 1;
+
+                    SplitList splitList = new SplitList(ie + "",
+                            datess.get(i), ispaid.get(i),
+                            amountss.get(i), split_invoicess.get(i));
+                    splitLists.add(splitList);
+                }
+
+                show_remaining_payments.setVisibility(View.VISIBLE);
+                send_reminder.setVisibility(View.VISIBLE);
+                show_remaining_payments.setOnClickListener(v -> {
+                    listSplits(splitLists, "1");
+
+                });
+
+                send_reminder.setOnClickListener(v -> {
+                    listSplits(splitLists, "2");
+
+
+                });
+              /*  split_invoice
+                        split_date
+                payment_made_by_emi
+                        split_payment
+                split_amount*/
+            } catch (Exception e) {
+
+            }
+
+        }
         if (saledate_str != null) {
             try {
                 String mytime = saledate_str;
@@ -158,12 +308,168 @@ public class SaledItemDetailAct extends AppCompatActivity {
         }
 
         //   saledate.setText(""+saledate_str);
-        shipaddress.setText("" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str + "\n" + post_code);
+
+        String str = "" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str + "\n" + post_code;
+        if (str.contains("null")) {
+            String daa = str.replace("null", "");
+            shipaddress.setText(daa);
+
+        } else {
+            shipaddress.setText(str);
+        }
+
+
         // upspackage.setText(delivery_date_str);
         if (product_img_str != null && !product_img_str.equalsIgnoreCase("") && !product_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
             Picasso.with(SaledItemDetailAct.this).load(product_img_str).placeholder(R.drawable.placeholder).into(product_img);
         }
 
     }
+
+
+
+    @Override
+    public void onClick1(SplitList id_item) {
+
+        dialogSts.dismiss();
+        getMerOrderActivity(id_item);
+     // cart_id=157&=7446&=4.8&=3&=ed58126&=REACH&=247&=2012-01-22&number_of_emi=1&json=on
+
+    }
+    private void getMerOrderActivity(SplitList id_item) {
+        Log.e("user_idd", user_id);
+ /*color_str = "", size_str = "", shipping_price = "",
+            review_str = "", quantity_str = "", average_rating = "",
+            user_id = "", comment_str = "", rating_str = "",
+            member_img_str = "", member_contact_name = "",
+            product_img_str = "", delivery_date_str = "",
+            shipping_username = "", product_id = "",
+            member_id = "", product_name_str = "",
+            member_name_str = "", mainprice_str = "",
+            order_id_str = "", saledate_str = "",
+            upspackage_str = "", shipaddress_str = "",
+            shipadd_opt_str = "";*/
+        Map<String, String >map = new HashMap<>();
+        map.put("cart_id",cart_id);
+        map.put("order_id",order_id_str);
+        map.put("split_amount_x",id_item.getAmount());
+        map.put("merchant_id",user_id);
+        map.put("merchant_business_no",member_contact_name);
+        map.put("merchant_business_name",member_name_str);
+        map.put("due_date",id_item.getDate());
+        map.put("member_id",member_id);
+        map.put("number_of_emi",id_item.getId());
+        map.put("json","on");
+        Call<ResponseBody> call = ApiClient.getApiInterface().notification_emi(map);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+
+                        new SweetAlertDialog(SaledItemDetailAct.this, SweetAlertDialog.NORMAL_TYPE)
+                                .setTitleText("Ng Rewards")
+                                .setContentText("Send Reminder Successfully")
+                                .setConfirmText("Ok")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismissWithAnimation();
+                                        //finish();
+                                    }
+                                })
+                                .show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("TAG", "onResponse: "+e.getLocalizedMessage());
+                        Log.e("TAG", "onResponse: "+e.getMessage());
+                        Log.e("TAG", "onResponse: "+e.getCause());
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
+        private ArrayList<SplitList> peopleList;
+        Context context;
+        String type;
+        RecyclerViewClickListenerSplit recyclerViewClickListener1;
+
+        public FinalPuzzelAdapter(ArrayList<SplitList> peopleList,
+                                  Context context, String type
+                , RecyclerViewClickListenerSplit recyclerViewClickListener1) {
+            this.peopleList = peopleList;
+            this.context = context;
+            this.type = type;
+            this.recyclerViewClickListener1 = recyclerViewClickListener1;
+        }
+
+        @NonNull
+        @Override
+        public FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item_two, parent,
+                    false);
+            FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull FinalPuzzelAdapter.SelectTimeViewHolder holder
+                , @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            SplitList splitList = peopleList.get(position);
+            String str = "th";
+            if (position == 0) str = "st";
+            if (position == 1) str = "nd";
+            if (position == 2) str = "nd";
+            if (type.equalsIgnoreCase("1")) {
+
+
+                if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Paid");
+
+                } else {
+                    ivFinalImage.setTextColor(getColor(R.color.red));
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due - " + splitList.getDate());
+                }
+            } else {
+                if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
+                    ivFinalImage.setText("done");
+
+                } else {
+                    ivFinalImage.setTextColor(getColor(R.color.red));
+                    ivFinalImage.setTextSize(10);
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    ivFinalImage.setOnClickListener(v -> {
+                        recyclerViewClickListener1.onClick1(splitList);
+                    });
+
+                }
+
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+
 }
 //E3:78:16:49:3C:20:C0:DF:17:9D:C4:10:9A:A7:78:24:36:7B:BA:AD

@@ -160,14 +160,15 @@ CheckBox termscheck1;
                         String []  splitings = spliting.split(",");
                         Log.e("TAG", "onBindViewHolder:xxxxxxxxxxxxxxxxxxxxxxx " +splitings[0]);
                         Log.e("TAG", "onBindViewHolder:yyyyyyyyyyyyyyyyyyyyyyy " +splitings[0]);
-                      notice.setText("Total payment is divide by "+splitings.length+" easy Emi " +
-                              "you can " +
-                              "see text " +
-                              "payment invoice in order details after purchase item successfully");
-
+                      notice.setText("Total payment is divide by "+splitings.length+" easy payments " +
+                              "you can see invoice details in Activity section after successful " +
+                              "item transaction.");
+                    //    Total Payment is divided by 6 easy payments. You can see invoice
+                        //    details in Activity section after successful item transaction.
                         String str =splitings[0];
-                        if (str.contains("$")) {
-                          str=  str.replace("$","");
+                        if (str.contains("$")) {//Make Easy Payments
+
+                            str=  str.replace("$","");
                         }
                         emi_amount_str = str;
                     }
@@ -481,11 +482,9 @@ CheckBox termscheck1;
                             if (spliting!=null &&!spliting.equalsIgnoreCase("")){
                                 String []  splitings = spliting.split(",");
                                 Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
-                                notice.setText("Total payment is divide by "+splitings.length+" easy Emi " +
-                                        "you can " +
-                                        "see text " +
-                                        "payment invoice in order details after purchase item successfully");
-
+                                notice.setText("Total payment is divide by "+splitings.length+" easy payments " +
+                                        "you can see invoice details in Activity section after successful " +
+                                        "item transaction.");
                                 String str =splitings[0];
 
                                 if (str.contains("$")) {

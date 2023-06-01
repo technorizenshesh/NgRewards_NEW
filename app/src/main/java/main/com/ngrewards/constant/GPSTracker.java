@@ -1,8 +1,5 @@
 package main.com.ngrewards.constant;
 
-/**
- * Created by technorizen on 20/3/17.
- */
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -64,22 +61,7 @@ public class GPSTracker extends Service implements LocationListener {
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
             } else {
-/*
-                if (isGPSEnabled){
-                    Log.e("COME GPS","ENAMBLE");
-                    if (location==null){
-                        Log.e("COME LOC","ENAMBLE");
-                    }
-                    else {
-                        latitude = location.getLatitude();
 
-                        Log.e("COME LOC","ELSE");
-                    }
-                }
-                else {
-                    Log.e("COME FLASE GPS","ENAMBLE");
-                }
-*/
 
                 this.canGetLocation = true;
                 // First get location from Network Provider
@@ -91,13 +73,7 @@ public class GPSTracker extends Service implements LocationListener {
                             ActivityCompat.checkSelfPermission(
                                     this, Manifest.permission.ACCESS_COARSE_LOCATION)
                                     != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+
                     return location;
                     }
                     locationManager.requestLocationUpdates(

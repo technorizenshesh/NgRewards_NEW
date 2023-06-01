@@ -21,20 +21,24 @@ public class ApiClient {
 
       public static Retrofit getClient() {
         if (retrofit==null) {
-            final HttpLoggingInterceptor interceptor =  new  HttpLoggingInterceptor();
+          okhttp3.logging.HttpLoggingInterceptor interceptor = new okhttp3.logging.HttpLoggingInterceptor();
+          interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            final OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(100, TimeUnit.SECONDS)
-                    .addInterceptor(interceptor)
-                    .readTimeout(100,TimeUnit.SECONDS).build();
+          OkHttpClient.Builder builder = new OkHttpClient.Builder();
+          builder.connectTimeout(50, TimeUnit.SECONDS) // connect timeout
+                  .writeTimeout(50, TimeUnit.SECONDS) // write timeout
+                  .readTimeout(50, TimeUnit.SECONDS)
+                  .addInterceptor(interceptor); // read timeout
+          OkHttpClient client = builder.build();
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL).client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+          retrofit = new Retrofit.Builder()
+                  .baseUrl(BASE_URL)
+                  .addConverterFactory(GsonConverterFactory.create())
+                  .client(client)
+                  .build();
         }
-        return retrofit;
-    }
+          return retrofit;
+      }
 
     public static ApiInterface getApiInterface(){
        if (apiInterface==null)

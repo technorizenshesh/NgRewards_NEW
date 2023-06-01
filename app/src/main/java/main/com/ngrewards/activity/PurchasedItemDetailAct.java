@@ -238,7 +238,13 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
 
         //   saledate.setText(""+saledate_str);
-        shipaddress.setText("" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str);
+         String str = "" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str;
+         if (str.contains("null")){
+             String daa= str.replace("null","");
+             shipaddress.setText(daa);
+
+         }else {
+        shipaddress.setText(str);}
        // upspackage.setText(delivery_date_str);
         if (product_img_str != null && !product_img_str.equalsIgnoreCase("") && !product_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
             Picasso.with(PurchasedItemDetailAct.this).load(product_img_str).placeholder(R.drawable.placeholder).into(product_img);

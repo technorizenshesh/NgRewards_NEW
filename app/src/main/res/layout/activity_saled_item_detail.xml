@@ -430,6 +430,21 @@ android:layout_below="@+id/estdeliver"
         android:textColor="@color/white"
         android:textSize="@dimen/large"/>
 
+    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/new_blue"
+        android:gravity="center"
+        android:padding="5dp"
+        android:visibility="gone"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/download_invoice"
+        android:text="Download Invoice"
+        android:textColor="@color/white"
+        android:textSize="@dimen/large" />
 
      <main.com.ngrewards.fonttypeclasses.NoramlTextView
         android:layout_width="match_parent"
@@ -443,6 +458,36 @@ android:layout_below="@+id/estdeliver"
         android:layout_marginTop="10dp"
         android:id="@+id/strip_recipt"
         android:text="Stripe Receipt"
+        android:textColor="@color/white"
+        android:textSize="@dimen/large" />
+
+     <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/new_blue"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+         android:visibility="gone"
+
+         android:id="@+id/show_remaining_payments"
+        android:text="Show Remaining Payments"
+        android:textColor="@color/white"
+        android:textSize="@dimen/large" />
+     <main.com.ngrewards.fonttypeclasses.NoramlTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/new_blue"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/send_reminder"
+         android:visibility="gone"
+         android:text="Send Reminder"
         android:textColor="@color/white"
         android:textSize="@dimen/large" />
 

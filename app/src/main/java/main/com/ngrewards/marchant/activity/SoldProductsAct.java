@@ -218,94 +218,21 @@ public class SoldProductsAct extends AppCompatActivity {
             } else {
                 Picasso.with(SoldProductsAct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.offer_img);
 
-/*
-                Glide.with(ActiveProductsAct.this)
-                        .load(product_img)
-                        .thumbnail(0.5f)
-                        .override(400, 150)
-                        .centerCrop()
-                        .crossFade()
-                        .placeholder(R.drawable.placeholder)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
-                        .into(holder.offer_img);
-*/
 
 
             }
-/*
-            holder.option.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(SoldProductsAct.this, v);
-                    popup.getMenuInflater().inflate(R.menu.offermenu, popup.getMenu());
-                    MenuItem bedMenuItem = popup.getMenu().findItem(R.id.hideoffer);
-                    if (soldItemListArrayList.get(listPosition).getStatus().equalsIgnoreCase("publish")) {
 
-                        bedMenuItem.setTitle("Hide Item");
-                    } else {
-                        bedMenuItem.setTitle("Publish");
-                    }
-                    setForceShowIcon(popup);
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.editoffer:
-                                    if (!swipeToRefresh.isRefreshing()){
-                                        product_item_detail =  myactivelist.get(listPosition);
-                                        Intent i = new Intent(SoldProductsAct.this, UpdateListingProduct.class);
-                                        startActivity(i);
-
-                                    }
-
-                                    break;
-                                case R.id.hideoffer:
-                                    if (myactivelist.get(listPosition).getStatus().equalsIgnoreCase("publish")) {
-
-                                        hidepublishOffer("trash", myactivelist.get(listPosition).getId());
-                                    } else {
-                                        hidepublishOffer("publish", myactivelist.get(listPosition).getId());
-
-                                    }
-                                    break;
-
-
-                                case R.id.deleteoffer:
-                                    current_offer_pos = listPosition;
-                                    deleteOffer(listPosition, myactivelist.get(listPosition).getId());
-                                    break;
-                            }
-                            return false;
-
-                            //   Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-                    popup.show();
-                }
-
-
-            });
-*/
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(SoldProductsAct.this, SaledItemDetailAct.class);
+                  /*  i.putExtra("split_invoice", "" + soldItemListArrayList.get(position).getSplit_invoice());
+                    i.putExtra("split_date", "" + soldItemListArrayList.get(position).getSplit_date());
+                    i.putExtra("payment_made_by_emi", "" + soldItemListArrayList.get(position).getPayment_made_by_emi());
+                    i.putExtra("split_payment", "" + soldItemListArrayList.get(position).getSplit_payment());
+                    i.putExtra("split_amount", "" + soldItemListArrayList.get(position).getSplit_amount());
+*/
                     i.putExtra("product_name", soldItemListArrayList.get(position).getProductName());
                     i.putExtra("size", soldItemListArrayList.get(position).getSize());
                     i.putExtra("color", soldItemListArrayList.get(position).getColor());

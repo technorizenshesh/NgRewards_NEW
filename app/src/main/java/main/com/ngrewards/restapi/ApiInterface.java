@@ -9,6 +9,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by technorizen on 14/2/18.
@@ -136,6 +137,8 @@ public interface ApiInterface {
 
     @GET("merchant_order_lists.php?")
     Call<ResponseBody> getMerchantOrder(@Query("merchant_id") String merchant_id);
+   @GET("notification-emi.php")
+    Call<ResponseBody> notification_emi(@QueryMap Map<String, String> paramHashMap);
 
     @GET("pay_bill.php?")
     Call<ResponseBody> payBillToMerchant(@Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);

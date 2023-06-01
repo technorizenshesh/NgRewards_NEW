@@ -504,7 +504,8 @@ public class MerHomeActivity extends MerchantBaseActivity {
                     holder.img_minus.setVisibility(View.GONE);
                 }
             });
-
+            Log.e("TAG",
+                    "onBindViewHolder:454353454646 "+orderBeanArrayList.get(position).getOrder_cart_id());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -540,7 +541,8 @@ public class MerHomeActivity extends MerchantBaseActivity {
                             i.putExtra("member_img_str", orderBeanArrayList.get(position).getMemberDetail().get(0).getMemberImage());
                         }
                         i.putExtra("order_id", "" + orderBeanArrayList.get(position).getId());
-                        i.putExtra("cardnumber_tv", "" + orderBeanArrayList.get(position).getCardNumber());
+                        i.putExtra("cardnumber_tv",
+                                "" + orderBeanArrayList.get(position).getCardNumber());
                         i.putExtra("cardbrand", "" + orderBeanArrayList.get(position).getCardBrand());
                         i.putExtra("total_amt_tv_str", "" + orderBeanArrayList.get(position).getTotal_amount());
                         i.putExtra("due_amt_tv_str", "" + orderBeanArrayList.get(position).getAmount());
@@ -555,13 +557,17 @@ public class MerHomeActivity extends MerchantBaseActivity {
                         i.putExtra("reciept_url", "" + orderBeanArrayList.get(position).getReciept_url());
                         i.putExtra("order_date", "" + orderBeanArrayList.get(position).getOrderDate2());
                         i.putExtra("order_cart_id", "" + orderBeanArrayList.get(position).getOrder_cart_id());
+                        i.putExtra("split",
+                                "" + orderBeanArrayList.get(position).getOrder_cart_id());
                         startActivity(i);
 
                     } else {
 
-                        Log.e("orderBeanArrayList>>>>", "" + orderBeanArrayList);
+                        Log.e("orderBeanArrayList>>>>",
+                                "heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" + orderBeanArrayList);
 
-                        Intent i = new Intent(MerHomeActivity.this, SaledItemDetailAct.class);
+                        Intent i = new Intent(MerHomeActivity.this,
+                                SaledItemDetailAct.class);
                         i.putExtra("product_name", "" + orderBeanArrayList.get(position).getProductName());
                         i.putExtra("size", "" + orderBeanArrayList.get(position).getSize());
                         i.putExtra("color", "" + orderBeanArrayList.get(position).getColor());
@@ -590,6 +596,14 @@ public class MerHomeActivity extends MerchantBaseActivity {
                         i.putExtra("reciept_url", "" + orderBeanArrayList.get(position).getReciept_url());
                         i.putExtra("order_date", "" + orderBeanArrayList.get(position).getCreated_date());
                         i.putExtra("order_cart_id", "" + orderBeanArrayList.get(position).getOrder_cart_id());
+                        i.putExtra("split_invoice", "" + orderBeanArrayList.get(position).getSplit_invoice());
+                        i.putExtra("split_date", "" + orderBeanArrayList.get(position).getSplit_date());
+                        i.putExtra("payment_made_by_emi", "" + orderBeanArrayList.get(position).getPayment_made_by_emi());
+                        i.putExtra("split_payment", "" + orderBeanArrayList.get(position).getSplit_payment());
+                        i.putExtra("split_amount", "" + orderBeanArrayList.get(position).getSplit_amount());
+                        i.putExtra("cart_id", "" + orderBeanArrayList.get(position).getCart_id());
+
+
                         startActivity(i);
                     }
                 }
