@@ -242,10 +242,10 @@ public class SoldProductsAct extends AppCompatActivity {
                     i.putExtra("mainprice", "" + soldItemListArrayList.get(position).getTotalProductPrice());
                     i.putExtra("order_id", "" + soldItemListArrayList.get(position).getOrderId());
                     i.putExtra("saledate", soldItemListArrayList.get(position).getOrderDate());
+                    i.putExtra("order_date", soldItemListArrayList.get(position).getOrderDate());
                     i.putExtra("post_code", soldItemListArrayList.get(position).getShippingPostcode());
                     i.putExtra("reciept_url", soldItemListArrayList.get(position).getReciept_url());
                     i.putExtra("created_date", soldItemListArrayList.get(position).getCreatedDate());
-
                     i.putExtra("upspackage", soldItemListArrayList.get(position).getDeliveryDate());
                     i.putExtra("shipaddress_1", soldItemListArrayList.get(position).getShippingAddress1());
                     i.putExtra("shipaddress_2", soldItemListArrayList.get(position).getShippingAddress2());
@@ -255,6 +255,13 @@ public class SoldProductsAct extends AppCompatActivity {
                     i.putExtra("product_id", soldItemListArrayList.get(position).getId());
                     i.putExtra("product_img_str", soldItemListArrayList.get(position).getThumbnailImage());
                     i.putExtra("quantity", "" + soldItemListArrayList.get(position).getQuantity());
+                    i.putExtra("split_invoice", "" + soldItemListArrayList.get(position).getSplit_invoice());
+                    i.putExtra("split_date", "" + soldItemListArrayList.get(position).getSplit_date());
+                    i.putExtra("payment_made_by_emi", "" + soldItemListArrayList.get(position).getPayment_made_by_emi());
+                    i.putExtra("split_payment", "" + soldItemListArrayList.get(position).getSplit_payment());
+                    i.putExtra("split_amount", "" + soldItemListArrayList.get(position).getSplit_amount());
+                    i.putExtra("cart_id", "" + soldItemListArrayList.get(position).getOrderId());
+
                     startActivity(i);
                 }
             });

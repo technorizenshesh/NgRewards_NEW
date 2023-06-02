@@ -89,7 +89,6 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saled_item_detail);
         mySession = new MySession(this);
-        mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
         } else {
@@ -238,7 +237,7 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
         shipprice.setText("$" + shipping_price);
         order_id.setText("" + order_id_str);
         estdeliver.setText("Est. Delivery " + delivery_date_str);
-        purchasedate.setText("" + created_date);
+        purchasedate.setText("" + order_date);
         download_invoice.setVisibility(View.VISIBLE);
         download_invoice.setOnClickListener(v -> {
             new FragmentWebView().setData("Receipt", reciept_url).show(getSupportFragmentManager(), "");
@@ -297,11 +296,11 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
 
                 SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
                 String finalDate = timeFormat.format(myDate);
-                purchasedate.setText("" + created_date);
+                purchasedate.setText("" + order_date);
 
                 System.out.println(finalDate);
             } catch (Exception e) {
-                purchasedate.setText("" + created_date);
+                purchasedate.setText("" + order_date);
 
             }
 

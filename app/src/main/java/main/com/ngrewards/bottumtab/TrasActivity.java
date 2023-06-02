@@ -1,5 +1,6 @@
 package main.com.ngrewards.bottumtab;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -280,16 +281,18 @@ public class TrasActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
-            if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            Log.e("TAG", "onBindViewHolder:orderBeanArrayList.get(position).getType() "+orderBeanArrayList.get(position).getType());
+            if (orderBeanArrayList.get(position).getType() != null &&
+                    orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
 
                 holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
-
-                try {
+                holder.date_tv.setText(  orderBeanArrayList.get(position).getCreated_date());
+           /*     try {
+                    Log.e(TAG, "onBindViewHolder: ", );
                     String mytime = orderBeanArrayList.get(position).getCreated_date();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date myDate = null;
@@ -306,7 +309,7 @@ public class TrasActivity extends BaseActivity {
                     Log.e("EXC TRUE", " RRR");
                     holder.date_tv.setText("Date:- " + orderBeanArrayList.get(position).getCreated_date());
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
-                }
+                }*/
 
                 holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
@@ -326,7 +329,8 @@ public class TrasActivity extends BaseActivity {
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            } else if (orderBeanArrayList.get(position).getType() != null &&
+            }
+            else if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
 
                 holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getAmount());
@@ -376,7 +380,10 @@ public class TrasActivity extends BaseActivity {
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order")) {
+            }
+            else if (orderBeanArrayList.get(position).getType() != null &&
+                    orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order"))
+            {
                 //holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_amount());
                 holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
@@ -416,7 +423,8 @@ public class TrasActivity extends BaseActivity {
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            } else {
+            } else
+            {
 
                 holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
@@ -466,14 +474,10 @@ public class TrasActivity extends BaseActivity {
                 holder.merchant_member_name.setText("" + mername);
             }
 
-            holder.img_plus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.lesslay.setVisibility(View.VISIBLE);
-                    holder.img_plus.setVisibility(View.GONE);
-                    holder.img_minus.setVisibility(View.VISIBLE);
-                }
+            holder.img_plus.setOnClickListener(v -> {
+                holder.lesslay.setVisibility(View.VISIBLE);
+                holder.img_plus.setVisibility(View.GONE);
+                holder.img_minus.setVisibility(View.VISIBLE);
             });
 
             holder.img_minus.setOnClickListener(new View.OnClickListener() {
