@@ -75,108 +75,214 @@
             android:background="@color/darkgrey"
             android:layout_width="match_parent"
             android:layout_height="0.6dp"></View>
-
-        <RelativeLayout
+        <ScrollView
             android:layout_below="@+id/v"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
-    <android.support.v7.widget.CardView
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-
-        app:cardUseCompatPadding="true">
-        <RelativeLayout
-            android:background="@color/white"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/ddd"
-                android:background="@color/white"
+            android:fillViewport="true"
+            android:layout_height="wrap_content"
+            >
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <ImageView
-                    android:id="@+id/product_img"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/stove" />
-
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:layout_marginRight="2dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
-
-
-                    <main.com.ngrewards.fonttypeclasses.BoldTextView
-                        android:id="@+id/product_name"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="5dp"
-                        android:singleLine="true"
-                        android:text="Stove"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/medium" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+
+                        app:cardUseCompatPadding="true">
                         <RelativeLayout
+                            android:background="@color/white"
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-
-                            <TextView
-                                android:id="@+id/mainprice"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/ddd"
+                                android:background="@color/white"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="1dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginTop="5dp"
-                                android:text="$0.00"
-                                android:textColor="@color/pinkborder"
-                                android:textSize="@dimen/large" />
+                                android:orientation="horizontal"
+                                android:weightSum="3">
 
+                                <ImageView
+                                    android:id="@+id/product_img"
+                                    android:layout_width="90dp"
+                                    android:layout_height="90dp"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/stove" />
+
+                                <LinearLayout
+                                    android:layout_marginRight="2dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/white"
+                                    android:orientation="vertical">
+
+
+                                    <main.com.ngrewards.fonttypeclasses.BoldTextView
+                                        android:id="@+id/product_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="1dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginTop="5dp"
+                                        android:singleLine="true"
+                                        android:text="Stove"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/medium" />
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+                                        <RelativeLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/mainprice"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginBottom="1dp"
+                                                android:layout_marginLeft="8dp"
+                                                android:layout_marginTop="5dp"
+                                                android:text="$0.00"
+                                                android:textColor="@color/pinkborder"
+                                                android:textSize="@dimen/large" />
+
+
+                                        </RelativeLayout>
+
+                                        <LinearLayout
+                                            android:layout_alignParentRight="true"
+                                            android:orientation="vertical"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/quantity"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentRight="true"
+                                                android:text=""
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/medium" />
+                                            <TextView
+                                                android:id="@+id/size_tv"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentRight="true"
+                                                android:text=""
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/medium" />
+                                            <TextView
+                                                android:id="@+id/color_tv"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentRight="true"
+                                                android:text=""
+                                                android:textColor="@color/black"
+                                                android:textSize="@dimen/medium" />
+
+
+                                        </LinearLayout>
+
+
+                                    </RelativeLayout>
+
+
+
+                                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+
+                                        android:visibility="gone"
+                                        android:id="@+id/merchant_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:layout_marginTop="1dp"
+                                        android:singleLine="true"
+                                        android:text=""
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/small" />
+
+
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/estdeliver"
+                                android:layout_marginTop="5dp"
+                                android:layout_below="@+id/ddd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:layout_marginTop="3dp"
+                                android:layout_below="@+id/estdeliver"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/small"
+                                android:text="Ups first class package"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
                         </RelativeLayout>
 
-                        <LinearLayout
-                            android:layout_alignParentRight="true"
-                            android:orientation="vertical"
-                            android:layout_width="wrap_content"
+
+                    </android.support.v7.widget.CardView>
+
+                    <View
+                        android:background="@color/darkgrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"></View>
+                    <LinearLayout
+                        android:layout_margin="10dp"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/quantity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:text=""
+                                android:layout_toLeftOf="@+id/order_id"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/medium" />
+                                android:textSize="@dimen/medium"
+                                android:text="Order #"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
                             <TextView
-                                android:id="@+id/size_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:id="@+id/order_id"
                                 android:layout_alignParentRight="true"
-                                android:text=""
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/medium" />
+                                android:textSize="@dimen/medium"
+                                android:text="123123123"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content">
+
                             <TextView
-                                android:id="@+id/color_tv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/size_tv1"
+                                android:text="@string/size_s"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+
+                            <TextView
+                                android:id="@+id/size_tv1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -184,316 +290,217 @@
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/medium" />
 
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
 
-                        </LinearLayout>
+                            android:layout_height="wrap_content">
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/color_tv1"
+                                android:text="@string/color"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
 
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/color_tv1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
 
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
 
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_toLeftOf="@+id/purchasedate"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="@string/purchasedate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/purchasedate"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="Nov 27,2018 10:33 am"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_toLeftOf="@+id/upspackage"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="@string/ship"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/upspackage"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="Ups first class package"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_toLeftOf="@+id/shipprice"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="@string/shippingpricing"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/shipprice"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text=""
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/dd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="@string/to"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:gravity="right"
+                                android:layout_toRightOf="@+id/dd"
+                                android:id="@+id/shipaddress"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium"
+                                android:text="Demo ddd ddd\ndddd ddgg d"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:background="@color/darkgrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"></View>
 
                     <main.com.ngrewards.fonttypeclasses.NoramlTextView
-
-                        android:visibility="gone"
-                        android:id="@+id/merchant_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="1dp"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/small" />
+                        android:layout_below="@+id/pricelay"
+                        android:background="@color/pinkborder"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/contactseller"
+                        android:text="@string/contactbuyer"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large"/>
 
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/new_blue"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:visibility="gone"
 
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/download_invoice"
+                        android:text="Download Invoice"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large" />
 
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pricelay"
+                        android:background="@color/pinkborder"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/strip_recipt"
+                        android:text="Stripe Receipt"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large" />
+
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/new_blue"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+
+                        android:id="@+id/show_remaining_payments"
+                        android:text="Show Remaining Payments"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large" />
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/new_blue"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/send_reminder"
+                        android:visibility="gone"
+                        android:text="Send Reminder"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/large" />
 
                 </LinearLayout>
 
-            </LinearLayout>
-<TextView
-    android:id="@+id/estdeliver"
-    android:layout_marginTop="5dp"
-    android:layout_below="@+id/ddd"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
-            <TextView
-                android:layout_marginTop="3dp"
-android:layout_below="@+id/estdeliver"
-                android:textColor="@color/black"
-                android:textSize="@dimen/small"
-                android:text="Ups first class package"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </RelativeLayout>
 
-        </RelativeLayout>
+        </ScrollView>
 
-
-    </android.support.v7.widget.CardView>
-
-<View
-    android:background="@color/darkgrey"
-    android:layout_width="match_parent"
-    android:layout_height="0.5dp"></View>
-<LinearLayout
-    android:layout_margin="10dp"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
-    <RelativeLayout
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_toLeftOf="@+id/order_id"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="Order #"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/order_id"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="123123123"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/size_tv1"
-            android:text="@string/size_s"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium" />
-
-        <TextView
-            android:id="@+id/size_tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/color_tv1"
-            android:text="@string/color"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium" />
-
-        <TextView
-            android:id="@+id/color_tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_toLeftOf="@+id/purchasedate"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="@string/purchasedate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/purchasedate"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="Nov 27,2018 10:33 am"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_toLeftOf="@+id/upspackage"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="@string/ship"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/upspackage"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="Ups first class package"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_toLeftOf="@+id/shipprice"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="@string/shippingpricing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/shipprice"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/dd"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="@string/to"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:gravity="right"
-            android:layout_toRightOf="@+id/dd"
-            android:id="@+id/shipaddress"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/medium"
-            android:text="Demo ddd ddd\ndddd ddgg d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-
-</LinearLayout>
-
-    <View
-        android:background="@color/darkgrey"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"></View>
-
-    <main.com.ngrewards.fonttypeclasses.NoramlTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pricelay"
-        android:background="@color/pinkborder"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/contactseller"
-        android:text="@string/contactbuyer"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large"/>
-
-    <main.com.ngrewards.fonttypeclasses.NoramlTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/new_blue"
-        android:gravity="center"
-        android:padding="5dp"
-        android:visibility="gone"
-
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/download_invoice"
-        android:text="Download Invoice"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large" />
-
-     <main.com.ngrewards.fonttypeclasses.NoramlTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pricelay"
-        android:background="@color/pinkborder"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/strip_recipt"
-        android:text="Stripe Receipt"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large" />
-
-     <main.com.ngrewards.fonttypeclasses.NoramlTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/new_blue"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-         android:visibility="gone"
-
-         android:id="@+id/show_remaining_payments"
-        android:text="Show Remaining Payments"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large" />
-     <main.com.ngrewards.fonttypeclasses.NoramlTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/new_blue"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/send_reminder"
-         android:visibility="gone"
-         android:text="Send Reminder"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large" />
-
-</LinearLayout>
-
-        </RelativeLayout>
 
     </RelativeLayout>
 

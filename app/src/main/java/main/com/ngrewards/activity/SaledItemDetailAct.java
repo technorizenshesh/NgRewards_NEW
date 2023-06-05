@@ -44,6 +44,7 @@ import main.com.ngrewards.RecyclerViewClickListenerSplit;
 import main.com.ngrewards.beanclasses.OrderMerchantAct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.fragments.FragmentWebView;
 import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
 import main.com.ngrewards.restapi.ApiClient;
@@ -52,7 +53,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SaledItemDetailAct extends AppCompatActivity implements RecyclerViewClickListenerSplit {
+public class SaledItemDetailAct extends
+        AppCompatActivity implements
+        RecyclerViewClickListenerSplit {
     private MySession mySession;
 
     private RelativeLayout backlay;
@@ -69,8 +72,9 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
             member_name_str = "", mainprice_str = "",
             order_id_str = "", saledate_str = "",
             upspackage_str = "", shipaddress_str = "",
-            shipadd_opt_str = "";
-
+            shipadd_opt_str = "",
+    business_name="",
+            business_no="";
     private String order_date;
     private TextView strip_recipt, show_remaining_payments, send_reminder, download_invoice;
     private String reciept_url;
@@ -98,7 +102,15 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    /*{"result":{"id":"3","business_no":"ed58126","email":"ngrewardsllc@gmail.com","
+                    password":"123456","business_name":"REACH","contact_name":"X","bank_name":"X","
+                    account_no":"X","latitude":"29.5124819","longitude":"-98.5493952","zip_code":"
+                    78230","contact_number":"2109939000","address":"8100 Pinebrook Dr, San Antonio,
+                     TX  78230, United States",*/
+
                     user_id = jsonObject1.getString("id");
+                    business_name = jsonObject1.getString("business_name");
+                    business_no  = jsonObject1.getString("business_no");
                 }
             } catch (JSONException ee) {
                 ee.printStackTrace();
@@ -248,7 +260,9 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
         Log.e("TAG", "idinit: +split_invoice      " + split_invoice);
         Log.e("TAG", "idinit: +   split_date      " + split_date);
         Log.e("TAG", "idinit: +split_payment      " + split_payment);
-        if (payment_made_by_emi != null && payment_made_by_emi.equalsIgnoreCase("Yes")) {
+        if (payment_made_by_emi != null &&
+                payment_made_by_emi.equalsIgnoreCase(
+                        "Yes")) {
             try {
                 ArrayList<String> split_invoicess =
                         new ArrayList<String>(Arrays.asList(split_invoice.split(",")));
@@ -336,25 +350,20 @@ public class SaledItemDetailAct extends AppCompatActivity implements RecyclerVie
 
     }
     private void getMerOrderActivity(SplitList id_item) {
+       String dfgfd = PreferenceConnector.readString(SaledItemDetailAct.this,
+               PreferenceConnector.UserNAme, "");
+        String   dfgfd1 = PreferenceConnector.readString(SaledItemDetailAct.this, PreferenceConnector.UserNAme1, "");
+
         Log.e("user_idd", user_id);
- /*color_str = "", size_str = "", shipping_price = "",
-            review_str = "", quantity_str = "", average_rating = "",
-            user_id = "", comment_str = "", rating_str = "",
-            member_img_str = "", member_contact_name = "",
-            product_img_str = "", delivery_date_str = "",
-            shipping_username = "", product_id = "",
-            member_id = "", product_name_str = "",
-            member_name_str = "", mainprice_str = "",
-            order_id_str = "", saledate_str = "",
-            upspackage_str = "", shipaddress_str = "",
-            shipadd_opt_str = "";*/
+        Log.e("user_idd", dfgfd);
+        Log.e("user_idd", dfgfd1);
         Map<String, String >map = new HashMap<>();
         map.put("cart_id",cart_id);
         map.put("order_id",order_id_str);
         map.put("split_amount_x",id_item.getAmount());
         map.put("merchant_id",user_id);
-        map.put("merchant_business_no",member_contact_name);
-        map.put("merchant_business_name",member_name_str);
+        map.put("merchant_business_no",business_no);
+        map.put("merchant_business_name",business_name);
         map.put("due_date",id_item.getDate());
         map.put("member_id",member_id);
         map.put("number_of_emi",id_item.getId());

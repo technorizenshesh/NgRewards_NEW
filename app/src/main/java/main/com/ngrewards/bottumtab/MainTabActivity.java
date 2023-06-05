@@ -4,15 +4,21 @@ import static android.content.ContentValues.TAG;
 import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +26,9 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +52,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.BuildConfig;
+import main.com.ngrewards.Models.EMIdataModel;
 import main.com.ngrewards.R;
+import main.com.ngrewards.activity.EMIManualActivity;
 import main.com.ngrewards.activity.MemberMessageAct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
@@ -68,36 +79,52 @@ public class MainTabActivity extends TabActivity {
 
     private String result = "";
 
-  /*  public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+ public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            if (intent != null) {
-                String str = intent.getStringExtra("key");
-                Log.e("message>>>>>>>", str);
-                mySession = new MySession(getApplicationContext());
-                user_log_data = mySession.getKeyAlldata();
-                if (user_log_data == null) {
-
-                } else {
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(user_log_data);
-                        String message = jsonObject.getString("status");
-                        if (message.equalsIgnoreCase("1")) {
-                            JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                            user_id = jsonObject1.getString("id");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            Log.e("MEMBER_HOMEMEMBER_HOME",
+                    "----------------------------dfdd");
+            if(intent.getStringExtra("object") != null) {
+                try {
+                    JSONObject data = new JSONObject(intent.getStringExtra("object"));
+                    Log.e("MEMBER_HOMEMEMBER_HOME",
+                            "----------------------------dfdd"+data.toString());
+                String  member_id= data.getString("member_id");
+                String  cart_id=data.getString("cart_id");
+                String  split_amount_x=data.getString("split_amount_x");
+              //  String  merchant_business_name=data.getString("merchant_business_name");
+                String  merchant_business_no=data.getString("merchant_business_no");
+                String  merchant_id= data.getString("merchant_id");
+                String  message= data.getString("message");
+                String  type= data.getString("type");
+                String  due_date= data.getString("due_date");
+                String  order_id= data.getString("order_id");
+                int  number_of_emi= Integer.parseInt(data.getString("number_of_emi"));
+                    String str = "th";
+                    if (number_of_emi == 0) str = "st";
+                    if (number_of_emi == 1) str = "nd";
+                    if (number_of_emi == 2) str = "nd";
+                    Log.e("MEMBER_HOMEMEMBER_HOME",
+                            "-----------------------------messagemessage----"+message);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+                    alertDialog.setTitle("Payment");
+                    alertDialog.setMessage(
+                            "Reminder for "+number_of_emi+str+" Payment "+split_amount_x+"Due on "+due_date);
+                    alertDialog.setPositiveButton(" Pay Now ", (dialog, which) -> {
+                         dialog.dismiss();
+                       Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
+                       intentw.putExtra("object",data.toString());
+                        context.startActivity(intentw);
+                    });
+                    alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    AlertDialog alert=alertDialog.create();
+                    alert.show();
+                } catch (Exception e) {
+                    Log.e(TAG, "onReceive: -----------------------------ddd"+e.getMessage() );
+                    e.printStackTrace();
                 }
-
-               // reqcounft.setVisibility(View.GONE);
-                new GetProfile().execute();
-            }
-        }
-    };*/
+                }
+    }};
 
     private class GetProfile extends AsyncTask<String, String, String> {
         @Override
@@ -356,7 +383,7 @@ public class MainTabActivity extends TabActivity {
     @Override
     public void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
         if (scheduleTaskExecutor == null) {
 
         } else {
@@ -492,6 +519,8 @@ public class MainTabActivity extends TabActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(broadcastReceiver, new IntentFilter("MEMBER_HOME"));
+
         try {
             scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
             scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {

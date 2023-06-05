@@ -57,6 +57,9 @@
             android:name=".activity.OrderActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.EMIManualActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.EmployeesalesActivity"
             android:exported="false" />
         <activity

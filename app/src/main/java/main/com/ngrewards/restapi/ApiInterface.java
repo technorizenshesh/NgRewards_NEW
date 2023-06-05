@@ -2,6 +2,7 @@ package main.com.ngrewards.restapi;
 
 import java.util.Map;
 
+import main.com.ngrewards.Models.NotificationModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
@@ -113,6 +114,9 @@ public interface ApiInterface {
 
     @GET("member_notification_msg_lists.php?")
     Call<ResponseBody> getMemberNotification(@Query("member_id") String member_id);
+    @GET("admin_notification_list_new.php")
+    Call<NotificationModel> admin_notification_list_new(@Query("user_id") String member_id,
+                                                        @Query("type") String type);
 
     @GET("like_image.php?")
     Call<ResponseBody> likedislikemerchantphoto(@Query("merchant_id") String merchant_id, @Query("image_id") String image_id, @Query("user_id") String user_id);
@@ -142,6 +146,29 @@ public interface ApiInterface {
 
     @GET("pay_bill.php?")
     Call<ResponseBody> payBillToMerchant(@Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);
+
+/*/*pay_bill_emi.php?member_id=\(USER_DEFAULT.value(forKey: MemberID)!)&merchant_id=\(self.strMerchntId!)
+&merchant_no=\(text_Search.text!)&amount=\(text_AmountDue.text!)&tip_amount=\(strAmountTip!)&ngcash=\
+(strNgCash!)&card_id=\(dic_SelectCard["id"] ?? "")&card_number=\(dic_SelectCard["last4"] ?? "")
+&card_brand=\(dic_SelectCard["brand"] ?? "")&customer_id=\(dic_SelectCard["customer"] ?? "")
+&type=Paybill&timezone=\(Calendar.current.timeZone.identifier)&employee_name=\(lbl_Employee.text ??
+"")&employee_id=\(strEmployeeinviteId ?? "")&cart_id=\(strOrderCartId!)*/
+    @GET("pay_bill_emi.php?")
+    Call<ResponseBody> payBillEmiToMerchant(@Query("member_id") String user_id,
+                                            @Query("merchant_id") String merchant_id,
+                                            @Query("merchant_no") String merchant_number,
+                                            @Query("amount") String due_amount_str,
+                                            @Query("tip_amount") String tip_amt_str,
+                                            @Query("ngcash") String ngcash_app_str,
+                                            @Query("card_id") String card_id,
+                                            @Query("card_number") String card_number,
+                                            @Query("card_brand") String card_brand,
+                                            @Query("customer_id") String customer_id,
+                                            @Query("type") String type,
+                                            @Query("timezone") String timezone,
+                                            @Query("employee_id") String employee_id,
+                                            @Query("employee_name") String employee_name ,
+                                            @Query("cart_id") String cart_id);
 
     @GET("audience_lists.php?")
     Call<ResponseBody> getMerchantSalesAudience(@Query("merchant_id") String merchant_id);

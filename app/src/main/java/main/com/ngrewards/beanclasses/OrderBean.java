@@ -20,7 +20,62 @@ import java.util.List;
                 }*/
 
 public class OrderBean {
+    public String getSplit_invoice() {
+        return split_invoice;
+    }
 
+    public void setSplit_invoice(String split_invoice) {
+        this.split_invoice = split_invoice;
+    }
+
+    public String getSplit_date() {
+        return split_date;
+    }
+
+    public void setSplit_date(String split_date) {
+        this.split_date = split_date;
+    }
+
+    public String getPayment_made_by_emi() {
+        return payment_made_by_emi;
+    }
+
+    public void setPayment_made_by_emi(String payment_made_by_emi) {
+        this.payment_made_by_emi = payment_made_by_emi;
+    }
+
+    public String getSplit_payment() {
+        return split_payment;
+    }
+
+    public void setSplit_payment(String split_payment) {
+        this.split_payment = split_payment;
+    }
+
+    public String getSplit_amount() {
+        return split_amount;
+    }
+
+    public void setSplit_amount(String split_amount) {
+        this.split_amount = split_amount;
+    }
+
+
+    @SerializedName("split_invoice")
+    @Expose
+    private String split_invoice;
+    @SerializedName("split_date")
+    @Expose
+    private String split_date;
+    @SerializedName("payment_made_by_emi")
+    @Expose
+    private String payment_made_by_emi;
+    @SerializedName("split_payment")
+    @Expose
+    private String split_payment;
+    @SerializedName("split_amount")
+    @Expose
+    private String split_amount;
     @SerializedName("transfer_request_user_id")
     @Expose
     private String transferRequestUserId;

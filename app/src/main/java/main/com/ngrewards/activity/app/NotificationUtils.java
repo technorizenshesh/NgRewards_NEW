@@ -92,7 +92,7 @@ public class NotificationUtils {
                     mContext,
                     0,
                     intent1,
-                    PendingIntent.FLAG_ONE_SHOT);
+                    PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         }
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(

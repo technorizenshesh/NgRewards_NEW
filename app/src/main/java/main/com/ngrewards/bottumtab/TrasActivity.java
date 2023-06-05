@@ -443,7 +443,9 @@ public class TrasActivity extends BaseActivity {
                         holder.date_tv.setText("Date:- " + finalDate + " " + orderBeanArrayList.get(position).getOrder_Time());
 
                     }else{
-                        holder.date_tv.setText("Date:- " + finalDate +  " " +position+":00"+":"+"00");
+                      //  holder.date_tv.setText("Date:- " + finalDate +  " " +position+":00"+":"+
+                          //      "00");
+                        holder.date_tv.setText("" +orderBeanArrayList.get(position).getOrderDate());
                     }
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
 
@@ -497,7 +499,8 @@ public class TrasActivity extends BaseActivity {
 
                     Log.e("TYPE >> ", " >> " + orderBeanArrayList.get(position).getType());
 
-                    if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
+                    if (orderBeanArrayList.get(position).getType() != null
+                            && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
 
                         order_cart_id = orderBeanArrayList.get(position).getOrder_cart_id();
                         OrderTime = orderBeanArrayList.get(position).getNgcash();
@@ -536,7 +539,9 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("type123", orderBeanArrayList.get(position).getType());
                         startActivity(i);
 
-                    } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
+                    }
+                    else if (orderBeanArrayList.get(position).getType() != null &&
+                            orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
                         Intent i = new Intent(TrasActivity.this, TransferRequestDetActivity.class);
                         i.putExtra("member_id", orderBeanArrayList.get(position).getMember_id());
                         i.putExtra("reciept_url", orderBeanArrayList.get(position).getReciept_url());
@@ -550,7 +555,9 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("ngcash_str", "" + orderBeanArrayList.get(position).getNgcash());
                         startActivity(i);
 
-                    } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Request")) {
+                    }
+                    else if (orderBeanArrayList.get(position).getType() != null &&
+                            orderBeanArrayList.get(position).getType().equalsIgnoreCase("Request")) {
                         Intent i = new Intent(TrasActivity.this, TransferRequestDetActivity.class);
                         i.putExtra("member_user_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getAffiliateName());
                         i.putExtra("member_id", orderBeanArrayList.get(position).getMerchantDetail().get(0).getId());
@@ -576,7 +583,9 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("employee_name", "" + orderBeanArrayList.get(position).getEmployeeName());
                         startActivity(i);
 
-                    } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order")) {
+                    }
+                    else if (orderBeanArrayList.get(position).getType() != null &&
+                            orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order")) {
 
                         order_cart_id = orderBeanArrayList.get(position).getOrder_special_request();
 
@@ -611,7 +620,8 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("type123", orderBeanArrayList.get(position).getType());
                         startActivity(i);
 
-                    } else {
+                    }
+                    else {
 
                         Intent i = new Intent(TrasActivity.this, PurchasedItemDetailAct.class);
                         i.putExtra("product_name", orderBeanArrayList.get(position).getProductName());
@@ -620,7 +630,8 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("quantity", orderBeanArrayList.get(position).getQuantity());
                         i.putExtra("member_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessNo());
                         i.putExtra("merchant_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName());
-                        i.putExtra("merchant_contact_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getContactName());
+                        i.putExtra("merchant_contact_name",
+                                orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessNo());
                         i.putExtra("merchant_img_str", orderBeanArrayList.get(position).getMerchantDetail().get(0).getMerchantImage());
                         i.putExtra("mainprice", orderBeanArrayList.get(position).getTotalproductprice());
                         i.putExtra("order_id", "" + orderBeanArrayList.get(position).getOrderId());
@@ -643,6 +654,13 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("Order_Table_No", "" + orderBeanArrayList.get(position).getOrder_Table_No());
                         i.putExtra("reciept_url", "" + orderBeanArrayList.get(position).getReciept_url());
                         i.putExtra("order_special", "" + orderBeanArrayList.get(position).getOrder_special_request());
+                        i.putExtra("split_invoice", "" + orderBeanArrayList.get(position).getSplit_invoice());
+                        i.putExtra("split_date", "" + orderBeanArrayList.get(position).getSplit_date());
+                        i.putExtra("payment_made_by_emi", "" + orderBeanArrayList.get(position).getPayment_made_by_emi());
+                        i.putExtra("split_payment", "" + orderBeanArrayList.get(position).getSplit_payment());
+                        i.putExtra("split_amount", "" + orderBeanArrayList.get(position).getSplit_amount());
+                        i.putExtra("cart_id", "" + orderBeanArrayList.get(position).getOrderId());
+
                         startActivity(i);
                     }
                 }

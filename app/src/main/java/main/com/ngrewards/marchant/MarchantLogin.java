@@ -409,6 +409,8 @@ public class MarchantLogin extends AppCompatActivity {
                     jsonObject = new JSONObject(result);
                     String result_chk = jsonObject.getString("status");
                     if (result_chk.equalsIgnoreCase("1")) {
+                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ "+result);
+
                         mySession.setlogindata(result);
                         mySession.signinusers(true);
 
@@ -602,6 +604,7 @@ public class MarchantLogin extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String status = jsonObject.getString("status");
                     if (status.equalsIgnoreCase("1")) {
+                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ "+result);
                         mySession.setlogindata(result);
                         mySession.signinusers(true);
 

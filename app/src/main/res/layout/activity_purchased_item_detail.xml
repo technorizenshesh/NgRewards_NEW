@@ -530,7 +530,7 @@
 
             <main.com.ngrewards.fonttypeclasses.NoramlTextView
                 android:id="@+id/contactseller"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/pricelay"
@@ -543,8 +543,40 @@
                 android:text="@string/contactsell"
                 android:textColor="@color/white"
                 android:textSize="@dimen/large" />
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/new_blue"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="gone"
 
-              <Button
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/download_invoice"
+                android:text="Download Invoice"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large" />
+
+
+            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/new_blue"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+
+                android:id="@+id/show_remaining_payments"
+                android:text="Show Remaining Payments"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large" />
+
+            <Button
                 android:id="@+id/btn_strip_receipt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

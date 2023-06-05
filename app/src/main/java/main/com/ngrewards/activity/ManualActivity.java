@@ -835,6 +835,7 @@ public class ManualActivity extends AppCompatActivity {
                             card_amount_tv1 = card_amount_tv.getText().toString().trim();
 
                             Intent intent = new Intent(ManualActivity.this, ManualPaybillSucess.class);
+                            intent.putExtra("type", type);
                             intent.putExtra("user_id", user_id);
                             intent.putExtra("merchant_id", merchant_id);
                             intent.putExtra("merchant_number", merchant_number);
@@ -909,6 +910,7 @@ public class ManualActivity extends AppCompatActivity {
                                     Log.e("customer_id", customer_id);
 
                                     Intent intent = new Intent(ManualActivity.this, ManualPaybillSucess.class);
+                                    intent.putExtra("type", type);
                                     intent.putExtra("user_id", user_id);
                                     intent.putExtra("member_id", merchant_id);
                                     intent.putExtra("merchant_number", merchant_number);

@@ -1,11 +1,22 @@
 package main.com.ngrewards.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,31 +41,47 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import main.com.ngrewards.Models.SplitList;
 import main.com.ngrewards.R;
+import main.com.ngrewards.RecyclerViewClickListenerSplit;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentWebView;
 
-public class PurchasedItemDetailAct extends AppCompatActivity {
+public class PurchasedItemDetailAct extends
+        AppCompatActivity implements
+        RecyclerViewClickListenerSplit {
+    private Dialog dialogSts;
 
     private RelativeLayout backlay;
     private ImageView product_img;
     private TextView product_name, merchant_name, mainprice, order_id, saledate, upspackage, shipaddress;
     private String quantity_str="",color_str="",size_str="",shipping_price="",review_status="",review_str="",average_rating="",user_id="",comment_str="",rating_str="",merchant_img_str="",merchant_contact_name="",product_img_str = "", delivery_date_str = "", shipping_username = "", product_id = "", merchant_id = "", product_name_str = "", merchant_name_str = "", mainprice_str = "", order_id_str = "", saledate_str = "", upspackage_str = "", shipaddress_str = "", shipadd_opt_str = "";
-    private TextView quantity_tv,size_tv,color_tv,writereview, contactseller;
+    private TextView   download_invoice, show_remaining_payments,quantity_tv,size_tv
+            ,color_tv,
+            writereview,
+            contactseller;
     private LinearLayout post_review_lay,done_review_lay;
     private EditText comment_et;
     private RatingBar rating,rating_done;
-    private TextView shipping_price_tv,submit_review,donereview_tv;
+    private TextView shipping_price_tv,submit_review,
+            donereview_tv;
     private ProgressBar progresbar;
     private MySession mySession;
     private Button btn_strip_receipt;
     private String reciept_url;
+    private String split_invoice = "",cart_id = "";
+    private String split_date = "";
+    private String split_payment = "";
 
+    private String payment_made_by_emi = "";
+    private String split_amount = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +133,14 @@ public class PurchasedItemDetailAct extends AppCompatActivity {
             product_img_str = bundle.getString("product_img_str");
             merchant_contact_name = bundle.getString("merchant_contact_name");
             reciept_url = bundle.getString("reciept_url");
-
-
+            cart_id = bundle.getString("cart_id");
+            split_invoice = bundle.getString("split_invoice");
+            split_date = bundle.getString("split_date");
+            payment_made_by_emi = bundle.getString("payment_made_by_emi");
+            split_payment = bundle.getString("split_payment");
+            split_amount = bundle.getString("split_amount");
+            Log.e("TAG", "onCreate:split_amountsplit_amountsplit_amountsplit_amount "+split_amount );
+            Log.e("TAG", "onCreate:merchant_contact_namemerchant_contact_namemerchant_contact_namemerchant_contact_name "+merchant_contact_name );
         }
 
 
@@ -163,6 +196,9 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
     }
 
     private void idinit() {
+        show_remaining_payments = findViewById(R.id.show_remaining_payments);
+        download_invoice = findViewById(R.id.download_invoice);
+
         quantity_tv = findViewById(R.id.quantity_tv);
         size_tv = findViewById(R.id.size_tv);
         color_tv = findViewById(R.id.color_tv);
@@ -215,6 +251,45 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
             new FragmentWebView().setData("Receipt", reciept_url).show(getSupportFragmentManager(), "");
         });
 
+        if (payment_made_by_emi != null && payment_made_by_emi.equalsIgnoreCase("Yes")) {
+            try {
+                ArrayList<String> split_invoicess =
+                        new ArrayList<String>(Arrays.asList(split_invoice.split(",")));
+                ArrayList<String> amountss = new ArrayList<String>(Arrays.asList(split_amount.split(",")));
+                ArrayList<String> datess = new ArrayList<String>(Arrays.asList(split_date.split(",")));
+                ArrayList<String> ispaid = new ArrayList<String>(Arrays.asList(split_payment.split(",")));
+                ArrayList<SplitList> splitLists = new ArrayList<>();
+                for (int i = 0; i < ispaid.size(); i++) {
+                    int ie = i + 1;
+
+                    SplitList splitList = new SplitList(ie + "",
+                            datess.get(i), ispaid.get(i),
+                            amountss.get(i), split_invoicess.get(i));
+                    splitLists.add(splitList);
+                }
+
+                show_remaining_payments.setVisibility(View.VISIBLE);
+               // send_reminder.setVisibility(View.VISIBLE);
+                show_remaining_payments.setOnClickListener(v -> {
+                    listSplits(splitLists, "1");
+
+                });
+
+                /*send_reminder.setOnClickListener(v -> {
+                    listSplits(splitLists, "2");
+
+
+                });*/
+              /*  split_invoice
+                        split_date
+                payment_made_by_emi
+                        split_payment
+                split_amount*/
+            } catch (Exception e) {
+
+            }
+
+        }
 
         if (saledate_str != null) {
             try {
@@ -251,6 +326,151 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
         }
 
     }
+    private void listSplits(ArrayList<SplitList>
+                                    splitLists,
+                            String type) {
+        try {
+
+            FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(splitLists,
+                    PurchasedItemDetailAct.this, type, this);
+            dialogSts = new Dialog(PurchasedItemDetailAct.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.bottem_split__list_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            RecyclerView recy_list = dialogSts.findViewById(R.id.recy_list);
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView cancel = (TextView) dialogSts.findViewById(R.id.cancel);
+            recy_list.hasFixedSize();
+            recy_list.setLayoutManager(new LinearLayoutManager(this));
+            recy_list.setAdapter(finalPuzzelAdapter);
+            submitt.setOnClickListener(v -> {
+                // split_amount = TextUtils.join(", ", peopleList);
+                //  Log.e("TAG", "listSplits:split_amountsplit_amount " + split_amount);
+                // IsSplited = true ;
+                //  split_check.setChecked(true);
+                dialogSts.dismiss();
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("TAG", "listSplits: " + e.getMessage());
+            Log.e("TAG", "listSplits: " + e.getLocalizedMessage());
+        }
+
+    }
+
+    @Override
+    public void onClick1(SplitList id_item) {
+        dialogSts.dismiss();
+        Log.e("TAG", "onClick1: " );
+        String data = "{" +
+                " type=" + "member" +
+                ", contentAvailable=" + "contentAvailable" +
+                ", cart_id='" + cart_id + '\'' +
+                ", order_id='" + order_id_str + '\'' +
+                ", split_amount_x='" + id_item.getAmount() + '\'' +
+                ", merchant_id='" + merchant_id + '\'' +
+                ", merchant_business_no='" + merchant_contact_name + '\'' +
+                ", merchant_business_name='" + merchant_name_str+ '\'' +
+                ", memberId='" + user_id + '\'' +
+                ", dueDate='" + id_item.getDate() + '\'' +
+                ", message='" + "message" + '\'' +
+                ", numberOfEmi='" + id_item.getId() + '\'' +
+                '}';
+        Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
+        intentw.putExtra("object",data);
+        startActivity(intentw);
+    }
+    public class FinalPuzzelAdapter extends
+            RecyclerView.Adapter<
+                    FinalPuzzelAdapter.SelectTimeViewHolder>
+    {
+        private ArrayList<SplitList> peopleList;
+        Context context;
+        String type;
+        RecyclerViewClickListenerSplit recyclerViewClickListener1;
+
+        public FinalPuzzelAdapter(ArrayList<SplitList> peopleList,
+                                  Context context, String type
+                , RecyclerViewClickListenerSplit recyclerViewClickListener1) {
+            this.peopleList = peopleList;
+            this.context = context;
+            this.type = type;
+            this.recyclerViewClickListener1 = recyclerViewClickListener1;
+        }
+
+        @NonNull
+        @Override
+        public FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item_two, parent,
+                    false);
+            FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull FinalPuzzelAdapter.SelectTimeViewHolder holder
+                , @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            SplitList splitList = peopleList.get(position);
+            String str = "th";
+            if (position == 0) str = "st";
+            if (position == 1) str = "nd";
+            if (position == 2) str = "nd";
+            if (type.equalsIgnoreCase("1")) {
+
+
+                if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Paid");
+
+                } else {
+                    ivFinalImage.setTextColor(getColor(R.color.red));
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due - " + splitList.getDate());
+                }
+
+                ivFinalImage.setOnClickListener(v -> {
+                    Log.e("TAG", "onBindViewHolder: --------" );
+                    recyclerViewClickListener1.onClick1(splitList);
+                });
+
+            } else {
+                if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
+                    ivFinalImage.setText("done");
+
+                } else {
+                    ivFinalImage.setTextColor(getColor(R.color.red));
+                    ivFinalImage.setTextSize(10);
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    holder.itemView.setOnClickListener(v -> {
+                        recyclerViewClickListener1.onClick1(splitList);
+                    });
+
+                }
+
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+
+
+
+
+
 
     private class AddReviewAsc extends AsyncTask<String, String, String> {
         @Override

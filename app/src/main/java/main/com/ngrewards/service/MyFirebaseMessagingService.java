@@ -24,11 +24,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import main.com.ngrewards.activity.EMIManualActivity;
+import main.com.ngrewards.activity.ManualActivity;
 import main.com.ngrewards.activity.MemberChatAct;
 import main.com.ngrewards.activity.NotificationActivity;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
+import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
@@ -119,7 +122,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("key", data.toString());
             sendBroadcast(intent);
             if (!isAppIsInBackground(getApplicationContext())) {
+
+                Log.e(TAG, "handleDataMessage: isAppIsInBackground");
                 if (!MemberChatAct.isInFront) {
+                    Log.e(TAG, "handleDataMessage: MemberChatAct.isInFront");
+
                     if (keyMessage.equalsIgnoreCase("You have a new chat message")) {
                         if (data.getString("type").equalsIgnoreCase("Member")) {
                             Intent resultIntent = new Intent(getApplicationContext(), MemberChatAct.class);
@@ -144,7 +151,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             resultIntent.putExtra("receiver_fullname", data.getString("fullname"));
                             showNotificationMessage(getApplicationContext(), "NG Rewards", "" + keyMessage, format, resultIntent, null, type);
                         }
+                    } else {
+
+                        if (keyMessage.contains("You have emi pending please pay now")) {
+                            Log.e(TAG, "handleDataMessage: You have a new chat message");
+                                                   Intent intent1 = new Intent("MEMBER_HOME");
+                            Log.e("MEMBER_HOMEMEMBER_HOME", "MEMBER_HOMEMEMBER_HOMEMEMBER_HOME"+data.toString());
+                            intent1.putExtra("object", data.toString());
+                            sendBroadcast(intent1);
+                            showNotificationMessage(getApplicationContext(), "NG Rewards",
+                                    "" + keyMessage, format,
+                                    intent1, null, type);
+
+                        } else {
+                            Intent resultIntent = new Intent(getApplicationContext(), SplashActivity.class);
+                            showNotificationMessage(getApplicationContext(), "NG Rewards", "" + keyMessage, format, resultIntent, null, type);
+
+                        }
+
                     }
+                } else {
+                    Log.e(TAG, "handleDataMessage: !MemberChatAct.isInFront");
+
                 }
 
                 Log.e("KEYKEYOUTSIDE ", " >>> " + keyMessage);
@@ -159,7 +187,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     showNotificationMessage(getApplicationContext(), "NG Rewards", "" + message, format, resultIntent, null, type);
                 }
 
-            } else {
+            }
+            else {
                 if (keyMessage.equalsIgnoreCase("You have a new chat message")) {
                     Log.e("IN Service ELSE", "KEY: " + keyMessage);
                     if (data.getString("type").equalsIgnoreCase("Member")) {
@@ -186,8 +215,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         resultIntent.putExtra("receiver_fullname", data.getString("fullname"));
                         showNotificationMessage(getApplicationContext(), "NG Rewards", "" + keyMessage, format, resultIntent, null, type);
                     }
-
-                } else if (keyMessage.equalsIgnoreCase("Your Number Used By Someone")) {
+                } else
+                    if (keyMessage.equalsIgnoreCase("Your Number Used By Someone")) {
                     Intent resultIntent = new Intent(getApplicationContext(), NotificationActivity.class);
                     showNotificationMessage(getApplicationContext(), "NG Rewards", "" + keyMessage, format, resultIntent, null, type);
                 } else if (keyMessage.equalsIgnoreCase("You Have a new Transfer Money Request")) {
@@ -201,15 +230,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String type = data.getString("type");
                     Intent resultIntent = new Intent(getApplicationContext(), MerchantBottumAct.class);
                     showNotificationMessage(getApplicationContext(), "NG Rewards", "" + message, format, resultIntent, null, type);
-                } else {
+                }
+                else {
                     Intent resultIntent = new Intent(getApplicationContext(), SplashActivity.class);
                     showNotificationMessage(getApplicationContext(), "NG Rewards", "" + keyMessage, format, resultIntent, null, type);
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
+            Log.e(TAG, "Json Exception: " + e.getLocalizedMessage());
+            Log.e(TAG, "Json Exception: " + e.getCause());
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+            Log.e(TAG, "Json Exception: " + e.getMessage());
+            Log.e(TAG, "Json Exception: " + e.getLocalizedMessage());
+            Log.e(TAG, "Json Exception: " + e.getCause());
         }
     }
 

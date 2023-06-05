@@ -24,6 +24,7 @@
                 android:layout_height="70dp"
                 app:border_overlay="true"
                 app:border_width="2dp"
+                android:layout_margin="2dp"
                  app:border_color="@color/white"
                 android:layout_centerVertical="true"
                 android:src="@drawable/logo" />
