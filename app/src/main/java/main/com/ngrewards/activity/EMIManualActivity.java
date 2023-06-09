@@ -47,7 +47,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -272,7 +271,9 @@ public class EMIManualActivity extends AppCompatActivity {
                     user_id = jsonObject1.getString("id");
                     phone = jsonObject1.getString("phone");
                     fullname = jsonObject1.getString("fullname");
-
+                    member_ngcash = jsonObject1.getString("member_ngcash");
+                    ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                    Log.e("", "onCreate:  ngcash_valngcash_valngcash_val "+ngcash_val );
                 }
 
             } catch (JSONException ee) {
@@ -348,8 +349,8 @@ public class EMIManualActivity extends AppCompatActivity {
         qrcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EMIManualActivity.this, QrCodeActivity.class);
-                startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+                // Intent i = new Intent(EMIManualActivity.this, QrCodeActivity.class);
+                //  startActivityForResult(i, REQUEST_CODE_QR_SCAN);
             }
         });
 
@@ -368,7 +369,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
             try {
 
-                merchant_name = MerchantData.getBusinessName();
+                //   merchant_name = MerchantData.getBusinessName();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -377,8 +378,8 @@ public class EMIManualActivity extends AppCompatActivity {
             merchant_num_auto.setText(merchant_number);
             merchantname.setText(merchant_name);
         }
-
-        new GetProfile().execute();
+        // new GetProfile().execute();
+        //getProfile();
     }
 
     private void checkGps() {
@@ -398,146 +399,236 @@ public class EMIManualActivity extends AppCompatActivity {
         }
     }
 
-    private class GetProfile extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-
-            try {
+    /*
+        private class GetProfile extends AsyncTask<String, String, String> {
+            @Override
+            protected void onPreExecute() {
                 super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+                progresbar.setVisibility(View.VISIBLE);
 
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-
-                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("user_id", user_id);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                try {
+                    super.onPreExecute();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
             }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            progresbar.setVisibility(View.GONE);
-
-            if (result == null) {
-
-            } else if (result.isEmpty()) {
-
-            } else {
+            @Override
+            protected String doInBackground(String... strings) {
 
                 try {
 
-                    JSONObject jsonObject = new JSONObject(result);
+                    String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
+                    URL url = new URL(postReceiverUrl);
+                    Map<String, Object> params = new LinkedHashMap<>();
+                    params.put("user_id", user_id);
+                    StringBuilder postData = new StringBuilder();
+                    for (Map.Entry<String, Object> param : params.entrySet()) {
+                        if (postData.length() != 0) postData.append('&');
+                        postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                        postData.append('=');
+                        postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                    }
+                    Log.e("GetProfile Response", "GetProfileGetProfile urlurl>>>>>>>>>>>>" + postData);
 
-                    Log.e("jsonObjectresult", String.valueOf(jsonObject));
+                    String urlParameters = postData.toString();
+                    URLConnection conn = url.openConnection();
+                    conn.setDoOutput(true);
+                    OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                    writer.write(urlParameters);
+                    writer.flush();
+                    String response = "";
+                    String line;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = reader.readLine()) != null) {
+                        response += line;
+                    }
+                    writer.close();
+                    reader.close();
+                    Log.e("GetProfile Response", "GetProfileGetProfile>>>>>>>>>>>>" + user_id);
 
-                    String message = jsonObject.getString("status");
+                    Log.e("GetProfile Response", "GetProfileGetProfile>>>>>>>>>>>>" + response);
+                    return response;
+                } catch (UnsupportedEncodingException e1) {
 
-                    if (message.equalsIgnoreCase("1")) {
+                    e1.printStackTrace();
 
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                } catch (IOException e1) {
 
-                        username_str = jsonObject1.getString("affiliate_name");
-                        fullname = jsonObject1.getString("fullname");
-                        who_invite_str = jsonObject1.getString("how_invited_you");
-                        invited_user_name = jsonObject1.getString("invited_user_name");
-                        member_ngcash = jsonObject1.getString("member_ngcash");
+                    e1.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+
+                progresbar.setVisibility(View.GONE);
+
+                if (result == null) {
+
+                } else if (result.isEmpty()) {
+
+                } else {
+
+                    try {
+
+                        JSONObject jsonObject = new JSONObject(result);
+
+                        Log.e("jsonObjectresult", String.valueOf(jsonObject));
+
+                        String message = jsonObject.getString("status");
+
+                        if (message.equalsIgnoreCase("1")) {
+
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+
+                            username_str = jsonObject1.getString("affiliate_name");
+                            fullname = jsonObject1.getString("fullname");
+                            who_invite_str = jsonObject1.getString("how_invited_you");
+                            invited_user_name = jsonObject1.getString("invited_user_name");
+                            member_ngcash = jsonObject1.getString("member_ngcash");
 
 
-                        edt_name.setEnabled(true);
+                            edt_name.setEnabled(true);
 
-                        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                            avbngcash.setText("$0.00");
+                            if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0")
+                                    || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") ||
+                                    member_ngcash.equalsIgnoreCase("null")) {
+                                avbngcash.setText("$0.00");
 
-                        } else {
+                            } else {
 
-                            avbngcash.setText("$" + member_ngcash);
-                            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
-                        }
+                                avbngcash.setText("$" + member_ngcash);
+                                ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                            }
 
-                        Log.e("employeesalesname", "yyu" + employee_slaes_name);
+                            Log.e("employeesalesname", "yyu" + employee_slaes_name);
 
-                        if (employee_name == null) {
+                            if (employee_name == null) {
 
-                            edt_name.setText("");
+                                edt_name.setText("");
 
-                        } else {
-
-                        }
-
-                        if (who_invite_str != null) {
-
-                            who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
-                        }
-
-                        String social_id = jsonObject1.getString("social_id");
-
-                        if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
-
-                        }
-
-                        if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
-                            if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
-                                // edt_name.setText(""+employee_slaes_name);
-                                edt_name.setEnabled(true);
+                            } else {
 
                             }
+
+                            if (who_invite_str != null) {
+
+                                who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
+                            }
+
+                            String social_id = jsonObject1.getString("social_id");
+
+                            if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+
+                            }
+
+                            if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
+                                if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+                                    // edt_name.setText(""+employee_slaes_name);
+                                    edt_name.setEnabled(true);
+
+                                }
+                            }
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
 
             }
-
         }
+    */
+    private void getProfile() {
+        Call<ResponseBody> call = ApiClient.getApiInterface().member_profile(user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.e("TAG", "onResponse:  responseresponseresponse "+response );
+                    try {
+                        String responseData = response.body().toString();
+
+                        JSONObject jsonObject = new JSONObject(responseData);
+
+                        Log.e("jsonObjectresult", String.valueOf(jsonObject));
+
+                        String message = jsonObject.getString("status");
+
+                        if (message.equalsIgnoreCase("1")) {
+
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+
+                            username_str = jsonObject1.getString("affiliate_name");
+                            fullname = jsonObject1.getString("fullname");
+                            who_invite_str = jsonObject1.getString("how_invited_you");
+                            invited_user_name = jsonObject1.getString("invited_user_name");
+                            member_ngcash = jsonObject1.getString("member_ngcash");
+
+
+                            edt_name.setEnabled(true);
+
+                            if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0")
+                                    || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") ||
+                                    member_ngcash.equalsIgnoreCase("null")) {
+                                avbngcash.setText("$0.00");
+
+                            } else {
+
+                                avbngcash.setText("$" + member_ngcash);
+                                ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                            }
+
+                            Log.e("employeesalesname", "yyu" + employee_slaes_name);
+
+                            if (employee_name == null) {
+
+                                edt_name.setText("");
+
+                            } else {
+
+                            }
+
+                            if (who_invite_str != null) {
+
+                                who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
+                            }
+
+                            String social_id = jsonObject1.getString("social_id");
+
+                            if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+
+                            }
+
+                            if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
+                                if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+                                    // edt_name.setText(""+employee_slaes_name);
+                                    edt_name.setEnabled(true);
+
+                                }
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                Log.e("TAG", t.toString());
+            }
+        });
     }
 
     private void getUsername() {
-
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
         Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
@@ -995,6 +1086,7 @@ public class EMIManualActivity extends AppCompatActivity {
         creditcard_rbut = findViewById(R.id.creditcard_rbut);
         paypalbut = findViewById(R.id.paypalbut);
         edt_name = findViewById(R.id.edt_name);
+        avbngcash.setText("$" + member_ngcash);
 
         ngcashavb.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {

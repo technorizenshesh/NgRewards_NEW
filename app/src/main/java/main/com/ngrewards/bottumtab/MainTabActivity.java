@@ -103,7 +103,7 @@ public class MainTabActivity extends TabActivity {
                     String str = "th";
                     if (number_of_emi == 0) str = "st";
                     if (number_of_emi == 1) str = "nd";
-                    if (number_of_emi == 2) str = "nd";
+                    if (number_of_emi == 2) str = "rd";
                     Log.e("MEMBER_HOMEMEMBER_HOME",
                             "-----------------------------messagemessage----"+message);
                     AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);

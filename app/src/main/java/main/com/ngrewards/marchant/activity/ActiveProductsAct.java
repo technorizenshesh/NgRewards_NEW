@@ -225,7 +225,8 @@ public class ActiveProductsAct extends AppCompatActivity {
                                     case R.id.editoffer:
                                         if (!swipeToRefresh.isRefreshing()){
                                             product_item_detail =  myactivelist.get(listPosition);
-                                            Intent i = new Intent(ActiveProductsAct.this, UpdateListingProduct.class);
+                                            Intent i = new Intent(ActiveProductsAct.this,
+                                                    UpdateListingProduct.class);
                                             startActivity(i);
 
                                         }

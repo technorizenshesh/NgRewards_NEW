@@ -377,7 +377,7 @@ public class SaledItemDetailAct extends
 
                         new SweetAlertDialog(SaledItemDetailAct.this, SweetAlertDialog.NORMAL_TYPE)
                                 .setTitleText("Ng Rewards")
-                                .setContentText("Send Reminder Successfully")
+                                .setContentText("EMI reminder sent successfully")
                                 .setConfirmText("Ok")
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
@@ -437,7 +437,7 @@ public class SaledItemDetailAct extends
             String str = "th";
             if (position == 0) str = "st";
             if (position == 1) str = "nd";
-            if (position == 2) str = "nd";
+            if (position == 2) str = "rd";
             if (type.equalsIgnoreCase("1")) {
 
 
