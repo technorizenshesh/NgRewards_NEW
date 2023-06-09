@@ -261,7 +261,10 @@ public class SoldProductsAct extends AppCompatActivity {
                     i.putExtra("split_payment", "" + soldItemListArrayList.get(position).getSplit_payment());
                     i.putExtra("split_amount", "" + soldItemListArrayList.get(position).getSplit_amount());
                     i.putExtra("cart_id", "" + soldItemListArrayList.get(position).getOrderId());
-
+                    Log.e("split_payment", "getPayment_made_by_emigetPayment_made_by_emi" + soldItemListArrayList.get(position).getPayment_made_by_emi() );
+                    Log.e("split_payment",
+                            "split_datesplit_datesplit_datesplit_datesplit_datesplit_date" + soldItemListArrayList.get(position).getSplit_date() );
+                    Log.e("split_payment", "getPayment_made_by_emigetPayment_made_by_emi" + soldItemListArrayList.get(position).getPayment_made_by_emi() );
                     startActivity(i);
                 }
             });

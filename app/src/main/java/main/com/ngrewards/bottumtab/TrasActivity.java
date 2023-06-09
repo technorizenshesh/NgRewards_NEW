@@ -659,7 +659,7 @@ public class TrasActivity extends BaseActivity {
                         i.putExtra("payment_made_by_emi", "" + orderBeanArrayList.get(position).getPayment_made_by_emi());
                         i.putExtra("split_payment", "" + orderBeanArrayList.get(position).getSplit_payment());
                         i.putExtra("split_amount", "" + orderBeanArrayList.get(position).getSplit_amount());
-                        i.putExtra("cart_id", "" + orderBeanArrayList.get(position).getOrderId());
+                        i.putExtra("cart_id", "" + orderBeanArrayList.get(position).getCart_id());
 
                         startActivity(i);
                     }

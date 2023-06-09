@@ -218,6 +218,18 @@ public class OrderBean {
     @SerializedName("card_id")
     @Expose
     private String cardId;
+    @SerializedName("cart_id")
+    @Expose
+    private String cart_id;
+
+    public String getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(String cart_id) {
+        this.cart_id = cart_id;
+    }
+
     @SerializedName("card_number")
     @Expose
     private String cardNumber;
