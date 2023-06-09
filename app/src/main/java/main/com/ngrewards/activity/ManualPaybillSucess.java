@@ -129,7 +129,9 @@ if (type.equalsIgnoreCase("payemi")){
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                     Intent intent = new Intent(ManualPaybillSucess.this, WebViewCalled.class);
                                     intent.putExtra("reciept_url", reciept_url);
-                                    intent.putExtra("scrsts", "activity");
+                                    intent.putExtra("scrsts", "activity")
+                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
                                     pDialog.dismissWithAnimation();

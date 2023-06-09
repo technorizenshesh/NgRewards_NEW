@@ -35,7 +35,8 @@ public class WebViewCalled extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent in = new Intent(this, MainTabActivity.class);
+        Intent in = new Intent(this, MainTabActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(in);
         finish();
         PreferenceConnector.writeString(WebViewCalled.this, PreferenceConnector.Logout_Status, "false");

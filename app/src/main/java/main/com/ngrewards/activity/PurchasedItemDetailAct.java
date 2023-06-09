@@ -139,6 +139,7 @@ public class PurchasedItemDetailAct extends
             payment_made_by_emi = bundle.getString("payment_made_by_emi");
             split_payment = bundle.getString("split_payment");
             split_amount = bundle.getString("split_amount");
+            Log.e("TAG", "onCreate:split_datesplit_datesplit_datesplit_datesplit_datesplit_date "+split_date );
             Log.e("TAG", "onCreate:split_amountsplit_amountsplit_amountsplit_amount "+split_amount );
             Log.e("TAG", "onCreate:merchant_contact_namemerchant_contact_namemerchant_contact_namemerchant_contact_name "+merchant_contact_name );
         }
@@ -419,7 +420,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
             String str = "th";
             if (position == 0) str = "st";
             if (position == 1) str = "nd";
-            if (position == 2) str = "nd";
+            if (position == 2) str = "rd";
             if (type.equalsIgnoreCase("1")) {
 
 

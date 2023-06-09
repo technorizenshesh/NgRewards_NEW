@@ -48,6 +48,8 @@ public interface ApiInterface {
 
     @GET("my_offer.php?")
     Call<ResponseBody> getMyOfferProduct(@Query("user_id") String user_id);
+    @GET("member_profile.php?")
+    Call<ResponseBody> member_profile(@Query("user_id") String user_id);
 
     @GET("merchant_offer_for_member.php?")
     Call<ResponseBody> getMemberMerchnatOffer(@Query("merchant_id") String merchant_id, @Query("user_id") String user_id);

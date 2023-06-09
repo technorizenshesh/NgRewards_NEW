@@ -1,5 +1,6 @@
 package main.com.ngrewards.marchant.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -13,11 +14,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,8 +30,10 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -44,6 +49,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,6 +71,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateListingProduct extends AppCompatActivity {
+    private static final String TAG = "UpdateListingProduct";
     //public static ArrayList<String> ImagePathArrayList;
     private RelativeLayout backlay;
     private ImageView uploadimg;
@@ -84,11 +91,16 @@ public class UpdateListingProduct extends AppCompatActivity {
     private int remove_pos;
     public static ArrayList<ProductImage> ImagePathArrayList;
     public static ArrayList<String> ImagePathArrayList_str;
-
+    private String   split_amount= "";
+    private String  split_payments= "";
+    boolean IsSplited  = false;
+    LinearLayout split_lay;
+    CheckBox split_check;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_your_listing);
+        Log.e(TAG, "onCreate: "+TAG );
         mySession = new MySession(this);
         myapisession = new Myapisession(this);
         filearray = new File[0];
@@ -270,6 +282,31 @@ public class UpdateListingProduct extends AppCompatActivity {
         add_product_list.setLayoutManager(horizontalLayoutManagaer);
         backlay = findViewById(R.id.backlay);
         uploadimg = findViewById(R.id.uploadimg);
+        split_lay = findViewById(R.id.split_lay);
+        split_check = findViewById(R.id.split_check);
+
+
+        split_lay.setOnClickListener(v -> {
+
+            if (IsSplited){
+                split_amount ="";
+                IsSplited = false;
+                split_check.setChecked(false);
+                Toast.makeText(UpdateListingProduct.this, "Split Payments Removed",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if (price_et.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(UpdateListingProduct.this, "Please Enter Amount First",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    enterNoOfSplits(price_et.getText().toString());
+                }}
+
+        });
+
+
         category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -318,6 +355,17 @@ public class UpdateListingProduct extends AppCompatActivity {
                 }
         });
         if (ActiveProductsAct.product_item_detail != null) {
+            Log.e(TAG, "idinti: ActiveProductsAct.product_item_detail.getSplit_payments()"+ActiveProductsAct.product_item_detail.getSplit_payments() );
+if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
+        null&&!ActiveProductsAct.product_item_detail.getSplit_payments()
+        .equalsIgnoreCase("")){
+
+    split_lay.setVisibility(View.VISIBLE);
+}else {
+    split_lay.setVisibility(View.VISIBLE);
+
+}
+
 
             tital_name_et.setText("" + ActiveProductsAct.product_item_detail.getProductName());
             category_id = ActiveProductsAct.product_item_detail.getCategoryId();
@@ -377,6 +425,126 @@ public class UpdateListingProduct extends AppCompatActivity {
             }
         });
         dialogSts.show();
+    }
+    private void enterNoOfSplits(String amount) {
+        try {
+            final Dialog dialogSts = new Dialog( this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.enter_no_of_split_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            Button cancel = (Button) dialogSts.findViewById(R.id.cancel);
+            EditText no_of_pay = (EditText) dialogSts.findViewById(R.id.no_of_pay);
+            submitt.setOnClickListener(v -> {
+                try {
+                    if (no_of_pay.getText().toString().equalsIgnoreCase("")) {
+                        no_of_pay.setError("Empty");
+                    } else {
+
+                        if (shipping_price_et.getText().toString().equalsIgnoreCase("")) {
+                            dialogSts.dismiss();
+                            listSplits(Double.parseDouble(amount), Double.parseDouble(no_of_pay.getText().toString()));
+                        } else {
+                            dialogSts.dismiss();
+                            double ship = Double.parseDouble(shipping_price_et.getText().toString());
+                            double price = Double.parseDouble(amount);
+                            double price2 = ship + price;
+                            listSplits(price2, Double.parseDouble(no_of_pay.getText().toString()));
+                        }
+
+
+                    }
+                } catch (Exception e) {
+                    Toast.makeText( this, e.getLocalizedMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    dialogSts.dismiss();
+                }
+
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void listSplits(double price, double noofemi) {
+        try {
+            Log.e("TAG", "listSplits:priceprice " + price);
+            Log.e("TAG", "listSplits: noofemi " + noofemi);
+            Log.e("TAG", "listSplits: noofemi " + price / noofemi);
+            double data = price / noofemi;
+            ArrayList<String> peopleList = new ArrayList<>();
+            for (int i = 0; i < noofemi; i++) {
+                DecimalFormat f = new DecimalFormat("##.00");
+
+                peopleList.add("" + f.format(data));
+            }
+             FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(peopleList);
+            final Dialog dialogSts = new Dialog( this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.split__list_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            RecyclerView recy_list = dialogSts.findViewById(R.id.recy_list);
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView cancel = (TextView) dialogSts.findViewById(R.id.cancel);
+            recy_list.hasFixedSize();
+            recy_list.setLayoutManager(new LinearLayoutManager(this));
+            recy_list.setAdapter(finalPuzzelAdapter);
+            submitt.setOnClickListener(v -> {
+                split_amount   =     TextUtils.join(", ", peopleList);
+                Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
+                IsSplited = true ;
+                split_check.setChecked(true);
+                dialogSts.dismiss();
+            });
+            cancel.setOnClickListener(v -> dialogSts.dismiss());
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("TAG", "listSplits: " + e.getMessage());
+            Log.e("TAG", "listSplits: " + e.getLocalizedMessage());
+        }
+
+    }
+
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter< FinalPuzzelAdapter.SelectTimeViewHolder> {
+        private ArrayList<String> peopleList;
+
+        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
+            this.peopleList = peopleList;
+        }
+
+        @NonNull
+        @Override
+        public  FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
+             FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new  FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull  FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            int prop = position + 1;
+            ivFinalImage.setText("Payment " + prop + " - $ " + peopleList.get(position));
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
     }
 
     @Override
@@ -444,8 +612,9 @@ public class UpdateListingProduct extends AppCompatActivity {
             return new HorizontalAdapter.MyViewHolder(itemView);
         }
 
+        @SuppressLint("RecyclerView")
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder,  int position) {
             if (ImagePathArray.get(position) != null) {
 
                 if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
@@ -609,6 +778,7 @@ public class UpdateListingProduct extends AppCompatActivity {
 
     }
 
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -802,6 +972,9 @@ public class UpdateListingProduct extends AppCompatActivity {
                 multipart.addFormField("color", colors_str);
                 multipart.addFormField("size", sizes_str);
                 multipart.addFormField("stock", stock_str);
+                multipart.addFormField("split_amount",    split_amount);
+                multipart.addFormField("split_payments", split_payments);
+
                 if (shipping_price_str==null){
                     multipart.addFormField("shipping_price", "");
                 }

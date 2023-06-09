@@ -277,7 +277,7 @@ public class MerchantNotificationActivity extends AppCompatActivity {
                               if (number_of_emi == 2) str = "nd";
                               if (number_of_emi == 3) str = "rd";
                               holder.message_tv.setText("Reminder for " + number_of_emi + str +
-                                      " Payment " + paylode.getSplitAmountX() + " Due on " + paylode.getDueDate());
+                                      " Payment " + paylode.getSplitAmountX() + "  Due on " + paylode.getDueDate());
 
                           }catch (Exception e){
                               holder.message_tv.setText("Reminder for EMI"  + " Payment " + paylode.getSplitAmountX() + "Due on " + paylode.getDueDate());
@@ -763,7 +763,7 @@ public class MerchantNotificationActivity extends AppCompatActivity {
                         String str = "th";
                         if (number_of_emi == 0) str = "st";
                         if (number_of_emi == 1) str = "nd";
-                        if (number_of_emi == 2) str = "nd";
+                        if (number_of_emi == 2) str = "rd";
                         holder.message_tv.setText("Reminder for " + number_of_emi + str + " Payment " + split_amount_x + "Due on " + due_date);
                     } catch (JSONException e) {
                         Log.e("TAG", "onBindViewHolder: "+e.getLocalizedMessage() );
