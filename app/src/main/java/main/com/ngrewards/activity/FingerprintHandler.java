@@ -30,10 +30,10 @@ import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
 
 
-    private Context context;
-    private TextView textView;
+    private final Context context;
+    private final TextView textView;
     private MySession mySession;
-    private String logintype;
+    private final String logintype;
 
 
     // Constructor

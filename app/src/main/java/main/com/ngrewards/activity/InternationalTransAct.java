@@ -131,7 +131,8 @@ public class InternationalTransAct extends AppCompatActivity {
         amount = findViewById(R.id.amount);
         amount.setFilters(new InputFilter[] {
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -140,8 +141,7 @@ public class InternationalTransAct extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        }
-                        else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -311,7 +311,7 @@ public class InternationalTransAct extends AppCompatActivity {
         Context context;
 
         LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+        private final ArrayList<CountryBean> values;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -378,9 +378,9 @@ public class InternationalTransAct extends AppCompatActivity {
     }
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private ArrayList<MemberDetail> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        private final LayoutInflater layoutInflater;
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;

@@ -40,8 +40,8 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 
 public class NotificationUtils {
 
-    private static String TAG = NotificationUtils.class.getSimpleName();
-    private Context mContext;
+    private static final String TAG = NotificationUtils.class.getSimpleName();
+    private final Context mContext;
     public static Ringtone r;
 
     public NotificationUtils(Context mContext) {

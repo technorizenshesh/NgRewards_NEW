@@ -56,16 +56,22 @@ public class AddMemberCard extends AppCompatActivity {
     private CheckBox acceptcondition;
     private TextView submit, myaccountemail, addcardbut;
     private ProgressBar prgressbar;
-    private boolean asc_sts = true;
+    private final boolean asc_sts = true;
     private MySession mySession;
     private LinearLayout alreadyavbacountlay, accountcreate, adddebitcardlay;
     private EditText cardname, cardnumber, security_code;
     private String cardname_str = "", cardnumber_str = "", security_code_str = "";
     private Spinner yearspinner, datespinner;
-    private String expiryyear_str = "", date_str = "", user_id = "", card_id = "";
+    private final String card_id = "";
+    private final String email_str = "";
+    private final String accountid = "";
+    private final String stripe_account_id = "";
     private BasicCustomAdp basicCustomAdp;
     int month, year_int;
-    private String token_id = "", email_str = "", accountid = "", stripe_account_id = "";
+    private String expiryyear_str = "";
+    private String date_str = "";
+    private String user_id = "";
+    private String token_id = "";
     ArrayList<String> modellist;
     ArrayList<String> datelist;
     CreditCardFormatTextWatcher tv, tv2;
@@ -180,7 +186,7 @@ public class AddMemberCard extends AppCompatActivity {
                                     prgressbar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
                                     // Show localized error message
-                                    Toast.makeText(AddMemberCard.this, "\n" + error.toString(),
+                                    Toast.makeText(AddMemberCard.this, "\n" + error,
                                             Toast.LENGTH_LONG
                                     ).show();
 
@@ -384,7 +390,7 @@ public class AddMemberCard extends AppCompatActivity {
     public class BasicCustomAdp extends ArrayAdapter<String> {
         Context context;
         Activity activity;
-        private ArrayList<String> carmodel;
+        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);

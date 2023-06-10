@@ -45,22 +45,32 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NewMemberMessageActivity extends AppCompatActivity {
-private RelativeLayout backlay;
-private AutoCompleteTextView merchant_number;
+    private RelativeLayout backlay;
+    private AutoCompleteTextView merchant_number;
     int count = 0;
     private MySession mySession;
-    private String user_id="",image_url="";
-    private String receiver_name="",receiver_id="",receiver_fullname="",receiver_img="",receiver_type_str="Merchant",time_zone="",type="",messagetext="",date_time = "",ImagePath="";
+    private String user_id = "", image_url = "";
+    private final String time_zone = "";
+    private final String messagetext = "";
+    private final String date_time = "";
+    private final String ImagePath = "";
+    private String receiver_name = "";
+    private String receiver_id = "";
+    private String receiver_fullname = "";
+    private String receiver_img = "";
+    private String receiver_type_str = "Merchant";
+    private String type = "";
     private Myapisession myapisession;
     ArrayList<MerchantListBean> merchantListBeanArrayList;
     private ProgressBar progresbar;
     private ArrayList<MemberDetail> memberDetailArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
         mySession = new MySession(this);
-        myapisession  = new Myapisession(this);
+        myapisession = new Myapisession(this);
         String user_log_data = mySession.getKeyAlldata();
 
         if (user_log_data == null) {
@@ -190,9 +200,9 @@ private AutoCompleteTextView merchant_number;
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private ArrayList<MerchantListBean> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        private final LayoutInflater layoutInflater;
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MerchantListBean> l2, String lat, String lon) {
             this.context = context;
@@ -284,7 +294,7 @@ private AutoCompleteTextView merchant_number;
                             type = "Member";
                             if (l2==null||l2.get(i).getReceiver_type()==null||l2.get(i).getReceiver_type().equalsIgnoreCase("")){
                                 receiver_type_str = "Merchant";
-                                receiver_fullname=l2.get(i).getBusinessName();;
+                                receiver_fullname = l2.get(i).getBusinessName();
                             }
                             else {
                                 receiver_type_str = l2.get(i).getReceiver_type();

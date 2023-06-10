@@ -32,6 +32,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -560,13 +561,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     public static String fromBase64(String message) {
         byte[] data = Base64.decode(message, Base64.DEFAULT);
-        try {
-            return new String(data, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        return new String(data, StandardCharsets.UTF_8);
 
-        return null;
     }
 
 }

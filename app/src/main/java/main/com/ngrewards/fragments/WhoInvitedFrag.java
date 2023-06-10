@@ -193,22 +193,20 @@ public class WhoInvitedFrag extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
-            switch (requestCode) {
-                case 3:
-                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-                    try {
+            if (requestCode == 3) {
+                String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                try {
 
-                        String[] arr = result.split(",");
-                        whoinvite.setText(arr[1]);
-                        who_invite_id = arr[3];
+                    String[] arr = result.split(",");
+                    whoinvite.setText(arr[1]);
+                    who_invite_id = arr[3];
 
-                        Log.e("result123", result);
+                    Log.e("result123", result);
 
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                    break;
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         }
     }

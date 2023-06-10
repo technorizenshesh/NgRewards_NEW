@@ -72,7 +72,8 @@ public class MerchantSignupSlider extends AppCompatActivity {
     private CirclePageIndicator indicator;
     String selectedItem;
     ViewPagerAdapter adapter;
-    private boolean click_sts = false, back_click_sts = false;
+    private final boolean back_click_sts = false;
+    private boolean click_sts = false;
     private RelativeLayout backlay;
     public static String ImagePath = "", bus_category_id = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = "", mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
     private ProgressBar progresbar;

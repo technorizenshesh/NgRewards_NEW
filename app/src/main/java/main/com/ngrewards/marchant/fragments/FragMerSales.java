@@ -266,57 +266,7 @@ public class FragMerSales extends Fragment {
         return calendar.getTime();
     }
 
-    public class MonthSelAdp extends BaseAdapter {
-        Context context;
-        LayoutInflater inflter;
-        private ArrayList<String> timesellist;
-
-        public MonthSelAdp(Context applicationContext, ArrayList<String> timesellist) {
-            this.context = applicationContext;
-            this.timesellist = timesellist;
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-            return timesellist == null ? 0 : timesellist.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.spinner_layout, null);
-            TextView names = (TextView) view.findViewById(R.id.name_tv);
-            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
-            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            selected_str = timesellist.get(i);
-            names.setText(timesellist.get(i));
-            return view;
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(broadcastReceiver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("SalesEarningData"));
-    }
-
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
@@ -350,6 +300,56 @@ public class FragMerSales extends Fragment {
 
         }
     };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("SalesEarningData"));
+    }
+
+    public class MonthSelAdp extends BaseAdapter {
+        Context context;
+        LayoutInflater inflter;
+        private final ArrayList<String> timesellist;
+
+        public MonthSelAdp(Context applicationContext, ArrayList<String> timesellist) {
+            this.context = applicationContext;
+            this.timesellist = timesellist;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return timesellist == null ? 0 : timesellist.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.spinner_layout, null);
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            selected_str = timesellist.get(i);
+            names.setText(timesellist.get(i));
+            return view;
+        }
+    }
 
 }
 //graph view tutorial=======

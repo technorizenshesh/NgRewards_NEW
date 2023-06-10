@@ -24,14 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-import main.com.ngrewards.activity.EMIManualActivity;
-import main.com.ngrewards.activity.ManualActivity;
 import main.com.ngrewards.activity.MemberChatAct;
 import main.com.ngrewards.activity.NotificationActivity;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
-import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
@@ -156,7 +153,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         if (keyMessage.contains("You have emi pending please pay now")) {
                             Log.e(TAG, "handleDataMessage: You have a new chat message");
                                                    Intent intent1 = new Intent("MEMBER_HOME");
-                            Log.e("MEMBER_HOMEMEMBER_HOME", "MEMBER_HOMEMEMBER_HOMEMEMBER_HOME"+data.toString());
+                            Log.e("MEMBER_HOMEMEMBER_HOME", "MEMBER_HOMEMEMBER_HOMEMEMBER_HOME" + data);
                             intent1.putExtra("object", data.toString());
                             sendBroadcast(intent1);
                             showNotificationMessage(getApplicationContext(), "NG Rewards",

@@ -22,17 +22,35 @@ import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentOrder;
 import main.com.ngrewards.fragments.FragmentWebView;
 
-public class MerchantReceiptActivity extends AppCompatActivity  {
+public class MerchantReceiptActivity extends AppCompatActivity {
 
     private RelativeLayout backlay;
     private ImageView sharebut;
-    private TextView ngcashredeem,username_tv, member_name, tipamount_tv,special_request, due_amount,employee_tv, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
-    private String user_id="",due_amt_tv_str="",ngcash_str="",tip_str="",business_name="",username="",merchant_contact_name_str = "", merchant_img_str = "", merchant_id_str = "", shipaddress_2_str = "", shipping_name_str = "", cardbrand_str = "", order_id_str = "", merchant_name_str = "", merchant_number_str = "", date_tv_str = "", address_tv_str = "", total_amt_tv_str = "", cardnumber_tv_str = "";
+    private TextView ngcashredeem, username_tv, member_name, tipamount_tv, special_request, due_amount, employee_tv, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
+    private final String merchant_img_str = "";
+    private final String merchant_id_str = "";
+    private final String shipping_name_str = "";
+    private String user_id = "";
+    private String due_amt_tv_str = "";
+    private String ngcash_str = "";
+    private String tip_str = "";
+    private String business_name = "";
+    private String username = "";
+    private String merchant_contact_name_str = "";
+    private String shipaddress_2_str = "";
+    private String cardbrand_str = "";
+    private String order_id_str = "";
+    private String merchant_name_str = "";
+    private String merchant_number_str = "";
+    private String date_tv_str = "";
+    private String address_tv_str = "";
+    private String total_amt_tv_str = "";
+    private String cardnumber_tv_str = "";
     private MySession mySession;
-    private TextView tv_date,tv_time,tv_guest_user,tv_table_no;
-    private LinearLayout li_memberinfo,li_order_info;
-    private String mdate,time,Order_guset_No,Order_Table_No;
-    private String order_special_str,employee_name_str;
+    private TextView tv_date, tv_time, tv_guest_user, tv_table_no;
+    private LinearLayout li_memberinfo, li_order_info;
+    private String mdate, time, Order_guset_No, Order_Table_No;
+    private String order_special_str, employee_name_str;
     private Button btn_strip_receipt;
     private Button btn_order;
     private String reciept_url;

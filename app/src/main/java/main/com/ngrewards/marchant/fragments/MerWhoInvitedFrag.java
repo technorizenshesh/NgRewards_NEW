@@ -53,7 +53,7 @@ public class MerWhoInvitedFrag extends Fragment {
     private ProgressBar progresbar;
     private ArrayList<MemberDetail> memberDetailArrayList;
     private ImageView qrcode;
-    private boolean sts = false;
+    private final boolean sts = false;
     int count = 0;
     Myapisession myapisession;
     View v;
@@ -196,11 +196,33 @@ public class MerWhoInvitedFrag extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 3) {
+                String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                try {
+
+                    String[] arr = result.split(",");
+                    whoinvite.setText(arr[1]);
+
+//                        JSONObject obj = new JSONObject(result);
+//                        whoinvite.setText(obj.getString("Member"));
+
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private ArrayList<MemberDetail> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        private final LayoutInflater layoutInflater;
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -295,32 +317,6 @@ public class MerWhoInvitedFrag extends Fragment {
                 }
             };
             return filter;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-
-                case 3:
-                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-                    try {
-
-                        String arr[] = result.split(",");
-                        whoinvite.setText(arr[1]);
-
-//                        JSONObject obj = new JSONObject(result);
-//                        whoinvite.setText(obj.getString("Member"));
-
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    break;
-            }
         }
     }
 

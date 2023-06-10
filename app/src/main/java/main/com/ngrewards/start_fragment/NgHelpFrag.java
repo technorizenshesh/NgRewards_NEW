@@ -146,7 +146,7 @@ public class NgHelpFrag extends Fragment {
     public class CountryListAdapter extends ArrayAdapter<CountryBean> {
         Context context;
         Activity activity;
-        private ArrayList<CountryBean> items;
+    private final ArrayList<CountryBean> items;
 
         public CountryListAdapter(Context context, int resourceId, ArrayList<CountryBean> aritems) {
             super(context, resourceId, aritems);

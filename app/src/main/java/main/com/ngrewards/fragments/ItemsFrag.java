@@ -233,7 +233,7 @@ public class ItemsFrag extends Fragment {
             if (charText == null) {
 
             } else {
-                charText = charText.toString().toLowerCase();
+                charText = charText.toLowerCase();
                 soldItemListArrayList.clear();
                 if (charText.length() == 0) {
                     soldItemListArrayList.addAll(searchsoldItemListArrayList);
@@ -563,7 +563,7 @@ public class ItemsFrag extends Fragment {
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

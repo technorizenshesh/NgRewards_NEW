@@ -89,7 +89,7 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
         com.google.android.gms.location.LocationListener,
         ResultCallback<LocationSettingsResult> {
 
-    private Integer THRESHOLD = 2;
+    private final Integer THRESHOLD = 2;
     private int count = 0;
     private FrameLayout contentFrameLayout;
     private GoogleMap gMap;
@@ -494,11 +494,12 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private List<String> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
-        private WebOperations wo;
-        private String lat, lon;
+        private final LayoutInflater layoutInflater;
+        private final WebOperations wo;
+        private final String lat;
+        private final String lon;
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;

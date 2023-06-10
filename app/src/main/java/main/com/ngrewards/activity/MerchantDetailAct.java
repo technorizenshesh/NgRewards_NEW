@@ -83,7 +83,12 @@ public class MerchantDetailAct extends AppCompatActivity {
     private ViewPager viewPager;
     private ScrollView scrollView;
     private RelativeLayout backlay;
-    private String phone_number_str = "", business_category_name_str = "", distance_str = "", user_id = "", merchant_number_str = "", merchant_location_str = "";
+    private final String phone_number_str = "";
+    private final String business_category_name_str = "";
+    private final String distance_str = "";
+    private final String merchant_location_str = "";
+    private String user_id = "";
+    private String merchant_number_str = "";
     public static String latitude_str = "0", longitude_str = "0", merchant_id = "", merchant_img_str = "", merchant_name_str = "";
     private TextView businesscategory_name, distance_tv, merchant_name_head, merchant_name, merchant_number, location_tv, paybill;
     private ProgressBar progresbar;

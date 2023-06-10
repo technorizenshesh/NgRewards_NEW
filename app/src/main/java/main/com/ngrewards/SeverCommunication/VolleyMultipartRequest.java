@@ -17,17 +17,17 @@ import java.util.Map;
 
 /**
  * Custom request to make multipart header and upload file.
- * 
+ *
  * Sketch Project Studio
  * Created by Angga on 27/04/2016 12.05.
  */
-    public class VolleyMultipartRequest extends Request<NetworkResponse> {
+public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     private final String twoHyphens = "--";
     private final String lineEnd = "\r\n";
     private final String boundary = "apiclient-" + System.currentTimeMillis();
-    private Response.Listener<NetworkResponse> mListener;
-    private Response.ErrorListener mErrorListener;
+    private final Response.Listener<NetworkResponse> mListener;
+    private final Response.ErrorListener mErrorListener;
     private Map<String, String> mHeaders;
 
     /**

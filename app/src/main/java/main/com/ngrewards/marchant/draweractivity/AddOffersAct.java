@@ -86,7 +86,7 @@ public class AddOffersAct extends AppCompatActivity {
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private Myapisession myapisession;
     private TextView offer_discount_price_tv;
-    private int GALLERY = 1;
+    private final int GALLERY = 1;
     private File file;
     private String extension;
     private String timeStamp;
@@ -321,7 +321,8 @@ public class AddOffersAct extends AppCompatActivity {
 
         offer_price.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -330,7 +331,7 @@ public class AddOffersAct extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        } else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -593,7 +594,7 @@ public class AddOffersAct extends AppCompatActivity {
                     Log.e("file", fileName);
 
                     Log.e("file", fileName);
-                    String filenameArray[] = fileName.split("\\.");
+                    String[] filenameArray = fileName.split("\\.");
                     extension = filenameArray[filenameArray.length - 1];
                     Log.e("fileName", extension);
                     Long tsLong = System.currentTimeMillis() / 1000;
@@ -700,7 +701,7 @@ public class AddOffersAct extends AppCompatActivity {
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

@@ -128,7 +128,9 @@ public class ManualActivity extends AppCompatActivity {
     CustomCardAdp customCardAdp;
     private ArrayList<CardBean> cardBeanArrayList;
     private ExpandableHeightListView savedcardlist;
-    private String due_amount_str = "", tip_amt_str = "", ngcash_app_str = "";
+    private final String ngcash_app_str = "";
+    private final String order_guset_No = "";
+    private final String order_Table_No = "";
     public String card_id = "", time_zone = "", member_ngcash = "", apply_ngcassh = "0", card_number = "", card_brand = "", customer_id = "";
     private double ngcash_val = 0, total_amt_calculate = 0, apply_ng_cash = 0;
     private ImageView qrcode;
@@ -137,7 +139,33 @@ public class ManualActivity extends AppCompatActivity {
     private MerchantListBean MerchantData;
     private String sub_total_price;
     private String phone;
-    private String fullname = "", order_guset_No = "", order_Table_No = "", order_Address_Id = "", order_special_request = "", order_Date = "", order_Time = "";
+    private final String order_Address_Id = "";
+    private final String order_special_request = "";
+    private final String order_Date = "";
+    private final String order_Time = "";
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+
+                    String ngcash_str = intent.getExtras().getString("ngcash");
+                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
+                        avbngcash.setText("$0.00 Available");
+                    } else {
+                        avbngcash.setText("$" + ngcash_str + " Available");
+                        ngcash_val = Double.parseDouble(ngcash_str);
+                    }
+                }
+
+            } catch (Exception e) {
+
+            }
+        }
+    };
+    private String due_amount_str = "";
+    private String tip_amt_str = "";
     private String order_cart_id;
     private String result;
     private String tax_price;
@@ -160,12 +188,30 @@ public class ManualActivity extends AppCompatActivity {
     private String country_id;
     private ArrayList<String> distance_filter_list;
     private String edit_text_string = "";
+    private String fullname = "";
+
+    private void checkGps() {
+
+        gpsTracker = new GPSTracker(getApplicationContext());
+        if (gpsTracker.canGetLocation()) {
+
+            latitude = gpsTracker.getLatitude();
+            Log.e("REFRESH_LOCATION ", " >> " + latitude);
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
-
+        Log.e("TAG", "onCreate: activity_manualactivity_manualactivity_manual");
         mySession = new MySession(getApplicationContext());
         myapisession = new Myapisession(getApplicationContext());
         distance_filter_list = new ArrayList<>();
@@ -272,6 +318,9 @@ public class ManualActivity extends AppCompatActivity {
                     user_id = jsonObject1.getString("id");
                     phone = jsonObject1.getString("phone");
                     fullname = jsonObject1.getString("fullname");
+                    member_ngcash = jsonObject1.getString("member_ngcash");
+                    ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                    Log.e("", "onCreate:  ngcash_valngcash_valngcash_val " + ngcash_val);
 
                 }
 
@@ -347,11 +396,8 @@ public class ManualActivity extends AppCompatActivity {
         });
 
         if (getIntent().getExtras() != null) {
-
             MerchantData = (MerchantListBean) getIntent().getExtras().getSerializable("merchant_data");
-
             try {
-
                 merchant_number = MerchantData.getBusinessNo();
                 merchant_id = MerchantData.getId();
 
@@ -371,162 +417,7 @@ public class ManualActivity extends AppCompatActivity {
             merchantname.setText(merchant_name);
         }
 
-        new GetProfile().execute();
-    }
-
-    private void checkGps() {
-
-        gpsTracker = new GPSTracker(getApplicationContext());
-        if (gpsTracker.canGetLocation()) {
-
-            latitude = gpsTracker.getLatitude();
-            Log.e("REFRESH_LOCATION ", " >> " + latitude);
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        }
-    }
-
-    private class GetProfile extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-
-                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("user_id", user_id);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            progresbar.setVisibility(View.GONE);
-
-            if (result == null) {
-
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-
-                    JSONObject jsonObject = new JSONObject(result);
-
-                    Log.e("jsonObjectresult", String.valueOf(jsonObject));
-
-                    String message = jsonObject.getString("status");
-
-                    if (message.equalsIgnoreCase("1")) {
-
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-
-                        username_str = jsonObject1.getString("affiliate_name");
-                        fullname = jsonObject1.getString("fullname");
-                        who_invite_str = jsonObject1.getString("how_invited_you");
-                        invited_user_name = jsonObject1.getString("invited_user_name");
-                        member_ngcash = jsonObject1.getString("member_ngcash");
-
-
-                        edt_name.setEnabled(true);
-
-                        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                            avbngcash.setText("$0.00");
-
-                        } else {
-
-                            avbngcash.setText("$" + member_ngcash);
-                            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
-                        }
-
-                        Log.e("employeesalesname", "yyu" + employee_slaes_name);
-
-                        if (employee_name == null) {
-
-                            edt_name.setText("");
-
-                        } else {
-
-                        }
-
-                        if (who_invite_str != null) {
-
-                            who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
-                        }
-
-                        String social_id = jsonObject1.getString("social_id");
-
-                        if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
-
-                        }
-
-                        if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
-                            if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
-                                // edt_name.setText(""+employee_slaes_name);
-                                edt_name.setEnabled(true);
-
-                            }
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
+        //getprofile();
     }
 
     private void getUsername() {
@@ -570,39 +461,124 @@ public class ManualActivity extends AppCompatActivity {
         });
     }
 
+    private void getprofile() {
+        Call<ResponseBody> call = ApiClient.getApiInterface().member_profile(user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            Log.e("jsonObjectresult", String.valueOf(jsonObject));
+
+                            String message = jsonObject.getString("status");
+
+                            if (message.equalsIgnoreCase("1")) {
+
+                                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                                Log.e("TAG", "jsonObject1jsonObject1jsonObject1: " + jsonObject1);
+                                username_str = jsonObject1.getString("affiliate_name");
+                                fullname = jsonObject1.getString("fullname");
+                                who_invite_str = jsonObject1.getString("how_invited_you");
+                                invited_user_name = jsonObject1.getString("invited_user_name");
+                                member_ngcash = jsonObject1.getString("member_ngcash");
+
+
+                                edt_name.setEnabled(true);
+
+                                if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
+                                    avbngcash.setText("$0.00");
+
+                                } else {
+
+                                    avbngcash.setText("$" + member_ngcash);
+                                    ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                                }
+
+                                Log.e("employeesalesname", "yyu" + employee_slaes_name);
+
+                                if (employee_name == null) {
+
+                                    edt_name.setText("");
+
+                                } else {
+
+                                }
+
+                                if (who_invite_str != null) {
+
+                                    who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
+                                }
+
+                                String social_id = jsonObject1.getString("social_id");
+
+                                if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+
+                                }
+
+                                if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
+                                    if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+                                        // edt_name.setText(""+employee_slaes_name);
+                                        edt_name.setEnabled(true);
+
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
 
-            switch (requestCode) {
+            if (requestCode == 3) {
+                String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
 
-                case 3:
-                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                try {
 
-                    try {
+                    String[] arr = result.split(",");
+                    edt_name.setText(arr[1]);
+                    employee_name = arr[1];
+                    employee_id = arr[4];
+                    edt_name.setVisibility(View.VISIBLE);
+                    employee = true;
 
-                        String arr[] = result.split(",");
-                        edt_name.setText(arr[1]);
-                        employee_name = arr[1];
-                        employee_id = arr[4];
-                        edt_name.setVisibility(View.VISIBLE);
-                        employee = true;
+                    Log.e("employee_iddddd", result);
+                    // edt_name.setText(employee_name);
 
-                        Log.e("employee_iddddd",result);
-                        // edt_name.setText(employee_name);
-
-                        PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, employee_id);
-                        PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, employee_name);
+                    PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, employee_id);
+                    PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, employee_name);
 
 
-                    } catch (Exception e) {
-                        Toast.makeText(ManualActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    break;
+                } catch (Exception e) {
+                    Toast.makeText(ManualActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -620,24 +596,14 @@ public class ManualActivity extends AppCompatActivity {
         paypalbut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    creditcard_rbut.setChecked(false);
-                } else {
-                    creditcard_rbut.setChecked(true);
-
-                }
+                creditcard_rbut.setChecked(!isChecked);
             }
         });
 
         creditcard_rbut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    paypalbut.setChecked(false);
-                } else {
-                    paypalbut.setChecked(true);
-
-                }
+                paypalbut.setChecked(!isChecked);
             }
         });
 
@@ -850,7 +816,7 @@ public class ManualActivity extends AppCompatActivity {
                             intent.putExtra("merchant_name", merchant_name);
                             intent.putExtra("employee_name", employee_name);
 
-                            if (employee == true) {
+                            if (employee) {
 
                                 intent.putExtra("employee_id", employee_id);
 
@@ -925,7 +891,7 @@ public class ManualActivity extends AppCompatActivity {
                                     intent.putExtra("merchant_name", merchant_name);
                                     intent.putExtra("employee_name", employee_name);
 
-                                    if (employee == true) {
+                                    if (employee) {
                                         intent.putExtra("employee_id", employee_id);
                                     } else {
                                         intent.putExtra("employee_id", employee_sales_id);
@@ -987,10 +953,18 @@ public class ManualActivity extends AppCompatActivity {
         creditcard_rbut = findViewById(R.id.creditcard_rbut);
         paypalbut = findViewById(R.id.paypalbut);
         edt_name = findViewById(R.id.edt_name);
+        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
+            avbngcash.setText("$0.00");
 
+        } else {
+
+            avbngcash.setText("$" + member_ngcash);
+            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+        }
         ngcashavb.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -999,7 +973,7 @@ public class ManualActivity extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        } else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -1020,7 +994,8 @@ public class ManualActivity extends AppCompatActivity {
         tipamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -1028,7 +1003,7 @@ public class ManualActivity extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        } else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -1048,7 +1023,8 @@ public class ManualActivity extends AppCompatActivity {
              dueamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -1057,7 +1033,7 @@ public class ManualActivity extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        } else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -1112,124 +1088,6 @@ public class ManualActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    class GeoAutoCompleteAdapter1 extends BaseAdapter implements Filterable {
-
-        private Activity context;
-        private ArrayList<MemberDetail> l21 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
-
-        public GeoAutoCompleteAdapter1(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
-            this.context = context;
-            this.l21 = l2;
-            layoutInflater = LayoutInflater.from(context);
-            Log.e("FIRST", "CONS");
-        }
-
-        @Override
-        public int getCount() {
-
-            return l21 == null ? 0 : l21.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return l21.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-
-            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
-            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
-            try {
-                geo_search_result_text.setText(l21.get(i).getAffiliateName());
-                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-
-                        if (l21 != null && !l21.isEmpty()) {
-                            ArrayList<MemberDetail> test = new ArrayList<>();
-                            test.add(l21.get(i));
-
-                            Log.e("test123456", String.valueOf(test));
-
-                            if (test != null) {
-
-                                edt_name.setText(test.get(0).getAffiliateName());
-                                edt_name.dismissDropDown();
-                            }
-
-                        }
-
-                    }
-                });
-
-            } catch (Exception e) {
-
-            }
-
-            return view;
-        }
-
-        @Override
-        public Filter getFilter() {
-
-            Filter filter1 = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-                        if (constraint.length() == 0) {
-
-                        } else {
-                            l21.clear();
-                            if (memberDetailArrayList != null && !memberDetailArrayList.isEmpty()) {
-                                for (MemberDetail wp : memberDetailArrayList) {
-                                    if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
-                                    {
-                                        Log.e("TRUE", " >> FILTER" + wp.getAffiliateName());
-                                        Log.e("TRUEE", " >> FILTERID" + wp.getId());
-                                        employee_id = wp.getId();
-                                        l21.add(wp);
-                                    }
-                                }
-
-                            }
-                        }
-                        // Assign the data to the FilterResults
-                        filterResults.values = l21;
-                        filterResults.count = l21.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    if (results != null && results.count != 0) {
-                        l21 = (ArrayList<MemberDetail>) results.values;
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-
-            return filter1;
-        }
     }
 
     private void payBiilMerchant(String user_id, String merchant_id, String merchant_number, String due_amount_str, String tip_amt_str, String ngcash_app_str, String card_id, String card_number, String card_brand, String customer_id) {
@@ -1315,116 +1173,39 @@ public class ManualActivity extends AppCompatActivity {
         });
     }
 
-    class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
+    private void PayOrderBill(String order_cart_id) {
 
-        private Activity context;
-        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        employee_name = edt_name.getText().toString().trim();
+        card_amount_tv1 = card_amount_tv.getText().toString().trim();
 
-        public GeoAutoCompleteAdapter(Activity context, ArrayList<MerchantListBean> l2, String lat, String lon) {
-            this.context = context;
-            this.l2 = l2;
-            layoutInflater = LayoutInflater.from(context);
-            Log.e("FIRST", "CONS");
+        //Toast.makeText(this, "test  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(ManualActivity.this, OrderPaidSuccesfully.class);
+
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("merchant_id", merchant_id);
+        intent.putExtra("merchant_number", merchant_number);
+        intent.putExtra("due_amount_str", due_amount_str);
+        intent.putExtra("tip_amt_str", tipamount_et.getText().toString());
+        intent.putExtra("apply_ngcassh", apply_ngcassh);
+        intent.putExtra("card_id", card_id);
+        intent.putExtra("card_number", card_number);
+        intent.putExtra("card_brand", card_brand);
+        intent.putExtra("customer_id", customer_id);
+        intent.putExtra("order_cart_id", order_cart_id);
+        intent.putExtra("merchant_name", merchant_name);
+        intent.putExtra("employee_name", employee_name);
+
+        if (employee) {
+
+            intent.putExtra("employee_id", employee_id);
+
+        } else {
+
+            intent.putExtra("employee_id", employee_id);
         }
 
-        @Override
-        public int getCount() {
-
-            return l2 == null ? 0 : l2.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return l2.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-
-            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
-            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
-            try {
-                geo_search_result_text.setText(l2.get(i).getBusinessNo());
-                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                        Log.e("ADP LIST", " >> " + l2);
-                        if (l2 != null) {
-
-                            try {
-                                merchant_id = l2.get(i).getId();
-                                merchant_num_auto.setText(l2.get(i).getBusinessNo());
-                                merchantname.setText(l2.get(i).getBusinessName());
-                                merchant_num_auto.dismissDropDown();
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                    }
-                });
-
-            } catch (Exception e) {
-
-            }
-
-            return view;
-        }
-
-        @Override
-        public Filter getFilter() {
-
-            Filter filter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-
-
-                        if (constraint.length() == 0) {
-                        } else {
-                            l2.clear();
-                            for (MerchantListBean wp : merchantListBeanArrayList) {
-                                if (wp.getBusinessNo().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
-                                {
-                                    Log.e("TRUE", " >> FILTER" + wp.getBusinessNo());
-                                    l2.add(wp);
-                                }
-                            }
-                        }
-                        filterResults.values = l2;
-                        filterResults.count = l2.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    if (results != null && results.count != 0) {
-                        l2 = (ArrayList<MerchantListBean>) results.values;
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return filter;
-        }
+        startActivity(intent);
 
     }
 
@@ -1595,131 +1376,127 @@ public class ManualActivity extends AppCompatActivity {
             return true;
         } catch (KeyPermanentlyInvalidatedException e) {
             return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException |
+                 IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 
+    class GeoAutoCompleteAdapter1 extends BaseAdapter implements Filterable {
 
-    private class GetAddedCard extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-            cardBeanArrayList = new ArrayList<>();
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        private final Activity context;
+        private ArrayList<MemberDetail> l21 = new ArrayList<>();
+        private final LayoutInflater layoutInflater;
+
+        public GeoAutoCompleteAdapter1(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
+            this.context = context;
+            this.l21 = l2;
+            layoutInflater = LayoutInflater.from(context);
+            Log.e("FIRST", "CONS");
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        public int getCount() {
 
-            try {
-
-                String postReceiverUrl = BaseUrl.baseurl + "get_customer_stripe_card_list.php?";
-
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("user_id", user_id);
-
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
+            return l21 == null ? 0 : l21.size();
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progresbar.setVisibility(View.GONE);
-            if (result == null) {
-            } else if (result.isEmpty()) {
+        public Object getItem(int i) {
+            return l21.get(i);
+        }
 
-            } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                        String default_source = "";
-                        if (jsonObject1.has("default_source")) {
-                            default_source = jsonObject1.getString("default_source");
-                        }
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
 
-                        JSONObject jsonObject2 = jsonObject1.getJSONObject("sources");
-                        String customer_id = jsonObject1.getString("id");
-                        Log.e("customer_id >> ", " >> " + customer_id);
-                        mySavedCardInfo.setKeyCarddata(result);
+        @Override
+        public View getView(final int i, View view, ViewGroup viewGroup) {
 
-                        JSONArray jsonArray = jsonObject2.getJSONArray("data");
+            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
+            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
+            try {
+                geo_search_result_text.setText(l21.get(i).getAffiliateName());
+                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject3 = jsonArray.getJSONObject(i);
-                            CardBean cardBean = new CardBean();
-                            if (jsonObject3.getString("id").equalsIgnoreCase(default_source)) {
-                                cardBean.setDefaultCard(true);
-                            } else {
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                                cardBean.setDefaultCard(false);
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+
+                        if (l21 != null && !l21.isEmpty()) {
+                            ArrayList<MemberDetail> test = new ArrayList<>();
+                            test.add(l21.get(i));
+
+                            Log.e("test123456", String.valueOf(test));
+
+                            if (test != null) {
+
+                                edt_name.setText(test.get(0).getAffiliateName());
+                                edt_name.dismissDropDown();
                             }
 
-                            cardBean.setId(jsonObject3.getString("id"));
-                            cardBean.setLast4(jsonObject3.getString("last4"));
-                            cardBean.setExp_month(jsonObject3.getString("exp_month"));
-                            cardBean.setExp_year(jsonObject3.getString("exp_year"));
-                            cardBean.setBrand(jsonObject3.getString("brand"));
-                            cardBean.setFunding(jsonObject3.getString("funding"));
-                            cardBean.setCustomer(jsonObject3.getString("customer"));
-                            cardBean.setCard_name(jsonObject3.getString("name"));
-                            String star = "************";
-                            String cardlastfour = jsonObject3.getString("last4");
-                            cardBean.setSetfullcardnumber(star + cardlastfour);
-                            cardBean.setSetfullexpyearmonth(jsonObject3.getString("exp_month") + "/" + jsonObject3.getString("exp_year"));
-                            cardBeanArrayList.add(cardBean);
-
                         }
 
-                        customCardAdp = new CustomCardAdp(ManualActivity.this, cardBeanArrayList);
-                        savedcardlist.setAdapter(customCardAdp);
-                        customCardAdp.notifyDataSetChanged();
                     }
+                });
 
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
 
             }
 
+            return view;
+        }
+
+        @Override
+        public Filter getFilter() {
+
+            Filter filter1 = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        if (constraint.length() == 0) {
+
+                        } else {
+                            l21.clear();
+                            if (memberDetailArrayList != null && !memberDetailArrayList.isEmpty()) {
+                                for (MemberDetail wp : memberDetailArrayList) {
+                                    if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
+                                    {
+                                        Log.e("TRUE", " >> FILTER" + wp.getAffiliateName());
+                                        Log.e("TRUEE", " >> FILTERID" + wp.getId());
+                                        employee_id = wp.getId();
+                                        l21.add(wp);
+                                    }
+                                }
+
+                            }
+                        }
+                        // Assign the data to the FilterResults
+                        filterResults.values = l21;
+                        filterResults.count = l21.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                    if (results != null && results.count != 0) {
+                        l21 = (ArrayList<MemberDetail>) results.values;
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+
+            return filter1;
         }
     }
 
@@ -1849,27 +1626,118 @@ public class ManualActivity extends AppCompatActivity {
         }
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
+    class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-                    String ngcash_str = intent.getExtras().getString("ngcash");
-                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText("$0.00 Available");
-                    } else {
-                        avbngcash.setText("$" + ngcash_str + " Available");
-                        ngcash_val = Double.parseDouble(ngcash_str);
+        private final Activity context;
+        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
+        private final LayoutInflater layoutInflater;
+
+        public GeoAutoCompleteAdapter(Activity context, ArrayList<MerchantListBean> l2, String lat, String lon) {
+            this.context = context;
+            this.l2 = l2;
+            layoutInflater = LayoutInflater.from(context);
+            Log.e("FIRST", "CONS");
+        }
+
+        @Override
+        public int getCount() {
+
+            return l2 == null ? 0 : l2.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return l2.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int i, View view, ViewGroup viewGroup) {
+
+            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
+            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
+            try {
+                geo_search_result_text.setText(l2.get(i).getBusinessNo());
+                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                        Log.e("ADP LIST", " >> " + l2);
+                        if (l2 != null) {
+
+                            try {
+                                merchant_id = l2.get(i).getId();
+                                merchant_num_auto.setText(l2.get(i).getBusinessNo());
+                                merchantname.setText(l2.get(i).getBusinessName());
+                                merchant_num_auto.dismissDropDown();
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
                     }
-                }
+                });
 
             } catch (Exception e) {
 
             }
+
+            return view;
         }
-    };
+
+        @Override
+        public Filter getFilter() {
+
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+
+
+                        if (constraint.length() == 0) {
+                        } else {
+                            l2.clear();
+                            for (MerchantListBean wp : merchantListBeanArrayList) {
+                                if (wp.getBusinessNo().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
+                                {
+                                    Log.e("TRUE", " >> FILTER" + wp.getBusinessNo());
+                                    l2.add(wp);
+                                }
+                            }
+                        }
+                        filterResults.values = l2;
+                        filterResults.count = l2.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                    if (results != null && results.count != 0) {
+                        l2 = (ArrayList<MerchantListBean>) results.values;
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+            return filter;
+        }
+
+    }
 
     @Override
     protected void onPause() {
@@ -1877,40 +1745,121 @@ public class ManualActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiver);
     }
 
-    private void PayOrderBill(String order_cart_id) {
-
-        employee_name = edt_name.getText().toString().trim();
-        card_amount_tv1 = card_amount_tv.getText().toString().trim();
-
-        //Toast.makeText(this, "test  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(ManualActivity.this, OrderPaidSuccesfully.class);
-
-        intent.putExtra("user_id", user_id);
-        intent.putExtra("merchant_id", merchant_id);
-        intent.putExtra("merchant_number", merchant_number);
-        intent.putExtra("due_amount_str", due_amount_str);
-        intent.putExtra("tip_amt_str", tipamount_et.getText().toString());
-        intent.putExtra("apply_ngcassh", apply_ngcassh);
-        intent.putExtra("card_id", card_id);
-        intent.putExtra("card_number", card_number);
-        intent.putExtra("card_brand", card_brand);
-        intent.putExtra("customer_id", customer_id);
-        intent.putExtra("order_cart_id", order_cart_id);
-        intent.putExtra("merchant_name", merchant_name);
-        intent.putExtra("employee_name", employee_name);
-
-        if (employee == true) {
-
-            intent.putExtra("employee_id", employee_id);
-
-        } else {
-
-            intent.putExtra("employee_id", employee_id);
+    private class GetAddedCard extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+            cardBeanArrayList = new ArrayList<>();
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        startActivity(intent);
+        @Override
+        protected String doInBackground(String... strings) {
 
+            try {
+
+                String postReceiverUrl = BaseUrl.baseurl + "get_customer_stripe_card_list.php?";
+
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("user_id", user_id);
+
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
+                return response;
+            } catch (UnsupportedEncodingException e1) {
+
+                e1.printStackTrace();
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                        String default_source = "";
+                        if (jsonObject1.has("default_source")) {
+                            default_source = jsonObject1.getString("default_source");
+                        }
+
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("sources");
+                        String customer_id = jsonObject1.getString("id");
+                        Log.e("customer_id >> ", " >> " + customer_id);
+                        mySavedCardInfo.setKeyCarddata(result);
+
+                        JSONArray jsonArray = jsonObject2.getJSONArray("data");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject3 = jsonArray.getJSONObject(i);
+                            CardBean cardBean = new CardBean();
+                            cardBean.setDefaultCard(jsonObject3.getString("id").equalsIgnoreCase(default_source));
+
+                            cardBean.setId(jsonObject3.getString("id"));
+                            cardBean.setLast4(jsonObject3.getString("last4"));
+                            cardBean.setExp_month(jsonObject3.getString("exp_month"));
+                            cardBean.setExp_year(jsonObject3.getString("exp_year"));
+                            cardBean.setBrand(jsonObject3.getString("brand"));
+                            cardBean.setFunding(jsonObject3.getString("funding"));
+                            cardBean.setCustomer(jsonObject3.getString("customer"));
+                            cardBean.setCard_name(jsonObject3.getString("name"));
+                            String star = "************";
+                            String cardlastfour = jsonObject3.getString("last4");
+                            cardBean.setSetfullcardnumber(star + cardlastfour);
+                            cardBean.setSetfullexpyearmonth(jsonObject3.getString("exp_month") + "/" + jsonObject3.getString("exp_year"));
+                            cardBeanArrayList.add(cardBean);
+
+                        }
+
+                        customCardAdp = new CustomCardAdp(ManualActivity.this, cardBeanArrayList);
+                        savedcardlist.setAdapter(customCardAdp);
+                        customCardAdp.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
 
 }

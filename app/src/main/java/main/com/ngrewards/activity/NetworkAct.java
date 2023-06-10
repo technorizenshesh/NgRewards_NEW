@@ -302,7 +302,7 @@ public class NetworkAct extends AppCompatActivity {
     public class BasicCustomAdp extends ArrayAdapter<String> {
         Context context;
         Activity activity;
-        private ArrayList<String> carmodel;
+        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
@@ -452,18 +452,16 @@ public class NetworkAct extends AppCompatActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             int id = item.getItemId();
-                            switch (id) {
-                                case R.id.nav_transfer:
-                                    Intent i = new Intent(NetworkAct.this, TransferToaFriend.class);
-                                    i.putExtra("aff_name", memberDetailArrayList.get(listPosition).getAffiliateName());
-                                    i.putExtra("memberfull_name", memberDetailArrayList.get(listPosition).getFullname());
-                                    i.putExtra("member_id", memberDetailArrayList.get(listPosition).getId());
-                                    startActivity(i);
-                                    finish();
-                                    return true;
-                                default:
-                                    return false;
+                            if (id == R.id.nav_transfer) {
+                                Intent i = new Intent(NetworkAct.this, TransferToaFriend.class);
+                                i.putExtra("aff_name", memberDetailArrayList.get(listPosition).getAffiliateName());
+                                i.putExtra("memberfull_name", memberDetailArrayList.get(listPosition).getFullname());
+                                i.putExtra("member_id", memberDetailArrayList.get(listPosition).getId());
+                                startActivity(i);
+                                finish();
+                                return true;
                             }
+                            return false;
                         }
                     });
                 }

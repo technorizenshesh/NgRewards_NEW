@@ -155,7 +155,7 @@ public class CreditCardFormatTextWatcher implements TextWatcher {
 
     public static class PaddingRightSpan extends ReplacementSpan {
 
-        private int mPadding;
+        private final int mPadding;
 
         public PaddingRightSpan(int padding) {
             mPadding = padding;

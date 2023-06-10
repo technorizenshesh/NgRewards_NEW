@@ -24,7 +24,7 @@ public class AxisFormatterCustom {
     List<ChartDataCustom> values;
     List<String> hori_labels;
     String description;
-    private List<String> colorList = new ArrayList<>();
+    private final List<String> colorList = new ArrayList<>();
     private int legendTop, legendLeft, legendRight, legendBottom;
     private RectF legends;
 

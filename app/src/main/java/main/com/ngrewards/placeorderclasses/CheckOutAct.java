@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,21 +82,58 @@ public class CheckOutAct extends AppCompatActivity {
     private ArrayList<CartListBean> cartListBeanArrayList;
     private MycartAdapter mycartAdapter;
     private MycartAdapterExpand mycartAdapterExpand;
-    private TextView   notice , total_amount, nocartitem, place_order_but, avbngcash;
+    private TextView notice, total_amount, nocartitem, place_order_but, avbngcash;
     private RelativeLayout backlay, addaddressdlay, addcardlay;
     private EditText optionaladdress, zipcode, applyamtcash;
-    private String email_str = "", shipping_price = "", time_zone = "", ngcash_send_str = "0",
-            apply_ngcassh = "0", member_ngcash = "", phone_str = "", total_amount_str = "",
-            emi_amount_str = "", fullname_str = "", order_address = "", streat_address = "",
-            zipcode_code_str = "", product_id_comma = "", merchant_id_comma_sep = "", product_quantity_comm = "";
+    private final String order_address = "";
+    private final String streat_address = "";
+    private final String zipcode_code_str = "";
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+
+                    String ngcash_str = intent.getExtras().getString("ngcash");
+
+
+                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
+                        avbngcash.setText("$0.00 Available");
+                    } else {
+                        avbngcash.setText("$" + ngcash_str + " Available");
+                        ngcash_val = Double.parseDouble(ngcash_str);
+                    }
+                }
+
+            } catch (Exception e) {
+
+            }
+
+
+        }
+    };
+    private String email_str = "";
+    private String shipping_price = "";
+    private String time_zone = "";
+    private String ngcash_send_str = "0";
+    private String apply_ngcassh = "0";
+    private String member_ngcash = "";
+    private String phone_str = "";
+    private String total_amount_str = "";
+    private String emi_amount_str = "";
+    private String fullname_str = "";
+    private String product_id_comma = "";
+    private String merchant_id_comma_sep = "";
     private RelativeLayout selectedaddlay, paywithlay;
     private TextView shipping_price_tv, finalngcashredeem, itemcount, ngapply_tv, fullname, total_item_price, address1, address2, statecityadd, countrytv, phonetv, cardnumber_tv;
     private Myapisession myapisession;
     private boolean apickeck = false;
     private double ngcash_val = 0;
     private LinearLayout emi_lay;
-    private   boolean IS =false;
-CheckBox termscheck1;
+    private boolean IS = false;
+    CheckBox termscheck1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1180,31 +1216,7 @@ CheckBox termscheck1;
         });
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-
-                    String ngcash_str = intent.getExtras().getString("ngcash");
-
-
-                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText("$0.00 Available");
-                    } else {
-                        avbngcash.setText("$" + ngcash_str + " Available");
-                        ngcash_val = Double.parseDouble(ngcash_str);
-                    }
-                }
-
-            } catch (Exception e) {
-
-            }
-
-
-        }
-    };
+    private String product_quantity_comm = "";
 
     @Override
     protected void onPause() {

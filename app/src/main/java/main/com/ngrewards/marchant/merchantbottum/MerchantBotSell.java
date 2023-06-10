@@ -138,7 +138,6 @@ public class MerchantBotSell extends MerchantBaseActivity {
                                 }
                             })
                             .show();
-                    return;
                 }else {
                     Snackbar.make(v,"Password Matched",Snackbar.LENGTH_SHORT ).show();
                     mySession.setPassSet(mySession.getadmin_created_password());

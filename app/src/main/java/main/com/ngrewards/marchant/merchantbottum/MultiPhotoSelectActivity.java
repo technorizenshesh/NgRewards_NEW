@@ -57,7 +57,7 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
                     Log.e("Images Path",""+image.get(0));
                     finish();
                   //  Toast.makeText(MultiPhotoSelectActivity.this, "Total photos selected: " + selectedItems.size(), Toast.LENGTH_SHORT).show();
-                    Log.e(MultiPhotoSelectActivity.class.getSimpleName(), "Selected Items: " + selectedItems.toString());
+                    Log.e(MultiPhotoSelectActivity.class.getSimpleName(), "Selected Items: " + selectedItems);
                 }
                 else {
                     Toast.makeText(MultiPhotoSelectActivity.this, "No image selected" + selectedItems.size(), Toast.LENGTH_SHORT).show();
@@ -109,23 +109,17 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
 
-        switch (requestCode) {
-
-            case REQUEST_FOR_STORAGE_PERMISSION: {
-
-                if (grantResults.length > 0) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        populateImagesFromGallery();
+        if (requestCode == REQUEST_FOR_STORAGE_PERMISSION) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    populateImagesFromGallery();
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
+                        showPermissionRationaleSnackBar();
                     } else {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
-                            showPermissionRationaleSnackBar();
-                        } else {
-                            Toast.makeText(this, "Go to settings and enable permission", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(this, "Go to settings and enable permission", Toast.LENGTH_LONG).show();
                     }
                 }
-
-                break;
             }
         }
     }

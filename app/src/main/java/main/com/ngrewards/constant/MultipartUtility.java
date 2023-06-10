@@ -17,16 +17,16 @@ import java.util.List;
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
  * POST requests to a web server.
- * @author www.codejava.net
  *
+ * @author www.codejava.net
  */
 public class MultipartUtility {
     private final String boundary;
     private static final String LINE_FEED = "\r\n";
-    private HttpURLConnection httpConn;
-    private String charset;
-    private OutputStream outputStream;
-    private PrintWriter writer;
+    private final HttpURLConnection httpConn;
+    private final String charset;
+    private final OutputStream outputStream;
+    private final PrintWriter writer;
 
     /**
      * This constructor initializes a new HTTP POST request with content type

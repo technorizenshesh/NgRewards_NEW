@@ -365,17 +365,17 @@ public class BaseActivityUpdate extends AppCompatActivity {
 
     }
 
-      private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+      private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+          @Override
+          public void onReceive(Context context, Intent intent) {
 
-            try {
+              try {
 
-                Bundle bundle = intent.getExtras();
+                  Bundle bundle = intent.getExtras();
 
-                if (bundle != null) {
+                  if (bundle != null) {
 
-                    String result = intent.getExtras().getString("noticount");
+                      String result = intent.getExtras().getString("noticount");
                     String cartcounts = intent.getExtras().getString("cartcount");
                     member_ngcash = intent.getExtras().getString("ngcash");
 

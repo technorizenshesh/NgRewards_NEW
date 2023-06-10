@@ -51,17 +51,22 @@ public class UpdateMemberCard extends AppCompatActivity {
     private CheckBox acceptcondition;
     private TextView submit, myaccountemail, addcardbut;
     private ProgressBar prgressbar;
-    private boolean asc_sts = true;
+    private final boolean asc_sts = true;
     private MySession mySession;
     private LinearLayout alreadyavbacountlay, accountcreate, adddebitcardlay;
-    private EditText cardname,  security_code;
+    private EditText cardname, security_code;
     private TextView cardnumber;
-    private String cardname_str = "", cardnumber_str = "", security_code_str = "";
+    private final String security_code_str = "";
+    private final String token_id = "";
+    private final String email_str = "";
     private Spinner yearspinner, datespinner;
-    private String expiryyear_str = "", date_str = "", user_id = "", card_id = "",customer_id="";
+    private String expiryyear_str = "", date_str = "", user_id = "", card_id = "", customer_id = "";
     private BasicCustomAdp basicCustomAdp;
     int month, year_int;
-    private String token_id = "", email_str = "", accountid = "", stripe_account_id = "";
+    private final String accountid = "";
+    private final String stripe_account_id = "";
+    private String cardname_str = "";
+    private String cardnumber_str = "";
     ArrayList<String> modellist;
     ArrayList<String> datelist;
     CreditCardFormatTextWatcher tv, tv2;
@@ -381,11 +386,10 @@ public class UpdateMemberCard extends AppCompatActivity {
         return prevYear.get(Calendar.YEAR);
     }
 
-
     public class BasicCustomAdp extends ArrayAdapter<String> {
         Context context;
         Activity activity;
-        private ArrayList<String> carmodel;
+        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);

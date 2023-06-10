@@ -149,11 +149,11 @@ public class FullScreenActivity extends AppCompatActivity {
     // demo adapter
 
     static class TouchImageAdapter extends PagerAdapter {
-        private Activity _activity;
-        private List<GalleryBean> _imagePaths;
+        private final Activity _activity;
+        private final List<GalleryBean> _imagePaths;
         private LayoutInflater inflater;
 
-   //     private static int[] images = { R.drawable.img1, R.drawable.img2, R.drawable.img3 };
+        //     private static int[] images = { R.drawable.img1, R.drawable.img2, R.drawable.img3 };
 
 
         public TouchImageAdapter(Activity activity,

@@ -288,7 +288,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
                             boolean status = response.getString("status").contains("1");
 
-                            if (status == true) {
+                            if (status) {
 
                                 Afflited_name_String = merchant_num_auto.getText().toString().trim();
 
@@ -365,30 +365,25 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
         if (resultCode == RESULT_OK) {
 
-            switch (requestCode) {
+            if (requestCode == 3) {
+                String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
 
-                case 3:
+                try {
 
-                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                    String[] arr = result.split(",");
+                    merchant_num_auto.setText(arr[2]);
+                    employee_name1 = arr[2];
+                    employee_id = arr[4];
+                    employyee_id.setText(arr[4]);
+                    merchant_num_auto.setVisibility(View.VISIBLE);
 
-                    try {
+                    Log.e("arrayliiist", "" + result);
 
-                        String arr[] = result.split(",");
-                        merchant_num_auto.setText(arr[2]);
-                        employee_name1 = arr[2];
-                        employee_id = arr[4];
-                        employyee_id.setText(arr[4]);
-                        merchant_num_auto.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
 
-                        Log.e("arrayliiist", "" + result);
-
-                    } catch (Exception e) {
-
-                        Toast.makeText(Die_TakeOut.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    break;
+                    Toast.makeText(Die_TakeOut.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -456,123 +451,60 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
+    private void ApiUpdateUser() {
 
-        private Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        Afflited_name_String = merchant_num_auto.getText().toString().trim();
+        employyee_id_string = employyee_id.getText().toString().trim();
 
-        public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
-            this.context = context;
-            this.l2 = l2;
-            layoutInflater = LayoutInflater.from(context);
-            Log.e("FIRST", "CONS");
-        }
+        Toast.makeText(this, employyee_id_string, Toast.LENGTH_SHORT).show();
 
-        @Override
-        public int getCount() {
-
-            return l2 == null ? 0 : l2.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return l2.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-
-            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
-            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
-            try {
-                geo_search_result_text.setText(l2.get(i).getAffiliateName());
-                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
+        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id + "&employee_name=" + Afflited_name_String + "&employee_id=" + employyee_id_string)
+                .addPathParameter("pageNumber", "0")
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onResponse(JSONObject response) {
 
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        try {
 
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
+                            boolean status = response.getString("status").contains("1");
 
-                        // checkic.setImageResource(R.drawable.check);
-                        if (l2 != null && !l2.isEmpty()) {
-                            ArrayList<MemberDetail> test = new ArrayList<>();
-                            test.add(l2.get(i));
-                            if (test != null) {
-                                merchant_num_auto.setText(test.get(0).getAffiliateName());
+                            if (status) {
 
-                                get_how_to_inveted = test.get(0).getHowInvitedYou();
-                                // memname.setText(test.get(0).getFullname());
-                                //  member_id = test.get(0).getId();
-                                merchant_num_auto.dismissDropDown();
+                                Afflited_name_String = merchant_num_auto.getText().toString().trim();
+
+                                Intent intent = new Intent(Die_TakeOut.this, MerchantMenuSetting.class);
+                                intent.putExtra("amount_due", amount_due);
+                                intent.putExtra("tax_amount", tax_amount);
+                                intent.putExtra("Afflited_name_String", Afflited_name_String);
+                                intent.putExtra("employe_sale_name", employe_sale_name);
+                                intent.putExtra("employe_sale_id", employe_sale_id);
+
+                                startActivity(intent);
+
+
+                                //JSONObject result = response.getJSONObject("result");
+                                // Toast.makeText(getApplicationContext(),""+result,Toast.LENGTH_SHORT).show();
+
+                                PreferenceConnector.writeString(Die_TakeOut.this, PreferenceConnector.AfflitedName, Afflited_name_String);
+
+                                //merchant_num_auto.setText(Afflited_name_String);
+
                             }
-                           /*   usernameauto.setText(l2.get(i).getAffiliateName());
-                            memname.setText(l2.get(i).getFullname());
-                            member_id = l2.get(i).getId();
-                            usernameauto.dismissDropDown();*/
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
                     }
                 });
-
-            } catch (Exception e) {
-
-            }
-
-            return view;
-        }
-
-        @Override
-        public Filter getFilter() {
-            Filter filter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-                        if (constraint.length() == 0) {
-
-                        } else {
-                            l2.clear();
-                            if (memberDetailArrayList != null && !memberDetailArrayList.isEmpty()) {
-                                for (MemberDetail wp : memberDetailArrayList) {
-                                    if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
-                                    {
-                                        Log.e("TRUE", " >> FILTER" + wp.getAffiliateName());
-                                        l2.add(wp);
-                                    }
-                                }
-
-                            }
-                        }
-                        // Assign the data to the FilterResults
-                        filterResults.values = l2;
-                        filterResults.count = l2.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    if (results != null && results.count != 0) {
-                        l2 = (ArrayList<MemberDetail>) results.values;
-                        notifyDataSetChanged();
-
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return filter;
-        }
     }
 
     private void getMerchantMenuSettingList() {
@@ -652,14 +584,8 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void ApiUpdateUser() {
-
-        Afflited_name_String = merchant_num_auto.getText().toString().trim();
-        employyee_id_string = employyee_id.getText().toString().trim();
-
-        Toast.makeText(this, employyee_id_string, Toast.LENGTH_SHORT).show();
-
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id + "&employee_name=" + Afflited_name_String + "&employee_id=" + employyee_id_string)
+    private void AddUpdateTax(String editTextString) {
+        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_tax.php?merchant_id=" + user_id + "&tax=" + editTextString)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -671,27 +597,13 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
                         try {
 
                             boolean status = response.getString("status").contains("1");
+                            if (status) {
 
-                            if (status == true) {
+                                MenuItemApiCAll();
 
-                                Afflited_name_String = merchant_num_auto.getText().toString().trim();
-
-                                Intent intent = new Intent(Die_TakeOut.this, MerchantMenuSetting.class);
-                                intent.putExtra("amount_due", amount_due);
-                                intent.putExtra("tax_amount", tax_amount);
-                                intent.putExtra("Afflited_name_String", Afflited_name_String);
-                                intent.putExtra("employe_sale_name", employe_sale_name);
-                                intent.putExtra("employe_sale_id", employe_sale_id);
-
-                                startActivity(intent);
-
-
-                                //JSONObject result = response.getJSONObject("result");
-                                // Toast.makeText(getApplicationContext(),""+result,Toast.LENGTH_SHORT).show();
-
-                                PreferenceConnector.writeString(Die_TakeOut.this, PreferenceConnector.AfflitedName, Afflited_name_String);
-
-                                //merchant_num_auto.setText(Afflited_name_String);
+                                String message = response.getString("message");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                alertDialog.hide();
 
                             }
 
@@ -740,8 +652,8 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
         alertDialog.show();
     }
 
-    private void AddUpdateTax(String editTextString) {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_tax.php?merchant_id=" + user_id + "&tax=" + editTextString)
+    private void AddUpdateDelvery(String editTextString, String strPerorFix) {
+        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_delivery.php?merchant_id=" + user_id + "&delivery=" + editTextString + "&delivery_percent=" + strPerorFix)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -753,10 +665,9 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
                         try {
 
                             boolean status = response.getString("status").contains("1");
-                            if (status == true) {
+                            if (status) {
 
                                 MenuItemApiCAll();
-
                                 String message = response.getString("message");
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                 alertDialog.hide();
@@ -877,38 +788,122 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
         alertDialog.show();
     }
 
-    private void AddUpdateDelvery(String editTextString, String strPerorFix) {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_delivery.php?merchant_id=" + user_id + "&delivery=" + editTextString + "&delivery_percent=" + strPerorFix)
-                .addPathParameter("pageNumber", "0")
-                .setTag("test")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+    class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
+
+        private final Activity context;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
+        private final LayoutInflater layoutInflater;
+
+        public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
+            this.context = context;
+            this.l2 = l2;
+            layoutInflater = LayoutInflater.from(context);
+            Log.e("FIRST", "CONS");
+        }
+
+        @Override
+        public int getCount() {
+
+            return l2 == null ? 0 : l2.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return l2.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int i, View view, ViewGroup viewGroup) {
+
+            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
+            TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
+            try {
+                geo_search_result_text.setText(l2.get(i).getAffiliateName());
+                geo_search_result_text.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onClick(View view) {
 
-                        try {
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                            boolean status = response.getString("status").contains("1");
-                            if (status == true) {
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
 
-                                MenuItemApiCAll();
-                                String message = response.getString("message");
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                alertDialog.hide();
+                        // checkic.setImageResource(R.drawable.check);
+                        if (l2 != null && !l2.isEmpty()) {
+                            ArrayList<MemberDetail> test = new ArrayList<>();
+                            test.add(l2.get(i));
+                            if (test != null) {
+                                merchant_num_auto.setText(test.get(0).getAffiliateName());
 
+                                get_how_to_inveted = test.get(0).getHowInvitedYou();
+                                // memname.setText(test.get(0).getFullname());
+                                //  member_id = test.get(0).getId();
+                                merchant_num_auto.dismissDropDown();
                             }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                           /*   usernameauto.setText(l2.get(i).getAffiliateName());
+                            memname.setText(l2.get(i).getFullname());
+                            member_id = l2.get(i).getId();
+                            usernameauto.dismissDropDown();*/
                         }
 
                     }
-
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                    }
                 });
+
+            } catch (Exception e) {
+
+            }
+
+            return view;
+        }
+
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        if (constraint.length() == 0) {
+
+                        } else {
+                            l2.clear();
+                            if (memberDetailArrayList != null && !memberDetailArrayList.isEmpty()) {
+                                for (MemberDetail wp : memberDetailArrayList) {
+                                    if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
+                                    {
+                                        Log.e("TRUE", " >> FILTER" + wp.getAffiliateName());
+                                        l2.add(wp);
+                                    }
+                                }
+
+                            }
+                        }
+                        // Assign the data to the FilterResults
+                        filterResults.values = l2;
+                        filterResults.count = l2.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                    if (results != null && results.count != 0) {
+                        l2 = (ArrayList<MemberDetail>) results.values;
+                        notifyDataSetChanged();
+
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+            return filter;
+        }
     }
 }

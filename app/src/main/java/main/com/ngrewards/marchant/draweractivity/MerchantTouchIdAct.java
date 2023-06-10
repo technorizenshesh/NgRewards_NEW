@@ -94,14 +94,7 @@ private RelativeLayout backlay;
         progresbar = findViewById(R.id.progresbar);
         usefingerprint = findViewById(R.id.usefingerprint);
         member_touch_id = findViewById(R.id.member_touch_id);
-        if (status_touchid.equalsIgnoreCase("Yes")){
-            member_touch_id.setChecked(true);
-
-        }
-        else {
-            member_touch_id.setChecked(false);
-
-        }
+        member_touch_id.setChecked(status_touchid.equalsIgnoreCase("Yes"));
 
         String first = getResources().getString(R.string.youusefing);
         String second = getResources().getString(R.string.appand);
@@ -174,12 +167,7 @@ private RelativeLayout backlay;
                 String result_chk = jsonObject.getString("status");
                 if (result_chk.equalsIgnoreCase("1")) {
                     mySession.setlogindata(result);
-                    if (status_touchid.equalsIgnoreCase("No")){
-                        mySession.touchid(false);
-                    }
-                    else {
-                        mySession.touchid(true);
-                    }
+                    mySession.touchid(!status_touchid.equalsIgnoreCase("No"));
 
                 }
             } catch (JSONException e) {

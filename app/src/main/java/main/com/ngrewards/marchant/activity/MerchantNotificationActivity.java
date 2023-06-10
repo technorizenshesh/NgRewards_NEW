@@ -16,9 +16,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,13 +39,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.Models.NotificationModel;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.EMIManualActivity;
-import main.com.ngrewards.beanclasses.NotificationBean;
-import main.com.ngrewards.beanclasses.NotificationBeanNew;
-import main.com.ngrewards.beanclasses.NotificationListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -286,7 +279,7 @@ public class MerchantNotificationActivity extends AppCompatActivity {
 
                           holder.itemView.setOnClickListener(v -> {
                               Log.e("TAG",
-                                      "onBindViewHolder: paylode.toString()---"+paylode.toString() );
+                                      "onBindViewHolder: paylode.toString()---" + paylode);
                               Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
                               intentw.putExtra("object",paylode.toString());
                               context.startActivity(intentw);

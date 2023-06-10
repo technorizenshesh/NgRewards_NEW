@@ -39,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -207,131 +208,12 @@ public class MerMessageAct extends MerchantBaseActivity {
 */
     }
 
-    public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
-        Context context;
-        ArrayList<ConverSession> converSessionArrayList;
-        public class MyViewHolder extends SwipeToAction.ViewHolder<ConverSession> {
+    public static String fromBase64(String message) {
 
-            private TextView fullname,name,lastmaessage_tv,datetiem,reqcount;
-            private CircleImageView propic;
-            private ImageView deletecon;
+        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        return new String(data, StandardCharsets.UTF_8);
 
 
-            public MyViewHolder(View view) {
-                super(view);
-                reqcount =  itemView.findViewById(R.id.reqcount);
-                propic =  itemView.findViewById(R.id.propic);
-                name =  itemView.findViewById(R.id.name);
-                fullname = itemView.findViewById(R.id.fullname);
-                lastmaessage_tv =  itemView.findViewById(R.id.lastmaessage_tv);
-                datetiem =  itemView.findViewById(R.id.datetiem);
-                deletecon =  itemView.findViewById(R.id.deletecon);
-            }
-        }
-
-
-        public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
-            this.context = myContacts;
-            this.converSessionArrayList = converSessionArrayList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.messagelistlay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-
-
-            return holder;
-            // return new MyViewHolder(itemView);
-        }
-
-
-        @Override
-        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            ConverSession item = converSessionArrayList.get(position);
-            if (converSessionArrayList.get(position).getNo_of_message()!=null&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("")&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("0")){
-                holder.reqcount.setVisibility(View.VISIBLE);
-                holder.reqcount.setText(""+converSessionArrayList.get(position).getNo_of_message());
-            }
-            else {
-                holder.reqcount.setVisibility(View.GONE);
-            }
-            if (converSessionArrayList.get(position).getFullname()==null||converSessionArrayList.get(position).getFullname().equalsIgnoreCase("")){
-                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
-            }
-            else {
-                holder.fullname.setText("" + converSessionArrayList.get(position).getFullname());
-                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
-
-            }
-           // holder.name.setText(""+converSessionArrayList.get(position).getSendername());
-            holder.lastmaessage_tv.setText(""+converSessionArrayList.get(position).getMessage());
-            holder.datetiem.setText(""+converSessionArrayList.get(position).getDatetime());
-
-            String imagelist = converSessionArrayList.get(position).getSenderimg();
-            if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-            } else {
-                //Picasso.with(ChatingAct.this).load(imagelist).into(my_profile);
-
-                Glide.with(MerMessageAct.this)
-                        .load(BaseUrl.image_baseurl+imagelist)
-                        .thumbnail(0.5f)
-                        .override(200, 200)
-                        .centerCrop()
-                        //  .placeholder(R.drawable.profile_ic)
-                        .crossFade()
-                        //.dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                //  myplaceholder.setVisibility(View.GONE);
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // myplaceholder.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(holder.propic);
-
-            }
-            holder.itemView.setOnClickListener(v -> {
-                Log.e("TAG", "onClick:  getSenderid"+converSessionArrayList.get(position).getSenderid() );
-                Log.e("TAG", "onClick:  getReciverid "+converSessionArrayList.get(position).getReciverid() );
-                Intent i = new Intent(MerMessageAct.this, MemberChatAct.class);
-                i.putExtra("receiver_id",converSessionArrayList.get(position).getSenderid());
-                i.putExtra("type","Merchant");
-               // i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-                i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-                i.putExtra("receiver_type",converSessionArrayList.get(position).getReceiver_type());
-                i.putExtra("receiver_img",BaseUrl.image_baseurl+converSessionArrayList.get(position).getSenderimg());
-                i.putExtra("receiver_name",converSessionArrayList.get(position).getSendername());
-                startActivity(i);
-
-            });
-            holder.deletecon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    del_item_pos = position;
-new DeleteChat().execute(converSessionArrayList.get(position).getSenderid());
-
-                }
-            });
-
-            holder.data = item;
-        }
-
-        @Override
-        public int getItemCount() {
-            //return 6;
-            return converSessionArrayList == null ? 0 : converSessionArrayList.size();
-        }
     }
 
 
@@ -675,17 +557,135 @@ new DeleteChat().execute(converSessionArrayList.get(position).getSenderid());
             }
         });
     }
-    public static String fromBase64(String message) {
 
-        try {
-            byte[] data = Base64.decode(message, Base64.DEFAULT);
-            return new String(data, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return message;
+    public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
+        Context context;
+        ArrayList<ConverSession> converSessionArrayList;
+
+        public class MyViewHolder extends SwipeToAction.ViewHolder<ConverSession> {
+
+            private final TextView fullname;
+            private final TextView name;
+            private final TextView lastmaessage_tv;
+            private final TextView datetiem;
+            private final TextView reqcount;
+            private final CircleImageView propic;
+            private final ImageView deletecon;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+                reqcount = itemView.findViewById(R.id.reqcount);
+                propic = itemView.findViewById(R.id.propic);
+                name = itemView.findViewById(R.id.name);
+                fullname = itemView.findViewById(R.id.fullname);
+                lastmaessage_tv = itemView.findViewById(R.id.lastmaessage_tv);
+                datetiem = itemView.findViewById(R.id.datetiem);
+                deletecon = itemView.findViewById(R.id.deletecon);
+            }
         }
 
 
+        public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
+            this.context = myContacts;
+            this.converSessionArrayList = converSessionArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.messagelistlay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+
+
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+
+
+        @Override
+        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            ConverSession item = converSessionArrayList.get(position);
+            if (converSessionArrayList.get(position).getNo_of_message() != null && !converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("") && !converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("0")) {
+                holder.reqcount.setVisibility(View.VISIBLE);
+                holder.reqcount.setText("" + converSessionArrayList.get(position).getNo_of_message());
+            } else {
+                holder.reqcount.setVisibility(View.GONE);
+            }
+            if (converSessionArrayList.get(position).getFullname() == null || converSessionArrayList.get(position).getFullname().equalsIgnoreCase("")) {
+                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
+            } else {
+                holder.fullname.setText("" + converSessionArrayList.get(position).getFullname());
+                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
+
+            }
+            // holder.name.setText(""+converSessionArrayList.get(position).getSendername());
+            holder.lastmaessage_tv.setText("" + converSessionArrayList.get(position).getMessage());
+            holder.datetiem.setText("" + converSessionArrayList.get(position).getDatetime());
+
+            String imagelist = converSessionArrayList.get(position).getSenderimg();
+            if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+            } else {
+                //Picasso.with(ChatingAct.this).load(imagelist).into(my_profile);
+
+                Glide.with(MerMessageAct.this)
+                        .load(BaseUrl.image_baseurl + imagelist)
+                        .thumbnail(0.5f)
+                        .override(200, 200)
+                        .centerCrop()
+                        //  .placeholder(R.drawable.profile_ic)
+                        .crossFade()
+                        //.dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                //  myplaceholder.setVisibility(View.GONE);
+                                return false;
+
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                // myplaceholder.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(holder.propic);
+
+            }
+            holder.itemView.setOnClickListener(v -> {
+                Log.e("TAG", "onClick:  getSenderid" + converSessionArrayList.get(position).getSenderid());
+                Log.e("TAG", "onClick:  getReciverid " + converSessionArrayList.get(position).getReciverid());
+                Intent i = new Intent(MerMessageAct.this, MemberChatAct.class);
+                i.putExtra("receiver_id", converSessionArrayList.get(position).getSenderid());
+                i.putExtra("type", "Merchant");
+                // i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+                i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+                i.putExtra("receiver_type", converSessionArrayList.get(position).getReceiver_type());
+                i.putExtra("receiver_img", BaseUrl.image_baseurl + converSessionArrayList.get(position).getSenderimg());
+                i.putExtra("receiver_name", converSessionArrayList.get(position).getSendername());
+                startActivity(i);
+
+            });
+            holder.deletecon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    del_item_pos = position;
+                    new DeleteChat().execute(converSessionArrayList.get(position).getSenderid());
+
+                }
+            });
+
+            holder.data = item;
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 6;
+            return converSessionArrayList == null ? 0 : converSessionArrayList.size();
+        }
     }
 
 }

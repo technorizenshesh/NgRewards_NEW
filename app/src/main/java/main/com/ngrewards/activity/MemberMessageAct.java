@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -201,15 +202,29 @@ public class MemberMessageAct extends BaseActivity {
 
     }
 
+    public static String fromBase64(String message) {
+        try {
+            byte[] data = Base64.decode(message, Base64.DEFAULT);
+            return new String(data, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return message;
+        }
+    }
+
     public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
         Context context;
         ArrayList<ConverSession> converSessionArrayList;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public RelativeLayout backlay;
-            private TextView name,fullname, lastmaessage_tv, datetiem,reqcount;
-            private CircleImageView propic;
-            private ImageView deletecon;
+            private final TextView name;
+            private final TextView fullname;
+            private final TextView lastmaessage_tv;
+            private final TextView datetiem;
+            private final TextView reqcount;
+            private final CircleImageView propic;
+            private final ImageView deletecon;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -329,165 +344,6 @@ public class MemberMessageAct extends BaseActivity {
             //return 6;
             return converSessionArrayList == null ? 0 : converSessionArrayList.size();
         }
-    }
-
-    private class GetChatList extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            converSessionArrayList = new ArrayList<>();
-            swipeToRefresh.setRefreshing(true);
-            super.onPreExecute();
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation.php?receiver_id=927
-            //https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation_test.php?user_id=382&type=Merchant
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "get_conversation.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "user_id=" + user_id + "&type=Member");
-                params.put("user_id", user_id);
-                params.put("type", "Member");
-
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-
-                conn.setDoOutput(true);
-
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-
-                writer.write(urlParameters);
-                writer.flush();
-
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                return response;
-
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.e("Chat List >>", "" + result);
-            swipeToRefresh.setRefreshing(false);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    int jsonlenth = 0;
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        jsonlenth = jsonArray.length();
-                        converSessionArrayList = new ArrayList<>();
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                            ConverSession conversession = new ConverSession();
-                            conversession.setChat_id(jsonObject2.getString("chat_id"));
-                            conversession.setNo_of_message(jsonObject2.getString("no_of_message"));
-
-                            if (jsonObject2.getString("type").equalsIgnoreCase("Merchant")) {
-                                conversession.setSenderid(jsonObject2.getString("id"));
-                                conversession.setSenderimg(jsonObject2.getString("merchant_image"));
-                                conversession.setSendername(jsonObject2.getString("business_no"));
-                                conversession.setFullname(jsonObject2.getString("business_name"));
-                            } else
-                            {
-
-                                if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")) {
-                                    conversession.setSenderid(jsonObject2.getString("tid"));
-                                    conversession.setSenderimg(jsonObject2.getString("member_image"));
-                                    conversession.setSendername(jsonObject2.getString("username"));
-                                    conversession.setFullname(jsonObject2.getString("fullname"));
-                                } else {
-                                    conversession.setSenderid(jsonObject2.getString("id"));
-                                    conversession.setSenderimg(jsonObject2.getString("merchant_image"));
-                                     if (jsonObject2.has("username")){
-                                         conversession.setSendername(jsonObject2.getString("username"));
-
-                                     }else {
-                                         if (jsonObject2.has("business_no")){
-                                             conversession.setSendername(jsonObject2.getString("business_no"));
-
-                                         }else{
-                                             conversession.setSendername(jsonObject2.getString("business_name"));
-
-                                         }
-                                     }
-                                    conversession.setFullname(jsonObject2.getString("business_name"));
-                                }
-                            }
-
-                             conversession.setReceiver_type(jsonObject2.getString("receiver_type"));
-
-                            if (!(jsonObject2.getString("last_message") == null) || (!jsonObject2.getString("last_message").equalsIgnoreCase(""))) {
-                                conversession.setMessage(jsonObject2.getString("last_message"));
-
-                            } else {
-                                conversession.setMessage(""+fromBase64(jsonObject2.getString("last_message")));
-                            }
-
-                            conversession.setDatetime(jsonObject2.getString("date_time"));
-
-                            Date date1 = null;
-                            try {
-                                if (jsonObject2.getString("date_time") != null && !jsonObject2.getString("date_time").equalsIgnoreCase("")) {
-                                    date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonObject2.getString("date_time").trim());
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM hh:mm aa", Locale.ENGLISH);
-                                    String strDate = formatter.format(date1);
-                                    conversession.setDatetime(strDate);
-                                }
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            converSessionArrayList.add(conversession);
-                            Log.e("TAG", "converSessionArrayListconverSessionArrayList:---     "+conversession.toString());
-                        }
-
-                    }
-                    if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
-                        messageRecycladp = new MessageRecycladp(MemberMessageAct.this, converSessionArrayList);
-                        mychat.setAdapter(messageRecycladp);
-                        messageRecycladp.notifyDataSetChanged();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
     }
 
     private void getBusnessNumber() {
@@ -659,13 +515,161 @@ public class MemberMessageAct extends BaseActivity {
         });
     }
 
-    public static String fromBase64(String message) {
-        try {
-            byte[] data = Base64.decode(message, Base64.DEFAULT);
-            return new String(data, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return message;
+    private class GetChatList extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            converSessionArrayList = new ArrayList<>();
+            swipeToRefresh.setRefreshing(true);
+            super.onPreExecute();
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        @Override
+        protected String doInBackground(String... strings) {
+//https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation.php?receiver_id=927
+            //https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation_test.php?user_id=382&type=Merchant
+            try {
+                String postReceiverUrl = BaseUrl.baseurl + "get_conversation.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "user_id=" + user_id + "&type=Member");
+                params.put("user_id", user_id);
+                params.put("type", "Member");
+
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+
+                conn.setDoOutput(true);
+
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+
+                writer.write(urlParameters);
+                writer.flush();
+
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                return response;
+
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e("Chat List >>", "" + result);
+            swipeToRefresh.setRefreshing(false);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int jsonlenth = 0;
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        jsonlenth = jsonArray.length();
+                        converSessionArrayList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                            ConverSession conversession = new ConverSession();
+                            conversession.setChat_id(jsonObject2.getString("chat_id"));
+                            conversession.setNo_of_message(jsonObject2.getString("no_of_message"));
+
+                            if (jsonObject2.getString("type").equalsIgnoreCase("Merchant")) {
+                                conversession.setSenderid(jsonObject2.getString("id"));
+                                conversession.setSenderimg(jsonObject2.getString("merchant_image"));
+                                conversession.setSendername(jsonObject2.getString("business_no"));
+                                conversession.setFullname(jsonObject2.getString("business_name"));
+                            } else {
+
+                                if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")) {
+                                    conversession.setSenderid(jsonObject2.getString("tid"));
+                                    conversession.setSenderimg(jsonObject2.getString("member_image"));
+                                    conversession.setSendername(jsonObject2.getString("username"));
+                                    conversession.setFullname(jsonObject2.getString("fullname"));
+                                } else {
+                                    conversession.setSenderid(jsonObject2.getString("id"));
+                                    conversession.setSenderimg(jsonObject2.getString("merchant_image"));
+                                    if (jsonObject2.has("username")) {
+                                        conversession.setSendername(jsonObject2.getString("username"));
+
+                                    } else {
+                                        if (jsonObject2.has("business_no")) {
+                                            conversession.setSendername(jsonObject2.getString("business_no"));
+
+                                        } else {
+                                            conversession.setSendername(jsonObject2.getString("business_name"));
+
+                                        }
+                                    }
+                                    conversession.setFullname(jsonObject2.getString("business_name"));
+                                }
+                            }
+
+                            conversession.setReceiver_type(jsonObject2.getString("receiver_type"));
+
+                            if (!(jsonObject2.getString("last_message") == null) || (!jsonObject2.getString("last_message").equalsIgnoreCase(""))) {
+                                conversession.setMessage(jsonObject2.getString("last_message"));
+
+                            } else {
+                                conversession.setMessage("" + fromBase64(jsonObject2.getString("last_message")));
+                            }
+
+                            conversession.setDatetime(jsonObject2.getString("date_time"));
+
+                            Date date1 = null;
+                            try {
+                                if (jsonObject2.getString("date_time") != null && !jsonObject2.getString("date_time").equalsIgnoreCase("")) {
+                                    date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonObject2.getString("date_time").trim());
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM hh:mm aa", Locale.ENGLISH);
+                                    String strDate = formatter.format(date1);
+                                    conversession.setDatetime(strDate);
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            converSessionArrayList.add(conversession);
+                            Log.e("TAG", "converSessionArrayListconverSessionArrayList:---     " + conversession);
+                        }
+
+                    }
+                    if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
+                        messageRecycladp = new MessageRecycladp(MemberMessageAct.this, converSessionArrayList);
+                        mychat.setAdapter(messageRecycladp);
+                        messageRecycladp.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
     }
 }

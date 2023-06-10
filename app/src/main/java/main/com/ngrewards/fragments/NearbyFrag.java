@@ -385,7 +385,7 @@ public class NearbyFrag extends Fragment {
 
                         try {
 
-                            if (wp.getBusinessName().toString().toLowerCase().startsWith(charText)){
+                            if (wp.getBusinessName().toLowerCase().startsWith(charText)) {
                                 merchantListBeanArrayList.add(wp);
                             }
 
@@ -625,7 +625,7 @@ public class NearbyFrag extends Fragment {
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -663,7 +663,7 @@ public class NearbyFrag extends Fragment {
 
         Context context;
         LayoutInflater inflter;
-        private ArrayList<String> distancelist;
+        private final ArrayList<String> distancelist;
 
         public DistanceAdapter(Context applicationContext, ArrayList<String> distancelist) {
             this.context = applicationContext;

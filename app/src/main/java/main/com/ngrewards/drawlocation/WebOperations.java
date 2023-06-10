@@ -25,11 +25,11 @@ public class WebOperations {
     private String url = null;
     private MultipartEntity reqEntity = null;
     private String json = null;
-    private String BaseUrl = "";
-  //  private String BaseUrl = "http://technorizen.co.in/";
-    private HttpClient httpClient = new DefaultHttpClient();
+    private final String BaseUrl = "";
+    //  private String BaseUrl = "http://technorizen.co.in/";
+    private final HttpClient httpClient = new DefaultHttpClient();
     private String filename = "";
-    private String filepath = "ShoparStorage";
+    private final String filepath = "ShoparStorage";
     File myInternalFile;
     Context context;
 
@@ -165,7 +165,7 @@ public class WebOperations {
             file.mkdir();
         }
         try {
-            FileOutputStream fOut = context.openFileOutput(filename,context.MODE_WORLD_READABLE);
+            FileOutputStream fOut = context.openFileOutput(filename, Context.MODE_WORLD_READABLE);
             fOut.write(data.getBytes());
             fOut.close();
             System.out.println("data saved");
@@ -179,7 +179,7 @@ public class WebOperations {
             int c;
             String temp="";
             while( (c = fin.read()) != -1){
-                temp = temp + Character.toString((char)c);
+                temp = temp + (char) c;
 
             }
           System.out.println("data of "+fn+"   "+temp);

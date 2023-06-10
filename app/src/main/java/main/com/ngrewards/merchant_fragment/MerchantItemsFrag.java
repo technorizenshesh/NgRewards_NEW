@@ -54,8 +54,12 @@ public class MerchantItemsFrag extends Fragment {
     private Myapisession myapisession;
     private MySession mySession;
     SwipeRefreshLayout swipeToRefresh;
-    private String user_id = "",rating_filter_str="",fill_category_id="",price_type_str="",fill_category_id_loc="";
-    private TextView filter_tv,noitemtv;
+    private final String rating_filter_str = "";
+    private final String fill_category_id = "";
+    private final String price_type_str = "";
+    private final String fill_category_id_loc = "";
+    private String user_id = "";
+    private TextView filter_tv, noitemtv;
     ArrayList<CategoryBeanList> categoryBeanListArrayList;
 
     public MerchantItemsFrag() {
@@ -166,7 +170,7 @@ public class MerchantItemsFrag extends Fragment {
 
             }
             else {
-                charText = charText.toString().toLowerCase();
+                charText = charText.toLowerCase();
                 soldItemListArrayList.clear();
                 if (charText.length() == 0) {
                     soldItemListArrayList.addAll(searchsoldItemListArrayList);

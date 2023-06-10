@@ -40,7 +40,7 @@ public class FragmentMenuCart extends Fragment {
 
     private FragmentMemberMenuBinding binding;
     private ModelMenuSetting data;
-    private ArrayList<ModelItem> arrayList = new ArrayList<>();
+    private final ArrayList<ModelItem> arrayList = new ArrayList<>();
     private String user_id;
     private String total_quantity;
     private String total_price, tax, tax_amount, amount_due;
@@ -73,7 +73,7 @@ public class FragmentMenuCart extends Fragment {
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    Log.e("UserRecord", "========>" + jsonObject1.toString());
+                    Log.e("UserRecord", "========>" + jsonObject1);
                     user_id = jsonObject1.getString("id");
                 }
             } catch (JSONException e) {
@@ -283,9 +283,8 @@ public class FragmentMenuCart extends Fragment {
         StringBuilder prices = new StringBuilder();
         StringBuilder quantities = new StringBuilder();
         StringBuilder othernotes = new StringBuilder();
-        StringBuilder special = new StringBuilder();
 
-        Log.e("item.getOther_special()", special + "otehernotes" + othernotes);
+        Log.e("item.getOther_special()", "" + "otehernotes" + othernotes);
 
         for(ModelItem item : arrayList) {
             itemIds.append(item.getId() + ",");

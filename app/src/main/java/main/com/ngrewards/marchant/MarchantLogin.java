@@ -737,7 +737,7 @@ public class MarchantLogin extends AppCompatActivity {
         Context context;
 
         LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+        private final ArrayList<CountryBean> values;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;

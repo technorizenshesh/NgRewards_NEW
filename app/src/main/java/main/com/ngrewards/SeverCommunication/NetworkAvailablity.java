@@ -10,19 +10,13 @@ public class NetworkAvailablity {
 public static boolean chkStatus(Context context) {
 	// TODO Auto-generated method stub
 	try {
-		final ConnectivityManager connMgr = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager connMgr = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		if (connMgr.getActiveNetworkInfo() != null
-				&& connMgr.getActiveNetworkInfo().isAvailable()
-				&& connMgr.getActiveNetworkInfo().isConnected()) {
-
-			return true;
-		} else {
-
-			return false;
-		}
-	} catch (Exception e) {
+        return connMgr.getActiveNetworkInfo() != null
+                && connMgr.getActiveNetworkInfo().isAvailable()
+                && connMgr.getActiveNetworkInfo().isConnected();
+    } catch (Exception e) {
 
 		e.printStackTrace();
 	}

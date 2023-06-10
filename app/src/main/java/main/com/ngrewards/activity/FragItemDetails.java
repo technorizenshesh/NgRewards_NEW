@@ -100,12 +100,25 @@ public class FragItemDetails extends AppCompatActivity {
     private CircleImageView user_img;
     private ImageView like_buton, shareproduct, description_arrow, itemarrow, shipingarrow, proimg;
     private MySession mySession;
-    private String EMI = "",   stockcount = "", time_zone = "", size_select_str = "", color_select_str = "", user_id = "", comment_str = "", like_count = "0", merchant_name_str = "", product_price = "", like_status = "", share_url_str = "", price_str, product_thumbimg;
+    private final String like_count = "0";
+    private String EMI = "";
+    private String stockcount = "";
+    private String time_zone = "";
+    private String size_select_str = "";
+    private String color_select_str = "";
+    private String user_id = "";
+    private String comment_str = "";
+    private String merchant_name_str = "";
+    private String product_price = "";
+    private String like_status = "";
+    private String share_url_str = "";
+    private String price_str;
+    private String product_thumbimg;
     private LinearLayout description_lay, shipping_lay, itemspeclay;
     private RelativeLayout description_info, shipinfo_but, item_info, colorlay, sizelay;
     private RatingBar rating, rating_done, averagerating;
     private EditText comment_et;
-    private TextView   buyon_emi_tv, shipping_price, buynow_tv, addtocart_tv, submit_review,
+    private TextView buyon_emi_tv, shipping_price, buynow_tv, addtocart_tv, submit_review,
             donereview_tv,
             rating_count, color_tv_head, sizes_tv_head, price_tv, quant_tv, instock_tv;
     private float rating_val;
@@ -468,7 +481,7 @@ public class FragItemDetails extends AppCompatActivity {
 
     public class CustomSizeColAdapter extends BaseAdapter {
         Context context;
-        private String type;
+        private final String type;
         private LayoutInflater inflater = null;
         List<String> strlist;
 
@@ -1427,8 +1440,8 @@ public class FragItemDetails extends AppCompatActivity {
 
     public class CustomProductImgAdp extends PagerAdapter {
 
-        private Context mContext;
-        private List<ProductImage> productImages;
+        private final Context mContext;
+        private final List<ProductImage> productImages;
 
         public CustomProductImgAdp(Context context, List<ProductImage> productImages) {
             mContext = context;

@@ -46,7 +46,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import main.com.ngrewards.activity.ManualActivity;
-import main.com.ngrewards.activity.TransferToaFriend;
 import main.com.ngrewards.qrcodes.CaptureActivityHandler;
 
 public class QrCodeActivity extends AppCompatActivity implements Callback, OnClickListener {
@@ -192,113 +191,26 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
     }
 
 
-    public void handleDecode(Result result) {
-        mInactivityTimer.onActivity();
-        Log.e("SCAN RST", " >> " + result.getText());
-        playBeepSoundAndVibrate();
-        if (null == result) {
-            mDecodeManager.showCouldNotReadQrCodeFromScanner(this, () -> restartPreview());
-        } else {
-            String resultString = result.getText();
-            Log.e("FETCHEDSCANDATA ", " " + resultString);
-
-            //JSONObject jsonObject = null;
-            if (resultString.contains("Member")) {
-                Toast.makeText(QrCodeActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-
-       /*         try {
-                    if (resultString != null && !resultString.equalsIgnoreCase("")) {
-                        Log.e("TAG", "onActivityResultresultresultresult: " + result);
-                        *//*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*//*
-                        String arr[] = resultString.split(",");
-                        //   JSONObject jsonObject = new JSONObject(result);
-                        //   String murchant_name = jsonObject.getString("murchant_name");
-                        String member_id = arr[4];
-                        String usernameauto = arr[1];
-                        String memname = (arr[2]);
-
-                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
-                        i.putExtra("merchant_id", member_id);
-                        i.putExtra("merchant_name", memname);
-                        i.putExtra("merchant_number", usernameauto);
-                        i.putExtra("type", "paybill");
-                        startActivity(i);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
-            } else {
-                try {
-
-                    Log.e("TAG", "onActivityResultresultresultresult: " + result);
-                    /*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*/
-                    String arr[] = resultString.split(",");
-                    //   JSONObject jsonObject = new JSONObject(result);
-                    //   String murchant_name = jsonObject.getString("murchant_name");
-                    String member_id = arr[2];
-                    String usernameauto = arr[1];
-                    String memname = (arr[0]);
-                    //  jsonObject = new JSONObject(resultString);
-                    Log.e("COME IN JSON", " <<" + resultString);
-             /*   String mername = jsonObject.getString("murchant_name");
-                if (jsonObject.getString("murchant_name") != null && !jsonObject.getString("murchant_name").equalsIgnoreCase("")) {
-                    mername = mername.replace("?", "'");
-                }*/
-                    Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
-                    i.putExtra("merchant_id", member_id);
-                    i.putExtra("merchant_name", memname);
-                    i.putExtra("merchant_number", usernameauto);
-                    i.putExtra("type", "paybill");
-                    startActivity(i);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(QrCodeActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-
-              /*  if (resultString != null && !resultString.equalsIgnoreCase("")) {
-                    List<String> datalist = Arrays.asList(resultString.split(","));
-                    if (datalist != null && !datalist.isEmpty() && datalist.size() == 3) {
-                        String mername = datalist.get(0);
-                        if (datalist.get(0) != null && !datalist.get(0).equalsIgnoreCase("")) {
-                            mername = mername.replace("?", "'");
-                        }
-                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
-                        i.putExtra("merchant_id", datalist.get(2));
-                        i.putExtra("merchant_name", mername);
-                        i.putExtra("merchant_number", datalist.get(1));
-                        i.putExtra("type","paybill");
-                        startActivity(i);
-                    }
-                }
-                e.printStackTrace();*/
-                  /*  if (resultString != null && !resultString.equalsIgnoreCase("")) {
-                        Log.e("TAG", "onActivityResultresultresultresult: " + result);
-                        *//*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*//*
-                        String arr[] = resultString.split(",");
-                        //   JSONObject jsonObject = new JSONObject(result);
-                        //   String murchant_name = jsonObject.getString("murchant_name");
-                        String member_id = arr[4];
-                        String usernameauto = arr[1];
-                        String memname = (arr[2]);
-
-                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
-                        i.putExtra("merchant_id", member_id);
-                        i.putExtra("merchant_name", memname);
-                        i.putExtra("merchant_number", usernameauto);
-                        i.putExtra("type", "paybill");
-                        startActivity(i);
-                    }*/
-
-
-                    //  handleResult(resultString);
-
-                }
-            }
-
-
-            //  handleResult(resultString);
+    private final DecodeImageCallback mDecodeImageCallback = new DecodeImageCallback() {
+        @Override
+        public void decodeSucceed(Result result) {
+            //Got scan result from scaning an image loaded by the user
+            Log.d(LOGTAG, "Decoded the image successfully :" + result.getText());
+            Intent data = new Intent();
+            data.putExtra(GOT_RESULT, result.getText());
+            setResult(Activity.RESULT_OK, data);
+            finish();
         }
-    }
+
+        @Override
+        public void decodeFail(int type, String reason) {
+            Log.d(LOGTAG, "Something went wrong decoding the image :" + reason);
+            Intent data = new Intent();
+            data.putExtra(ERROR_DECODING_IMAGE, reason);
+            setResult(Activity.RESULT_CANCELED, data);
+            finish();
+        }
+    };
 
     private void initCamera(SurfaceHolder surfaceHolder) {
         try {
@@ -489,30 +401,117 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
         return path;
     }
 
-    private DecodeImageCallback mDecodeImageCallback = new DecodeImageCallback() {
-        @Override
-        public void decodeSucceed(Result result) {
-            //Got scan result from scaning an image loaded by the user
-            Log.d(LOGTAG, "Decoded the image successfully :" + result.getText());
-            Intent data = new Intent();
-            data.putExtra(GOT_RESULT, result.getText());
-            setResult(Activity.RESULT_OK, data);
-            finish();
-        }
+    public void handleDecode(Result result) {
+        mInactivityTimer.onActivity();
+        Log.e("SCAN RST", " >> " + result.getText());
+        playBeepSoundAndVibrate();
+        if (null == result) {
+            mDecodeManager.showCouldNotReadQrCodeFromScanner(this, () -> restartPreview());
+        } else {
+            String resultString = result.getText();
+            Log.e("FETCHEDSCANDATA ", " " + resultString);
 
-        @Override
-        public void decodeFail(int type, String reason) {
-            Log.d(LOGTAG, "Something went wrong decoding the image :" + reason);
-            Intent data = new Intent();
-            data.putExtra(ERROR_DECODING_IMAGE, reason);
-            setResult(Activity.RESULT_CANCELED, data);
-            finish();
+            //JSONObject jsonObject = null;
+            if (resultString.contains("Member")) {
+                Toast.makeText(QrCodeActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+
+       /*         try {
+                    if (resultString != null && !resultString.equalsIgnoreCase("")) {
+                        Log.e("TAG", "onActivityResultresultresultresult: " + result);
+                        *//*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*//*
+                        String arr[] = resultString.split(",");
+                        //   JSONObject jsonObject = new JSONObject(result);
+                        //   String murchant_name = jsonObject.getString("murchant_name");
+                        String member_id = arr[4];
+                        String usernameauto = arr[1];
+                        String memname = (arr[2]);
+
+                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                        i.putExtra("merchant_id", member_id);
+                        i.putExtra("merchant_name", memname);
+                        i.putExtra("merchant_number", usernameauto);
+                        i.putExtra("type", "paybill");
+                        startActivity(i);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+
+            } else {
+                try {
+
+                    Log.e("TAG", "onActivityResultresultresultresult: " + result);
+                    /*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*/
+                    String[] arr = resultString.split(",");
+                    //   JSONObject jsonObject = new JSONObject(result);
+                    //   String murchant_name = jsonObject.getString("murchant_name");
+                    String member_id = arr[2];
+                    String usernameauto = arr[1];
+                    String memname = (arr[0]);
+                    //  jsonObject = new JSONObject(resultString);
+                    Log.e("COME IN JSON", " <<" + resultString);
+             /*   String mername = jsonObject.getString("murchant_name");
+                if (jsonObject.getString("murchant_name") != null && !jsonObject.getString("murchant_name").equalsIgnoreCase("")) {
+                    mername = mername.replace("?", "'");
+                }*/
+                    Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                    i.putExtra("merchant_id", member_id);
+                    i.putExtra("merchant_name", memname);
+                    i.putExtra("merchant_number", usernameauto);
+                    i.putExtra("type", "paybill");
+                    startActivity(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(QrCodeActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+
+              /*  if (resultString != null && !resultString.equalsIgnoreCase("")) {
+                    List<String> datalist = Arrays.asList(resultString.split(","));
+                    if (datalist != null && !datalist.isEmpty() && datalist.size() == 3) {
+                        String mername = datalist.get(0);
+                        if (datalist.get(0) != null && !datalist.get(0).equalsIgnoreCase("")) {
+                            mername = mername.replace("?", "'");
+                        }
+                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                        i.putExtra("merchant_id", datalist.get(2));
+                        i.putExtra("merchant_name", mername);
+                        i.putExtra("merchant_number", datalist.get(1));
+                        i.putExtra("type","paybill");
+                        startActivity(i);
+                    }
+                }
+                e.printStackTrace();*/
+                  /*  if (resultString != null && !resultString.equalsIgnoreCase("")) {
+                        Log.e("TAG", "onActivityResultresultresultresult: " + result);
+                        *//*{"murchant_name":"REACH","merchant_number":"ed58126","merchant_id":"3"}*//*
+                        String arr[] = resultString.split(",");
+                        //   JSONObject jsonObject = new JSONObject(result);
+                        //   String murchant_name = jsonObject.getString("murchant_name");
+                        String member_id = arr[4];
+                        String usernameauto = arr[1];
+                        String memname = (arr[2]);
+
+                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                        i.putExtra("merchant_id", member_id);
+                        i.putExtra("merchant_name", memname);
+                        i.putExtra("merchant_number", usernameauto);
+                        i.putExtra("type", "paybill");
+                        startActivity(i);
+                    }*/
+
+
+                    //  handleResult(resultString);
+
+                }
+            }
+
+
+            //  handleResult(resultString);
         }
-    };
+    }
 
     private static class WeakHandler extends Handler {
-        private WeakReference<QrCodeActivity> mWeakQrCodeActivity;
-        private DecodeManager mDecodeManager = new DecodeManager();
+        private final WeakReference<QrCodeActivity> mWeakQrCodeActivity;
+        private final DecodeManager mDecodeManager = new DecodeManager();
 
         public WeakHandler(QrCodeActivity imagePickerActivity) {
             super();

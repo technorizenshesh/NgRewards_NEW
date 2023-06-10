@@ -61,7 +61,7 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    Log.e("UserRecord", "========>" + jsonObject1.toString());
+                    Log.e("UserRecord", "========>" + jsonObject1);
                     user_id = jsonObject1.getString("id");
                 }
             } catch (JSONException e) {

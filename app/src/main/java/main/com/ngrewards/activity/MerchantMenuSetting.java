@@ -348,7 +348,7 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
 
                             boolean status = response.getString("status").contains("1");
 
-                            if (status == true) {
+                            if (status) {
                                 Intent intent = new Intent(MerchantMenuSetting.this, MerchantMenuSetting.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);

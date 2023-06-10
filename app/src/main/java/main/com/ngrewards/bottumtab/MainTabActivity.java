@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +24,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +47,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.BuildConfig;
-import main.com.ngrewards.Models.EMIdataModel;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.EMIManualActivity;
 import main.com.ngrewards.activity.MemberMessageAct;
@@ -88,7 +82,7 @@ public class MainTabActivity extends TabActivity {
                 try {
                     JSONObject data = new JSONObject(intent.getStringExtra("object"));
                     Log.e("MEMBER_HOMEMEMBER_HOME",
-                            "----------------------------dfdd"+data.toString());
+                            "----------------------------dfdd" + data);
                 String  member_id= data.getString("member_id");
                 String  cart_id=data.getString("cart_id");
                 String  split_amount_x=data.getString("split_amount_x");

@@ -62,15 +62,38 @@ public class PurchasedItemDetailAct extends
     private RelativeLayout backlay;
     private ImageView product_img;
     private TextView product_name, merchant_name, mainprice, order_id, saledate, upspackage, shipaddress;
-    private String quantity_str="",color_str="",size_str="",shipping_price="",review_status="",review_str="",average_rating="",user_id="",comment_str="",rating_str="",merchant_img_str="",merchant_contact_name="",product_img_str = "", delivery_date_str = "", shipping_username = "", product_id = "", merchant_id = "", product_name_str = "", merchant_name_str = "", mainprice_str = "", order_id_str = "", saledate_str = "", upspackage_str = "", shipaddress_str = "", shipadd_opt_str = "";
-    private TextView   download_invoice, show_remaining_payments,quantity_tv,size_tv
-            ,color_tv,
+    private final String upspackage_str = "";
+    private String quantity_str = "";
+    private String color_str = "";
+    private String size_str = "";
+    private String shipping_price = "";
+    private String review_status = "";
+    private String review_str = "";
+    private String average_rating = "";
+    private String user_id = "";
+    private String comment_str = "";
+    private String rating_str = "";
+    private String merchant_img_str = "";
+    private String merchant_contact_name = "";
+    private String product_img_str = "";
+    private String delivery_date_str = "";
+    private String shipping_username = "";
+    private String product_id = "";
+    private String merchant_id = "";
+    private String product_name_str = "";
+    private String merchant_name_str = "";
+    private String mainprice_str = "";
+    private String order_id_str = "";
+    private String saledate_str = "";
+    private String shipaddress_str = "";
+    private String shipadd_opt_str = "";
+    private TextView download_invoice, show_remaining_payments, quantity_tv, size_tv, color_tv,
             writereview,
             contactseller;
-    private LinearLayout post_review_lay,done_review_lay;
+    private LinearLayout post_review_lay, done_review_lay;
     private EditText comment_et;
-    private RatingBar rating,rating_done;
-    private TextView shipping_price_tv,submit_review,
+    private RatingBar rating, rating_done;
+    private TextView shipping_price_tv, submit_review,
             donereview_tv;
     private ProgressBar progresbar;
     private MySession mySession;
@@ -388,7 +411,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
             RecyclerView.Adapter<
                     FinalPuzzelAdapter.SelectTimeViewHolder>
     {
-        private ArrayList<SplitList> peopleList;
+        private final ArrayList<SplitList> peopleList;
         Context context;
         String type;
         RecyclerViewClickListenerSplit recyclerViewClickListener1;

@@ -62,7 +62,7 @@ import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 
 public class UpdateShipingAddress extends AppCompatActivity {
-    private Integer THRESHOLD = 2;
+    private final Integer THRESHOLD = 2;
     GPSTracker gpsTracker;
     private int count = 0;
     CircleImageView merchant_img;
@@ -752,7 +752,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
         Context context;
 
         LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+        private final ArrayList<CountryBean> values;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -815,11 +815,12 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private List<String> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
-        private WebOperations wo;
-        private String lat, lon;
+        private final LayoutInflater layoutInflater;
+        private final WebOperations wo;
+        private final String lat;
+        private final String lon;
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;

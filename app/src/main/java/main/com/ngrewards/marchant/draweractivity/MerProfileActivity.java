@@ -119,7 +119,7 @@ public class MerProfileActivity extends AppCompatActivity {
     GPSTracker gpsTracker;
     private AutoCompleteTextView streetaddress;
     boolean sts;
-    private Integer THRESHOLD = 2;
+    private final Integer THRESHOLD = 2;
     private int count = 0;
     CategoryAdpters categoryAdpters;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
@@ -273,191 +273,6 @@ public class MerProfileActivity extends AppCompatActivity {
                                     category_spinner.setSelection(i);
                                 }
                             }
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-
-    public class CategoryAdpters extends BaseAdapter {
-        Context context;
-        LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
-
-        public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
-            this.context = applicationContext;
-            this.categoryBeanLists = categoryBeanLists;
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-            return categoryBeanLists == null ? 0 : categoryBeanLists.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.spinner_layout, null);
-            TextView names = (TextView) view.findViewById(R.id.name_tv);
-            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
-            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            names.setText(categoryBeanLists.get(i).getCategoryName());
-            return view;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (MultiPhotoSelectActivity.image == null) {
-
-        } else if (MultiPhotoSelectActivity.image.isEmpty()) {
-
-        } else {
-            for (int i = 0; i < MultiPhotoSelectActivity.image.size(); i++) {
-                if (ImagePathArrayList.size() < 7) {
-                    Log.e("Select Photo ", " > " + MultiPhotoSelectActivity.image.get(i));
-                    GalleryBean galleryBean = new GalleryBean();
-                    galleryBean.setId("0");
-                    galleryBean.setGallery_image(MultiPhotoSelectActivity.image.get(i));
-                    ImagePathArrayList.add(galleryBean);
-                    ImagePathArrayList_str.add(MultiPhotoSelectActivity.image.get(i));
-                    Log.e("Select Photo add", " > " + ImagePathArrayList.get(i));
-
-                }
-
-            }
-            MultiPhotoSelectActivity.image = null;
-            business_galleryimage.setVisibility(View.VISIBLE);
-            horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-            business_galleryimage.setAdapter(horizontalAdapter);
-            horizontalAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
-
-        private ArrayList<Bitmap> horizontalList;
-        private ArrayList<GalleryBean> ImagePathArray;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public ImageView ProductImageImagevies, remove_images;
-            //   RelativeLayout RLRemovePhoto;
-
-            public MyViewHolder(View view) {
-                super(view);
-
-                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
-                remove_images = (ImageView) view.findViewById(R.id.remove_images);
-                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
-
-            }
-        }
-
-
-        public HorizontalAdapter(ArrayList<GalleryBean> ImagePathArray) {
-            this.horizontalList = horizontalList;
-            this.ImagePathArray = ImagePathArray;
-        }
-
-        @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.business_lay_img, parent, false);
-
-            return new HorizontalAdapter.MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
-            if (ImagePathArray.get(position) != null) {
-
-                if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
-                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getGallery_image())));
-                } else {
-                    String product_img = ImagePathArray.get(position).getGallery_image();
-                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-                    } else {
-
-                        Picasso.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
-
-                    }
-                }
-
-            }
-
-            holder.remove_images.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
-                        ImagePathArrayList.remove(position);
-                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-                        business_galleryimage.setAdapter(horizontalAdapter);
-                        horizontalAdapter.notifyDataSetChanged();
-                    } else {
-                        remove_pos = position;
-                        removeImages(remove_pos, ImagePathArray.get(position).getId());
-                    }
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return ImagePathArray == null ? 0 : ImagePathArray.size();
-
-        }
-    }
-
-    private void removeImages(final int remove_pos, String id) {
-        //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        Log.e("loginCall >", " > FIRST");
-        progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().removeImages(id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("Remove Images >", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            ImagePathArrayList.remove(remove_pos);
-                            horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-                            business_galleryimage.setAdapter(horizontalAdapter);
-                            horizontalAdapter.notifyDataSetChanged();
-
                         }
 
                     } catch (IOException e) {
@@ -786,7 +601,7 @@ public class MerProfileActivity extends AppCompatActivity {
                 address_tv_str = address_tv.getText().toString();
                 businessname_str = businessname.getText().toString();
                 Log.e("businessname_str >>", " ." + businessname_str);
-                businessname_str = businessname_str.replaceAll("\'", "'");
+                businessname_str = businessname_str.replaceAll("'", "'");
 
                 busines_email_str = busines_email.getText().toString();
                 streetaddress_str = streetaddress.getText().toString();
@@ -931,6 +746,191 @@ public class MerProfileActivity extends AppCompatActivity {
                 addTime("Satcls");
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MultiPhotoSelectActivity.image == null) {
+
+        } else if (MultiPhotoSelectActivity.image.isEmpty()) {
+
+        } else {
+            for (int i = 0; i < MultiPhotoSelectActivity.image.size(); i++) {
+                if (ImagePathArrayList.size() < 7) {
+                    Log.e("Select Photo ", " > " + MultiPhotoSelectActivity.image.get(i));
+                    GalleryBean galleryBean = new GalleryBean();
+                    galleryBean.setId("0");
+                    galleryBean.setGallery_image(MultiPhotoSelectActivity.image.get(i));
+                    ImagePathArrayList.add(galleryBean);
+                    ImagePathArrayList_str.add(MultiPhotoSelectActivity.image.get(i));
+                    Log.e("Select Photo add", " > " + ImagePathArrayList.get(i));
+
+                }
+
+            }
+            MultiPhotoSelectActivity.image = null;
+            business_galleryimage.setVisibility(View.VISIBLE);
+            horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+            business_galleryimage.setAdapter(horizontalAdapter);
+            horizontalAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public class CategoryAdpters extends BaseAdapter {
+        Context context;
+        LayoutInflater inflter;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
+
+        public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
+            this.context = applicationContext;
+            this.categoryBeanLists = categoryBeanLists;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return categoryBeanLists == null ? 0 : categoryBeanLists.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.spinner_layout, null);
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            names.setText(categoryBeanLists.get(i).getCategoryName());
+            return view;
+        }
+    }
+
+    private void removeImages(final int remove_pos, String id) {
+        //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
+        Log.e("loginCall >", " > FIRST");
+        progresbar.setVisibility(View.VISIBLE);
+        Call<ResponseBody> call = ApiClient.getApiInterface().removeImages(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("Remove Images >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            ImagePathArrayList.remove(remove_pos);
+                            horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+                            business_galleryimage.setAdapter(horizontalAdapter);
+                            horizontalAdapter.notifyDataSetChanged();
+
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+        private ArrayList<Bitmap> horizontalList;
+        private final ArrayList<GalleryBean> ImagePathArray;
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public ImageView ProductImageImagevies, remove_images;
+            //   RelativeLayout RLRemovePhoto;
+
+            public MyViewHolder(View view) {
+                super(view);
+
+                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
+                remove_images = (ImageView) view.findViewById(R.id.remove_images);
+                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
+
+            }
+        }
+
+
+        public HorizontalAdapter(ArrayList<GalleryBean> ImagePathArray) {
+            this.horizontalList = horizontalList;
+            this.ImagePathArray = ImagePathArray;
+        }
+
+        @Override
+        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.business_lay_img, parent, false);
+
+            return new HorizontalAdapter.MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
+            if (ImagePathArray.get(position) != null) {
+
+                if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
+                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getGallery_image())));
+                } else {
+                    String product_img = ImagePathArray.get(position).getGallery_image();
+                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+                    } else {
+
+                        Picasso.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
+
+                    }
+                }
+
+            }
+
+            holder.remove_images.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
+                        ImagePathArrayList.remove(position);
+                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+                        business_galleryimage.setAdapter(horizontalAdapter);
+                        horizontalAdapter.notifyDataSetChanged();
+                    } else {
+                        remove_pos = position;
+                        removeImages(remove_pos, ImagePathArray.get(position).getId());
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return ImagePathArray == null ? 0 : ImagePathArray.size();
+
+        }
     }
 
     @Override
@@ -1792,7 +1792,7 @@ public class MerProfileActivity extends AppCompatActivity {
         Context context;
 
         LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+        private final ArrayList<CountryBean> values;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -2177,11 +2177,12 @@ public class MerProfileActivity extends AppCompatActivity {
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private List<String> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
-        private WebOperations wo;
-        private String lat, lon;
+        private final LayoutInflater layoutInflater;
+        private final WebOperations wo;
+        private final String lat;
+        private final String lon;
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;

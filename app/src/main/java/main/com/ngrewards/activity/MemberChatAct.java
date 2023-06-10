@@ -70,6 +70,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,14 +111,29 @@ public class MemberChatAct extends AppCompatActivity {
     int beforelength1 = 0;
     private ArrayList<ChatBeanMain> converSessionArrayList;
     MySession mySession;
-    private String VideoPath = "", date_time_show = "", FilePath = "", ThumbnailPath = "", user_id = "", receiver_type = "", receiver_name = "", receiver_fullname = "", receiver_id = "", image_url = "", receiver_img = "", time_zone = "", type = "", messagetext = "", date_time = "", ImagePath = "";
+    private final String receiver_img = "";
+    private final String tag = "Test";
+    private String VideoPath = "";
+    private String date_time_show = "";
+    private String FilePath = "";
+    private String ThumbnailPath = "";
+    private String user_id = "";
+    private String receiver_type = "";
+    private String receiver_name = "";
+    private String receiver_fullname = "";
+    private String receiver_id = "";
+    private String image_url = "";
+    private String time_zone = "";
+    private String type = "";
+    private String messagetext = "";
+    private String date_time = "";
     private TextView send_tv, username_tv, name_tv;
     private EditText message_et;
     private ProgressBar prgressbar;
     private ImageView camera_img, video_but;
     private static final int FILE_SELECT_CODE = 0;
     File file_dff;
-    private String tag = "Test";
+    private String ImagePath = "";
     ChatMainAdapter chatMainAdapter;
     private ProgressDialog pDialog;
     public static final int progress_bar_type = 0;
@@ -299,15 +315,10 @@ public class MemberChatAct extends AppCompatActivity {
 
     public static String toBase64(String message) {
         byte[] data;
-        try {
-            data = message.getBytes("UTF-8");
-            String base64Sms = Base64.encodeToString(data, Base64.DEFAULT);
-            return base64Sms;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        data = message.getBytes(StandardCharsets.UTF_8);
+        String base64Sms = Base64.encodeToString(data, Base64.DEFAULT);
+        return base64Sms;
 
-        return null;
     }
 
     @Override
@@ -1757,7 +1768,7 @@ public class MemberChatAct extends AppCompatActivity {
 
         try {
             byte[] data = Base64.decode(message, Base64.DEFAULT);
-            return new String(data, "UTF-8");
+            return new String(data, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return message;
@@ -1970,7 +1981,7 @@ public class MemberChatAct extends AppCompatActivity {
 
                 if (Build.VERSION.SDK_INT > 20) {
                     //getExternalMediaDirs() added in API 21
-                    File extenal[] = context.getExternalMediaDirs();
+                    File[] extenal = context.getExternalMediaDirs();
                     if (extenal.length > 1) {
                         filePath = extenal[1].getAbsolutePath();
                         filePath = filePath.substring(0, filePath.indexOf("Android")) + split[1];
@@ -2113,7 +2124,7 @@ public class MemberChatAct extends AppCompatActivity {
                         .getExternalStorageDirectory().toString()
                         + "/Ngreward Downloads/" + f_url[0]);
 
-                byte data[] = new byte[1024];
+                byte[] data = new byte[1024];
 
                 long total = 0;
 

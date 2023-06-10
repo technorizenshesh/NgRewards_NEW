@@ -71,7 +71,7 @@ public class SplashActivity extends AppCompatActivity implements
         LocationListener,
         ResultCallback<LocationSettingsResult> {
 
-    private static int SPLASH_TIME_OUT = 3500;
+    private static final int SPLASH_TIME_OUT = 3500;
     MySession mySession;
     private String user_type = "";
     public static final int RequestPermissionCode = 1;
@@ -94,7 +94,7 @@ public class SplashActivity extends AppCompatActivity implements
     private Uri uri;
     private String hasData;
     private String result = "";
-    private String mutableList = "test";
+    private final String mutableList = "test";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class SplashActivity extends AppCompatActivity implements
         gpsTracker = new GPSTracker(SplashActivity.this);
         mRequestingLocationUpdates = false;
 
-        String newMutableList = new String("Test");
+        String newMutableList = "Test";
 
         Log.d(TAG, "MutableListComparison: " + mutableList.equals(newMutableList));
         try {
@@ -263,11 +263,7 @@ public class SplashActivity extends AppCompatActivity implements
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
-                    if (session.isValid()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return session.isValid();
                 }
             });
         } catch (Exception e) {
@@ -333,49 +329,45 @@ public class SplashActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == RequestPermissionCode) {
+            if (grantResults.length > 0) {
 
-            case RequestPermissionCode:
+                boolean read = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean write = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                boolean camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                boolean network = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                boolean coarseloc = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                boolean fineloc = grantResults[5] == PackageManager.PERMISSION_GRANTED;
 
-                if (grantResults.length > 0) {
+                if (read && write && camera && network && coarseloc && fineloc) {
 
-                    boolean read = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean write = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                    boolean network = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                    boolean coarseloc = grantResults[4] == PackageManager.PERMISSION_GRANTED;
-                    boolean fineloc = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    if (read && write && camera && network && coarseloc && fineloc) {
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (mySession.IsLoggedIn()) {
-                                    if (user_type.equalsIgnoreCase("Merchant")) {
-                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                        startActivity(i);
-                                        finish();
-                                    } else {
-                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
-                                        startActivity(i);
-                                        finish();
-                                    }
+                            if (mySession.IsLoggedIn()) {
+                                if (user_type.equalsIgnoreCase("Merchant")) {
+                                    Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                    startActivity(i);
+                                    finish();
                                 } else {
-                                    Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                    Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
                                     startActivity(i);
                                     finish();
                                 }
+                            } else {
+                                Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                startActivity(i);
+                                finish();
                             }
-                        }, SPLASH_TIME_OUT);
+                        }
+                    }, SPLASH_TIME_OUT);
 
-                    } else {
-                        nesePermission();
-                    }
+                } else {
+                    nesePermission();
                 }
-                break;
+            }
         }
     }
 
@@ -582,68 +574,66 @@ public class SplashActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            // Check for the integer request code originally supplied to startResolutionForResult().
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        Log.e(TAG, "User agreed to make required location settings changes.");
-                        if (mySession.IsLoggedIn()) {
+        // Check for the integer request code originally supplied to startResolutionForResult().
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    Log.e(TAG, "User agreed to make required location settings changes.");
+                    if (mySession.IsLoggedIn()) {
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mCurrentLocation == null) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mCurrentLocation == null) {
 
-                                    } else {
-                                        latitude = mCurrentLocation.getLatitude();
-                                        longitude = mCurrentLocation.getLongitude();
-                                    }
-
-                                    // Intent i = new Intent(SplashAct.this, CheckLocationActivity.class);
-                                    if (user_type.equalsIgnoreCase("Merchant")) {
-
-                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                        startActivity(i);
-                                        finish();
-
-                                    } else {
-
-                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
-                                        startActivity(i);
-                                        finish();
-                                        PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.Status_Facebook, "");
-                                    }
-
+                                } else {
+                                    latitude = mCurrentLocation.getLatitude();
+                                    longitude = mCurrentLocation.getLongitude();
                                 }
-                            }, 1500);
 
-                        } else {
+                                // Intent i = new Intent(SplashAct.this, CheckLocationActivity.class);
+                                if (user_type.equalsIgnoreCase("Merchant")) {
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mCurrentLocation == null) {
-
-                                    } else {
-                                        latitude = mCurrentLocation.getLatitude();
-                                        longitude = mCurrentLocation.getLongitude();
-                                    }
-
-                                    Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                    Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
                                     startActivity(i);
                                     finish();
 
+                                } else {
+
+                                    Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                    PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.Status_Facebook, "");
                                 }
-                            }, 1500);
-                        }
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Log.e(TAG, "User chose not to make required location settings changes.");
-                        finish();
-                        break;
-                }
-                break;
+
+                            }
+                        }, 1500);
+
+                    } else {
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mCurrentLocation == null) {
+
+                                } else {
+                                    latitude = mCurrentLocation.getLatitude();
+                                    longitude = mCurrentLocation.getLongitude();
+                                }
+
+                                Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                startActivity(i);
+                                finish();
+
+                            }
+                        }, 1500);
+                    }
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Log.e(TAG, "User chose not to make required location settings changes.");
+                    finish();
+                    break;
+            }
         }
     }
 

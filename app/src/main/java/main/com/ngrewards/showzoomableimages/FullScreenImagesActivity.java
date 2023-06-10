@@ -94,8 +94,8 @@ public class FullScreenImagesActivity extends AppCompatActivity {
     }
 
     static class TouchImageAdapter extends PagerAdapter {
-        private Activity _activity;
-        private List<ProductImage> _imagePaths;
+        private final Activity _activity;
+        private final List<ProductImage> _imagePaths;
         private LayoutInflater inflater;
 
         //     private static int[] images = { R.drawable.img1, R.drawable.img2, R.drawable.img3 };

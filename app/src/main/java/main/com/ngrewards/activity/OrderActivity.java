@@ -32,7 +32,7 @@ import main.com.ngrewards.fragments.FragmentOrderSubmit;
 import www.develpoeramit.mapicall.ApiCallBuilder;
 
 public class OrderActivity extends AppCompatActivity {
-    private ArrayList<ModelMenuSetting> arrayList = new ArrayList<>();
+    private final ArrayList<ModelMenuSetting> arrayList = new ArrayList<>();
     private ActivityOrderBinding binding;
     private MerchantListBean data;
 

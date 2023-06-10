@@ -200,17 +200,17 @@ public class FragMerAudience extends Fragment {
             }
         });
     }
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
 
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                    menpercant.setText(""+MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent()+" %");
-                    womenpercant.setText(""+MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent()+" %");
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                    menpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
+                    womenpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
 
                 }
-                if (mainview.getVisibility()==View.VISIBLE){
+                if (mainview.getVisibility() == View.VISIBLE) {
                     if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
                         range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentMale());
                         range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentMale());

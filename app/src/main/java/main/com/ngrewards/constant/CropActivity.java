@@ -34,8 +34,8 @@ public class CropActivity extends AppCompatActivity {
     Toolbar toolbar;
     Uri fileUri;
     int degree = 0;
-    String number ;
-    private String language = "";
+    String number;
+    private final String language = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,11 +145,9 @@ public class CropActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

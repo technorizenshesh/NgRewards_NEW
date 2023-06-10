@@ -587,7 +587,7 @@ public class ProfileActivity extends AppCompatActivity {
                     String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
                     try {
 
-                        String arr[] = result.split(",");
+                        String[] arr = result.split(",");
                         whoinvite.setText(arr[1]);
                     } catch (Exception e) {
                         Toast.makeText(this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
@@ -844,7 +844,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Context context;
         LayoutInflater inflter;
-        private ArrayList<String> values;
+        private final ArrayList<String> values;
 
         public GenderAdpter(Context applicationContext, ArrayList<String> values) {
             this.context = applicationContext;
@@ -922,9 +922,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
-        private Activity context;
+        private final Activity context;
         private ArrayList<MemberDetail> l2 = new ArrayList<>();
-        private LayoutInflater layoutInflater;
+        private final LayoutInflater layoutInflater;
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;

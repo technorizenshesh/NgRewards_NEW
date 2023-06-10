@@ -558,7 +558,7 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("country_id", country_id);
                 params.put("device_token", firebase_regid);
 
-                Log.e("url>>>", String.valueOf(url)+" Device Token : "+firebase_regid);
+                Log.e("url>>>", url + " Device Token : " + firebase_regid);
 
                 StringBuilder postData = new StringBuilder();
 
@@ -936,7 +936,7 @@ public class LoginActivity extends AppCompatActivity {
         Context context;
 
         LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+        private final ArrayList<CountryBean> values;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;

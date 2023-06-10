@@ -23,9 +23,9 @@ import main.com.ngrewards.SquareImageView;
 
 public class ImageAdpterGrid extends BaseAdapter {
     private ArrayList<String> mImagesList;
-    private Context mContext;
-    private SparseBooleanArray mSparseBooleanArray;
-    private SparseBooleanArray mSparseBooleanArray_new;
+    private final Context mContext;
+    private final SparseBooleanArray mSparseBooleanArray;
+    private final SparseBooleanArray mSparseBooleanArray_new;
     LayoutInflater inflater;
 
     public ImageAdpterGrid(Context context, ArrayList<String> imageList) {

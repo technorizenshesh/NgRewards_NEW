@@ -46,7 +46,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private View itemView;
     private String desage_name_string;
     private char first_char;
-    private Context activity;
+    private final Context activity;
     private String dish_title_string;
     private String discription_title_string;
     private String Item_Price;
@@ -58,7 +58,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog alertDialog;
     private String editTextString;
-    private RecyclerViewClickListener1 mListener;
+    private final RecyclerViewClickListener1 mListener;
     private String h;
     private String name_item;
     private String image_menu;

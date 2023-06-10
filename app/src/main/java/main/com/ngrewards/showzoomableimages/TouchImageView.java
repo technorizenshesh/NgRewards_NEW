@@ -27,24 +27,36 @@ import android.widget.OverScroller;
 import android.widget.Scroller;
 
 public class TouchImageView extends ImageView {
-	private PointF last = new PointF();
-	private static final String DEBUG = "DEBUG";
-	private static final float SUPER_MIN_MULTIPLIER = .75f;
-	private static final float SUPER_MAX_MULTIPLIER = 1.25f;
-	private float normalizedScale;
-	private Matrix matrix, prevMatrix;
+    private final PointF last = new PointF();
+    private static final String DEBUG = "DEBUG";
+    private static final float SUPER_MIN_MULTIPLIER = .75f;
+    private static final float SUPER_MAX_MULTIPLIER = 1.25f;
+    private float normalizedScale;
+    private Matrix matrix, prevMatrix;
+    private State state;
 
-	private static enum State { NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM };
-	private State state;
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        matrix.getValues(m);
+        float x = m[Matrix.MTRANS_X];
 
-	private float minScale;
-	private float maxScale;
-	private float superMinScale;
-	private float superMaxScale;
-	private float[] m;
+        if (getImageWidth() < viewWidth) {
+            return false;
 
-	private Context context;
-	private Fling fling;
+        } else if (x >= -1 && direction < 0) {
+            return false;
+
+        } else return !(Math.abs(x) + viewWidth + 1 >= getImageWidth()) || direction <= 0;
+    }
+
+    private float minScale;
+    private float maxScale;
+    private float superMinScale;
+    private float superMaxScale;
+    private float[] m;
+
+    private Context context;
+    private Fling fling;
 
 	private ScaleType mScaleType;
 
@@ -687,23 +699,7 @@ public class TouchImageView extends ImageView {
 		return canScrollHorizontally(direction);
 	}
 
-	@Override
-	public boolean canScrollHorizontally(int direction) {
-		matrix.getValues(m);
-		float x = m[Matrix.MTRANS_X];
-
-		if (getImageWidth() < viewWidth) {
-			return false;
-
-		} else if (x >= -1 && direction < 0) {
-			return false;
-
-		} else if (Math.abs(x) + viewWidth + 1 >= getImageWidth() && direction > 0) {
-			return false;
-		}
-
-		return true;
-	}
+    private enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
 
 	/**
 	 * Gesture Listener detects a single click or long click and passes that on
@@ -768,7 +764,7 @@ public class TouchImageView extends ImageView {
 	}
 
 	public interface OnTouchImageViewListener {
-		public void onMove();
+        void onMove();
 	}
 
 	/**
@@ -779,10 +775,10 @@ public class TouchImageView extends ImageView {
 	 */
 	private class PrivateOnTouchListener implements OnTouchListener {
 
-		//
-		// Remember last point position for dragging
-		//
-		private PointF last = new PointF();
+        //
+        // Remember last point position for dragging
+        //
+        private final PointF last = new PointF();
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -914,32 +910,34 @@ public class TouchImageView extends ImageView {
 		fixScaleTrans();
 	}
 
-	/**
-	 * DoubleTapZoom calls a series of runnables which apply
-	 * an animated zoom in/out graphic to the image.
-	 * @author Ortiz
-	 *
-	 */
-	private class DoubleTapZoom implements Runnable {
+    /**
+     * DoubleTapZoom calls a series of runnables which apply
+     * an animated zoom in/out graphic to the image.
+     *
+     * @author Ortiz
+     */
+    private class DoubleTapZoom implements Runnable {
 
-		private long startTime;
-		private static final float ZOOM_TIME = 500;
-		private float startZoom, targetZoom;
-		private float bitmapX, bitmapY;
-		private boolean stretchImageToSuper;
-		private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-		private PointF startTouch;
-		private PointF endTouch;
+        private final long startTime;
+        private static final float ZOOM_TIME = 500;
+        private final float startZoom;
+        private final float targetZoom;
+        private final float bitmapX;
+        private final float bitmapY;
+        private final boolean stretchImageToSuper;
+        private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        private final PointF startTouch;
+        private final PointF endTouch;
 
-		DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
-			setState(State.ANIMATE_ZOOM);
-			startTime = System.currentTimeMillis();
-			this.startZoom = normalizedScale;
-			this.targetZoom = targetZoom;
-			this.stretchImageToSuper = stretchImageToSuper;
-			PointF bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false);
-			this.bitmapX = bitmapPoint.x;
-			this.bitmapY = bitmapPoint.y;
+        DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
+            setState(State.ANIMATE_ZOOM);
+            startTime = System.currentTimeMillis();
+            this.startZoom = normalizedScale;
+            this.targetZoom = targetZoom;
+            this.stretchImageToSuper = stretchImageToSuper;
+            PointF bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false);
+            this.bitmapX = bitmapPoint.x;
+            this.bitmapY = bitmapPoint.y;
 
 			//
 			// Used for translating image during scaling

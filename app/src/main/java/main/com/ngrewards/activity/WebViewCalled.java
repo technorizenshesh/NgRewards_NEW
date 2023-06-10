@@ -19,7 +19,7 @@ public class WebViewCalled extends AppCompatActivity {
 
     private String reciept_url;
     private WebView webView;
-    private String postUrl = "https://api.androidhive.info/webview/index.html";
+    private final String postUrl = "https://api.androidhive.info/webview/index.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

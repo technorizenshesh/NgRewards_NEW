@@ -41,8 +41,8 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
  */
 public class FragmentOrder extends BottomSheetDialogFragment {
     private FragmentOrderBinding binding;
-    private ArrayList<ModelItem> arrayList = new ArrayList<>();
-    private ArrayList<ModelItem> arrayList1 = new ArrayList<>();
+    private final ArrayList<ModelItem> arrayList = new ArrayList<>();
+    private final ArrayList<ModelItem> arrayList1 = new ArrayList<>();
     private String user_id;
     private String total_quantity;
     private String total_price, tax, tax_amount, amount_due;
@@ -84,7 +84,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    Log.e("UserRecord", "========>" + jsonObject1.toString());
+                    Log.e("UserRecord", "========>" + jsonObject1);
                     user_id = jsonObject1.getString("id");
                 }
             } catch (JSONException e) {
@@ -155,7 +155,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
 
                                 for (int j = 0; j<listOfString.size();j++){
 
-                                    stringnew =  listOfString.get(j).toString();
+                                    stringnew = listOfString.get(j);
 
                                 }
 
@@ -163,7 +163,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
 
                                 for (int k = 0; k<listOfString1.size();k++){
 
-                                    stringnew1 =  listOfString1.get(k).toString();
+                                    stringnew1 = listOfString1.get(k);
 
                                 }
 
@@ -203,10 +203,10 @@ public class FragmentOrder extends BottomSheetDialogFragment {
                 });
            }
 
-       class SubMenuAdapter extends RecyclerView.Adapter<SubMenuAdapter.MyViewHolder> {
-          private ArrayList items1;
-          private ArrayList items2;
-          ArrayList<ModelItem> items;
+    class SubMenuAdapter extends RecyclerView.Adapter<SubMenuAdapter.MyViewHolder> {
+        private final ArrayList items1;
+        private final ArrayList items2;
+        ArrayList<ModelItem> items;
 
         public SubMenuAdapter(ArrayList<ModelItem> items, ArrayList<String> stringnew, ArrayList<String> stringnew1) {
             this.items = items;

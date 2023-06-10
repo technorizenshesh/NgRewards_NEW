@@ -42,26 +42,36 @@ import main.com.ngrewards.constant.MySession;
 public class UpdateCard extends AppCompatActivity {
 
     private EditText cardname, cardnumber;
-    private TextView update_tv,delete_tv;
+    private TextView update_tv, delete_tv;
     ArrayList<String> listOfPattern;
     ArrayList<String> modellist;
     ArrayList<String> datelist;
     private Spinner yearspinner, datespinner;
-    private String expiryyear_str = "",date_str="",user_id="";
+    private final String user_id = "";
+    private final String expiry_date = "";
+    private final String expiry_year = "";
     private BasicCustomAdp basicCustomAdp;
     private ProgressBar progressBar;
     private MySession mySession;
-    private boolean status_match=false;
+    private boolean status_match = false;
 
 
     private RelativeLayout backlay;
-    private String id="",member_id="",cardname_str="",cardnumber_str="",expiry_date="",expiry_year="",created_date="",card_type="";
+    private String expiryyear_str = "";
+    private String date_str = "";
+    private String id = "";
+    private String member_id = "";
+    private String cardname_str = "";
+    private String cardnumber_str = "";
+    private String created_date = "";
+    private String card_type = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_card);
         Bundle bundle = getIntent().getExtras();
-        if (bundle!=null){
+        if (bundle != null) {
             id = bundle.getString("id");
             member_id = bundle.getString("member_id");
             cardname_str = bundle.getString("card_name");
@@ -274,7 +284,7 @@ public class UpdateCard extends AppCompatActivity {
     public class BasicCustomAdp extends ArrayAdapter<String> {
         Context context;
         Activity activity;
-        private ArrayList<String> carmodel;
+        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);

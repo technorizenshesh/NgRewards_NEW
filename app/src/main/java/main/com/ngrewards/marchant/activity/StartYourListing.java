@@ -82,9 +82,9 @@ public class StartYourListing extends AppCompatActivity {
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private CategoryAdpters categoryAdpters;
     private String category_id = "";
-           private String   split_amount= "";
-           private String  split_payments= "";
-           boolean IsSplited  = false;
+           private String split_amount = "";
+    private final String split_payments = "";
+    boolean IsSplited = false;
     private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
     private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
     private TextView list_item_tv;
@@ -287,7 +287,8 @@ public class StartYourListing extends AppCompatActivity {
 
         price_et.setFilters(new InputFilter[] {
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -296,8 +297,7 @@ public class StartYourListing extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        }
-                        else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -326,7 +326,6 @@ public class StartYourListing extends AppCompatActivity {
             if (price_et.getText().toString().equalsIgnoreCase("")) {
                 Toast.makeText(StartYourListing.this, "Please Enter Amount First",
                         Toast.LENGTH_SHORT).show();
-                return;
             } else {
                 enterNoOfSplits(price_et.getText().toString());
             }}
@@ -422,7 +421,7 @@ public class StartYourListing extends AppCompatActivity {
     }
 
     public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
-        private ArrayList<String> peopleList;
+        private final ArrayList<String> peopleList;
 
         public FinalPuzzelAdapter(ArrayList<String> peopleList) {
             this.peopleList = peopleList;
@@ -535,7 +534,7 @@ public class StartYourListing extends AppCompatActivity {
     private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private ArrayList<Bitmap> horizontalList;
-        private ArrayList<String> ImagePathArrayList_adp;
+        private final ArrayList<String> ImagePathArrayList_adp;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -780,7 +779,7 @@ public class StartYourListing extends AppCompatActivity {
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

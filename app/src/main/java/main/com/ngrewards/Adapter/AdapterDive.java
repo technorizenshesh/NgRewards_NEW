@@ -29,7 +29,7 @@ public class AdapterDive extends RecyclerView.Adapter<AdapterDive.MyViewHolder> 
     private final ArrayList<DiveInModal> all_category_subcategory;
     private View itemView;
     private String desage_name_string;
-    private Context activity;
+    private final Context activity;
     private String name_string;
     private String id_string;
     private String Image_string;

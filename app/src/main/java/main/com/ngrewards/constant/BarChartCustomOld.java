@@ -18,13 +18,15 @@ import java.util.List;
 
 public class BarChartCustomOld extends View {
 
-    private Paint paint;
+    private final Paint paint;
     private List<ChartDataCustom> values;
     private List<String> hori_labels;
-    private List<Float> horizontal_width_list = new ArrayList<>();
+    private final List<Float> horizontal_width_list = new ArrayList<>();
     private String description;
-    private float horizontal_width,  border = 30, horstart = border * 2;
-    private int parentHeight ,parentWidth;
+    private final float border = 30;
+    private final float horstart = border * 2;
+    private final ScaleGestureDetector mScaleDetector;
+    private int parentHeight, parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
     private float mPosY;
@@ -32,7 +34,7 @@ public class BarChartCustomOld extends View {
     private float mLastTouchY;
     private int mActivePointerId = INVALID_POINTER_ID;
     private Boolean gesture = false;
-    private ScaleGestureDetector mScaleDetector;
+    private float horizontal_width;
     private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartDataCustom> list_cordinate = new ArrayList<>();
@@ -74,7 +76,7 @@ private int maxY_values;
 
         intilaizeValue(canvas);
 
-        if(gesture == true) {
+        if (gesture) {
 
             CanvasScaleFator();
         }
@@ -95,7 +97,7 @@ private int maxY_values;
             chartHelper.createBar(list_cordinate, canvas, paint);
             DrawText();
 
-            if(gesture == true) {
+            if (gesture) {
                 canvas.restore();
             }
         }

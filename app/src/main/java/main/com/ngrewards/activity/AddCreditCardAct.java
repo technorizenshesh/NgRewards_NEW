@@ -54,15 +54,18 @@ public class AddCreditCardAct extends AppCompatActivity {
     ArrayList<String> modellist;
     ArrayList<String> datelist;
     private Spinner yearspinner, datespinner;
-    private String expiryyear_str = "",date_str="",user_id="";
+    private String expiryyear_str = "", date_str = "", user_id = "";
     private BasicCustomAdp basicCustomAdp;
     private ProgressBar progressBar;
     private MySession mySession;
-    private boolean status_match=false;
+    private final boolean status_match = false;
     int month, year_int;
-    private String token_id="",email_str="",accountid="";
+    private final String accountid = "";
+    private String token_id = "";
+    private String email_str = "";
 
     CreditCardFormatTextWatcher tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +185,7 @@ public class AddCreditCardAct extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr",">>" + error.toString());
                                     // Show localized error message
-                                    Toast.makeText(AddCreditCardAct.this, "\n" + error.toString(),
+                                    Toast.makeText(AddCreditCardAct.this, "\n" + error,
                                             Toast.LENGTH_LONG
                                     ).show();
 
@@ -267,7 +270,7 @@ public class AddCreditCardAct extends AppCompatActivity {
     public class BasicCustomAdp extends ArrayAdapter<String> {
         Context context;
         Activity activity;
-        private ArrayList<String> carmodel;
+        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);

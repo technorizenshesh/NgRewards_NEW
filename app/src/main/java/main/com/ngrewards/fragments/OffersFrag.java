@@ -292,7 +292,7 @@ public class OffersFrag extends Fragment {
         public void filter(String charText) {
             if (charText == null) {
             } else {
-                charText = charText.toString().toLowerCase();
+                charText = charText.toLowerCase();
                 offerBeanLists.clear();
                 if (charText.length() == 0) {
                     offerBeanLists.addAll(searchofferBeanLists);
@@ -839,7 +839,7 @@ public class OffersFrag extends Fragment {
     public class DistanceAdapter extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<String> distancelist;
+        private final ArrayList<String> distancelist;
 
         public DistanceAdapter(Context applicationContext, ArrayList<String> distancelist) {
             this.context = applicationContext;
@@ -881,7 +881,7 @@ public class OffersFrag extends Fragment {
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

@@ -71,7 +71,8 @@ public class WelcomeActivity extends AppCompatActivity {
     Location location;
     private double latitude = 0, longitude = 0;
     GPSTracker gpsTracker;
-    private String country_str = "", country_id = "";
+    private final String country_str = "";
+    private final String country_id = "";
 
     private LoginButton loginButton;
     private LinearLayout facebook_button;

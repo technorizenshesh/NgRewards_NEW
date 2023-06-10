@@ -255,7 +255,7 @@ public class InviteActMain extends BaseActivity {
     Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;
         try {
-            bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.DATA_MATRIX.QR_CODE, QRcodeWidth, QRcodeWidth, null
+            bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.QR_CODE, QRcodeWidth, QRcodeWidth, null
             );
 
         } catch (IllegalArgumentException Illegalargumentexception) {

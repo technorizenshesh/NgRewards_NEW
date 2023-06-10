@@ -91,9 +91,9 @@ public class UpdateListingProduct extends AppCompatActivity {
     private int remove_pos;
     public static ArrayList<ProductImage> ImagePathArrayList;
     public static ArrayList<String> ImagePathArrayList_str;
-    private String   split_amount= "";
-    private String  split_payments= "";
-    boolean IsSplited  = false;
+    private String split_amount = "";
+    private final String split_payments = "";
+    boolean IsSplited = false;
     LinearLayout split_lay;
     CheckBox split_check;
     @Override
@@ -299,7 +299,6 @@ public class UpdateListingProduct extends AppCompatActivity {
                 if (price_et.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(UpdateListingProduct.this, "Please Enter Amount First",
                             Toast.LENGTH_SHORT).show();
-                    return;
                 } else {
                     enterNoOfSplits(price_et.getText().toString());
                 }}
@@ -329,7 +328,8 @@ public class UpdateListingProduct extends AppCompatActivity {
 
         price_et.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
-                    int beforeDecimal = 8, afterDecimal = 2;
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
 
                     @Override
                     public CharSequence filter(CharSequence source, int start, int end,
@@ -338,7 +338,7 @@ public class UpdateListingProduct extends AppCompatActivity {
 
                         if (temp.equals(".")) {
                             return "0.";
-                        } else if (temp.toString().indexOf(".") == -1) {
+                        } else if (temp.indexOf(".") == -1) {
                             // no decimal point placed yet
                             if (temp.length() > beforeDecimal) {
                                 return "";
@@ -512,7 +512,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
     }
 
     public class FinalPuzzelAdapter extends RecyclerView.Adapter< FinalPuzzelAdapter.SelectTimeViewHolder> {
-        private ArrayList<String> peopleList;
+        private final ArrayList<String> peopleList;
 
         public FinalPuzzelAdapter(ArrayList<String> peopleList) {
             this.peopleList = peopleList;
@@ -582,7 +582,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
     private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private ArrayList<Bitmap> horizontalList;
-        private ArrayList<ProductImage> ImagePathArray;
+        private final ArrayList<ProductImage> ImagePathArray;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -908,7 +908,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
     public class CategoryAdpters extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
-        private ArrayList<CategoryBeanList> categoryBeanLists;
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

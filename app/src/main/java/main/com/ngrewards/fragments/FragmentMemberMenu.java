@@ -38,7 +38,7 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 public class FragmentMemberMenu extends Fragment {
     private FragmentMemberMenuBinding binding;
     private ModelMenuSetting data;
-    private ArrayList<ModelItemList> arrayList = new ArrayList<>();
+    private final ArrayList<ModelItemList> arrayList = new ArrayList<>();
     private String URL = "";
     private String user_id;
     private MerchantListBean MerchentData;
@@ -70,7 +70,7 @@ public class FragmentMemberMenu extends Fragment {
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    Log.e("UserRecord", "========>" + jsonObject1.toString());
+                    Log.e("UserRecord", "========>" + jsonObject1);
                     user_id = jsonObject1.getString("id");
                 }
             } catch (JSONException e) {

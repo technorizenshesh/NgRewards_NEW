@@ -22,13 +22,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,14 +37,10 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.Models.SplitList;
 import main.com.ngrewards.R;
-import main.com.ngrewards.RecyclerViewClickListener1;
 import main.com.ngrewards.RecyclerViewClickListenerSplit;
-import main.com.ngrewards.beanclasses.OrderMerchantAct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.fragments.FragmentWebView;
-import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -62,25 +56,38 @@ public class SaledItemDetailAct extends
     private ImageView product_img;
     private TextView size_tv, color_tv, product_name, quantity, merchant_name, mainprice, order_id, purchasedate, upspackage, shipaddress;
     private TextView shipprice, estdeliver, contactseller;
-    private String color_str = "", size_str = "", shipping_price = "",
-            review_str = "", quantity_str = "", average_rating = "",
-            user_id = "", comment_str = "", rating_str = "",
-            member_img_str = "", member_contact_name = "",
-            product_img_str = "", delivery_date_str = "",
-            shipping_username = "", product_id = "",
-            member_id = "", product_name_str = "",
-            member_name_str = "", mainprice_str = "",
-            order_id_str = "", saledate_str = "",
-            upspackage_str = "", shipaddress_str = "",
-            shipadd_opt_str = "",
-    business_name="",
-            business_no="";
+    private final String review_str = "";
+    private final String average_rating = "";
+    private final String comment_str = "";
+    private final String rating_str = "";
+    private final String member_img_str = "";
+    private final String upspackage_str = "";
+    private String color_str = "";
+    private String size_str = "";
+    private String shipping_price = "";
+    private String quantity_str = "";
+    private String user_id = "";
+    private String member_contact_name = "";
+    private String product_img_str = "";
+    private String delivery_date_str = "";
+    private String shipping_username = "";
+    private String product_id = "";
+    private String member_id = "";
+    private String product_name_str = "";
+    private String member_name_str = "";
+    private String mainprice_str = "";
+    private String order_id_str = "";
+    private String saledate_str = "";
+    private String shipaddress_str = "";
+    private String shipadd_opt_str = "";
+    private String business_name = "";
+    private String business_no = "";
     private String order_date;
     private TextView strip_recipt, show_remaining_payments, send_reminder, download_invoice;
     private String reciept_url;
     private String post_code;
     private String created_date;
-    private String split_invoice = "",cart_id = "";
+    private String split_invoice = "", cart_id = "";
     private String split_date = "";
     private String split_payment = "";
 
@@ -405,7 +412,7 @@ public class SaledItemDetailAct extends
         });
     }
     public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
-        private ArrayList<SplitList> peopleList;
+        private final ArrayList<SplitList> peopleList;
         Context context;
         String type;
         RecyclerViewClickListenerSplit recyclerViewClickListener1;

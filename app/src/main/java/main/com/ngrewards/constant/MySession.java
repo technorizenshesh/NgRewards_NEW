@@ -171,7 +171,21 @@ public class MySession {
         return pref.getString(KEY_ALLDATA, null);
     }
 
-    private String language = "", userid, name_str, birthdate_str, location_str, occupation_str, gender_str, imagepath_str, maritalstatus_str, children_str, smoking_habits_str, drinking_habits_str, education_str, height_str, country_str;
+    private final String language = "";
+    private String userid;
+    private String name_str;
+    private String birthdate_str;
+    private String location_str;
+    private String occupation_str;
+    private String gender_str;
+    private String imagepath_str;
+    private String maritalstatus_str;
+    private String children_str;
+    private String smoking_habits_str;
+    private String drinking_habits_str;
+    private String education_str;
+    private String height_str;
+    private String country_str;
 
 
     public void createLoginSession(String id, String firstname, String lastname, String sendviamail, String user_registered, String user_email, String DOB, String Mobileno, String email_verify, String user_status) {

@@ -64,7 +64,7 @@ public class FragmentOrderSubmit extends Fragment {
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    Log.e("UserRecord", "========>" + jsonObject1.toString());
+                    Log.e("UserRecord", "========>" + jsonObject1);
                     user_id = jsonObject1.getString("id");
                     phone = jsonObject1.getString("phone");
                     fullname = jsonObject1.getString("fullname");

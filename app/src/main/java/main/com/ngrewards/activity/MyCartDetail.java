@@ -53,7 +53,7 @@ public class MyCartDetail extends AppCompatActivity {
     private boolean apists=false;
     private String idd;
     private ProgressBar progresbar;
-    private boolean apickeck = false;
+    private final boolean apickeck = false;
 
 
     @Override

@@ -78,7 +78,7 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
     private String extension;
     private String timeStamp;
     private byte[] imageBytes;
-    private int GALLERY = 1;
+    private final int GALLERY = 1;
     private Uri selectedImage;
     private String publish_string;
     private String discription_string;
@@ -564,7 +564,7 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
                             String fileName = file.getName();
                             Log.e("file", fileName);
 
-                            String filenameArray[] = fileName.split("\\.");
+                            String[] filenameArray = fileName.split("\\.");
                             extension = filenameArray[filenameArray.length - 1];
                             Log.e("fileName", extension);
                             Long tsLong = System.currentTimeMillis() / 1000;

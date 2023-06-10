@@ -37,7 +37,7 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
     private final ArrayList<MenuModal> all_category_subcategory;
     private View itemView;
     private char first_char;
-    private Context activity;
+    private final Context activity;
     private String dish_title_string;
     private String discription_title_string;
     private String Item_Price;
