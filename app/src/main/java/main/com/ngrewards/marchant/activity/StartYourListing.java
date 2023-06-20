@@ -83,7 +83,7 @@ public class StartYourListing extends AppCompatActivity {
     private CategoryAdpters categoryAdpters;
     private String category_id = "";
            private String split_amount = "";
-    private final String split_payments = "";
+    private  String split_payments = "";
     boolean IsSplited = false;
     private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
     private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
@@ -405,6 +405,7 @@ public class StartYourListing extends AppCompatActivity {
             recy_list.setAdapter(finalPuzzelAdapter);
             submitt.setOnClickListener(v -> {
                 split_amount   =     TextUtils.join(", ", peopleList);
+                split_payments   =    ""+noofemi;
                 Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
                 IsSplited = true ;
                 split_check.setChecked(true);

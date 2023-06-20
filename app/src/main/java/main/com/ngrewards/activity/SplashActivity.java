@@ -645,13 +645,10 @@ public class SplashActivity extends AppCompatActivity implements
                 mGoogleApiClient,
                 mLocationRequest,
                 this
-        ).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(Status status) {
-                mRequestingLocationUpdates = true;
-                //  setButtonsEnabledState();
+        ).setResultCallback(status -> {
+            mRequestingLocationUpdates = true;
+            //  setButtonsEnabledState();
 
-            }
         });
     }
 

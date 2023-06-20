@@ -92,7 +92,7 @@ public class UpdateListingProduct extends AppCompatActivity {
     public static ArrayList<ProductImage> ImagePathArrayList;
     public static ArrayList<String> ImagePathArrayList_str;
     private String split_amount = "";
-    private final String split_payments = "";
+    private  String split_payments = "";
     boolean IsSplited = false;
     LinearLayout split_lay;
     CheckBox split_check;
@@ -496,7 +496,9 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
             recy_list.setAdapter(finalPuzzelAdapter);
             submitt.setOnClickListener(v -> {
                 split_amount   =     TextUtils.join(", ", peopleList);
+                split_payments   =     ""+noofemi;
                 Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
+                Log.e("TAG", "listSplits:split_amountsplit_amount "+noofemi );
                 IsSplited = true ;
                 split_check.setChecked(true);
                 dialogSts.dismiss();
@@ -956,11 +958,11 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_product.php?user_id=539&product_id=56300&product_name=Color%20and%20Size%202%20New%20Test%20Product%20Attr&offer_description=TestAttProductDescription&product_price=2&color=Red&size=Small
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_product.php?";
             Log.e("requestURL >>", requestURL);
-            try {
+            Log.e("requestURL >>  split_payments--", split_payments);
+           try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("user_id", user_id);
                 multipart.addFormField("product_id", ActiveProductsAct.product_item_detail.getId());
@@ -974,13 +976,29 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
                 multipart.addFormField("stock", stock_str);
                 multipart.addFormField("split_amount",    split_amount);
                 multipart.addFormField("split_payments", split_payments);
-
+                multipart.addFormField("tax_price", "");
                 if (shipping_price_str==null){
                     multipart.addFormField("shipping_price", "");
                 }
                 else {
                     multipart.addFormField("shipping_price", shipping_price_str);
                 }
+                Log.e("requestURL >>", requestURL);
+                Log.e("requestURL >>", "user_id"+ user_id+
+                "product_id"+ ActiveProductsAct.product_item_detail.getId()+
+                "product_name"+ tital_name_str+
+                "product_description"+ description_str+
+                "product_price"+price_str+
+                "shipping_time"+ shipping_str+
+                "category_id"+ category_id+
+                "color"+ colors_str+
+                "size"+ sizes_str +
+                "stock"+ stock_str+
+                "split_amount"+   split_amount+
+                "split_payments"+ split_payments);
+
+
+
                 if (ImagePathArrayList == null || ImagePathArrayList.isEmpty()) {
 //["+k+"]
                 } else {
@@ -1004,7 +1022,6 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 

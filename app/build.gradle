@@ -1,16 +1,26 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
+            storePassword 'ngrewards123'
+            keyAlias 'Ngrewards'
+            keyPassword 'ngrewards123'
+        }
+    }
     compileSdkVersion 32
     useLibrary 'org.apache.http.legacy'
     buildToolsVersion "30.0.3"
-
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
     defaultConfig {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 57
-        versionName "10.9"
+        versionCode 58
+        versionName "11.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
