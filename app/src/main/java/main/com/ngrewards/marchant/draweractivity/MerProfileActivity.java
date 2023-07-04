@@ -1142,7 +1142,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_profile.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1485,7 +1485,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/country_lists.php
+//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1598,7 +1598,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
+//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1704,7 +1704,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
+//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1916,7 +1916,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/update_merchant_profile.php?merchant_id=337&contact_name=fghdfh
+//https://international.myngrewards.com/wp-content/plugins/webservice/update_merchant_profile.php?merchant_id=337&contact_name=fghdfh
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_merchant_profile.php?";
             Log.e("requestURL >>", requestURL + "merchant_id=" + user_id + "&email=" + busines_email_str + "&day_name=" + day_name_str + "&opening_time=" + opening_hour_str + "&closing_time=" + closing_hour_str + "&opening_status=" + open_close_str);

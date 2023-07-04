@@ -678,7 +678,7 @@ public class TransferToaFriend extends AppCompatActivity {
     }
 
     private void transferrequest(String user_id, String member_id, String comment_str, String amount_str, String ngcash_app_str, String card_id, String card_number, String card_brand, String customer_id, final String type) {
-        //https://myngrewards.com/demo/wp-content/plugins/webservice/all_business_list.php
+        //https://international.myngrewards.com/demo/wp-content/plugins/webservice/all_business_list.php
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().transferorrequest(user_id, member_id, comment_str, amount_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, type, time_zone);
         call.enqueue(new Callback<ResponseBody>() {
@@ -1029,7 +1029,7 @@ public class TransferToaFriend extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/get_customer_stripe_card_list.php?user_id=1009
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/get_customer_stripe_card_list.php?user_id=1009
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "get_customer_stripe_card_list.php?";
                 URL url = new URL(postReceiverUrl);

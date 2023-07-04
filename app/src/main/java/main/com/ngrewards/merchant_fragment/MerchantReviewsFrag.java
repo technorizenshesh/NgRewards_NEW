@@ -465,7 +465,7 @@ private int current_offer_pos;
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_customer_reviews.php?merchant_id=3&member_id=4&review=scvscfd&rating=4
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_customer_reviews.php?merchant_id=3&member_id=4&review=scvscfd&rating=4
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_customer_reviews.php?";
                 URL url = new URL(postReceiverUrl);

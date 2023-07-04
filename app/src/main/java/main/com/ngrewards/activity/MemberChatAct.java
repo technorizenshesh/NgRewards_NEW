@@ -808,7 +808,7 @@ public class MemberChatAct extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String postReceiverUrl = "https://myngrewards.com/wp-content/plugins/webservice/get_chat_detail.php?sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type;
+                String postReceiverUrl = "https://international.myngrewards.com/wp-content/plugins/webservice/get_chat_detail.php?sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type;
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type);
@@ -1007,7 +1007,7 @@ public class MemberChatAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "insert_chat.php?";
 
@@ -1116,7 +1116,7 @@ public class MemberChatAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "insert_chat.php?";
             //  Log.e("requestURL >>", requestURL);
@@ -1222,7 +1222,7 @@ public class MemberChatAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "insert_chat.php?";
             //  Log.e("requestURL >>", requestURL);
@@ -1345,7 +1345,7 @@ public class MemberChatAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/insert_chat.php?sender_id=1&receiver_id=2&chat_message=TestMessage&type=Merchant
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "insert_chat.php?";
             //  Log.e("requestURL >>", requestURL);

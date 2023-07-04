@@ -275,7 +275,7 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-                  //https://myngrewards.com/demo/wp-content/plugins/webservice/get_customer_stripe_card_list.php?user_id=1009
+                  //https://international.myngrewards.com/demo/wp-content/plugins/webservice/get_customer_stripe_card_list.php?user_id=1009
 
             try {
 

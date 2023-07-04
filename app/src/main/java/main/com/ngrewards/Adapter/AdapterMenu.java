@@ -274,7 +274,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
 
     private void APIStatusPublish(String id_item) {
 
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_item_status.php?id=" + id_item + "&status=publish")
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/update_item_status.php?id=" + id_item + "&status=publish")
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -316,7 +316,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private void APIStatusHide(String id_item) {
 
         Log.e("id_item", id_item);
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_item_status.php?id=" + id_item + "&status=hide")
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/update_item_status.php?id=" + id_item + "&status=hide")
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -351,7 +351,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     }
 
     private void APIStatusHide1(int i, String id_item) {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/delete_item.php?id=" + id_item)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/delete_item.php?id=" + id_item)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

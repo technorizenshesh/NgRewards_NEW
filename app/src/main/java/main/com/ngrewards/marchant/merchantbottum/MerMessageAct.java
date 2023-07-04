@@ -436,7 +436,7 @@ public class MerMessageAct extends MerchantBaseActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/clear_conversation.php?receiver_id=377&sender_id=927
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/clear_conversation.php?receiver_id=377&sender_id=927
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "clear_conversation.php?";
                 URL url = new URL(postReceiverUrl);

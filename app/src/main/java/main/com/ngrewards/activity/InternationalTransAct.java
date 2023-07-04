@@ -225,7 +225,7 @@ public class InternationalTransAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/country_lists.php
+//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
                 URL url = new URL(postReceiverUrl);

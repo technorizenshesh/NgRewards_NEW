@@ -2,7 +2,7 @@ package main.com.ngrewards.SeverCommunication;
 
 public interface WebServiceDetails {
 
-    String WS_URL = "https://myngrewards.com/wp-content/plugins/webservice/menu_list.php?";
+    String WS_URL = "https://international.myngrewards.com/wp-content/plugins/webservice/menu_list.php?";
     String register = "register";
     String Varification = "otp_verify";
     String Practice = "practice";

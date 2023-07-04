@@ -363,7 +363,7 @@ public class UpdateCard extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_member_card_details.php?card_id=1&card_name=ksupdate&card_number=2222233333&expiry_date=12/09&expiry_year=2022
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_member_card_details.php?card_id=1&card_name=ksupdate&card_number=2222233333&expiry_date=12/09&expiry_year=2022
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_member_card_details.php?";
                 URL url = new URL(postReceiverUrl);
@@ -450,7 +450,7 @@ public class UpdateCard extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/delete_member_card_details.php?card_id=2
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/delete_member_card_details.php?card_id=2
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "delete_member_card_details.php?";
                 URL url = new URL(postReceiverUrl);

@@ -111,7 +111,7 @@ public class MerchantBottumAct extends TabActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_profile.php?";
                 URL url = new URL(postReceiverUrl);

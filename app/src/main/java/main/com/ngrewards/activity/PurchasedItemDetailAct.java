@@ -511,7 +511,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_to_cart.php?user_id=23&product_id=5658&quantity=4
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_to_cart.php?user_id=23&product_id=5658&quantity=4
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_product_reviews.php?";
                 URL url = new URL(postReceiverUrl);

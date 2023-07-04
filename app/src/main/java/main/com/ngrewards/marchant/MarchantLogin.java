@@ -351,7 +351,7 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_login.php?email=merte@g.com&password=1
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_login.php?email=merte@g.com&password=1
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_login.php?";
                 URL url = new URL(postReceiverUrl);
@@ -537,7 +537,7 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_social_login.php?fullname=kapil&social_id=567&merchant_image=https://s0.2mdn.net/6629020/Q1-2018-GET-STARTED-25_-OFF-728X90.jpg&email=a@g.com
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_social_login.php?fullname=kapil&social_id=567&merchant_image=https://s0.2mdn.net/6629020/Q1-2018-GET-STARTED-25_-OFF-728X90.jpg&email=a@g.com
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_social_login.php?";
                 URL url = new URL(postReceiverUrl);
@@ -650,7 +650,7 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/country_lists.php
+//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
                 URL url = new URL(postReceiverUrl);

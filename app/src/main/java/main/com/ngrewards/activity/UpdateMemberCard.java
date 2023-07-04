@@ -203,7 +203,7 @@ public class UpdateMemberCard extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_customer_card.php?customer_id=cus_DyIFU7Ur4umR6r&card_id=card_1DWNkaG6P9tTgl3AgXmlHIMZ&name=TestName&exp_month=3&exp_year=2039
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_customer_card.php?customer_id=cus_DyIFU7Ur4umR6r&card_id=card_1DWNkaG6P9tTgl3AgXmlHIMZ&name=TestName&exp_month=3&exp_year=2039
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "update_customer_card.php?";

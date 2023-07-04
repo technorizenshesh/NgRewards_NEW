@@ -118,7 +118,7 @@ private RelativeLayout backlay;
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_merchant_touch_id.php?merchant_id=376&touch_status=Yes
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_merchant_touch_id.php?merchant_id=376&touch_status=Yes
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_merchant_touch_id.php?";
                 URL url = new URL(postReceiverUrl);

@@ -222,7 +222,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
         Log.e("user_idsdsd", user_id);
 
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=" + user_id)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=" + user_id)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -273,7 +273,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
         Log.e("user_id", user_id);
         Toast.makeText(getApplicationContext(), employee_id, Toast.LENGTH_SHORT).show();
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -458,7 +458,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
 
         Toast.makeText(this, employyee_id_string, Toast.LENGTH_SHORT).show();
 
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id + "&employee_name=" + Afflited_name_String + "&employee_id=" + employyee_id_string)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/update_merchant.php?id=" + user_id + "&employee_name=" + Afflited_name_String + "&employee_id=" + employyee_id_string)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -585,7 +585,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     }
 
     private void AddUpdateTax(String editTextString) {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_tax.php?merchant_id=" + user_id + "&tax=" + editTextString)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/add_tax.php?merchant_id=" + user_id + "&tax=" + editTextString)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -653,7 +653,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     }
 
     private void AddUpdateDelvery(String editTextString, String strPerorFix) {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/add_delivery.php?merchant_id=" + user_id + "&delivery=" + editTextString + "&delivery_percent=" + strPerorFix)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/add_delivery.php?merchant_id=" + user_id + "&delivery=" + editTextString + "&delivery_percent=" + strPerorFix)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -688,7 +688,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     }
 
     private void MenuItemApiCAll() {
-        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
+        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

@@ -486,7 +486,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/check_member.php?user_name=&email=aaron.cruz1990@gmail.com
+//https://international.myngrewards.com/wp-content/plugins/webservice/check_member.php?user_name=&email=aaron.cruz1990@gmail.com
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "check_merchant.php?";
                 URL url = new URL(postReceiverUrl);

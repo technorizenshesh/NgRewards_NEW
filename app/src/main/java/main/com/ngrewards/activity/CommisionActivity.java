@@ -341,7 +341,7 @@ public class CommisionActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/create_stripe_login_link.php?account_id=acct_1EAb6pHKeMff62ao&merchant_id=476
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/create_stripe_login_link.php?account_id=acct_1EAb6pHKeMff62ao&merchant_id=476
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "create_stripe_login_link_member.php?";
                 URL url = new URL(postReceiverUrl);
@@ -419,7 +419,7 @@ public class CommisionActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
                 URL url = new URL(postReceiverUrl);

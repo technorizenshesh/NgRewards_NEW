@@ -61,7 +61,7 @@ public class TermsAndCondition extends AppCompatActivity {
 
         else {
 
-            w.loadUrl("https://myngrewards.com/terms-and-conditions/");
+            w.loadUrl("https://international.myngrewards.com/terms-and-conditions/");
         }
 
 

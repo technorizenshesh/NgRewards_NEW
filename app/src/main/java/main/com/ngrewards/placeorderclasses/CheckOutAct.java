@@ -1110,7 +1110,7 @@ public class CheckOutAct extends AppCompatActivity {
         new ApiCallBuilder().build(CheckOutAct.this)
                 .isShowProgressBar(true)
                 .setParam(param)
-                .setUrl("https://myngrewards.com/wp-content/plugins/webservice/remove_cart_product.php?cart_id="+id)
+                .setUrl("https://international.myngrewards.com/wp-content/plugins/webservice/remove_cart_product.php?cart_id="+id)
                 .execute(new ApiCallBuilder.onResponse() {
                     @Override
                     public void Success(String response) {

@@ -678,7 +678,7 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/delete_customer_card.php?customer_id=&card_id=
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/delete_customer_card.php?customer_id=&card_id=
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "delete_customer_card.php?";
                 URL url = new URL(postReceiverUrl);

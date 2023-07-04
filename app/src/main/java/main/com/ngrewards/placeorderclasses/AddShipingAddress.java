@@ -335,7 +335,7 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_address.php?user_id=1&fullname=kkk
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_address.php?user_id=1&fullname=kkk
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_address.php?";
                 URL url = new URL(postReceiverUrl);
@@ -430,7 +430,7 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/country_lists.php
+//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -525,7 +525,7 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
+//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -619,7 +619,7 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
+//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);

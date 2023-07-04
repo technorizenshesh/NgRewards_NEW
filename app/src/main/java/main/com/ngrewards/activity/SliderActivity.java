@@ -285,7 +285,7 @@ public class SliderActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-//https://myngrewards.com/wp-content/plugins/webservice/signup_member.php?email=ko@g.com&password=2345&phone=234234231&affiliate_name=dffdfsafd&phone=324234&how_invited_you=453534
+//https://international.myngrewards.com/wp-content/plugins/webservice/signup_member.php?email=ko@g.com&password=2345&phone=234234231&affiliate_name=dffdfsafd&phone=324234&how_invited_you=453534
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "signup_member.php?";
             String requestURLs = BaseUrl.baseurl + "signup_member.php?email=" + WelcomeActivity.member_email_str + "&password=" + member_pass_str + "&phone=" + user_number_str + "&affiliate_name=" + user_name_str +

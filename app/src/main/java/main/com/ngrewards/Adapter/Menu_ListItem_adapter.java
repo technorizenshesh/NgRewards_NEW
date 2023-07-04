@@ -142,7 +142,7 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
 
     private void APIStatusHide() {
 
-   /*     AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
+   /*     AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

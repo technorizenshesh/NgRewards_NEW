@@ -826,7 +826,7 @@ public class StartYourListing extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_product.php?user_id=1&product_name=shdjfgdshjfg&product_description=xcvcxvxv&product_price=500&shipping_time=4-5
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_product.php?user_id=1&product_name=shdjfgdshjfg&product_description=xcvcxvxv&product_price=500&shipping_time=4-5
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "add_product.php?";
             Log.e("requestURL >>", requestURL);

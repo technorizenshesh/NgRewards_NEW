@@ -365,7 +365,7 @@ public class AddOffersAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_offer.php?user_id=36&offer_name=sdfds&offer_description=dsfdsfgdsg&offer_image=1.png&offer_discount=20&offer_price=28
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_offer.php?user_id=36&offer_name=sdfds&offer_description=dsfdsfgdsg&offer_image=1.png&offer_discount=20&offer_price=28
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "add_offer.php?";
             try {

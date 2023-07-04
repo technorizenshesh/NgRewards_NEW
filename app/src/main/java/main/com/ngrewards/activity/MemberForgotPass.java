@@ -80,7 +80,7 @@ public class MemberForgotPass extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/member_forget_password.php?email=kapil.technorizen@gmail.com
+//https://international.myngrewards.com/wp-content/plugins/webservice/member_forget_password.php?email=kapil.technorizen@gmail.com
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "member_forget_password.php?";
                 URL url = new URL(postReceiverUrl);

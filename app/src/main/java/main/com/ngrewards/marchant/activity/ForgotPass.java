@@ -77,7 +77,7 @@ public class ForgotPass extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/merchant_forget_password.php?email=d@d.com
+//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_forget_password.php?email=d@d.com
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_forget_password.php?";
                 URL url = new URL(postReceiverUrl);

@@ -358,7 +358,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_address.php?address_id=1&user_id=1&fullname=kkkll55
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_address.php?address_id=1&user_id=1&fullname=kkkll55
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_address.php?";
                 URL url = new URL(postReceiverUrl);
@@ -453,7 +453,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/country_lists.php
+//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -557,7 +557,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
+//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -661,7 +661,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
+//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);

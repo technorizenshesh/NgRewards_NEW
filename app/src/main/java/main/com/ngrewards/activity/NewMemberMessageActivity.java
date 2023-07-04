@@ -400,7 +400,7 @@ e.printStackTrace();
 
     }
     private void getBusnessNumber() {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/all_business_list.php
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/all_business_list.php
         progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
         Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum();

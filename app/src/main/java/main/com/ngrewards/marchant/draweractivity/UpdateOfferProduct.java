@@ -368,7 +368,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/update_offer.php?offer_id=5520&offer_name=Test
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_offer.php?offer_id=5520&offer_name=Test
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_offer.php?";
             Log.e("requestURL >>", requestURL);

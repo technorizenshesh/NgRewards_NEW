@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-    //https://myngrewards.com/demo/wp-content/plugins/webservice/category_lists.php
+    //https://international.myngrewards.com/demo/wp-content/plugins/webservice/category_lists.php
     public static final String BASE_URL = BaseUrl.baseurl;
     private static Retrofit retrofit = null;
     private static ApiInterface apiInterface = null;

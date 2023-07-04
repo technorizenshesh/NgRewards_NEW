@@ -227,7 +227,7 @@ public class MerchantBaseActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/add_member_card_details.php?member_id=1&card_name=ks&card_number=122334455&expiry_date=12/08&expiry_year=2020
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_member_card_details.php?member_id=1&card_name=ks&card_number=122334455&expiry_date=12/08&expiry_year=2020
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_chat_status.php?";
                 URL url = new URL(postReceiverUrl);

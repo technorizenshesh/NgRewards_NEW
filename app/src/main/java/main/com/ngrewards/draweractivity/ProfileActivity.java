@@ -727,7 +727,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/update_member_profile.php?member_id=882&fullname=kapil&gender=Male
+//https://international.myngrewards.com/wp-content/plugins/webservice/update_member_profile.php?member_id=882&fullname=kapil&gender=Male
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_member_profile.php?";
             Log.e("requestURL >>", requestURL + "member_id=" + user_id + "&email=" + email_id_str + "&phone=" + phone_number_str + "&affiliate_name=" + username_str + "&gender=" + gender_str + "&fullname=" + name_str + "&age=" + age_str + "&timezone=" + time_zone + "&how_invited_you_name=" + how_invited_you_name + "&how_invited_you=" + who_invite_str.trim());

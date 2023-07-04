@@ -530,8 +530,8 @@ public class MemberMessageAct extends BaseActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation.php?receiver_id=927
-            //https://myngrewards.com/demo/wp-content/plugins/webservice/get_conversation_test.php?user_id=382&type=Merchant
+//https://international.myngrewards.com/demo/wp-content/plugins/webservice/get_conversation.php?receiver_id=927
+            //https://international.myngrewards.com/demo/wp-content/plugins/webservice/get_conversation_test.php?user_id=382&type=Merchant
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "get_conversation.php?";
                 URL url = new URL(postReceiverUrl);

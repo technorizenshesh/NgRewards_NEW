@@ -392,7 +392,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://myngrewards.com/wp-content/plugins/webservice/member_social_login.php?fullname=kapil&gender=Male&social_id=11111111115599
+//https://international.myngrewards.com/wp-content/plugins/webservice/member_social_login.php?fullname=kapil&gender=Male&social_id=11111111115599
 
             try {
 
