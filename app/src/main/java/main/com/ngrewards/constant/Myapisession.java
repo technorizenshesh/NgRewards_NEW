@@ -18,6 +18,7 @@ public class Myapisession {
 
     public static final String KEY_COUNTRY = "country_data";
     public static final String KEY_MERCHANTCATE = "merchant_category";
+    public static final String KEY_MERCHANTCOUNTRY = "merchant_country";
     public static final String KEY_PRODUCTCATE = "product_category";
     public static final String KEY_OFFERCATE = "offer_category";
     public static final String KEY_BUSINESSNUMBER = "business_number";
@@ -71,6 +72,11 @@ public class Myapisession {
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
+    }    public void setMerchantcountry(String merchantcountry) {
+        editor.putString(KEY_MERCHANTCOUNTRY, merchantcountry);
+        //editor.putString(KEY_TYPE, type);
+        editor.commit();
+
     }
     public void setCountrydata(String countrydata) {
         editor.putString(KEY_COUNTRY, countrydata);
@@ -93,6 +99,9 @@ public class Myapisession {
     }
     public String getKeyMerchantcate() {
         return pref.getString(KEY_MERCHANTCATE, null);
+    }
+    public String getKeyMerchantcountry() {
+        return pref.getString(KEY_MERCHANTCOUNTRY, null);
     }
     public String getProductdata() {
         return pref.getString(KEY_PRODUCTCATE, null);

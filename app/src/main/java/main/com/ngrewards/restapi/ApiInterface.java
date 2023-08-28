@@ -29,7 +29,7 @@ public interface ApiInterface {
                                                String average_rate, @Query("order_by") String order_by);
 
     @GET("all_business_list.php?")
-    Call<ResponseBody> getMerchantBusNum();
+    Call<ResponseBody> getMerchantBusNum(@Query("country_id") String country_id);
 
     @GET("all_product_lists.php?")
     Call<ResponseBody> getFeaturedProduct(@Query("user_id") String user_id, @Query("category_id") String category_id, @Query("sort_type") String sort_type, @Query("average_rate") String average_rate);
@@ -82,7 +82,7 @@ public interface ApiInterface {
     Call<ResponseBody> getMerchnantReview(@Query("user_id") String user_id, @Query("merchant_id") String merchant_id);
 
     @GET("member_list.php?")
-    Call<ResponseBody> getMembersusername();
+    Call<ResponseBody> getMembersusername(@Query("user_id") String user_id);
 
     @GET("category_lists.php?")
     Call<ResponseBody> getCategory();
@@ -92,6 +92,8 @@ public interface ApiInterface {
 
     @GET("business_category_lists.php?")
     Call<ResponseBody> getBusnessCategory();
+    @GET("countries.php?")
+    Call<ResponseBody> getBusnessCountry();
 
     @GET("delete_merchant_gallery_image.php?")
     Call<ResponseBody> removeImages(@Query("image_id") String image_id);

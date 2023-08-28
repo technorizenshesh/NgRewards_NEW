@@ -2,6 +2,7 @@ package main.com.ngrewards.marchant.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -72,6 +73,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import main.com.ngrewards.Models.CountryBeanList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
@@ -109,11 +111,13 @@ public class MerBusinessFrag extends Fragment {
     private EditText businessname, phone_number, address, zipcode;
     private ProgressBar progresbar;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
-    private Spinner state_spn, country_spn, city_spn, category_spinner;
+    private Spinner state_spn, country_spn, city_spn, category_spinner,select_country_spinner;
     private AutoCompleteTextView streetaddress;
     CountryListAdapter countryListAdapter;
     CategoryAdpters categoryAdpters;
+    CountryAdpters countryAdpters;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
+    private ArrayList<CountryBeanList> categoryBeanListArrayList2;
     private Myapisession myapisession;
     View v;
     boolean sts;
@@ -278,6 +282,7 @@ public class MerBusinessFrag extends Fragment {
 
     private void idint() {
         category_spinner = v.findViewById(R.id.category_spinner);
+        select_country_spinner = v.findViewById(R.id.select_country_spinner);
         streetaddress = v.findViewById(R.id.streetaddress);
         state_spn = v.findViewById(R.id.state_spn);
         country_spn = v.findViewById(R.id.country_spn);
@@ -311,6 +316,26 @@ public class MerBusinessFrag extends Fragment {
 
                     } else {
                         MerchantSignupSlider.bus_category_id = categoryBeanListArrayList.get(position).getCategoryId();
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        select_country_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (categoryBeanListArrayList2 != null && !categoryBeanListArrayList2.isEmpty()) {
+                    if (categoryBeanListArrayList2.get(position).getId().equalsIgnoreCase("0")) {
+
+                    } else {
+                        MerchantSignupSlider.selected_country = categoryBeanListArrayList2.get(position).getId();
+                        MerchantSignupSlider.selected_country_name = categoryBeanListArrayList2.get(position).getName();
                     }
 
                 }
@@ -487,6 +512,7 @@ public class MerBusinessFrag extends Fragment {
             }
         });
         getCategoryType();
+        getCountryList();
        /* if (myapisession.getKeyMerchantcate()==null||myapisession.getKeyMerchantcate().equalsIgnoreCase("")){
 
         }
@@ -848,6 +874,7 @@ public class MerBusinessFrag extends Fragment {
         }
     }
 
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -1299,10 +1326,44 @@ public class MerBusinessFrag extends Fragment {
             return view;
         }
     }
+    public class CountryAdpters extends BaseAdapter {
+        Context context;
+        LayoutInflater inflter;
+        private final ArrayList<CountryBeanList> categoryBeanLists2;
+
+        public CountryAdpters(Context applicationContext, ArrayList<CountryBeanList> categoryBeanLists) {
+            this.context = applicationContext;
+            this.categoryBeanLists2 = categoryBeanLists;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return categoryBeanLists2 == null ? 0 : categoryBeanLists2.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.spinner_layout, null);
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            names.setText(categoryBeanLists2.get(i).getName());
+            return view;
+        }
+    }
 
     private void getCategoryType() {
-//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        Log.e("loginCall >", " > FIRST");
         progresbar.setVisibility(View.VISIBLE);
         categoryBeanListArrayList = new ArrayList<>();
         CategoryBeanList categoryBeanList = new CategoryBeanList();
@@ -1330,6 +1391,53 @@ public class MerBusinessFrag extends Fragment {
 
                         categoryAdpters = new CategoryAdpters(getActivity(), categoryBeanListArrayList);
                         category_spinner.setAdapter(categoryAdpters);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+    private void getCountryList() {
+        progresbar.setVisibility(View.VISIBLE);
+        categoryBeanListArrayList2 = new ArrayList<>();
+        CountryBeanList categoryBeanList = new CountryBeanList();
+        categoryBeanList.setId("0");
+        categoryBeanList.setName("Select Country");
+        categoryBeanListArrayList2.add(categoryBeanList);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCountry();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("loginCall >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setMerchantcountry(responseData);
+
+                            main.com.ngrewards.beanclasses.CountryBean successData = new Gson().fromJson(responseData, main.com.ngrewards.beanclasses.CountryBean.class);
+                            categoryBeanListArrayList2.addAll(successData.getResult());
+
+                        }
+
+                        countryAdpters = new CountryAdpters(getActivity(), categoryBeanListArrayList2);
+                        select_country_spinner.setAdapter(countryAdpters);
 
                     } catch (IOException e) {
                         e.printStackTrace();

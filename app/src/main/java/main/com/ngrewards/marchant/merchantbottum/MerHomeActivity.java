@@ -37,9 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -60,17 +58,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MerHomeActivity extends MerchantBaseActivity {
+    public static ArrayList<GalleryBean> ImagePathArrayList;
     FrameLayout contentFrameLayout;
     ActivityRecAdp activityRecAdp;
+    ProgressBar progresbar;
     private RecyclerView activity_list;
     private SwipeRefreshLayout swipeToRefresh;
     private ArrayList<MerOrderBean> merOrderBeanArrayList;
     private MySession mySession;
-    public static ArrayList<GalleryBean> ImagePathArrayList;
     private String user_id = "";
     private TextView notransmade;
     private EditText search_et_home;
-    ProgressBar progresbar;
     private String dfghjbvdf;
 
     @Override
@@ -117,6 +115,118 @@ public class MerHomeActivity extends MerchantBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void clickevent() {
+
+    }
+
+    private void idinits() {
+
+        notransmade = findViewById(R.id.notransmade);
+        swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMerOrderActivity();
+            }
+        });
+
+
+        activity_list = findViewById(R.id.activity_list);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        search_et_home = findViewById(R.id.search_et_home);
+
+        search_et_home.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                try {
+
+                    activityRecAdp.filter(s.toString());
+
+                } catch (Exception e) {
+                    Log.e("TAG", "onResponse: " + e.getLocalizedMessage());
+                    Log.e("TAG", "onResponse: " + e.getMessage());
+                    Log.e("TAG", "onResponse: " + e.getCause());
+
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(MerHomeActivity.this, LinearLayoutManager.VERTICAL, false);
+        activity_list.setLayoutManager(horizontalLayoutManagaer);
+    }
+
+    private void getMerOrderActivity() {
+        Log.e("user_idd", user_id);
+        merOrderBeanArrayList = new ArrayList<>();
+        swipeToRefresh.setRefreshing(true);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantOrder(user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    swipeToRefresh.setRefreshing(false);
+                    try {
+
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+
+                            OrderMerchantAct successData = new Gson().fromJson(responseData, OrderMerchantAct.class);
+                            merOrderBeanArrayList.addAll(successData.getResult());
+
+                        }
+                        Log.e("responseData >> ", " >> " + responseData);
+
+                        activityRecAdp = new ActivityRecAdp(MerHomeActivity.this, merOrderBeanArrayList);
+                        activity_list.setAdapter(activityRecAdp);
+                        activityRecAdp.notifyDataSetChanged();
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                        Log.e("TAG", "onResponse: " + e.getLocalizedMessage());
+                        Log.e("TAG", "onResponse: " + e.getMessage());
+                        Log.e("TAG", "onResponse: " + e.getCause());
+                    }
+                } else {
+                    swipeToRefresh.setRefreshing(false);
+                }
+
+                if (merOrderBeanArrayList == null || merOrderBeanArrayList.isEmpty()) {
+                    notransmade.setVisibility(View.VISIBLE);
+                } else {
+                    notransmade.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                if (merOrderBeanArrayList == null || merOrderBeanArrayList.isEmpty()) {
+                    notransmade.setVisibility(View.VISIBLE);
+                } else {
+                    notransmade.setVisibility(View.GONE);
+                }
+
+                Log.e("TAG", t.toString());
+            }
+        });
     }
 
     private class GetProfile extends AsyncTask<String, String, String> {
@@ -218,124 +328,11 @@ public class MerHomeActivity extends MerchantBaseActivity {
         }
     }
 
-    private void clickevent() {
-
-    }
-
-    private void idinits() {
-
-        notransmade = findViewById(R.id.notransmade);
-        swipeToRefresh = findViewById(R.id.swipeToRefresh);
-        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getMerOrderActivity();
-            }
-        });
-
-
-        activity_list = findViewById(R.id.activity_list);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        search_et_home = findViewById(R.id.search_et_home);
-
-        search_et_home.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                try {
-
-                    activityRecAdp.filter(s.toString());
-
-                } catch (Exception e) {
-                    Log.e("TAG", "onResponse: "+e.getLocalizedMessage());
-                    Log.e("TAG", "onResponse: "+e.getMessage());
-                    Log.e("TAG", "onResponse: "+e.getCause());
-
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(MerHomeActivity.this, LinearLayoutManager.VERTICAL, false);
-        activity_list.setLayoutManager(horizontalLayoutManagaer);
-    }
-
-    private void getMerOrderActivity() {
-        Log.e("user_idd", user_id);
-        merOrderBeanArrayList = new ArrayList<>();
-        swipeToRefresh.setRefreshing(true);
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantOrder(user_id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    swipeToRefresh.setRefreshing(false);
-                    try {
-
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1")) {
-
-                            OrderMerchantAct successData = new Gson().fromJson(responseData, OrderMerchantAct.class);
-                            merOrderBeanArrayList.addAll(successData.getResult());
-
-                        }
-                        Log.e("responseData >> ", " >> " + responseData);
-
-                        activityRecAdp = new ActivityRecAdp(MerHomeActivity.this, merOrderBeanArrayList);
-                        activity_list.setAdapter(activityRecAdp);
-                        activityRecAdp.notifyDataSetChanged();
-
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
-                        Log.e("TAG", "onResponse: "+e.getLocalizedMessage());
-                        Log.e("TAG", "onResponse: "+e.getMessage());
-                        Log.e("TAG", "onResponse: "+e.getCause());
-                    }
-                } else {
-                    swipeToRefresh.setRefreshing(false);
-                }
-
-                if (merOrderBeanArrayList == null || merOrderBeanArrayList.isEmpty()) {
-                    notransmade.setVisibility(View.VISIBLE);
-                } else {
-                    notransmade.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                if (merOrderBeanArrayList == null || merOrderBeanArrayList.isEmpty()) {
-                    notransmade.setVisibility(View.VISIBLE);
-                } else {
-                    notransmade.setVisibility(View.GONE);
-                }
-
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-
-
     public class ActivityRecAdp extends RecyclerView.Adapter<ActivityRecAdp.MyViewHolder> {
         Context context;
         ArrayList<MerOrderBean> orderBeanArrayList;
         ArrayList<MerOrderBean> searchmerchantListBeanArrayList;
-
+MySession mySessione;
         public ActivityRecAdp(Activity myContacts, ArrayList<MerOrderBean> orderBeanArrayList) {
             this.context = myContacts;
             this.orderBeanArrayList = orderBeanArrayList;
@@ -394,121 +391,120 @@ public class MerHomeActivity extends MerchantBaseActivity {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            mySessione = new MySession(context);
+            try {
+                Log.e("TAG", "onBindViewHolder: " + orderBeanArrayList.get(position).getType());
+                if (orderBeanArrayList.get(position).getType() != null &&
+                        orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
+                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
+                    holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
+                    holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
+                    String mytime = orderBeanArrayList.get(position).getCreated_date();
+                    holder.date_tv.setText("" + mytime);
 
-            if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
-                holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
-                holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
-                holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
-                String mytime = orderBeanArrayList.get(position).getCreated_date();
-                holder.date_tv.setText("" + mytime);
-
-                try {
-                    Date myDate = null;
+               /* try {
+                    Date myDate = Calendar.getInstance().getTime();
 
                     SimpleDateFormat timeFormat = new SimpleDateFormat("dd , MMM , yyyy hh:mm a");
                     String finalDate = timeFormat.format(myDate);
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
+*/
+                    holder.paidamount_bycard.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
+                    if (orderBeanArrayList.get(position).getNgcash() == null ||
+                            orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") ||
+                            orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + "0.00");
 
-                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
-                if (orderBeanArrayList.get(position).getNgcash() == null ||
-                        orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") ||
-                        orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                    } else {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
+                    }
 
-                } else {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
-                }
+                    holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getB_name());
+                    if (orderBeanArrayList != null) {
+                        if (orderBeanArrayList.get(position).getMemberDetail() != null) {
+                            holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getB_name());
+                        }
 
-                holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getB_name());
-                if (orderBeanArrayList != null) {
+                    }
+
+                } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType()
+                        .equalsIgnoreCase("Item")) {
+
+                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_price_with_shipping());
+                    holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
+                    holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
+                    holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
+
+                    // String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
+                    holder.date_tv.setText("" + orderBeanArrayList.get(position).getCreated_date());
+                    holder.paidamount_bycard.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
+                    if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + "0.00");
+                    } else {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
+                    }
+                    String mername = orderBeanArrayList.get(position).getB_name();
+                    holder.merchant_member_name.setText("" + mername);
+
                     if (orderBeanArrayList.get(position).getMemberDetail() != null) {
-                        holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getB_name());
+                        try {
+                            String mername1 = orderBeanArrayList.get(position).getB_name();
+                            holder.merchant_member_name.setText("" + mername1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
-                }
-
-            } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Item")) {
-
-                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getTotal_price_with_shipping());
-                holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
-                holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
-                holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
-
-                String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
-                holder.date_tv.setText("" + orderBeanArrayList.get(position).getCreated_date());
-                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
-                if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
-                }
-                String mername = orderBeanArrayList.get(position).getB_name();
-                holder.merchant_member_name.setText("" + mername);
 
-                if (orderBeanArrayList.get(position).getMemberDetail() != null) {
-                    try {
-                        String mername1 = orderBeanArrayList.get(position).getB_name();
-                        holder.merchant_member_name.setText("" + mername1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign) +orderBeanArrayList.get(position).getTotal_amount());
+                    holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
+                    holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
+                    holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
+                    String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
+                    holder.date_tv.setText("" + mytime);
+                    holder.paidamount_bycard.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
+                    if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + "0.00");
+                    } else {
+                        holder.ngcash.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                     }
+                    String mername = orderBeanArrayList.get(position).getB_name();
+                    holder.merchant_member_name.setText("" + mername);
 
-                }
+                    if (orderBeanArrayList.get(position).getMerchantDetail() != null) {
+                        try {
+                            String mername1 = orderBeanArrayList.get(position).getB_name();
+                            holder.merchant_member_name.setText("" + mername1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
 
-            } else {
-
-                holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
-                holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
-                holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
-                holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
-                String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
-                holder.date_tv.setText("" + mytime);
-
-                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
-                if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
-                } else {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
-                }
-                String mername = orderBeanArrayList.get(position).getB_name();
-                holder.merchant_member_name.setText("" + mername);
-
-                if (orderBeanArrayList.get(position).getMerchantDetail() != null) {
-                    try {
-                        String mername1 = orderBeanArrayList.get(position).getB_name();
-                        holder.merchant_member_name.setText("" + mername1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
+                        }
                     }
                 }
-            }
 
-            holder.img_plus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    holder.lesslay.setVisibility(View.VISIBLE);
-                    holder.img_plus.setVisibility(View.GONE);
-                    holder.img_minus.setVisibility(View.VISIBLE);
-                }
-            });
+                holder.img_plus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.lesslay.setVisibility(View.VISIBLE);
+                        holder.img_plus.setVisibility(View.GONE);
+                        holder.img_minus.setVisibility(View.VISIBLE);
+                    }
+                });
 
-            holder.img_minus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    holder.lesslay.setVisibility(View.GONE);
-                    holder.img_plus.setVisibility(View.VISIBLE);
-                    holder.img_minus.setVisibility(View.GONE);
-                }
-            });
-            Log.e("TAG",
-                    "onBindViewHolder:454353454646 "+orderBeanArrayList.get(position).getOrder_cart_id());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                holder.img_minus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.lesslay.setVisibility(View.GONE);
+                        holder.img_plus.setVisibility(View.VISIBLE);
+                        holder.img_minus.setVisibility(View.GONE);
+                    }
+                });
+                holder.itemView.setOnClickListener(v -> {
                     if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
 
                         dfghjbvdf = orderBeanArrayList.get(position).getOrder_cart_id();
@@ -606,8 +602,10 @@ public class MerHomeActivity extends MerchantBaseActivity {
 
                         startActivity(i);
                     }
-                }
-            });
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

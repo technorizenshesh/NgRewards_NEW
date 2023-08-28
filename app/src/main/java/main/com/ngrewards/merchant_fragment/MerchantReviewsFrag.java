@@ -151,7 +151,11 @@ private int current_offer_pos;
                 swipeToRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
                     try {
+                        if (response.body()==null){
+                            return;
+                        }
                         String responseData = response.body().string();
+
                         JSONObject object = new JSONObject(responseData);
                         Log.e("Merchant Reviews >", " >" + responseData);
                         if (object.getString("status").equals("1")) {

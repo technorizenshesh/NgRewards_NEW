@@ -323,7 +323,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
         Log.e("Get User Name>", " >GET NAME");
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -350,7 +350,7 @@ public class MemberMessageAct extends BaseActivity {
         Log.e("loginCall >", " > FIRST");
         progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum( mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -481,7 +481,7 @@ public class MemberMessageAct extends BaseActivity {
     private void getUsername() {
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

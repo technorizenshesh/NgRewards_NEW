@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
@@ -34,6 +35,8 @@ public class MemberTransfer extends AppCompatActivity {
     private ProgressBar progresbar;
     public static ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
+    private MySession mySession;
+    private  String user_id="",country_id="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,13 +94,33 @@ public class MemberTransfer extends AppCompatActivity {
 
 
         }
+
+        mySession = new MySession(MemberTransfer.this);
+        String user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+
+        } else {
+
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                    country_id = jsonObject1.getString("country_id");
+                    Log.e("country_id >>", " >" + country_id);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
     private void getUsername() {
         Log.e("User name list>", " >GET NAME");
 
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

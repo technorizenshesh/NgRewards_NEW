@@ -2,6 +2,7 @@ package main.com.ngrewards.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +37,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TutorialAct extends YouTubeBaseActivity {
-
     private RelativeLayout backlay;
     private RecyclerView playerapi;
     private YouTubeAdapter youTubeAdapter;
@@ -240,12 +240,12 @@ public class TutorialAct extends YouTubeBaseActivity {
 
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            YouTubePlayerView youtube_player;
+          //  YouTubePlayerView youtube_player;
             WebView webView;
 
             public MyViewHolder(View itemView) {
                 super(itemView);
-               this.youtube_player = itemView.findViewById(R.id.youtube_player);
+              // this.youtube_player = itemView.findViewById(R.id.youtube_player);
                this.webView = itemView.findViewById(R.id.webView);
 
             }

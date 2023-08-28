@@ -267,7 +267,7 @@ public class SplashActivity extends AppCompatActivity implements
                 }
             });
         } catch (Exception e) {
-
+e.printStackTrace();
         }
     }
 

@@ -161,7 +161,9 @@ public class AddStripeConnectAccount extends AppCompatActivity {
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
                     Card card = new Card(cardnumber_str, month, year_int, security_code_str);  // pk_test_2khGozRubEhBZxFXj3TnxrkO
-                    card.setCurrency("usd");
+
+                   // card.setCurrency("usd");
+                    card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
 
                     Stripe stripe = new Stripe(AddStripeConnectAccount.this, BaseUrl.stripe_publish);  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya
                     //Stripe stripe = new Stripe(CreateCustomerFromCard.this, "pk_test_tuLF7lx5bPZpsfwM4OzqE0HJ");  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya

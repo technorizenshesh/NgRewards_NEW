@@ -26,23 +26,31 @@
 
         <main.com.ngrewards.constant.CustomViewPager
             android:id="@+id/viewpager"
+            android:layout_below="@+id/indect"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/continue_button"
-            android:layout_marginTop="75dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+<LinearLayout
+    android:id="@+id/indect"
+    android:layout_below="@+id/backlay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    >
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicatortwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dip"
+        app:centered="false"
+        app:fillColor="@color/pinkborder"
+        app:pageColor="@color/greyborder"
+        app:snap="false" />
 
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/indicatortwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="55dp"
-            android:gravity="right"
-            android:padding="10dip"
-            app:centered="false"
-            app:fillColor="@color/pinkborder"
-            app:pageColor="@color/greyborder"
-            app:snap="false" />
+</LinearLayout>
+
 
         <Button
             android:id="@+id/continue_button"

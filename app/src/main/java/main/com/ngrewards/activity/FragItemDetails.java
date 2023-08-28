@@ -192,6 +192,19 @@ public class FragItemDetails extends AppCompatActivity {
              backlay = findViewById(R.id.backlay);
              review_list = findViewById(R.id.review_list);
              similar_item_list = findViewById(R.id.similar_item_list);
+             sizelist = new ArrayList<>();
+             colorlist = new ArrayList<>();
+             sizelist_sel = new ArrayList<>();
+             colorlist_sel = new ArrayList<>();
+             Calendar c = Calendar.getInstance();
+             TimeZone tz = c.getTimeZone();
+             time_zone = tz.getID();
+             mySession = new MySession(this);
+             myapisession = new Myapisession(this);
+             String user_log_data = mySession.getKeyAlldata();
+
+             idinit();
+             clickevent();
              Bundle bundle = getIntent().getExtras();
              if (bundle != null) {
                  Log.e("PRO BUNDLE DATA", " >> " + product_id + " >" + product_name + " <>" + product_description);
@@ -218,37 +231,28 @@ public class FragItemDetails extends AppCompatActivity {
 
                  }
 
+                 if (user_log_data == null) {
+                 } else {
+                     try {
+                         Log.e("TAG", "onCreate: user_log_datauser_log_data  "+user_log_data );
+                         JSONObject jsonObject = new JSONObject(user_log_data);
+                         String message = jsonObject.getString("status");
+                         if (message.equalsIgnoreCase("1")) {
+                             JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                             user_id = jsonObject1.getString("id");
+                         }
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                 }
+
                  getFeaturedProductsDetail(product_id);
                  Picasso.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
 
              }
 
 
-             sizelist = new ArrayList<>();
-             colorlist = new ArrayList<>();
-             sizelist_sel = new ArrayList<>();
-             colorlist_sel = new ArrayList<>();
-             Calendar c = Calendar.getInstance();
-             TimeZone tz = c.getTimeZone();
-             time_zone = tz.getID();
-             mySession = new MySession(this);
-             myapisession = new Myapisession(this);
-             String user_log_data = mySession.getKeyAlldata();
-             if (user_log_data == null) {
-             } else {
-                 try {
-                     JSONObject jsonObject = new JSONObject(user_log_data);
-                     String message = jsonObject.getString("status");
-                     if (message.equalsIgnoreCase("1")) {
-                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                         user_id = jsonObject1.getString("id");
-                     }
-                 } catch (JSONException e) {
-                     e.printStackTrace();
-                 }
-             }
-             idinit();
-             clickevent();
+
 
          }catch (Exception e
          ){e.printStackTrace();
@@ -275,8 +279,9 @@ public class FragItemDetails extends AppCompatActivity {
                             productDetailArrayList.addAll(successData.getResult());
 
                         }
-                        Log.e("My Item Cart Status", " >>" + productDetailArrayList.get(0).getCart_status());
                         if (productDetailArrayList != null && !productDetailArrayList.isEmpty()) {
+                            Log.e("My Item Cart Status", " >>" + productDetailArrayList.get(0).getCart_status());
+
                             if (productDetailArrayList.get(0).getCart_status() != null && productDetailArrayList.get(0).getCart_status().equalsIgnoreCase("In Cart")) {
                                 addtocart_tv.setText("" + getResources().getString(R.string.gotocart));
                             } else {

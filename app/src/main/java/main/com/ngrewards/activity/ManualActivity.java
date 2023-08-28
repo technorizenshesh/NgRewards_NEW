@@ -222,6 +222,7 @@ public class ManualActivity extends AppCompatActivity {
         distance_filter_list.add("50.0");
 
         checkGps();
+        idint();
 
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
@@ -247,7 +248,6 @@ public class ManualActivity extends AppCompatActivity {
 
         progresbar = findViewById(R.id.progresbar);
 
-        getUsername();
         edt_name = findViewById(R.id.edt_name);
 
         Calendar c = Calendar.getInstance();
@@ -332,7 +332,7 @@ public class ManualActivity extends AppCompatActivity {
             }
         }
 
-        idint();
+        getUsername();
 
         Bundle bundle = getIntent().getExtras();
 
@@ -368,6 +368,33 @@ public class ManualActivity extends AppCompatActivity {
             }
         }
 
+        if (getIntent().getExtras() != null) {
+            MerchantData = (MerchantListBean) getIntent().getExtras().getSerializable("merchant_data");
+
+            try {
+
+                merchant_number = MerchantData.getBusinessNo();
+                merchant_id = MerchantData.getId();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                merchant_name = MerchantData.getBusinessName();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            merchant_num_auto.setText(merchant_number);
+            merchantname.setText(merchant_name);
+        }
+
+
+
+
         try {
 
             if (type.equals("paybill")) {
@@ -398,27 +425,7 @@ public class ManualActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getExtras() != null) {
-            MerchantData = (MerchantListBean) getIntent().getExtras().getSerializable("merchant_data");
-            try {
-                merchant_number = MerchantData.getBusinessNo();
-                merchant_id = MerchantData.getId();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-
-                merchant_name = MerchantData.getBusinessName();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            merchant_num_auto.setText(merchant_number);
-            merchantname.setText(merchant_name);
-        }
 
         //getprofile();
     }
@@ -427,7 +434,7 @@ public class ManualActivity extends AppCompatActivity {
 
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -956,6 +963,9 @@ public class ManualActivity extends AppCompatActivity {
         creditcard_rbut = findViewById(R.id.creditcard_rbut);
         paypalbut = findViewById(R.id.paypalbut);
         edt_name = findViewById(R.id.edt_name);
+        dueamount_et.setHint(mySession.getValueOf(MySession.CurrencySign)+"0.00");
+        tipamount_et.setHint(mySession.getValueOf(MySession.CurrencySign)+"0.00");
+        total_amt.setHint(mySession.getValueOf(MySession.CurrencySign)+"0.00");
         if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
             avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
@@ -1140,7 +1150,8 @@ public class ManualActivity extends AppCompatActivity {
     private void getBusnessNumber() {
         progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum(
+                mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        debug {
+        /*debug {
             storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
             storePassword 'ngrewards123'
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
-        }
+        }*/
     }
-    compileSdkVersion 32
+    compileSdkVersion 31
     useLibrary 'org.apache.http.legacy'
     buildToolsVersion "30.0.3"
     packagingOptions {

@@ -42,7 +42,7 @@
                 android:textSize="@dimen/extralarge"
                 android:textColor="@color/black"
                 android:gravity="center"
-                android:text="$35.00 NGCash"
+                android:text="35.00 NGCash"
                 android:layout_height="wrap_content" />
 
             <View

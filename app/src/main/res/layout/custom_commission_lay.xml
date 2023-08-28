@@ -52,7 +52,7 @@
                 <main.com.ngrewards.fonttypeclasses.NoramlTextView
                     android:layout_width="110dp"
                     android:id="@+id/weekearning_amount"
-                    android:text="$0.00"
+                    android:text="0.00"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small"

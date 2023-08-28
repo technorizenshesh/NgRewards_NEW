@@ -75,7 +75,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
     private final boolean back_click_sts = false;
     private boolean click_sts = false;
     private RelativeLayout backlay;
-    public static String ImagePath = "", bus_category_id = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = "", mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
+    public static String ImagePath = "", bus_category_id = "",  selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = "", mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
     private ProgressBar progresbar;
     MySession mySession;
     //code for lat long
@@ -176,8 +176,10 @@ public class MerchantSignupSlider extends AppCompatActivity {
                             }
                         } else if (viewPager.getCurrentItem() == 4) {
                             // if (mer_businessname != null && !mer_businessname.equalsIgnoreCase("") && mer_phone_number != null && !mer_phone_number.equalsIgnoreCase("") && mer_address != null && !mer_address.equalsIgnoreCase("") && mer_city != null && !mer_city.equalsIgnoreCase("") && mer_state != null && !mer_state.equalsIgnoreCase("") && mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
-                            if (mer_businessname != null && !mer_businessname.equalsIgnoreCase("") && mer_phone_number != null && !mer_phone_number.equalsIgnoreCase("") && bus_category_id != null && !
-                                    bus_category_id.equalsIgnoreCase("") && !bus_category_id.equalsIgnoreCase("0") && mer_address != null && !mer_address.equalsIgnoreCase("") && mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
+                            if (mer_businessname != null && !mer_businessname.equalsIgnoreCase("") &&
+                                    mer_phone_number != null && !mer_phone_number.equalsIgnoreCase("")
+                                    && bus_category_id != null  && selected_country != null
+                                    && !selected_country.equalsIgnoreCase("")&& !bus_category_id.equalsIgnoreCase("") && !selected_country.equalsIgnoreCase("0") && !bus_category_id.equalsIgnoreCase("0") && mer_address != null && !mer_address.equalsIgnoreCase("") && mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
                                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
 
                             } else {
@@ -343,8 +345,10 @@ public class MerchantSignupSlider extends AppCompatActivity {
                 multipart.addFormField("zip_code", mer_zipcode);
                 multipart.addFormField("address", mer_address);
                 multipart.addFormField("address_two", mer_address_two);
-                multipart.addFormField("country", MarchantLogin.country_str);
-                multipart.addFormField("country_id", MarchantLogin.country_id);
+                multipart.addFormField("country",selected_country_name);
+             //   multipart.addFormField("country", MarchantLogin.country_str);
+            //    multipart.addFormField("country_id", MarchantLogin.country_id);
+                multipart.addFormField("country_id", selected_country);
                 multipart.addFormField("state", mer_state);
                 multipart.addFormField("city", mer_city);
                 multipart.addFormField("device_token", firebase_regid);

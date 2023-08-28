@@ -246,8 +246,9 @@
     <string name="youleave">You can upload up to 10 images.</string>
     <string name="title">Title</string>
     <string name="selectcat">Select category</string>
+    <string name="selectcountry">Select Country</string>
     <string name="plsprovidedes">Please provide a description of\nyour item.</string>
-    <string name="pricing">Pricing (USD)</string>
+    <string name="pricing">Pricing </string>
     <string name="shiping">Shipping</string>
     <string name="bytaping">By tapping \"List your item\" \nYou agree to pay all applicable fees.</string>
     <string name="listyouritem">List Your Item</string>

@@ -34,10 +34,12 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.activity.MemberTransfer;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.activity.SliderActivity;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
@@ -61,6 +63,8 @@ public class WhoInvitedFrag extends Fragment {
     private ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
     private final boolean sts = false;
+    private  String user_id="",country_id="";
+    private MySession mySession;
 
     public WhoInvitedFrag() {
     }
@@ -129,6 +133,26 @@ public class WhoInvitedFrag extends Fragment {
                 count++;
             }
         });
+
+        mySession = new MySession(requireActivity());
+        String user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+
+        } else {
+
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                    country_id = jsonObject1.getString("country_id");
+                    Log.e("country_id >>", " >" + country_id);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -151,7 +175,7 @@ public class WhoInvitedFrag extends Fragment {
         Log.e("User name list>", " >GET NAME");
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -87,7 +87,7 @@ public class StartYourListing extends AppCompatActivity {
     boolean IsSplited = false;
     private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
     private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
-    private TextView list_item_tv;
+    private TextView  show_pricing_type ,list_item_tv;
     File[] filearray;
     MySession mySession;
     LinearLayout split_lay;
@@ -260,6 +260,8 @@ public class StartYourListing extends AppCompatActivity {
         category_spinner = findViewById(R.id.category_spinner);
         progresbar = findViewById(R.id.progresbar);
         add_product_list = findViewById(R.id.add_product_list);
+        show_pricing_type = findViewById(R.id.show_pricing_type);
+        show_pricing_type.setText(getString(R.string.pricing)+" ("+mySession.getValueOf(MySession.CurrencyCode)+")");
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(StartYourListing.this, LinearLayoutManager.HORIZONTAL, false);
         add_product_list.setLayoutManager(horizontalLayoutManagaer);

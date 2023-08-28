@@ -636,16 +636,17 @@ public class CheckOutAct extends AppCompatActivity {
                 if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("") || apply_ngcassh.equalsIgnoreCase("0")) {
                     Toast.makeText(CheckOutAct.this, getResources().getString(R.string.enteramount), Toast.LENGTH_LONG).show();
                     ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                    finalngcashredeem.setHint("-"+mySession.getValueOf(MySession.CurrencySign)
+                       finalngcashredeem.setText("");
+
+                    finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)
                             +"0.00");
-                    finalngcashredeem.setText("");
                 } else {
                     apply_ng = Double.parseDouble(apply_ngcassh);
                     if (apply_ng > ngcash_val) {
                         Toast.makeText(CheckOutAct.this, getResources().getString(R.string.appliedamtisgreaterthanngcash), Toast.LENGTH_LONG).show();
                         ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                        finalngcashredeem.setHint("-"+mySession.getValueOf(MySession.CurrencySign)+"0.00");
                         finalngcashredeem.setText("");
+                        finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+"0.00");
                     } else {
 
                         if (!IS){

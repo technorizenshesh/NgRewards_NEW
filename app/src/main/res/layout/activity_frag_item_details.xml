@@ -819,7 +819,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="Standard Shipping :$11.00"
+                        android:text="Standard Shipping :11.00"
                         android:textColor="@color/black"
                         android:textSize="@dimen/medium" />
 
@@ -857,7 +857,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="Standard Shipping :$0.00"
+                        android:text="Standard Shipping :0.00"
                         android:textColor="@color/black"
                         android:textSize="@dimen/small" />
 
@@ -954,7 +954,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="5dp"
-                        android:text="$00"
+                        android:text="00"
                         android:textColor="@color/pinkborder"
                         android:textSize="@dimen/small" />
 
@@ -968,7 +968,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/discountprice"
-                        android:text="$0"
+                        android:text="0"
                         android:textColor="@color/darkgrey"
                         android:textSize="@dimen/small" />
 

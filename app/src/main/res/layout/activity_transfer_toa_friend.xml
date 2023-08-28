@@ -121,7 +121,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:background="@null"
-                                android:hint="$0.00"
+                                android:hint="0.00"
                                 android:inputType="numberDecimal"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/medium" />
@@ -219,7 +219,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
-                                android:text="$0.00 Available"
+                                android:text="0.00 Available"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/small" />
 
@@ -238,7 +238,7 @@
                                 android:layout_weight="2"
                                 android:background="@color/darkgrey"
                                 android:gravity="center"
-                                android:hint="$0.00"
+                                android:hint="0.00"
                                 android:inputType="numberDecimal"
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/white"
@@ -284,8 +284,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_margin="10dp"
-                            android:text="$0.00"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="0.00"
                             android:textColor="@color/black"
                             android:textSize="@dimen/medium" />
 

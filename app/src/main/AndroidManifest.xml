@@ -570,7 +570,7 @@
                  <action android:name="android.intent.action.VIEW" />
                  <category android:name="android.intent.category.DEFAULT" />
                  <category android:name="android.intent.category.BROWSABLE" />
-                 <data android:scheme="${applicationId}.braintree" />
+                 <data android:scheme="{applicationId}.braintree" />
              </intent-filter>
          </activity>-->
 
@@ -634,7 +634,7 @@
         </service>
         <provider
             android:name=".UncaughtExceptionHandlerContentProvider"
-            android:authorities="${applicationId}"
+            android:authorities="{applicationId}"
             android:exported="false"
             android:initOrder="101"
             android:grantUriPermissions="false" />

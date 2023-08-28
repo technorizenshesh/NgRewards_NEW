@@ -70,6 +70,36 @@
                     android:text="@string/businessdetial"
                     android:textColor="@color/pinkborder"
                     android:textSize="@dimen/medium" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/greyborder"
+                    android:padding="5dp">
+
+                    <Spinner
+                        android:id="@+id/select_country_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/selectcat"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/medium"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/down_arrow"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
 
                 <main.com.ngrewards.fonttypeclasses.NormalEditText
                     android:id="@+id/businessname"

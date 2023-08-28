@@ -82,9 +82,9 @@ public class UpdateListingProduct extends AppCompatActivity {
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private CategoryAdpters categoryAdpters;
     private String category_id = "";
-    private EditText shipping_price_et,stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
-    private String user_id = "", stock_str = "",shipping_price_str="", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
-    private TextView update_item_tv;
+    private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
+    private String user_id = "", stock_str = "", shipping_price_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
+    private TextView show_pricing_type, update_item_tv;
     File[] filearray;
     MySession mySession;
     Myapisession myapisession;
@@ -92,15 +92,16 @@ public class UpdateListingProduct extends AppCompatActivity {
     public static ArrayList<ProductImage> ImagePathArrayList;
     public static ArrayList<String> ImagePathArrayList_str;
     private String split_amount = "";
-    private  String split_payments = "";
+    private String split_payments = "";
     boolean IsSplited = false;
     LinearLayout split_lay;
     CheckBox split_check;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_your_listing);
-        Log.e(TAG, "onCreate: "+TAG );
+        Log.e(TAG, "onCreate: " + TAG);
         mySession = new MySession(this);
         myapisession = new Myapisession(this);
         filearray = new File[0];
@@ -166,9 +167,6 @@ public class UpdateListingProduct extends AppCompatActivity {
                             category_spinner.setSelection(i, true);
                             break;
                         }
-
-
-
 
 
                     }
@@ -277,6 +275,9 @@ public class UpdateListingProduct extends AppCompatActivity {
         category_spinner = findViewById(R.id.category_spinner);
         progresbar = findViewById(R.id.progresbar);
         add_product_list = findViewById(R.id.add_product_list);
+        show_pricing_type = findViewById(R.id.show_pricing_type);
+        show_pricing_type.setText(getString(R.string.pricing) + "  (" + mySession.getValueOf(MySession.CurrencyCode) + ")");
+
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(UpdateListingProduct.this, LinearLayoutManager.HORIZONTAL, false);
         add_product_list.setLayoutManager(horizontalLayoutManagaer);
@@ -288,20 +289,20 @@ public class UpdateListingProduct extends AppCompatActivity {
 
         split_lay.setOnClickListener(v -> {
 
-            if (IsSplited){
-                split_amount ="";
+            if (IsSplited) {
+                split_amount = "";
                 IsSplited = false;
                 split_check.setChecked(false);
                 Toast.makeText(UpdateListingProduct.this, "Split Payments Removed",
                         Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 if (price_et.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(UpdateListingProduct.this, "Please Enter Amount First",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     enterNoOfSplits(price_et.getText().toString());
-                }}
+                }
+            }
 
         });
 
@@ -355,16 +356,16 @@ public class UpdateListingProduct extends AppCompatActivity {
                 }
         });
         if (ActiveProductsAct.product_item_detail != null) {
-            Log.e(TAG, "idinti: ActiveProductsAct.product_item_detail.getSplit_payments()"+ActiveProductsAct.product_item_detail.getSplit_payments() );
-if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
-        null&&!ActiveProductsAct.product_item_detail.getSplit_payments()
-        .equalsIgnoreCase("")){
+            Log.e(TAG, "idinti: ActiveProductsAct.product_item_detail.getSplit_payments()" + ActiveProductsAct.product_item_detail.getSplit_payments());
+            if (ActiveProductsAct.product_item_detail.getSplit_payments() !=
+                    null && !ActiveProductsAct.product_item_detail.getSplit_payments()
+                    .equalsIgnoreCase("")) {
 
-    split_lay.setVisibility(View.VISIBLE);
-}else {
-    split_lay.setVisibility(View.VISIBLE);
+                split_lay.setVisibility(View.VISIBLE);
+            } else {
+                split_lay.setVisibility(View.VISIBLE);
 
-}
+            }
 
 
             tital_name_et.setText("" + ActiveProductsAct.product_item_detail.getProductName());
@@ -375,7 +376,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
             price_et.setText("" + ActiveProductsAct.product_item_detail.getPrice());
             stock_et.setText("" + ActiveProductsAct.product_item_detail.getStock());
             shipping_et.setText("" + ActiveProductsAct.product_item_detail.getShipping_time());
-            if (ActiveProductsAct.product_item_detail.getShipping_price()!=null&&!ActiveProductsAct.product_item_detail.getShipping_price().equalsIgnoreCase("")){
+            if (ActiveProductsAct.product_item_detail.getShipping_price() != null && !ActiveProductsAct.product_item_detail.getShipping_price().equalsIgnoreCase("")) {
                 shipping_price_et.setText("" + ActiveProductsAct.product_item_detail.getShipping_price());
             }
             ImagePathArrayList.addAll(ActiveProductsAct.product_item_detail.getProductImages());
@@ -426,9 +427,10 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
         });
         dialogSts.show();
     }
+
     private void enterNoOfSplits(String amount) {
         try {
-            final Dialog dialogSts = new Dialog( this, R.style.DialogSlideAnim);
+            final Dialog dialogSts = new Dialog(this, R.style.DialogSlideAnim);
             dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSts.setCancelable(false);
             dialogSts.setContentView(R.layout.enter_no_of_split_item);
@@ -456,7 +458,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
                     }
                 } catch (Exception e) {
-                    Toast.makeText( this, e.getLocalizedMessage(),
+                    Toast.makeText(this, e.getLocalizedMessage(),
                             Toast.LENGTH_SHORT).show();
                     dialogSts.dismiss();
                 }
@@ -482,8 +484,8 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
                 peopleList.add("" + f.format(data));
             }
-             FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(peopleList);
-            final Dialog dialogSts = new Dialog( this, R.style.DialogSlideAnim);
+            FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(peopleList);
+            final Dialog dialogSts = new Dialog(this, R.style.DialogSlideAnim);
             dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSts.setCancelable(false);
             dialogSts.setContentView(R.layout.split__list_item);
@@ -495,11 +497,11 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
             recy_list.setLayoutManager(new LinearLayoutManager(this));
             recy_list.setAdapter(finalPuzzelAdapter);
             submitt.setOnClickListener(v -> {
-                split_amount   =     TextUtils.join(", ", peopleList);
-                split_payments   =     ""+noofemi;
-                Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
-                Log.e("TAG", "listSplits:split_amountsplit_amount "+noofemi );
-                IsSplited = true ;
+                split_amount = TextUtils.join(", ", peopleList);
+                split_payments = "" + noofemi;
+                Log.e("TAG", "listSplits:split_amountsplit_amount " + split_amount);
+                Log.e("TAG", "listSplits:split_amountsplit_amount " + noofemi);
+                IsSplited = true;
                 split_check.setChecked(true);
                 dialogSts.dismiss();
             });
@@ -513,7 +515,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
     }
 
-    public class FinalPuzzelAdapter extends RecyclerView.Adapter< FinalPuzzelAdapter.SelectTimeViewHolder> {
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
         private final ArrayList<String> peopleList;
 
         public FinalPuzzelAdapter(ArrayList<String> peopleList) {
@@ -522,18 +524,18 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
         @NonNull
         @Override
-        public  FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
-             FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new  FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
+            FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull  FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        public void onBindViewHolder(@NonNull FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
             TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
             int prop = position + 1;
-            ivFinalImage.setText("Payment " + prop + " - "+mySession.getValueOf(MySession.CurrencySign)+" " + peopleList.get(position));
+            ivFinalImage.setText("Payment " + prop + " - " + mySession.getValueOf(MySession.CurrencySign) + " " + peopleList.get(position));
 
         }
 
@@ -616,7 +618,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
         @SuppressLint("RecyclerView")
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder,  int position) {
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, int position) {
             if (ImagePathArray.get(position) != null) {
 
                 if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
@@ -685,10 +687,10 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
 
     private void removeImages(final int remove_pos, String id) {
         //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        Log.e("remove image id >"," >> "+id);
-        Log.e("remove product id >"," >> "+ActiveProductsAct.product_item_detail.getId());
+        Log.e("remove image id >", " >> " + id);
+        Log.e("remove product id >", " >> " + ActiveProductsAct.product_item_detail.getId());
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().removeProductImages(ActiveProductsAct.product_item_detail.getId(),id);
+        Call<ResponseBody> call = ApiClient.getApiInterface().removeProductImages(ActiveProductsAct.product_item_detail.getId(), id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -705,9 +707,8 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
                             add_product_list.setAdapter(horizontalAdapter);
                             horizontalAdapter.notifyDataSetChanged();
 
-                        }
-                        else {
-                            Toast.makeText(UpdateListingProduct.this,getResources().getString(R.string.somethingwrong),Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(UpdateListingProduct.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (IOException e) {
@@ -962,7 +963,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
             String requestURL = BaseUrl.baseurl + "update_product.php?";
             Log.e("requestURL >>", requestURL);
             Log.e("requestURL >>  split_payments--", split_payments);
-           try {
+            try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("user_id", user_id);
                 multipart.addFormField("product_id", ActiveProductsAct.product_item_detail.getId());
@@ -974,29 +975,27 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
                 multipart.addFormField("color", colors_str);
                 multipart.addFormField("size", sizes_str);
                 multipart.addFormField("stock", stock_str);
-                multipart.addFormField("split_amount",    split_amount);
+                multipart.addFormField("split_amount", split_amount);
                 multipart.addFormField("split_payments", split_payments);
                 multipart.addFormField("tax_price", "");
-                if (shipping_price_str==null){
+                if (shipping_price_str == null) {
                     multipart.addFormField("shipping_price", "");
-                }
-                else {
+                } else {
                     multipart.addFormField("shipping_price", shipping_price_str);
                 }
                 Log.e("requestURL >>", requestURL);
-                Log.e("requestURL >>", "user_id"+ user_id+
-                "product_id"+ ActiveProductsAct.product_item_detail.getId()+
-                "product_name"+ tital_name_str+
-                "product_description"+ description_str+
-                "product_price"+price_str+
-                "shipping_time"+ shipping_str+
-                "category_id"+ category_id+
-                "color"+ colors_str+
-                "size"+ sizes_str +
-                "stock"+ stock_str+
-                "split_amount"+   split_amount+
-                "split_payments"+ split_payments);
-
+                Log.e("requestURL >>", "user_id" + user_id +
+                        "product_id" + ActiveProductsAct.product_item_detail.getId() +
+                        "product_name" + tital_name_str +
+                        "product_description" + description_str +
+                        "product_price" + price_str +
+                        "shipping_time" + shipping_str +
+                        "category_id" + category_id +
+                        "color" + colors_str +
+                        "size" + sizes_str +
+                        "stock" + stock_str +
+                        "split_amount" + split_amount +
+                        "split_payments" + split_payments);
 
 
                 if (ImagePathArrayList == null || ImagePathArrayList.isEmpty()) {

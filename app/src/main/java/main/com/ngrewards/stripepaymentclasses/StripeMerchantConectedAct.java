@@ -153,7 +153,8 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
                     Card card = new Card(cardnumber_str, month, year_int, security_code_str);  // pk_test_2khGozRubEhBZxFXj3TnxrkO
-                    card.setCurrency("usd");
+                    //card.setCurrency("usd");
+                    card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
 
                     Stripe stripe = new Stripe(StripeMerchantConectedAct.this, "pk_test_2khGozRubEhBZxFXj3TnxrkO");  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya
                     //Stripe stripe = new Stripe(CreateCustomerFromCard.this, "pk_test_tuLF7lx5bPZpsfwM4OzqE0HJ");  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya
@@ -434,10 +435,12 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("total_amount", "1");
-                params.put("currency", "USD");
+
+               // params.put("currency", "USD");
+                params.put("currency", mySession.getValueOf(MySession.CurrencyCode));
                 params.put("token", token_id);
                 params.put("cart_id", "1");
-
+                Log.e("TAG", "doInBackground: currencycurrencycurrencycurrencycurrency"+mySession.getValueOf(MySession.CurrencyCode));
                 StringBuilder postData = new StringBuilder();
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');

@@ -6,13 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/black</item>
+
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+
     </style>
+
     <style name="TabWidgetTheme" parent="AppTheme">
         <item name="colorPrimary">@color/black</item>
         <item name="colorAccent">@color/black</item>
         <item name="android:textColorPrimary">@color/pinkborder</item>
         <item name="android:textColorSecondary">@color/pinkborder</item>
     </style>
+
     <style name="tallerBarStyle" parent="@android:style/Widget.SeekBar">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
@@ -20,13 +27,16 @@
         <item name="android:minHeight">12dip</item>
         <item name="android:maxHeight">20dip</item>
     </style>
+
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
         <item name="android:windowExitAnimation">@anim/slide_out_down</item>
     </style>
+
     <style name="DialogSlideAnim" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
     </style>
+
     <style name="btn_red">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

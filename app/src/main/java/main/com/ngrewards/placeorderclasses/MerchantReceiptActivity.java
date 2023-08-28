@@ -211,7 +211,13 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
         total_amt_tv.setText("Total :- " + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
         due_amount.setText("Amount Due :- " + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
-        tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) + tip_str);
+        if (tip_str.equalsIgnoreCase("")){
+            tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) +"0.00");
+
+        }else {
+            tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) + tip_str);
+
+        }
         if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
             ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
 

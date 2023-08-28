@@ -124,7 +124,7 @@
                     android:textStyle="bold"
                     android:textSize="@dimen/large"
                     android:textColor="@color/red"
-                    android:text="$0.00"
+                    android:text="0.00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
