@@ -99,9 +99,9 @@ public class CheckOutAct extends AppCompatActivity {
 
 
                     if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText("$0.00 Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00 Available");
                     } else {
-                        avbngcash.setText("$" + ngcash_str + " Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + ngcash_str + " Available");
                         ngcash_val = Double.parseDouble(ngcash_str);
                     }
                 }
@@ -202,9 +202,9 @@ public class CheckOutAct extends AppCompatActivity {
                     //    Total Payment is divided by 6 easy payments. You can see invoice
                         //    details in Activity section after successful item transaction.
                         String str =splitings[0];
-                        if (str.contains("$")) {//Make Easy Payments
+                        if (str.contains(mySession.getValueOf(MySession.CurrencySign) )) {//Make Easy Payments
 
-                            str=  str.replace("$","");
+                            str=  str.replace(mySession.getValueOf(MySession.CurrencySign) ,"");
                         }
                         emi_amount_str = str;
                     }
@@ -212,27 +212,27 @@ public class CheckOutAct extends AppCompatActivity {
                     shipping_price = successData.getTotal_shipping_price();
 
                    if (!IS) {
-                       total_amount.setText("$" + successData.getTotal_with_shipping_price());
-                       shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
+                       total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
+                       shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_shipping_price());
 
 
                    } else {
                        shipping_price_tv.setText("Included In EMI");
 
-                       total_amount.setText("1st EMI - $" + emi_amount_str);}
-                    total_item_price.setText("$" + successData.getTotalPrice());
-                   // shipping_price_tv.setText("$" + successData.getTotal_shipping_price());
+                       total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)  + emi_amount_str);}
+                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
+                   // shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_shipping_price());
                     itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                 }
                 if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                     // nocartitem.setVisibility(View.VISIBLE);
-                    total_amount.setText("$ 0.00");
+                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                     total_amount_str = "0";
                     emi_amount_str = "0";
                     shipping_price = "0";
-                    total_item_price.setText("$ 0.00");
+                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                     itemcount.setText("Items(0)");
-                    shipping_price_tv.setText("$" + "0.00");
+                    shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + "0.00");
                     mycartAdapterExpand = new MycartAdapterExpand(CheckOutAct.this, cartListBeanArrayList);
                     mycartlist.setAdapter(mycartAdapterExpand);
                     mycartAdapter.notifyDataSetChanged();
@@ -317,8 +317,8 @@ public class CheckOutAct extends AppCompatActivity {
             product_name.setText("" + mycartlist.get(position).getProductDetail().getProductName());
             merchant_name.setText("" + mycartlist.get(position).getUserDetails().get(0).getBusinessName());
             quant_tv.setText("" + mycartlist.get(position).getQuantity());
-            mainprice.setText("$" + mycartlist.get(position).getProductDetail().getProduct_cart_price());
-            shipingprice.setText("$" + mycartlist.get(position).getShipping_price());
+            mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(position).getProductDetail().getProduct_cart_price());
+            shipingprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(position).getShipping_price());
 
             try {
                 String mytime = mycartlist.get(position).getEstimated_delivery_date();
@@ -434,7 +434,7 @@ public class CheckOutAct extends AppCompatActivity {
             holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
             holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
             holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
-            holder.mainprice.setText("$" + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
 
             String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
@@ -523,37 +523,37 @@ public class CheckOutAct extends AppCompatActivity {
                                         "item transaction.");
                                 String str =splitings[0];
 
-                                if (str.contains("$")) {
-                                    str=  str.replace("$","");
+                                if (str.contains(mySession.getValueOf(MySession.CurrencySign) )) {
+                                    str=  str.replace(mySession.getValueOf(MySession.CurrencySign) ,"");
                                 }
                                 emi_amount_str = str;
                             }
                             Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
                             shipping_price = successData.getTotal_shipping_price();
                             if (!IS) {
-                                total_amount.setText("$" + successData.getTotal_with_shipping_price());
+                                total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
                                 shipping_price_tv.setText("Include in EMI");
 
                             }  else {
-                                total_amount.setText("1st EMI - $" + emi_amount_str);
-                                shipping_price_tv.setText("$" + successData.getTotal_with_shipping_price());
+                                total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
+                                shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
 
                             }
 
-                            total_item_price.setText("$" + successData.getTotalPrice());
-                          //  shipping_price_tv.setText("$" + successData
+                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
+                          //  shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData
                             //  .getTotal_with_shipping_price());
                             itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                         } else {
                             myapisession.setKeyCartitem("");
                         }
                         if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
-                            total_amount.setText("$0.00");
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00");
                             total_amount_str = "0";
                             shipping_price = "0";
-                            total_item_price.setText("$0.00");
+                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00");
                             itemcount.setText("Items(0)");
-                            shipping_price_tv.setText("$" + "0.00");
+                            shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + "0.00");
                             mycartAdapterExpand = new MycartAdapterExpand(CheckOutAct.this, cartListBeanArrayList);
                             mycartlist.setAdapter(mycartAdapterExpand);
                             try {
@@ -636,14 +636,15 @@ public class CheckOutAct extends AppCompatActivity {
                 if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("") || apply_ngcassh.equalsIgnoreCase("0")) {
                     Toast.makeText(CheckOutAct.this, getResources().getString(R.string.enteramount), Toast.LENGTH_LONG).show();
                     ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                    finalngcashredeem.setHint("-$0.00");
+                    finalngcashredeem.setHint("-"+mySession.getValueOf(MySession.CurrencySign)
+                            +"0.00");
                     finalngcashredeem.setText("");
                 } else {
                     apply_ng = Double.parseDouble(apply_ngcassh);
                     if (apply_ng > ngcash_val) {
                         Toast.makeText(CheckOutAct.this, getResources().getString(R.string.appliedamtisgreaterthanngcash), Toast.LENGTH_LONG).show();
                         ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                        finalngcashredeem.setHint("-$0.00");
+                        finalngcashredeem.setHint("-"+mySession.getValueOf(MySession.CurrencySign)+"0.00");
                         finalngcashredeem.setText("");
                     } else {
 
@@ -664,18 +665,18 @@ public class CheckOutAct extends AppCompatActivity {
                             if (cart_tot_dob > apply_ng_dob) {
                                 tot = cart_tot_dob - apply_ng_dob;
                                 //finalngcashredeem.setText("-$ " + apply_ng_dob);
-                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
 
 
                             } else {
                                 tot = 0;
                                 //finalngcashredeem.setText("-$ "+cart_tot_dob);
-                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
+                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
 
                             }
 
                             //  grandtotal.setText(" " + tot);
-                            total_amount.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)+" "  + String.format("%.2f", new BigDecimal(tot)));
                         }
                         else {
 
@@ -695,18 +696,18 @@ public class CheckOutAct extends AppCompatActivity {
                             if (cart_tot_dob > apply_ng_dob) {
                                 tot = cart_tot_dob - apply_ng_dob;
                                 //finalngcashredeem.setText("-$ " + apply_ng_dob);
-                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
 
 
                             } else {
                                 tot = 0;
                                 //finalngcashredeem.setText("-$ "+cart_tot_dob);
-                                finalngcashredeem.setText("-$ " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
+                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" "+ String.format("%.2f", new BigDecimal(cart_tot_dob)));
 
                             }
 
                             //  grandtotal.setText(" " + tot);hereeeee
-                            total_amount.setText("1st EMI - $"+ String.format("%.2f", new BigDecimal(tot)));
+                            total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)+ String.format("%.2f", new BigDecimal(tot)));
 
 
 
@@ -828,8 +829,8 @@ public class CheckOutAct extends AppCompatActivity {
         intent.putExtra("timezone", time_zone);
          if (IS){
             String amnt =  total_amount.getText().toString();
-            if (amnt.contains("1st EMI - $")){
-                amnt = amnt.replace("1st EMI - $"," ");
+            if (amnt.contains("1st EMI - "+mySession.getValueOf(MySession.CurrencySign))){
+                amnt = amnt.replace("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)," ");
             }
              Log.e("TAG", "Item_Oreder_Pay_Successfully1: "+amnt.trim() );
              intent.putExtra("amount", amnt.trim());
@@ -924,21 +925,21 @@ public class CheckOutAct extends AppCompatActivity {
              if (isChecked){
                  IS = true;
                  notice.setVisibility(View.VISIBLE);
-                 total_amount.setText("1st EMI - $"  + emi_amount_str  );
+                 total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)  + emi_amount_str  );
 
              }else {
                  IS = false;
                  notice.setVisibility(View.GONE);
-                 total_amount.setText("$" + total_amount_str);
+                 total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + total_amount_str);
 
              }
 
         });
         if (BaseActivity.member_ngcash == null || BaseActivity.member_ngcash.equalsIgnoreCase("0") || BaseActivity.member_ngcash.equalsIgnoreCase("null") || BaseActivity.member_ngcash.equalsIgnoreCase("") || BaseActivity.member_ngcash.equalsIgnoreCase("0.0")) {
-            avbngcash.setText("$0.00 Available");
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00 Available");
         } else {
 
-            avbngcash.setText("$" + BaseActivity.member_ngcash + " Available");
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + BaseActivity.member_ngcash + " Available");
 
             try {
 
@@ -969,10 +970,10 @@ public class CheckOutAct extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                if (!IS)total_amount.setText("$" + total_amount_str);
-                else total_amount.setText("1st EMI - $" + emi_amount_str);
+                if (!IS)total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + total_amount_str);
+                else total_amount.setText("1st EMI - " +mySession.getValueOf(MySession.CurrencySign)+ emi_amount_str);
               //  total_amount.setText("$ " + total_amount_str);
-                finalngcashredeem.setText("-$ 0.00");
+                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
             }
         });
 

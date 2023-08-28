@@ -161,7 +161,7 @@ public class UnsoldProductsAct extends AppCompatActivity {
             holder.offer_title.setText("" + myactivelist.get(listPosition).getProductName());
             holder.offer_desc.setText("" + myactivelist.get(listPosition).getProductDescription());
            // holder.price_discount.setText("$" + myactivelist.get(listPosition).getPrice() + " (" + myactivelist.get(listPosition).getSalePrice() + "%)");
-            holder.price_discount.setText("$" + myactivelist.get(listPosition).getPrice());
+            holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign)  + myactivelist.get(listPosition).getPrice());
 
             String product_img = myactivelist.get(listPosition).getThumbnailImage();
             if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {

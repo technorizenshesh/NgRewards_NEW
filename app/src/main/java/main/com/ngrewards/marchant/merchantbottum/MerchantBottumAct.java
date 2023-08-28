@@ -139,7 +139,7 @@ public class MerchantBottumAct extends TabActivity {
                 }
                 writer.close();
                 reader.close();
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
+                Log.e(" MER BOTTEM GetProfile Response", ">>>>>>>>>>>>" + response);
                 return response;
             } catch (IOException e1) {
 

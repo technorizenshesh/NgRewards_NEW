@@ -232,7 +232,7 @@ public class CommisionActivity extends AppCompatActivity {
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
             holder.weeknumber_tv.setText("Week " + firstDataArrayList.get(position).getWeek() + "/53");
             holder.week_date_range.setText("" + firstDataArrayList.get(position).getData().get(0).getWeekStart() + "-" + firstDataArrayList.get(position).getData().get(0).getWeekEnd());
-            holder.weekearning_amount.setText("$ " + firstDataArrayList.get(position).getWeekComission());
+            holder.weekearning_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" " + firstDataArrayList.get(position).getWeekComission());
             if (firstDataArrayList.get(position).getWithdraw_status().equalsIgnoreCase("Confirm")) {
                 holder.payment_sts.setBackgroundResource(R.color.darkgreen);
                 holder.payment_sts.setText("Completed");

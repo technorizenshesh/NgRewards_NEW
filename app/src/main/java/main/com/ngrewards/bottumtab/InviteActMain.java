@@ -201,7 +201,7 @@ public class InviteActMain extends BaseActivity {
 
                         usernametv = findViewById(R.id.usernametv);
                         usernametv.setText("@" + username);
-                        invite_str = "https://international.myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number;
+                        invite_str = "https://international.myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
 
                         Log.e("id>>", id);
                         Log.e("afflited_no>>", affiliate_number);

@@ -34,6 +34,7 @@ import main.com.ngrewards.RecyclerViewClickListener1;
 import main.com.ngrewards.activity.IMethodCaller;
 import main.com.ngrewards.activity.MerchantMenuSetting;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.draweractivity.AddMenuPublish;
 
 /**
@@ -70,6 +71,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private String price_item;
     private String image_item;
     private String menu_id;
+    private  MySession mySession;
 
     public AdapterMenu(Context a, ArrayList<ModalMenuList> all_category_subcategory, RecyclerViewClickListener1 listener, IMethodCaller IMethode) {
         this.activity = a;
@@ -88,7 +90,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int i) {
-
+mySession = new MySession(activity);
         desage_name_string = all_category_subcategory.get(i).getName();
         dish_title_string = all_category_subcategory.get(i).getTitle();
         discription_title_string = all_category_subcategory.get(i).getTitleDiscription();
@@ -201,7 +203,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
         holder.name_menu.setText(desage_name_string);
         holder.dish_name.setText(dish_title_string);
         holder.discription.setText("Discription : " + discription_title_string);
-        holder.price_tv.setText("$ " + Item_Price);
+        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign)+" "  + Item_Price);
 
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override

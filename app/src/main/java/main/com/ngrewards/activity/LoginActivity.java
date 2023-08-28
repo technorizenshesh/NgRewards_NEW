@@ -179,8 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                 String hashKey = new String(Base64.encode(md.digest(), 0));
                 Log.e("printHashKey", hashKey);
             }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("printHashKey", String.valueOf(e));
         } catch (Exception e) {
             Log.e("printHashKey", String.valueOf(e));
         }
@@ -277,28 +275,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        login_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        login_tv.setOnClickListener(v -> {
 
-                SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-                firebase_regid = pref.getString("regId", null);
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+            firebase_regid = pref.getString("regId", null);
 
-                Log.e("firebase_regid >> ", " > " + firebase_regid);
-                mobilenum_str = mobilenum.getText().toString();
-                Log.e("mobilenum_str", mobilenum_str);
-                password_str = password_et.getText().toString();
-                if (mobilenum_str == null || mobilenum_str.equalsIgnoreCase("")) {
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.entermobile), Toast.LENGTH_LONG).show();
-                } else if (password_str == null || password_str.equalsIgnoreCase("")) {
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.enterpass), Toast.LENGTH_LONG).show();
-                } else {
-
-                    new LoginAsc().execute();
-                    //  Toast.makeText(LoginActivity.this, "sseesecc", Toast.LENGTH_SHORT).show();
-                }
-
+            Log.e("firebase_regid >> ", " > " + firebase_regid);
+            mobilenum_str = mobilenum.getText().toString();
+            Log.e("mobilenum_str", mobilenum_str);
+            password_str = password_et.getText().toString();
+            if (mobilenum_str == null || mobilenum_str.equalsIgnoreCase("")) {
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.entermobile), Toast.LENGTH_LONG).show();
+            } else if (password_str == null || password_str.equalsIgnoreCase("")) {
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.enterpass), Toast.LENGTH_LONG).show();
+            } else {
+                new LoginAsc().execute();
+                //  Toast.makeText(LoginActivity.this, "sseesecc", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         backlay.setOnClickListener(new View.OnClickListener() {
@@ -319,7 +313,7 @@ public class LoginActivity extends AppCompatActivity {
                 String random_no = String.valueOf(additionint1);
 
               //  Url = "https://myngrewards.com/signup.php?affiliate_name=OFFICIALNG&affiliate_no=" + random_no + "&how_invited_you=";
-                Url = "https://international.myngrewards.com/signup.php?affiliate_name=bond&affiliate_no=" + random_no + "&how_invited_you=";
+                Url = "https://international.myngrewards.com/signup.php?affiliate_name=OFFICIALNG&affiliate_no=" + random_no + "&how_invited_you=";
 //https://international.myngrewards.com/signup.php?affiliate_name=bond&affiliate_no=289&how_invited_you=
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Url));
                 startActivity(intent);

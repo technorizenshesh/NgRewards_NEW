@@ -63,7 +63,8 @@ public class MainTabActivity extends TabActivity {
     private Boolean exit;
     String scrsts = "";
     MySession mySession;
-    public static String user_log_data = "", ngcash = "", user_id = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
+    public static String user_log_data = "", ngcash = "", user_id = "", currency_code = "",currency_sign="",
+    country_name="",  notification_data = "", notification_unseen_count, cart_unseen_count = "";
     TextView counter_wallet, counter_shedule, counter_order, counter_message;
     ScheduledExecutorService scheduleTaskExecutor;
     String currentVersion = "";
@@ -161,7 +162,7 @@ public class MainTabActivity extends TabActivity {
                 }
                 writer.close();
                 reader.close();
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
+                Log.e("MainTab GetProfile Response", ">>>>>>>>>>>>" + response);
                 return response;
             } catch (UnsupportedEncodingException e1) {
 
@@ -188,7 +189,16 @@ public class MainTabActivity extends TabActivity {
 
                     if (message.equalsIgnoreCase("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                        Log.e(TAG, "onCreate:  currency_code   ----  "+ jsonObject1.toString() );
+
                         String unseen_count = jsonObject1.getString("unseen_count");
+                      //  currency_code = jsonObject1.getString("currency_code");
+                       // currency_sign = jsonObject1.getString("currency_sign");
+                       // country_name  = jsonObject1.getString("country_name");
+
+                       // Log.e(TAG, "onCreate:  currency_code   ----  "+ currency_code );
+                     //   Log.e(TAG, "onCreate:  currency_sign   ----  "+ currency_sign );
+                       // Log.e(TAG, "onCreate:  country_name    ----  "+ country_name  );
 
                         if (unseen_count.equals("0")) {
                             reqcounft.setVisibility(View.GONE);
@@ -238,7 +248,7 @@ public class MainTabActivity extends TabActivity {
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
-                }
+                    }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

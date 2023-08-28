@@ -72,7 +72,7 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
         binding.tvTitle.setText(data.getTitle());
         binding.tvName.setText(data.getTitle());
         binding.tvDescription.setText(data.getDescription());
-        binding.tvPrice.setText("$" + data.getPrice());
+        binding.tvPrice.setText(mySession.getValueOf(MySession.CurrencySign) + data.getPrice());
 
         try {
             if (data.getOther_notes().equals("null")) {

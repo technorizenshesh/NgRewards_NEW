@@ -1,5 +1,7 @@
 package main.com.ngrewards.draweractivity;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -68,7 +70,9 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public static String member_ngcash = "0";
+    public static String member_ngcash = "0", currency_code = "", currency_sign = "",
+            country_name = "";
+    private final boolean isVisible = false;
     public Dialog dialogSts;
     boolean exit = false;
     MySession mySession;
@@ -84,7 +88,6 @@ public class BaseActivity extends AppCompatActivity {
     private ImageView notification, cartimg, qrcode;
     private LinearLayout commissionlay;
     private Myapisession myapisession;
-    private final boolean isVisible = false;
     private String newcreate_user_name;
     private String craete_profile;
     private String createUserName;
@@ -96,16 +99,6 @@ public class BaseActivity extends AppCompatActivity {
     private String gender_str;
     private String age_str;
     private String user_log_data;
-    private String username_str;
-    private String name123;
-    private String name1234;
-    private String logout_status;
-    private String fb_status;
-    private String fb_status111;
-    private View no_tv;
-    private View yes_tv;
-
-
     public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -135,6 +128,14 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
     };
+    private String username_str;
+    private String name123;
+    private String name1234;
+    private String logout_status;
+    private String fb_status;
+    private String fb_status111;
+    private View no_tv;
+    private View yes_tv;
 
   /*  private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -689,7 +690,7 @@ public class BaseActivity extends AppCompatActivity {
                 writer.close();
                 reader.close();
 
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
+                Log.e("BASE ACT VGetProfile Response", ">>>>>>>>>>>>" + response);
 
                 return response;
 
@@ -723,6 +724,19 @@ public class BaseActivity extends AppCompatActivity {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
 
                         String unseen_count = jsonObject1.getString("unseen_count");
+                        String country_id = jsonObject1.getString("country_id");
+                        currency_code = jsonObject1.getString("currency_code");
+                        currency_sign = jsonObject1.getString("currency_sign");
+                        country_name = jsonObject1.getString("country_name");
+                        mySession = new MySession(BaseActivity.this);
+                        mySession.setValueOf(MySession.CountryId, country_id);
+                        mySession.setValueOf(MySession.CurrencyCode, currency_code);
+                        mySession.setValueOf(MySession.CurrencySign, currency_sign);
+                        mySession.setValueOf(MySession.CountryName, country_name);
+                        Log.e(TAG, "onCreate:  country_id   ----  " + mySession.getValueOf(MySession.CountryId));
+                        Log.e(TAG, "onCreate:  currency_code   ----  " + mySession.getValueOf(MySession.CurrencyCode));
+                        Log.e(TAG, "onCreate:  currency_sign   ----  " + mySession.getValueOf(MySession.CurrencySign));
+                        Log.e(TAG, "onCreate:  country_name    ----  " + mySession.getValueOf(MySession.CountryName));
 
                         if (unseen_count.equals("0")) {
                             reqcount.setVisibility(View.GONE);
@@ -745,7 +759,7 @@ public class BaseActivity extends AppCompatActivity {
                         username_str = jsonObject1.getString("affiliate_name");
 
                         user_name.setText("" + jsonObject1.getString("username"));
-                        ngcash.setText("$" + jsonObject1.getString("member_ngcash"));
+                        ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + jsonObject1.getString("member_ngcash"));
 
                         if (username_str == null || username_str.equalsIgnoreCase("")) {
                             user_name.setEnabled(true);

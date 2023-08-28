@@ -24,12 +24,12 @@ import main.com.ngrewards.fragments.FragmentWebView;
 
 public class MerchantReceiptActivity extends AppCompatActivity {
 
-    private RelativeLayout backlay;
-    private ImageView sharebut;
-    private TextView ngcashredeem, username_tv, member_name, tipamount_tv, special_request, due_amount, employee_tv, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
     private final String merchant_img_str = "";
     private final String merchant_id_str = "";
     private final String shipping_name_str = "";
+    private RelativeLayout backlay;
+    private ImageView sharebut;
+    private TextView ngcashredeem, username_tv, member_name, tipamount_tv, special_request, due_amount, employee_tv, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
     private String user_id = "";
     private String due_amt_tv_str = "";
     private String ngcash_str = "";
@@ -83,14 +83,14 @@ public class MerchantReceiptActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-         }
+        }
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && !bundle.isEmpty()) {
 
             order_id_str = bundle.getString("order_id");
             username = bundle.getString("member_user_name");
-            Log.e("TAG", "onCreate: usernameusername"+username );
+            Log.e("TAG", "onCreate: usernameusername" + username);
             business_name = bundle.getString("member_fullname_number");
             order_special_str = bundle.getString("order_special");
             employee_name_str = bundle.getString("employee_name");
@@ -110,9 +110,9 @@ public class MerchantReceiptActivity extends AppCompatActivity {
             Order_Table_No = bundle.getString("Order_Table_No");
             reciept_url = bundle.getString("reciept_url");
             order_cart_id = bundle.getString("order_cart_id");
-         }
-              idinit();
-              clickevent();
+        }
+        idinit();
+        clickevent();
     }
 
     private void clickevent() {
@@ -163,12 +163,12 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         li_memberinfo = findViewById(R.id.li_memberinfo);
         li_order_info = findViewById(R.id.li_order_info);
         employee_tv = findViewById(R.id.employee_tv);
-        date_tv.setText("Date:- "+ order_date_);
+        date_tv.setText("Date:- " + order_date_);
 
         if (employee_name_str.equalsIgnoreCase("")) {
             employee_tv.setVisibility(View.GONE);
         } else {
-            employee_tv.setText("Employee :- " +" "+ employee_name_str);
+            employee_tv.setText("Employee :- " + " " + employee_name_str);
         }
 
         btn_strip_receipt.setOnClickListener(v -> {
@@ -181,14 +181,13 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         });
 
 
-        special_request.setText("Special Request :- "+""+ order_special_str);
+        special_request.setText("Special Request :- " + "" + order_special_str);
 
         order_id.setText("#" + order_id_str);
-      //  merchant_name.setText("" + merchant_name_str);
-        if (merchant_name_str==null||merchant_name_str.equalsIgnoreCase("")||merchant_name_str.equalsIgnoreCase("null")){
-            merchant_name.setText(""+getResources().getString(R.string.staticmerchantname));
-        }
-        else {
+        //  merchant_name.setText("" + merchant_name_str);
+        if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("") || merchant_name_str.equalsIgnoreCase("null")) {
+            merchant_name.setText("" + getResources().getString(R.string.staticmerchantname));
+        } else {
             merchant_name.setText("" + merchant_name_str);
         }
         merchant_number.setText("Merchant N0. :- " + merchant_number_str);
@@ -201,26 +200,23 @@ public class MerchantReceiptActivity extends AppCompatActivity {
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
             String finalDate = timeFormat.format(myDate);
-            date_tv.setText("Date:- "+ finalDate);
+            date_tv.setText("Date:- " + finalDate);
             System.out.println(finalDate);
 
-        }
+        } catch (Exception e) {
 
-         catch (Exception e){
-
-            Log.e("EXC TRUE"," RRR");
+            Log.e("EXC TRUE", " RRR");
         }
 
         address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
-        total_amt_tv.setText("Total :- $" + total_amt_tv_str);
-        due_amount.setText("Amount Due :- $" + due_amt_tv_str);
-        tipamount_tv.setText("Tip :- $" + tip_str);
-        if (ngcash_str==null||ngcash_str.equalsIgnoreCase("")||ngcash_str.equalsIgnoreCase("0")){
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- $ 0.00");
+        total_amt_tv.setText("Total :- " + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText("Amount Due :- " + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+        tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) + tip_str);
+        if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
 
-        }
-        else {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- $" + ngcash_str);
+        } else {
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
 
         }
 
@@ -231,15 +227,15 @@ public class MerchantReceiptActivity extends AppCompatActivity {
             String stars = "**** ****";
             cardnumber_tv.setText("" + cardbrand_str + " " + stars + " " + cardnumber_tv_str);
         }
-        if (mdate!=null&&!mdate.equals("null")) {
+        if (mdate != null && !mdate.equals("null")) {
             tv_date.setText("Date:- " + mdate);
             tv_time.setText("Time:- " + time);
             tv_guest_user.setText("Guest No:- " + Order_guset_No);
             tv_table_no.setText("Table No:- " + Order_Table_No);
-        }else {
+        } else {
             li_order_info.setVisibility(View.GONE);
         }
-        li_memberinfo.setVisibility(username==null?View.GONE:View.VISIBLE);
+        li_memberinfo.setVisibility(username == null ? View.GONE : View.VISIBLE);
 
     }
 }

@@ -282,7 +282,7 @@ public class FragItemDetails extends AppCompatActivity {
                             } else {
                                 addtocart_tv.setText("" + getResources().getString(R.string.addtocart));
                             }
-                            discountprice.setText("$" + productDetailArrayList.get(0).getPrice());
+                            discountprice.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
                             price_str = productDetailArrayList.get(0).getPrice();
                             if (productDetailArrayList.get(0).getStock() != null && !productDetailArrayList.get(0).getStock().equalsIgnoreCase("")) {
                                 stockcount = productDetailArrayList.get(0).getStock();
@@ -293,9 +293,9 @@ public class FragItemDetails extends AppCompatActivity {
                                 averagerating.setRating(Float.parseFloat(rat_str));
                                 rating_count.setText("(" + productDetailArrayList.get(0).getReviewCount() + ")");
                             }
-                            price_tv.setText("$" + productDetailArrayList.get(0).getPrice());
-                            real_price.setText("$" + productDetailArrayList.get(0).getPrice());
-                            shipping_price.setText("" + getResources().getString(R.string.shippriceing) + " $" + productDetailArrayList.get(0).getShipping_price());
+                            price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
+                            real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
+                            shipping_price.setText("" + getResources().getString(R.string.shippriceing) + " "+mySession.getValueOf(MySession.CurrencySign) +  productDetailArrayList.get(0).getShipping_price());
                             shipping_info.setText("" + productDetailArrayList.get(0).getShippingTime());
                             sizes_tv.setText("" + productDetailArrayList.get(0).getSize());
                             sizes_tv_head.setText("" + productDetailArrayList.get(0).getSize());
@@ -1432,7 +1432,7 @@ public class FragItemDetails extends AppCompatActivity {
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
                 Picasso.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(similar_pro_image);
             }
-            price.setText("$" + similarProducts.get(position).getPrice());
+            price.setText(mySession.getValueOf(MySession.CurrencySign)  + similarProducts.get(position).getPrice());
             return rowView;
         }
 

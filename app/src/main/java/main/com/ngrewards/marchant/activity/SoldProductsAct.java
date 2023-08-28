@@ -207,7 +207,7 @@ public class SoldProductsAct extends AppCompatActivity {
             holder.offer_desc.setText("" + soldItemListArrayList.get(position).getProductDescription());
 
             holder.member_name.setText(soldItemListArrayList.get(position).getMemberDetail().get(0).getAffiliateName());
-            holder.price_discount.setText("$" + soldItemListArrayList.get(position).getPrice());
+            holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign) + soldItemListArrayList.get(position).getPrice());
             holder.order_date_time.setText("Order Date : " + soldItemListArrayList.get(position).getOrderDate());
 
             holder.option.setVisibility(View.GONE);

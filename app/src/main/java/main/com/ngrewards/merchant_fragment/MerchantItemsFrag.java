@@ -190,8 +190,8 @@ public class MerchantItemsFrag extends Fragment {
         public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
             holder.product_name.setText("" + soldItemListArrayList.get(listPosition).getProductName());
             holder.product_desc.setText("" + soldItemListArrayList.get(listPosition).getProductDescription());
-            holder.price_discount.setText("$" + soldItemListArrayList.get(listPosition).getPrice());
-            holder.mainprice.setText("$" + soldItemListArrayList.get(listPosition).getPrice());
+            holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign) + soldItemListArrayList.get(listPosition).getPrice());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + soldItemListArrayList.get(listPosition).getPrice());
             holder.shipping_info.setText("" + soldItemListArrayList.get(listPosition).getShippingTime());
 
             if (soldItemListArrayList.get(listPosition).getBusinessName()==null||soldItemListArrayList.get(listPosition).getBusinessName().equalsIgnoreCase("")){

@@ -302,7 +302,7 @@ public class EmployeesalesActivity extends AppCompatActivity {
             Log.e("orderBeanArrayListt", "" + orderBeanArrayList.get(position).getMerchantDetail());
 
             if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText("PB" + orderBeanArrayList.get(position).getId());
                 holder.order_category.setText("Paybill");
 
@@ -325,11 +325,11 @@ public class EmployeesalesActivity extends AppCompatActivity {
 
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
                 try {
                     holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName());
@@ -338,7 +338,7 @@ public class EmployeesalesActivity extends AppCompatActivity {
                 }
 
             } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getAmount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getAmount());
                 if (orderBeanArrayList.get(position).getTransferRequestUserId().equalsIgnoreCase(user_id)) {
                     holder.total_order_price.setTextColor(getResources().getColor(R.color.green));
 
@@ -365,11 +365,11 @@ public class EmployeesalesActivity extends AppCompatActivity {
 
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getAmount_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getAmount_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 String mername = orderBeanArrayList.get(position).getMemberDetail().get(0).getFullname();
@@ -380,7 +380,7 @@ public class EmployeesalesActivity extends AppCompatActivity {
                 }
 
             } else if (orderBeanArrayList.get(position).getType() != null && orderBeanArrayList.get(position).getType().equalsIgnoreCase("order")) {
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getAmount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getAmount());
                 holder.order_id.setText("MO" + orderBeanArrayList.get(position).getId());
                 holder.order_category.setText("order");
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
@@ -401,11 +401,11 @@ public class EmployeesalesActivity extends AppCompatActivity {
 
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getAmount());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getAmount());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 try {
@@ -415,7 +415,7 @@ public class EmployeesalesActivity extends AppCompatActivity {
                 }
 
             } else {
-  /*              holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_amount());
+  /*              holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText("MO" + orderBeanArrayList.get(position).getId());
                 holder.order_category.setText("order");
 
@@ -436,24 +436,24 @@ public class EmployeesalesActivity extends AppCompatActivity {
 
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
                     holder.ngcash.setText("$0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
                 holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getMemberDetail().get(0).getFullname());*/
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText("#" + orderBeanArrayList.get(position).getId());
                 holder.order_category.setText("Order");
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
                 holder.date_tv.setText("" + mytime);
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 try {

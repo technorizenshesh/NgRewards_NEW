@@ -253,23 +253,21 @@ public class MerchantBotSell extends MerchantBaseActivity {
                             unsold_count_tv.setText("" + successData.getUnsoldProductCount());
                             sold_count_tv.setText("" + successData.getSoldProductCount());
                             if (successData.getTotal_earning_with_shipping() == null || successData.getTotal_earning_with_shipping().equalsIgnoreCase("") || successData.getTotal_earning_with_shipping().equalsIgnoreCase("null") || successData.getTotal_earning_with_shipping().equalsIgnoreCase("0")) {
-                                total_earning.setText("$0.00");
+                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                             } else {
-                                total_earning.setText("$" + successData.getTotal_earning_with_shipping());
+                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_earning_with_shipping());
                             }
 
                         } else {
                             active_count_tv.setText("0");
                             unsold_count_tv.setText("0");
                             sold_count_tv.setText("0");
-                            total_earning.setText("$0.00");
+                            total_earning.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 }

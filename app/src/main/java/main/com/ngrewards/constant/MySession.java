@@ -4,22 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Created by shyam on 11/04/2016.
  */
 public class MySession {
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context _context;
-    int PRIVATE_MODE = 0;
-
-
-    private static final String PREF_NAME = "MyPref";
-    private static final String IS_LOGIN = "IsLoggedIn";
     public static final String KEY_PUSH_NOTIFICATION = "push_noti";
     public static final String KEY_ID = "id";
-    private static final String IS_ONLINE = "IsOnline";
     public static final String KEY_FIRSTNAME = "first_name";
     public static final String KEY_LASTNAME = "last_name";
     public static final String KEY_SENDVIAMAIL = "Sendofferviamail";
@@ -40,6 +32,34 @@ public class MySession {
     public static final String admin_created_password = "admin_created_password";
     public static final String sell_items_reomve_access = "sell_items_reomve_access";
     public static final String PassSet = "pass_set";
+    private static final String PREF_NAME = "MyPref";
+    private static final String IS_LOGIN = "IsLoggedIn";
+    private static final String IS_ONLINE = "IsOnline";
+    public static final String   CountryId="country_id";
+    public static final String   CurrencyCode="currency_code";
+    public static final String   CurrencySign="currency_sign";
+    public static final String   CountryName = "country_name";
+
+
+    private final String language = "";
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    Context _context;
+    int PRIVATE_MODE = 0;
+    private String userid;
+    private String name_str;
+    private String birthdate_str;
+    private String location_str;
+    private String occupation_str;
+    private String gender_str;
+    private String imagepath_str;
+    private String maritalstatus_str;
+    private String children_str;
+    private String smoking_habits_str;
+    private String drinking_habits_str;
+    private String education_str;
+    private String height_str;
+    private String country_str;
 
     public MySession(Context context) {
         this._context = context;
@@ -57,14 +77,15 @@ public class MySession {
     public String getsell_items_reomve_access() {
         return pref.getString(sell_items_reomve_access, "");
     }
+
+    public String getPassSet() {
+        return pref.getString(PassSet, "");
+    }
+
     public void setPassSet(String appupdate) {
         editor.putString(PassSet, appupdate);
         editor.commit();
 
-    }
-
-    public String getPassSet() {
-        return pref.getString(PassSet, "");
     }
 
     public void setadmin_created_password(String appupdate) {
@@ -78,7 +99,6 @@ public class MySession {
         return pref.getString(admin_created_password, "");
     }
 
-
     public void setuserId(String uid) {
         editor.putString(KEY_ID, uid);
         //editor.putString(KEY_TYPE, type);
@@ -90,19 +110,12 @@ public class MySession {
         return pref.getString(KEY_ID, null);
     }
 
-    public void setAppUpdate(String appupdate) {
-        editor.putString(APP_UPDATE, appupdate);
-        //editor.putString(KEY_TYPE, type);
-        editor.commit();
-
-    }
-
     public String getAppUpdate() {
         return pref.getString(APP_UPDATE, "cancel");
     }
 
-    public void setProductdata(String productdata) {
-        editor.putString(KEY_PRODUCTCATE, productdata);
+    public void setAppUpdate(String appupdate) {
+        editor.putString(APP_UPDATE, appupdate);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
@@ -134,11 +147,29 @@ public class MySession {
         return pref.getString(KEY_PRODUCTCATE, null);
     }
 
-    public void setuserfirstName(String firstname) {
-        editor.putString(KEY_FIRSTNAME, firstname);
+    public void setProductdata(String productdata) {
+        editor.putString(KEY_PRODUCTCATE, productdata);
         //editor.putString(KEY_TYPE, type);
         editor.commit();
 
+    }
+
+    public void setuserfirstName(String firstname) {
+        editor.putString(KEY_FIRSTNAME, firstname);
+        editor.commit();
+
+    }
+    public String getValueOf(String id) {
+        if (Objects.equals(id, CurrencySign)){
+            return pref.getString(id, "$");
+        }else {
+        return pref.getString(id, "");}
+    }
+
+
+    public void setValueOf(String id, String firstname) {
+        editor.putString(id, firstname);
+        editor.commit();
     }
 
     public void pushnotificationofoff(boolean val) {
@@ -170,23 +201,6 @@ public class MySession {
     public String getKeyAlldata() {
         return pref.getString(KEY_ALLDATA, null);
     }
-
-    private final String language = "";
-    private String userid;
-    private String name_str;
-    private String birthdate_str;
-    private String location_str;
-    private String occupation_str;
-    private String gender_str;
-    private String imagepath_str;
-    private String maritalstatus_str;
-    private String children_str;
-    private String smoking_habits_str;
-    private String drinking_habits_str;
-    private String education_str;
-    private String height_str;
-    private String country_str;
-
 
     public void createLoginSession(String id, String firstname, String lastname, String sendviamail, String user_registered, String user_email, String DOB, String Mobileno, String email_verify, String user_status) {
         editor.putBoolean(IS_LOGIN, true);

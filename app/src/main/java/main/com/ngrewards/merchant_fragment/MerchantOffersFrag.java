@@ -224,7 +224,7 @@ public class MerchantOffersFrag extends Fragment {
             } else {
                 if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
                     holder.discounts.setVisibility(View.VISIBLE);
-                    holder.pricediscount.setText("$" + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
+                    holder.pricediscount.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
                     // holder.discounts.setText("(" + offerBeanLists.get(listPosition).getOfferDiscount() + "%)");
                     double discountss = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
                     int newdis = (int) discountss;
@@ -247,12 +247,12 @@ public class MerchantOffersFrag extends Fragment {
             } else {
 
                 if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.real_price.setText("$" + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
                     holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
                     holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                 } else {
-                    holder.real_price.setText("$" + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
 
                 }
             }
@@ -286,7 +286,7 @@ public class MerchantOffersFrag extends Fragment {
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
                             shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :$" + offerBeanLists.get(listPosition).getOfferPrice() + "\n" + offerBeanLists.get(listPosition).getShareLink());
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :"+mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice() + "\n" + offerBeanLists.get(listPosition).getShareLink());
                             shareIntent.setType("image/*");
                             startActivity(shareIntent);
                         } else {

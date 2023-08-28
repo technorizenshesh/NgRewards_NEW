@@ -267,8 +267,8 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
         quantity_tv.setText(getResources().getString(R.string.quanity)+" :" +quantity_str);
         product_name.setText("" + product_name_str);
         merchant_name.setText("" + merchant_name_str);
-        mainprice.setText("$" + mainprice_str);
-        shipping_price_tv.setText("$" + shipping_price);
+        mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mainprice_str);
+        shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + shipping_price);
         order_id.setText("" + order_id_str);
 
         btn_strip_receipt.setOnClickListener(v -> {
@@ -448,11 +448,11 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
 
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Paid");
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" " + splitList.getAmount() + " Paid");
 
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due - " + splitList.getDate());
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Due - " + splitList.getDate());
                 }
 
                 ivFinalImage.setOnClickListener(v -> {
@@ -467,7 +467,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
                     ivFinalImage.setTextSize(10);
-                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign)+" " + splitList.getAmount() + " Due On - " + splitList.getDate());
                     holder.itemView.setOnClickListener(v -> {
                         recyclerViewClickListener1.onClick1(splitList);
                     });

@@ -311,11 +311,11 @@ public class TrasActivity extends BaseActivity {
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }*/
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 //String mername = orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName();
@@ -333,7 +333,7 @@ public class TrasActivity extends BaseActivity {
             else if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
 
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getAmount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getAmount());
 
                 if (orderBeanArrayList.get(position).getTransferRequestUserId().equalsIgnoreCase(user_id)) {
                     holder.total_order_price.setTextColor(getResources().getColor(R.color.green));
@@ -362,14 +362,14 @@ public class TrasActivity extends BaseActivity {
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getAmount_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getAmount_by_card());
 
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") ||
                         orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
                 String mername = orderBeanArrayList.get(position).getB_name();
 
@@ -384,7 +384,7 @@ public class TrasActivity extends BaseActivity {
             else if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order"))
             {
-                //holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_amount());
+                //holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
                 holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
@@ -407,12 +407,12 @@ public class TrasActivity extends BaseActivity {
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }
 
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
 
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 String mername = orderBeanArrayList.get(position).getB_name();
@@ -462,14 +462,14 @@ public class TrasActivity extends BaseActivity {
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }
 
-                holder.total_order_price.setText("$" + orderBeanArrayList.get(position).getTotal_price_with_shipping());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_price_with_shipping());
 
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
-                holder.paidamount_bycard.setText("$" + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
-                    holder.ngcash.setText("$0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  +"0.00");
                 } else {
-                    holder.ngcash.setText("$" + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 String mername = orderBeanArrayList.get(position).getB_name();

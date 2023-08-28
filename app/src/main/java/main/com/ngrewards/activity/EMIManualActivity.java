@@ -152,9 +152,9 @@ public class EMIManualActivity extends AppCompatActivity {
 
                     String ngcash_str = intent.getExtras().getString("ngcash");
                     if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText("$0.00 Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00 Available");
                     } else {
-                        avbngcash.setText("$" + ngcash_str + " Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + ngcash_str + " Available");
                         ngcash_val = Double.parseDouble(ngcash_str);
                     }
                 }
@@ -346,7 +346,7 @@ public class EMIManualActivity extends AppCompatActivity {
             if (total_amount_due != null) {
 
                 dueamount_et.setText("" + total_amount_due);
-                total_amt.setText("$ " + total_amount_due);
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + total_amount_due);
                 card_amount_tv.setText(total_amount_due);
 
             }
@@ -603,11 +603,11 @@ public class EMIManualActivity extends AppCompatActivity {
                             if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0")
                                     || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") ||
                                     member_ngcash.equalsIgnoreCase("null")) {
-                                avbngcash.setText("$0.00");
+                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
                             } else {
 
-                                avbngcash.setText("$" + member_ngcash);
+                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
                                 ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
                             }
 
@@ -778,7 +778,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
                 total_amt_calculate = tot;
 
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -839,7 +839,7 @@ public class EMIManualActivity extends AppCompatActivity {
                 double tot = sp_dob + wait_dob;
 
                 total_amt_calculate = tot;
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -912,7 +912,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
                 double tot = sp_dob + wait_dob;
                 total_amt_calculate = tot;
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = tot - apply_ng_cash;
@@ -1102,7 +1102,7 @@ public class EMIManualActivity extends AppCompatActivity {
         creditcard_rbut = findViewById(R.id.creditcard_rbut);
         paypalbut = findViewById(R.id.paypalbut);
         edt_name = findViewById(R.id.edt_name);
-        avbngcash.setText("$" + member_ngcash);
+        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + member_ngcash);
 
         ngcashavb.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {

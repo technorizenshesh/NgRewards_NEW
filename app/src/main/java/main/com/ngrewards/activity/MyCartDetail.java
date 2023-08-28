@@ -140,11 +140,11 @@ public class MyCartDetail extends AppCompatActivity {
                 if (object.getString("status").equals("1")) {
                     CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                     cartListBeanArrayList.addAll(successData.getResult());
-                    total_amount.setText("$" + successData.getTotalPrice());
+                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotalPrice());
                 }
                 if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                     nocartitem.setVisibility(View.VISIBLE);
-                    total_amount.setText("$ 0.00");
+                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                     mycartAdapter = new MycartAdapter(cartListBeanArrayList);
                     mycartlist.setAdapter(mycartAdapter);
                     mycartAdapter.notifyDataSetChanged();
@@ -209,7 +209,7 @@ public class MyCartDetail extends AppCompatActivity {
 
              holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
             holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
-            holder.mainprice.setText("$" + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
 
             String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
@@ -333,7 +333,7 @@ public class MyCartDetail extends AppCompatActivity {
                             myapisession.setKeyCartitem(responseData);
                             CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                             cartListBeanArrayList.addAll(successData.getResult());
-                            total_amount.setText("$" + successData.getTotalPrice());
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
                         }
                         else {
                             myapisession.setKeyCartitem("");
@@ -341,7 +341,7 @@ public class MyCartDetail extends AppCompatActivity {
 
                         if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                             nocartitem.setVisibility(View.VISIBLE);
-                            total_amount.setText("$ 0.00");
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                             mycartAdapter = new MycartAdapter(cartListBeanArrayList);
                             mycartlist.setAdapter(mycartAdapter);
                             mycartAdapter.notifyDataSetChanged();

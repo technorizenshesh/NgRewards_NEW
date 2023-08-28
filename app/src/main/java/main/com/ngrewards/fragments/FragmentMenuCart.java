@@ -49,7 +49,7 @@ public class FragmentMenuCart extends Fragment {
     private TextView special;
     private String dhf;
     private TextView tv_other_note;
-
+private  MySession mySession;
     public FragmentMenuCart() {
 
     }
@@ -64,7 +64,7 @@ public class FragmentMenuCart extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member_menu, container, false);
-        MySession mySession = new MySession(getActivity());
+         mySession = new MySession(getActivity());
         String user_log_data = mySession.getKeyAlldata();
 
         if (user_log_data != null) {
@@ -118,9 +118,9 @@ public class FragmentMenuCart extends Fragment {
                                 amount_due = object.getString("amount_due");
                                 binding.tvItemCount.setText("Items(" + total_quantity + ")");
                                 binding.tvTex.setText("Tax(" + tax + "%)");
-                                binding.tvTexPrice.setText("$" + tax_amount);
-                                binding.tvAmountDuePrice.setText("$" + amount_due);
-                                binding.tvItemTotal.setText("$" + total_price);
+                                binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign)  + tax_amount);
+                                binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign)  + amount_due);
+                                binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign)  + total_price);
                                 binding.footer.setVisibility(total_quantity.equals("0") ? View.GONE : View.VISIBLE);
                                 JSONArray array = object.getJSONArray("result");
 
@@ -194,7 +194,7 @@ public class FragmentMenuCart extends Fragment {
 
             tv_name.setText(items.get(possion).getTitle());
             tv_descri.setText(items.get(possion).getDescription());
-            tv_price.setText("$" + items.get(possion).getPrice());
+            tv_price.setText(mySession.getValueOf(MySession.CurrencySign)  + items.get(possion).getPrice());
             tv_qty.setText("(" + items.get(possion).getNewquantity() + ")");
             tv_other_note.setText("" + items.get(possion).getOther_notes());
 

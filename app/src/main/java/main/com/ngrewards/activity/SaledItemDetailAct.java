@@ -252,8 +252,8 @@ public class SaledItemDetailAct extends
 
         product_name.setText("" + product_name_str);
         merchant_name.setText("" + member_contact_name);
-        mainprice.setText("$" + mainprice_str);
-        shipprice.setText("$" + shipping_price);
+        mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mainprice_str);
+        shipprice.setText(mySession.getValueOf(MySession.CurrencySign)  + shipping_price);
         order_id.setText("" + order_id_str);
         estdeliver.setText("Est. Delivery " + delivery_date_str);
         purchasedate.setText("" + order_date);
@@ -449,11 +449,11 @@ public class SaledItemDetailAct extends
 
 
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Paid");
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Paid");
 
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due - " + splitList.getDate());
+                    ivFinalImage.setText(splitList.getId() + str + " Payment "+ " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Due - " + splitList.getDate());
                 }
             } else {
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
@@ -462,7 +462,7 @@ public class SaledItemDetailAct extends
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
                     ivFinalImage.setTextSize(10);
-                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " $ " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" " + splitList.getAmount() + " Due On - " + splitList.getDate());
                     ivFinalImage.setOnClickListener(v -> {
                         recyclerViewClickListener1.onClick1(splitList);
                     });

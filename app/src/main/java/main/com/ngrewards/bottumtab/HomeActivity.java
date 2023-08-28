@@ -45,8 +45,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
+        contentFrameLayout =  findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
         myapisession = new Myapisession(this);
         result = getIntent().getExtras().getString("result");
@@ -80,7 +79,6 @@ public class HomeActivity extends BaseActivity {
         if (bundle == null) {
             Log.e("Get Notification >>", "NULL");
         } else {
-
             String message = bundle.getString("message");
             facebook_name = bundle.getString("facebook_name");
             facebook_image = bundle.getString("facebook_image");
@@ -123,8 +121,7 @@ public class HomeActivity extends BaseActivity {
         adapter.addFragment(new OffersFrag(offerItem), getResources().getString(R.string.offers));
         adapter.addFragment(new ItemsFrag(itemResult), getResources().getString(R.string.items));
         viewPager.setAdapter(adapter);
-        if(selectedPosition!=-1)
-        {
+        if(selectedPosition!=-1) {
             viewPager.setCurrentItem(selectedPosition);
         }
     }

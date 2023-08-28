@@ -194,7 +194,7 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
                 holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
                 // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
-                String text = notificationBeanNewArrayList.get(position).getFullname() + " transferred <font color=green>$" + notificationBeanNewArrayList.get(position).getAmount() + "</font> to you" + " " + notificationBeanNewArrayList.get(position).getTimeago();
+                String text = notificationBeanNewArrayList.get(position).getFullname() + " transferred <font color=green>"+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + "</font> to you" + " " + notificationBeanNewArrayList.get(position).getTimeago();
                 holder.message_tv.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 
                 //holder.message_tv.setText("" + text);
@@ -210,7 +210,7 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
                 // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
 
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " request for $" + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " request for "+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {

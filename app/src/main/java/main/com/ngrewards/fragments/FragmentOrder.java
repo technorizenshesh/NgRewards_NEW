@@ -59,7 +59,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
     private String stringnew;
     private ArrayList<String> listOfString1;
     private String stringnew1;
-
+private  MySession mySession;
     public FragmentOrder() {
         // Required empty public constructor
     }
@@ -76,7 +76,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
         dialog.setContentView(binding.getRoot());
         behavior = BottomSheetBehavior.from((View) binding.getRoot().getParent());
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        MySession mySession = new MySession(getActivity());
+         mySession = new MySession(getActivity());
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data != null) {
             try {
@@ -138,9 +138,9 @@ public class FragmentOrder extends BottomSheetDialogFragment {
 
                                  binding.tvItemCount.setText("Items(" + total_quantity + ")");
                                  binding.tvTex.setText("Tax(" + tax + "%)");
-                                 binding.tvTexPrice.setText("$" + tax_amount);
-                                 binding.tvAmountDuePrice.setText("$" + amount_due);
-                                 binding.tvItemTotal.setText("$" + sub_total_price);
+                                 binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign)  + tax_amount);
+                                 binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign)  + amount_due);
+                                 binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign)  + sub_total_price);
 
                                 JSONArray array = object.getJSONArray("item_list");
 
@@ -243,7 +243,7 @@ public class FragmentOrder extends BottomSheetDialogFragment {
             TextView tv_other_note = holder.itemView.findViewById(R.id.tv_other_note);
             tv_name.setText(items.get(possion).getTitle());
             tv_descri.setText(items.get(possion).getDescription());
-            tv_price.setText("$" + items.get(possion).getPrice());
+            tv_price.setText(mySession.getValueOf(MySession.CurrencySign)  + items.get(possion).getPrice());
 
             Log.e("items12311231234",items.get(possion).getPrice());
 

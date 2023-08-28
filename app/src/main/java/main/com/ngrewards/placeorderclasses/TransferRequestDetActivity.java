@@ -123,17 +123,17 @@ public class TransferRequestDetActivity extends AppCompatActivity {
 
         if (type!=null&&type.equalsIgnoreCase("Transfer")){
             reqest_type.setText(""+type);
-            String text = merchant_contact_name_str+" transferred $"+due_amt_tv_str+" to you";
+            String text = merchant_contact_name_str+" transferred "+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str+" to you";
 
             if (!transfer_request_user_id.equalsIgnoreCase(user_id)){
-                text = "Transfer of $ "+ due_amt_tv_str+" to "+merchant_contact_name_str;
+                text = "Transfer of "+mySession.getValueOf(MySession.CurrencySign)+" "+ due_amt_tv_str+" to "+merchant_contact_name_str;
             }
             type_head.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 
         }
         else {
             reqest_type.setText(""+type);
-            type_head.setText(""+merchant_contact_name_str+" send request for $"+due_amt_tv_str);
+            type_head.setText(""+merchant_contact_name_str+" send request for "+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str);
         }
 
         member_message = findViewById(R.id.member_message);
@@ -196,15 +196,15 @@ public class TransferRequestDetActivity extends AppCompatActivity {
 
         }
         address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
-        total_amt_tv.setText("Total :- $" + total_amt_tv_str);
-        due_amount.setText("Amount Due :- $" + due_amt_tv_str);
-        tipamount_tv.setText("Tip :- $" + tip_str);
+           total_amt_tv.setText("Total :- "+mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText("Amount Due :- "+mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+             tipamount_tv.setText("Tip :- "+mySession.getValueOf(MySession.CurrencySign) + tip_str);
         if (ngcash_str==null||ngcash_str.equalsIgnoreCase("")||ngcash_str.equalsIgnoreCase("0")){
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- $ 0.00");
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
 
         }
         else {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- $" + ngcash_str);
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- "+mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
 
         }
         if (cardbrand_str != null) {

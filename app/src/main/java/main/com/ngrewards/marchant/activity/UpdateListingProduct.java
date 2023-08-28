@@ -533,7 +533,7 @@ if (ActiveProductsAct.product_item_detail.getSplit_payments()!=
         public void onBindViewHolder(@NonNull  FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
             TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
             int prop = position + 1;
-            ivFinalImage.setText("Payment " + prop + " - $ " + peopleList.get(position));
+            ivFinalImage.setText("Payment " + prop + " - "+mySession.getValueOf(MySession.CurrencySign)+" " + peopleList.get(position));
 
         }
 

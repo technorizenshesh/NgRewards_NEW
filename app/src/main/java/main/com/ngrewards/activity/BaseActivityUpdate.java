@@ -111,9 +111,9 @@ public class BaseActivityUpdate extends AppCompatActivity {
                         member_ngcash = jsonObject1.getString("member_ngcash");
 
                         if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                            ngcash.setText("$0.00");
+                            ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                         } else {
-                            ngcash.setText("$" + member_ngcash);
+                            ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
                         }
                     }
 
@@ -399,9 +399,9 @@ public class BaseActivityUpdate extends AppCompatActivity {
                         cartcount.setText("" + MainTabActivity.cart_unseen_count);
                     }
                     if (member_ngcash == null || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("null") || member_ngcash.equalsIgnoreCase("0")) {
-                        ngcash.setText("$0.00");
+                        ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                     } else {
-                        ngcash.setText("$" + member_ngcash);
+                        ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
                     }
                 }
 

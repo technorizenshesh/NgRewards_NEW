@@ -511,10 +511,10 @@ public class NetworkAct extends AppCompatActivity {
                                     total_friends.setText("" + successData.getTotalfriends());
                                 }
                                 if (successData.getTotal_spent_this_week() != null && !successData.getTotal_spent_this_week().equalsIgnoreCase("")) {
-                                    total_spent.setText("$" + successData.getTotal_spent_this_week());
+                                    total_spent.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_spent_this_week());
                                 }
                                 if (successData.getTotal_earning_this_week() != null && !successData.getTotal_earning_this_week().equalsIgnoreCase("")) {
-                                    earn_ng_cash.setText("$" + successData.getTotal_earning_this_week());
+                                    earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_earning_this_week());
                                 }
                             }
 
@@ -642,10 +642,10 @@ public class NetworkAct extends AppCompatActivity {
                             total_friends.setText("" + json.getString("level_first_member_count"));
                         }
                         if (json.getString("total_spent_this_week") != null && !json.getString("total_spent_this_week").equalsIgnoreCase("")) {
-                            total_spent.setText("$" + json.getString("total_spent_this_week"));
+                            total_spent.setText(mySession.getValueOf(MySession.CurrencySign)  + json.getString("total_spent_this_week"));
                         }
                         if (json.getString("total_earning_this_week") != null && !json.getString("total_earning_this_week").equalsIgnoreCase("")) {
-                            earn_ng_cash.setText("$" + json.getString("total_earning_this_week"));
+                            earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign)  + json.getString("total_earning_this_week"));
                         }
 
                         JSONObject jsonObject1 = json.getJSONObject("result");
@@ -763,8 +763,8 @@ public class NetworkAct extends AppCompatActivity {
 
                     } else {
                         total_friends.setText("0");
-                        total_spent.setText("$0.00");
-                        earn_ng_cash.setText("$0.00");
+                        total_spent.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                        earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                     }
                     mynetworkchart.setData(null);
                 } catch (JSONException e) {

@@ -152,9 +152,9 @@ public class ManualActivity extends AppCompatActivity {
 
                     String ngcash_str = intent.getExtras().getString("ngcash");
                     if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText("$0.00 Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00 Available");
                     } else {
-                        avbngcash.setText("$" + ngcash_str + " Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + ngcash_str + " Available");
                         ngcash_val = Double.parseDouble(ngcash_str);
                     }
                 }
@@ -212,8 +212,8 @@ public class ManualActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
         Log.e("TAG", "onCreate: activity_manualactivity_manualactivity_manual");
-        mySession = new MySession(getApplicationContext());
-        myapisession = new Myapisession(getApplicationContext());
+        mySession = new MySession(ManualActivity.this);
+        myapisession = new Myapisession(ManualActivity.this);
         distance_filter_list = new ArrayList<>();
         distance_filter_list.add("Any Distance");
         distance_filter_list.add("5.0");
@@ -255,8 +255,6 @@ public class ManualActivity extends AppCompatActivity {
         edit_text_string = edt_name.getText().toString().trim();
         time_zone = tz.getID();
         mySavedCardInfo = new MySavedCardInfo(this);
-        myapisession = new Myapisession(this);
-        mySession = new MySession(ManualActivity.this);
 
         edt_name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -303,7 +301,7 @@ public class ManualActivity extends AppCompatActivity {
             }
         });
 
-        Log.e("USER DATA", ">> " + user_log_data);
+        Log.e("USER DATA", ">>user_log_datauser_log_data  " + user_log_data);
 
         if (user_log_data != null) {
 
@@ -319,8 +317,13 @@ public class ManualActivity extends AppCompatActivity {
                     phone = jsonObject1.getString("phone");
                     fullname = jsonObject1.getString("fullname");
                     member_ngcash = jsonObject1.getString("member_ngcash");
-                    ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
-                    Log.e("", "onCreate:  ngcash_valngcash_valngcash_val " + ngcash_val);
+                    Log.e("", "onCreate:  member_ngcashmember_ngcashmember_ngcash " + member_ngcash);
+
+                    if (member_ngcash.equalsIgnoreCase("")) {
+                    }else {
+                        ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                        Log.e("", "onCreate:  ngcash_valngcash_valngcash_val " + ngcash_val);
+                    }
 
                 }
 
@@ -359,7 +362,7 @@ public class ManualActivity extends AppCompatActivity {
             if (total_amount_due != null) {
 
                 dueamount_et.setText("" + total_amount_due);
-                total_amt.setText("$ " + total_amount_due);
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + total_amount_due);
                 card_amount_tv.setText(total_amount_due);
 
             }
@@ -491,11 +494,11 @@ public class ManualActivity extends AppCompatActivity {
                                 edt_name.setEnabled(true);
 
                                 if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                                    avbngcash.setText("$0.00");
+                                    avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
                                 } else {
 
-                                    avbngcash.setText("$" + member_ngcash);
+                                    avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
                                     ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
                                 }
 
@@ -630,7 +633,7 @@ public class ManualActivity extends AppCompatActivity {
 
                 total_amt_calculate = tot;
 
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -691,7 +694,7 @@ public class ManualActivity extends AppCompatActivity {
                 double tot = sp_dob + wait_dob;
 
                 total_amt_calculate = tot;
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -764,7 +767,7 @@ public class ManualActivity extends AppCompatActivity {
 
                 double tot = sp_dob + wait_dob;
                 total_amt_calculate = tot;
-                total_amt.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = tot - apply_ng_cash;
@@ -954,11 +957,11 @@ public class ManualActivity extends AppCompatActivity {
         paypalbut = findViewById(R.id.paypalbut);
         edt_name = findViewById(R.id.edt_name);
         if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-            avbngcash.setText("$0.00");
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
         } else {
 
-            avbngcash.setText("$" + member_ngcash);
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
             ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
         }
         ngcashavb.setFilters(new InputFilter[]{

@@ -26,10 +26,10 @@ import main.com.ngrewards.fragments.FragmentWebView;
 
 public class ReceiptActivity extends AppCompatActivity {
 
+    private final String shipping_name_str = "";
     private RelativeLayout backlay;
     private ImageView sharebut;
     private TextView ngcashredeem, username_tv, employee_tv, member_name, tipamount_tv, due_amount, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv, special_request;
-    private final String shipping_name_str = "";
     private String user_id = "";
     private String due_amt_tv_str = "";
     private String ngcash_str = "";
@@ -183,15 +183,15 @@ public class ReceiptActivity extends AppCompatActivity {
         btn_strip_receipt = findViewById(R.id.btn_strip_receipt);
         btn_order = findViewById(R.id.btn_order123);
 
-        busseness_name  = findViewById(R.id.busseness_name);
+        busseness_name = findViewById(R.id.busseness_name);
         busseness_name.setText(merchant_name_str);
         merchant_name.setText("Merchant No. :-" + member_name_str);
         member_name.setText("Name :- " + "");
         employee_tv.setText("Employee Name:- " + employee_name);
-        special_request.setText("Special Request :- "+" "+ order_special);
+        special_request.setText("Special Request :- " + " " + order_special);
         order_id.setText("#" + order_id_str);
 
-        if(type123.equals("Paybill")){
+        if (type123.equals("Paybill")) {
 
             String mytime = date_tv_str;
 
@@ -204,7 +204,7 @@ public class ReceiptActivity extends AppCompatActivity {
             } catch (ParseException e) {
 
                 String mytime1 = date_tv_str;
-                SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a",Locale.US);
+                SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a", Locale.US);
                 Date myDate1 = null;
                 try {
                     myDate1 = dateFormat1.parse(mytime1);
@@ -215,9 +215,7 @@ public class ReceiptActivity extends AppCompatActivity {
                 }
 
             }
-        }
-
-        else{
+        } else {
             try {
                 String mytime = date_tv_str;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -226,25 +224,25 @@ public class ReceiptActivity extends AppCompatActivity {
 
                 SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy");
                 String finalDate = timeFormat.format(myDate);
-                date_tv.setText("Date:- " + finalDate +  " " +time);
+                date_tv.setText("Date:- " + finalDate + " " + time);
                 System.out.println(finalDate);
 
             } catch (Exception e) {
                 Log.e("EXC TRUE", " RRR");
-                date_tv.setText("Date:- " + date_tv_str+  " " +time);
+                date_tv.setText("Date:- " + date_tv_str + " " + time);
             }
         }
 
         address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
-        total_amt_tv.setText("Total :- $" + total_amt_tv_str);
-        due_amount.setText("Amount Due :- $" + due_amt_tv_str);
-        tipamount_tv.setText("Tip :- $" + tip_str);
+        total_amt_tv.setText("Total :- " + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText("Amount Due :- " + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+        tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) + tip_str);
 
         if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- $ 0.00");
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
 
         } else {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- $" + ngcash_str);
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
 
         }
 
@@ -275,7 +273,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
         btn_order.setOnClickListener(v -> {
 
-           /* Log.e("order_id_str",order_id_str);*/
+            /* Log.e("order_id_str",order_id_str);*/
             new FragmentOrder().setData(Order_cart_id_str).show(getSupportFragmentManager(), "");
         });
     }

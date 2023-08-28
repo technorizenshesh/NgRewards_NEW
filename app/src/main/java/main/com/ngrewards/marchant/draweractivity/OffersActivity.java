@@ -203,19 +203,19 @@ public class OffersActivity extends AppCompatActivity {
         public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
             holder.offer_title.setText("" + offerBeanListArrayList.get(listPosition).getOfferName());
             holder.offer_desc.setText("" + offerBeanListArrayList.get(listPosition).getOfferDescription());
-           // holder.real_price.setText("$" + offerBeanListArrayList.get(listPosition).getOfferPrice());
+           // holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanListArrayList.get(listPosition).getOfferPrice());
             if (offerBeanListArrayList.get(listPosition).getOffer_discount_price() == null) {
-                holder.real_price.setText("$" + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
+                holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
 
             } else {
                 if (offerBeanListArrayList.get(listPosition).getOffer_discount_price()!=null&&!offerBeanListArrayList.get(listPosition).getOffer_discount_price().equalsIgnoreCase("")&&!offerBeanListArrayList.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")){
-                    holder.real_price.setText("$" + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
                     holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
                     holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
                 }
                 else {
-                    holder.real_price.setText("$" + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanListArrayList.get(listPosition).getOfferPrice().trim());
 
                 }
 
@@ -225,7 +225,7 @@ public class OffersActivity extends AppCompatActivity {
 
             }
             else {
-                holder.price_discount.setText("$" + offerBeanListArrayList.get(listPosition).getOffer_discount_price().trim()+" ("+offerBeanListArrayList.get(listPosition).getOfferDiscount()+"%)");
+                holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanListArrayList.get(listPosition).getOffer_discount_price().trim()+" ("+offerBeanListArrayList.get(listPosition).getOfferDiscount()+"%)");
 
             }
 

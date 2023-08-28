@@ -328,7 +328,7 @@ public class OffersFrag extends Fragment {
             } else {
                 if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
                     holder.discounts.setVisibility(View.VISIBLE);
-                    holder.pricediscount.setText("$" + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
+                    holder.pricediscount.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
                     double offresp = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
                     int ddd = (int) offresp;
                     holder.discounts.setText("" + ddd + "% OFF");
@@ -345,11 +345,11 @@ public class OffersFrag extends Fragment {
             if (offerBeanLists.get(listPosition).getOfferPrice() == null) {
             } else {
                 if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.real_price.setText("$" + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOfferPrice().trim());
                     holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
                     holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
-                    holder.real_price.setText("$" + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOfferPrice().trim());
                 }
             }
             String product_img = offerBeanLists.get(listPosition).getOfferImage();

@@ -229,9 +229,9 @@ public class TransferToaFriend extends AppCompatActivity {
                         member_ngcash = jsonObject1.getString("member_ngcash");
 
                         if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                            avbngcash.setText("$0.00");
+                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
                         } else {
-                            avbngcash.setText("$" + member_ngcash);
+                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
                             ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
                         }
 
@@ -320,10 +320,10 @@ public class TransferToaFriend extends AppCompatActivity {
 
                 double tot = wait_dob;
                 total_amt_calculate = tot;
-                card_amount_tv.setText("$ " + String.format("%.2f", new BigDecimal(tot)));
+                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = tot - apply_ng_cash;
-                    card_amount_tv.setText("$ " + String.format("%.2f", new BigDecimal(amt)));
+                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(amt)));
                 }
             }
         });
@@ -344,10 +344,10 @@ public class TransferToaFriend extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 applytv.setText("" + getResources().getString(R.string.apply));
-                card_amount_tv.setText("$ " + String.format("%.2f", new BigDecimal(total_amt_calculate)));
+                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(total_amt_calculate)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = total_amt_calculate - apply_ng_cash;
-                    card_amount_tv.setText("$ " + String.format("%.2f", new BigDecimal(amt)));
+                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(amt)));
                 }
             }
         });
@@ -375,7 +375,7 @@ public class TransferToaFriend extends AppCompatActivity {
                                 apply_ng_cash = apply_ng;
                                 double amt = total_amt_calculate - apply_ng;
                                 //card_amount_tv.setText();
-                                card_amount_tv.setText("$ " + String.format("%.2f", new BigDecimal(amt)));
+                                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(amt)));
                                 applytv.setText("" + getResources().getString(R.string.applied));
                             }
                         } else {

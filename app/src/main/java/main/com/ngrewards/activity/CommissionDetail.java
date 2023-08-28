@@ -200,7 +200,7 @@ public class CommissionDetail extends AppCompatActivity {
         amountpercant.setAdapter(amountSeleAdapter);
 
         weekdatemont_tv.setText("Week " + week_str + "/" + total_week_count + "\n" + week_start_month_str + "-" + week_end_month_str);
-        total_week_commision.setText("$" + total_week_commision_str);
+        total_week_commision.setText(mySession.getValueOf(MySession.CurrencySign)  + total_week_commision_str);
         amountpercant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -215,9 +215,9 @@ public class CommissionDetail extends AppCompatActivity {
                         double res = (comission_str / 100) * 25;
                         Log.e("Data 25 >> ", " >> " + res);
 
-                        ngcash_remain.setText("$ " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText("$ " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     } else if (amountlist.get(position).equalsIgnoreCase("50 %")) {
@@ -226,9 +226,9 @@ public class CommissionDetail extends AppCompatActivity {
                         double res = (comission_str / 100) * 50;
                         Log.e("Data 50 >> ", " >> " + res);
 
-                        ngcash_remain.setText("$ " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText("$ " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
 
@@ -236,10 +236,10 @@ public class CommissionDetail extends AppCompatActivity {
                         double comission_str = Double.parseDouble(total_week_commision_str);
 
                         double res = (comission_str / 100) * 75;
-                        ngcash_remain.setText("$ " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
                         Log.e("Data 75 >> ", " >> " + res);
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText("$ " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     } else if (amountlist.get(position).equalsIgnoreCase("100 %")) {
@@ -247,9 +247,9 @@ public class CommissionDetail extends AppCompatActivity {
 
                         double res = (comission_str / 100) * 100;
                         Log.e("Data 100 >> ", " >> " + res);
-                        ngcash_remain.setText("$ " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText("$ " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     }
@@ -318,7 +318,7 @@ public class CommissionDetail extends AppCompatActivity {
             merchant_no_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getBusinessNo());
             phone_number_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getContactNumber());
             address_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getAddress());
-            commission_amount.setText("Commission :  $" + commissionDataArrayList.get(position).getMerchantComision());
+            commission_amount.setText("Commission :  "+mySession.getValueOf(MySession.CurrencySign)  + commissionDataArrayList.get(position).getMerchantComision());
             return rowView;
         }
 

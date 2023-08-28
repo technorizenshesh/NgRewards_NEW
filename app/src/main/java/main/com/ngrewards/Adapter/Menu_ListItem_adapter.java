@@ -27,6 +27,7 @@ import main.com.ngrewards.Models.MenuModal;
 import main.com.ngrewards.R;
 import main.com.ngrewards.RecyclerViewClickListener1;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.draweractivity.AddMenuPublish;
 
 /**
@@ -53,7 +54,7 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
     private String h;
     private String name_item;
     private String image_menu;
-
+private  MySession mySession ;
     public Menu_ListItem_adapter(Context a, ArrayList<MenuModal> all_category_subcategory) {
         this.activity = a;
         this.all_category_subcategory = all_category_subcategory;
@@ -69,7 +70,7 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") final int i) {
-
+mySession = new MySession(activity);
         dish_title_string = all_category_subcategory.get(i).getTitle();
         discription_title_string = all_category_subcategory.get(i).getTitleDiscription();
         Item_Price = all_category_subcategory.get(i).getPrice();
@@ -123,7 +124,7 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
         /*  Log.e("desage_name_string",desage_name_string);*/
         holder.dish_name.setText(dish_title_string);
         holder.discription.setText("Discription : " + discription_title_string);
-        holder.price_tv.setText("$ " + Item_Price);
+        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + Item_Price);
 
         list = all_category_subcategory.get(i).getTitle();
 
