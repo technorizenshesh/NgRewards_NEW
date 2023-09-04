@@ -183,7 +183,6 @@ public class AllAddedAddressAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/get_address_lists.php?user_id=1
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "get_address_lists.php?";
                 URL url = new URL(postReceiverUrl);

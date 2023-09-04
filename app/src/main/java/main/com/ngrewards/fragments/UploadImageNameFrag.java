@@ -2,6 +2,9 @@ package main.com.ngrewards.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -12,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -30,11 +34,14 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SliderActivity;
+import main.com.ngrewards.draweractivity.ProfileActivity;
 
 /**
  * Created by technorizen on 13/6/18.
@@ -108,6 +115,7 @@ private ImageView member_img;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("TAG", "onActivityResult: -----------------------------------------------------------" );
         //super method removed
 /*
         if (resultCode == RESULT_OK) {
@@ -130,25 +138,41 @@ private ImageView member_img;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1:
-                    Uri selectedImage = data.getData();
-                    //getPath(selectedImage);
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String FinalPath = cursor.getString(columnIndex);
-                    cursor.close();
-                    String ImagePath = getPath(selectedImage);
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                member_img.setImageBitmap(bitmap);
+                                File tempfile =   Tools.persistImage(bitmap, getActivity());
+                                SliderActivity.member_bitmap=bitmap;
+                                SliderActivity.member_img_path = tempfile.getAbsolutePath();
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getActivity(),e.getLocalizedMessage());
+                        }
+                    } else {
 
-                    decodeFile(ImagePath);
-
+                        Uri selectedImage = data.getData();
+                        //getPath(selectedImage);
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String FinalPath = cursor.getString(columnIndex);
+                        cursor.close();
+                        String ImagePath = getPath(selectedImage);
+                        decodeFile(ImagePath);
+                    }
                     break;
                 case 2:
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     String cameraPath = saveToInternalStorage(photo);
                     Log.e("PATH Camera", "" + cameraPath);
                     //  String ImagePath = getPath(selectedImage);
-
                     decodeFile(cameraPath);
                     break;
 
@@ -158,6 +182,7 @@ private ImageView member_img;
         //Uri returnUri;
         //returnUri = data.getData();
     }
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -220,7 +245,7 @@ private ImageView member_img;
         BitmapFactory.Options o2 = new BitmapFactory.Options();
         o2.inSampleSize = scale;
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-        SliderActivity.member_bitmap = bitmap;
+        SliderActivity.member_bitmap   = bitmap;
         SliderActivity.member_img_path = saveToInternalStorage(bitmap);
         Log.e("DECODE PATH","ff "+SliderActivity.member_img_path);
         member_img.setImageBitmap(bitmap);

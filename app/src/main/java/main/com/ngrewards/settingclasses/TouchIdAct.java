@@ -117,7 +117,6 @@ public class TouchIdAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_member_touch_id.php?member_id=927&touch_status=No
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_member_touch_id.php?";
                 URL url = new URL(postReceiverUrl);

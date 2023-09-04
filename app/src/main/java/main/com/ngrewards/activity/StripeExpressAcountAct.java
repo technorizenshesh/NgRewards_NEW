@@ -156,8 +156,7 @@ if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
         stripewebview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         stripewebview.setWebViewClient(new HelloWebViewClient());
         stripewebview.getSettings().setDomStorageEnabled(true);
-        stripewebview.getSettings().setAppCacheEnabled(false);
-        stripewebview.getSettings().setLoadsImagesAutomatically(true);
+        stripewebview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             stripewebview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }

@@ -44,7 +44,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,23 +61,22 @@ import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 
 public class AddShipingAddress extends AppCompatActivity {
-    private final Integer THRESHOLD = 2;
-    GPSTracker gpsTracker;
-    private int count = 0;
-    CircleImageView merchant_img;
-    private double longitude = 0.0, latitude = 0.0;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    private final Integer THRESHOLD = 2;
+    GPSTracker gpsTracker;
+    CircleImageView merchant_img;
     LocationManager locationManager;
     Location location;
-
+    CountryListAdapter countryListAdapter;
+    private int count = 0;
+    private double longitude = 0.0, latitude = 0.0;
     private RelativeLayout backlay;
     private EditText fullname, optionaladdress, city, state, zipcode, phone_number;
     private String user_id = "", email_str = "", order_landmarkadd = "", fullname_str = "", country_str = "", optionaladdress_str = "", city_str = "", state_str = "", zipcode_str = "", phone_number_str = "";
     private AutoCompleteTextView gettypedlocation;
     private TextView add_adress;
     private Spinner state_spn, country_spn, city_spn;
-    CountryListAdapter countryListAdapter;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
     private ProgressBar progresbar;
     private MySession mySession;
@@ -122,45 +120,42 @@ public class AddShipingAddress extends AppCompatActivity {
         clickevent();
 
         autocompleteView();
+        new GetCountryList().execute();
 
-        if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
-            new GetCountryList().execute();
-        } else {
-            JSONObject jsonObject = null;
-            try {
-                countryBeanArrayList = new ArrayList<>();
-                jsonObject = new JSONObject(myapisession.getKeyCountry());
-                String message = jsonObject.getString("message");
-                if (message.equalsIgnoreCase("successful")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        CountryBean countryBean = new CountryBean();
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        countryBean.setId(jsonObject1.getString("id"));
-                        countryBean.setName(jsonObject1.getString("name"));
-                        countryBean.setSortname(jsonObject1.getString("sortname"));
-                        countryBean.setFlag_url(jsonObject1.getString("flag"));
-                        countryBeanArrayList.add(countryBean);
-                    }
-
-                    if (countryBeanArrayList != null) {
-                        Collections.reverse(countryBeanArrayList);
-                    }
-
-
-                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);*/
-                    countryListAdapter = new CountryListAdapter(AddShipingAddress.this, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);
-                    countryListAdapter.notifyDataSetChanged();
-                } else {
-                    new GetCountryList().execute();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
+        //  if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
+//        } else {
+//            JSONObject jsonObject = null;
+//            try {
+//                countryBeanArrayList = new ArrayList<>();
+//                jsonObject = new JSONObject(myapisession.getKeyCountry());
+//                String message = jsonObject.getString("message");
+//                if (message.equalsIgnoreCase("successful")) {
+//                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        CountryBean countryBean = new CountryBean();
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        countryBean.setId(jsonObject1.getString("id"));
+//                        countryBean.setName(jsonObject1.getString("name"));
+//                        countryBean.setSortname(jsonObject1.getString("sortname"));
+//                        countryBean.setFlag_url(jsonObject1.getString("flag"));
+//                        countryBeanArrayList.add(countryBean);
+//                    }
+//                    if (countryBeanArrayList != null) {
+//                        Collections.reverse(countryBeanArrayList);
+//                    }
+//                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);*/
+//                    countryListAdapter = new CountryListAdapter(AddShipingAddress.this, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);
+//                    countryListAdapter.notifyDataSetChanged();
+//                } else {
+//                    new GetCountryList().execute();
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
         // new GetCountryList().execute();
 
     }
@@ -211,27 +206,27 @@ public class AddShipingAddress extends AppCompatActivity {
                 zipcode_str = zipcode.getText().toString();
 
                 if (fullname_str == null || fullname_str.equalsIgnoreCase("")) {
-Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
                 } else if (order_landmarkadd == null || order_landmarkadd.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } /*else if (optionaladdress_str == null || optionaladdress_str.equalsIgnoreCase("")) {
                     Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
 
                 }*/ else if (country_str == null || country_str.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } else if (state_str == null || state_str.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } else if (city_str == null || city_str.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } else if (zipcode_str == null || zipcode_str.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } else if (phone_number_str == null || phone_number_str.equalsIgnoreCase("")) {
-                    Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldetail),Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                 } else {
                     new AddNewAddress().execute();
@@ -319,6 +314,58 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
     // country state city
 
+    private void autocompleteView() {
+
+        gettypedlocation.setThreshold(THRESHOLD);
+        gettypedlocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.length() > 0) {
+
+                    //clear_pick_ic.setVisibility(View.VISIBLE);
+                    loadData(gettypedlocation.getText().toString());
+                } else {
+                    //clear_pick_ic.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void loadData(String s) {
+
+
+        try {
+            if (count == 0) {
+                List<String> l1 = new ArrayList<>();
+                if (s == null) {
+
+                } else {
+
+                    l1.add(s);
+
+                    GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(AddShipingAddress.this, l1, "" + latitude, "" + longitude);
+                    gettypedlocation.setAdapter(ga);
+                    ga.notifyDataSetChanged();
+                }
+
+            }
+            count++;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private class AddNewAddress extends AsyncTask<String, String, String> {
         @Override
@@ -335,7 +382,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_address.php?user_id=1&fullname=kkk
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_address.php?";
                 URL url = new URL(postReceiverUrl);
@@ -409,7 +455,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
         }
     }
 
-
     private class GetCountryList extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -430,9 +475,8 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?contry_id=" + mySession.getValueOf(MySession.CountryId);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 
@@ -525,7 +569,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -539,6 +582,7 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
                     postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                 }
                 String urlParameters = postData.toString();
+                Log.e("TAG", "doInBackground: urlParametersurlParameters "+urlParameters );
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
@@ -619,7 +663,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -632,7 +675,11 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
                     postData.append('=');
                     postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                 }
+                Log.e("TAG", "doInBackground: urlParametersurlParameters "+postData );
+
                 String urlParameters = postData.toString();
+                Log.e("TAG", "doInBackground: urlParametersurlParameters "+urlParameters );
+
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
@@ -694,10 +741,9 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -737,7 +783,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
         }
     }
 
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -762,11 +807,11 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private List<String> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
         private final WebOperations wo;
         private final String lat;
         private final String lon;
+        private List<String> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;
@@ -904,59 +949,6 @@ Toast.makeText(AddShipingAddress.this,getResources().getString(R.string.filldeta
             }
 
             return addresses;
-        }
-    }
-
-    private void autocompleteView() {
-
-        gettypedlocation.setThreshold(THRESHOLD);
-        gettypedlocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (s.length() > 0) {
-
-                    //clear_pick_ic.setVisibility(View.VISIBLE);
-                    loadData(gettypedlocation.getText().toString());
-                } else {
-                    //clear_pick_ic.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void loadData(String s) {
-
-
-        try {
-            if (count == 0) {
-                List<String> l1 = new ArrayList<>();
-                if (s == null) {
-
-                } else {
-
-                    l1.add(s);
-
-                    GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(AddShipingAddress.this, l1, "" + latitude, "" + longitude);
-                    gettypedlocation.setAdapter(ga);
-                    ga.notifyDataSetChanged();
-                }
-
-            }
-            count++;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

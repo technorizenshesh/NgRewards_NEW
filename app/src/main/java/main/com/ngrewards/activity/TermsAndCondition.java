@@ -43,7 +43,7 @@ public class TermsAndCondition extends AppCompatActivity {
         w.getSettings().setJavaScriptEnabled(true);
         w.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         w.getSettings().setDomStorageEnabled(true);
-        w.getSettings().setAppCacheEnabled(true);
+        w.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         w.setWebViewClient(new HelloWebViewClient());
         w.getSettings().setLoadsImagesAutomatically(true);
         w.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -56,12 +56,12 @@ public class TermsAndCondition extends AppCompatActivity {
 
         if (status.equals("privacy")) {
 
-            w.loadUrl("http://myngrewards.com/privacy-policy/?v=7516fd43adaa");
+            w.loadUrl("http://com/privacy-policy/?v=7516fd43adaa");
         }
 
         else {
 
-            w.loadUrl("https://international.myngrewards.com/terms-and-conditions/");
+            w.loadUrl("https://myngrewards.com/terms-and-conditions/");
         }
 
 

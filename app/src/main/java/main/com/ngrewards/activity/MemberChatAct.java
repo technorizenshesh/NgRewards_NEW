@@ -1,5 +1,8 @@
 package main.com.ngrewards.activity;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -89,6 +91,7 @@ import cz.msebera.android.httpclient.extras.Base64;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.gauriinfotech.commons.Commons;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.beanclasses.ChatBeanMain;
@@ -98,21 +101,34 @@ import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.GetFilePathFromDevice;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MemberChatAct extends AppCompatActivity {
-    ConversessionAdapter conversessionAdapter;
-    private ListView chat_list;
-    private RelativeLayout backlay;
-    BroadcastReceiver mRegistrationBroadcastReceiver;
+    public static final int progress_bar_type = 0;
+    public static final String TAG = "MemberChatAct";
+    private static final int FILE_SELECT_CODE = 0;
     public static boolean isInFront = false;
+    private final String receiver_img = "";
+    private final String tag = "Test";
+    ConversessionAdapter conversessionAdapter;
+    BroadcastReceiver mRegistrationBroadcastReceiver;
     ScheduledExecutorService scheduleTaskExecutor;
     int beforelength = 0;
     int mainbeforelength = 0;
     int beforelength1 = 0;
-    private ArrayList<ChatBeanMain> converSessionArrayList;
     MySession mySession;
-    private final String receiver_img = "";
-    private final String tag = "Test";
+    File file_dff;
+    ChatMainAdapter chatMainAdapter;
+    private ListView chat_list;
+    private RelativeLayout backlay;
+    private ArrayList<ChatBeanMain> converSessionArrayList;
     private String VideoPath = "";
     private String date_time_show = "";
     private String FilePath = "";
@@ -131,13 +147,185 @@ public class MemberChatAct extends AppCompatActivity {
     private EditText message_et;
     private ProgressBar prgressbar;
     private ImageView camera_img, video_but;
-    private static final int FILE_SELECT_CODE = 0;
-    File file_dff;
     private String ImagePath = "";
-    ChatMainAdapter chatMainAdapter;
     private ProgressDialog pDialog;
-    public static final int progress_bar_type = 0;
     private SwipeRefreshLayout swipeToRefresh;
+
+    public static String toBase64(String message) {
+        byte[] data;
+        data = message.getBytes(StandardCharsets.UTF_8);
+        String base64Sms = Base64.encodeToString(data, Base64.DEFAULT);
+        return base64Sms;
+
+    }
+
+    public static String fromBase64(String message) {
+
+        try {
+            byte[] data = Base64.decode(message, Base64.DEFAULT);
+            return new String(data, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return message;
+        }
+
+
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getRealPathFromURI_API19(Context context, Uri uri) {
+        String filePath = "";
+
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            if ("primary".equalsIgnoreCase(type)) {
+                return Environment.getExternalStorageDirectory() + "/" + split[1];
+            } else {
+
+                if (Build.VERSION.SDK_INT > 20) {
+                    //getExternalMediaDirs() added in API 21
+                    File[] extenal = context.getExternalMediaDirs();
+                    if (extenal.length > 1) {
+                        filePath = extenal[1].getAbsolutePath();
+                        filePath = filePath.substring(0, filePath.indexOf("Android")) + split[1];
+                    }
+                } else {
+                    filePath = "/storage/" + type + "/" + split[1];
+                }
+                return filePath;
+            }
+
+        } else if (isDownloadsDocument(uri)) {
+            // DownloadsProvider
+            final String id = DocumentsContract.getDocumentId(uri);
+            //final Uri contentUri = ContentUris.withAppendedId(
+            // Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+            Cursor cursor = null;
+            final String column = "_data";
+            final String[] projection = {column};
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int index = cursor.getColumnIndexOrThrow(column);
+                    String result = cursor.getString(index);
+                    cursor.close();
+                    return result;
+                }
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+        } else if (DocumentsContract.isDocumentUri(context, uri)) {
+            // MediaProvider
+            String wholeID = DocumentsContract.getDocumentId(uri);
+
+            // Split at colon, use second item in the array
+            String[] ids = wholeID.split(":");
+            String id;
+            String type;
+            if (ids.length > 1) {
+                id = ids[1];
+                type = ids[0];
+            } else {
+                id = ids[0];
+                type = ids[0];
+            }
+
+            Uri contentUri = null;
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            final String selection = "_id=?";
+            final String[] selectionArgs = new String[]{id};
+            final String column = "_data";
+            final String[] projection = {column};
+            Cursor cursor = context.getContentResolver().query(contentUri,
+                    projection, selection, selectionArgs, null);
+
+            if (cursor != null) {
+                int columnIndex = cursor.getColumnIndex(column);
+
+                if (cursor.moveToFirst()) {
+                    filePath = cursor.getString(columnIndex);
+                }
+                cursor.close();
+            }
+            return filePath;
+        } else {
+            String[] proj = {MediaStore.Audio.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+                if (cursor.moveToFirst())
+                    filePath = cursor.getString(column_index);
+                cursor.close();
+            }
+
+
+            return filePath;
+        }
+        return null;
+    }
+
+    public static String getVideoPath2(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = context.getContentResolver().query(
+                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +340,7 @@ public class MemberChatAct extends AppCompatActivity {
             receiver_id = bundle.getString("receiver_id");
             type = bundle.getString("type");
             type = type.trim();
-           // receiver_img = bundle.getString("receiver_img");
+            // receiver_img = bundle.getString("receiver_img");
             receiver_type = bundle.getString("receiver_type");
             receiver_name = bundle.getString("receiver_name");
             receiver_fullname = bundle.getString("receiver_fullname");
@@ -313,14 +501,6 @@ public class MemberChatAct extends AppCompatActivity {
         });
     }
 
-    public static String toBase64(String message) {
-        byte[] data;
-        data = message.getBytes(StandardCharsets.UTF_8);
-        String base64Sms = Base64.encodeToString(data, Base64.DEFAULT);
-        return base64Sms;
-
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -355,10 +535,615 @@ public class MemberChatAct extends AppCompatActivity {
 
     }
 
+    private void selectImage() {
+        final Dialog dialogSts = new Dialog(MemberChatAct.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.select_img_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button camera = (Button) dialogSts.findViewById(R.id.camera);
+        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
+        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+        gallary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 1);
+
+            }
+        });
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 2);
+
+            }
+        });
+
+        cont_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+        dialogSts.show();
+    }
+
+    private void selectFiles() {
+        final Dialog dialogSts = new Dialog(MemberChatAct.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.select_files_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button files = (Button) dialogSts.findViewById(R.id.files);
+        Button video_but = (Button) dialogSts.findViewById(R.id.video_but);
+        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+        files.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                browseDocuments();
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                intent.setType("*/*");
+//                Intent i = Intent.createChooser(intent, "File");
+//                startActivityForResult(i, FILE_SELECT_CODE);
+
+
+
+               /* Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file*//**//*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                // special intent for Samsung file manager
+                Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                // if you want any file type, you can skip next line
+                sIntent.putExtra("CONTENT_TYPE", "pdf*//**//*");
+                sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+                Intent chooserIntent;
+                if (getPackageManager().resolveActivity(sIntent, 0) != null){
+                    // it is device with samsung file manager
+                    chooserIntent = Intent.createChooser(sIntent, "Open file");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
+                }
+                else {
+                    chooserIntent = Intent.createChooser(intent, "Open file");
+                }
+
+                try {
+                    startActivityForResult(chooserIntent, FILE_SELECT_CODE);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+               *//* Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file*//**//*");
+                startActivityForResult(intent, FILE_SELECT_CODE);*/
+
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//              //  intent.setType("file/*");
+//                intent.setType("*/*");
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//
+//                try {
+//                    startActivityForResult(
+//                            Intent.createChooser(intent, "Select a File to Upload"),
+//                            FILE_SELECT_CODE);
+//                } catch (android.content.ActivityNotFoundException ex) {
+//                    // Potentially direct the user to the Market with a Dialog
+//
+//                }
+            }
+        });
+        video_but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 3);
+            }
+        });
+        cont_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+        dialogSts.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Date today = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            date_time = format2.format(today);
+            date_time_show = format.format(today);
+            System.out.println("CURRENT " + date_time);
+
+            switch (requestCode) {
+                case 1:
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                File tempfile = Tools.persistImage(bitmap, MemberChatAct.this);
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
+                                new SendImageMessage().execute();
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
+                        }
+                    } else {
+
+                        Uri selectedImage = data.getData();
+                        //getPath(selectedImage);
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String FinalPath = cursor.getString(columnIndex);
+                        cursor.close();
+                        String ImagePath = getPath(selectedImage);
+                        decodeFile(ImagePath);
+                    }
+
+                    break;
+                case 2:
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    String cameraPath = saveToInternalStorage(photo);
+                    Log.e("PATH Camera", "" + cameraPath);
+                    //  String ImagePath = getPath(selectedImage);
+
+                    decodeFile(cameraPath);
+
+                    break;
+                case 3:
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        Uri selectedVideo = data.getData();
+                        assert selectedVideo != null;
+                        try {
+                            String path = Tools.getRealPathFromUri(MemberChatAct.this, selectedVideo);
+                            VideoPath= path;
+                            Log.e("TAG", "onActivityResult: " + VideoPath);
+                            uploadPost();
+
+                        } catch (Exception e) {
+                            Log.e("ThumbnailPath ", e.getLocalizedMessage().toString());
+                            Log.e("ThumbnailPath ", e.getMessage().toString());
+                            Log.e("ThumbnailPath ", e.getCause().toString());
+
+                        }
+                        //VideoPath = getVideoPath2(MemberChatAct.this, selectedVideo);
+
+
+                    } else {
+                        Uri selectedVideo = data.getData();
+                        //getPath(selectedImage);
+                        Log.e("selectedVideo", " >> " + selectedVideo);
+                        VideoPath = GetFilePathFromDevice.getVideoPath2(MemberChatAct.this, selectedVideo);
+                        Log.e("Video Path On Result", " >> " + VideoPath);
+                        //    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(VideoPath, MediaStore.Video.Thumbnails.MICRO_KIND);
+                        //  ThumbnailPath = saveToInternalStorage(bMap);
+                        Log.e("ThumbnailPath >> ", " ..." + ThumbnailPath);
+                        uploadPost();
+
+                    }
+
+                    break;
+
+                case FILE_SELECT_CODE:
+                    if (resultCode == RESULT_OK) {
+                        // Get the Uri of the selected file
+                        Uri uri = data.getData();
+                        //  FilePath = Commons.getPath(uri, MemberChatAct.this);
+                        // Get the path
+                        // String path = uri.uri.toString()
+                        try {
+                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+                                FilePath = getRealPathFromURI_API19(MemberChatAct.this, uri);
+
+                            } else {
+                                FilePath = Commons.getPath(uri, MemberChatAct.this);
+
+                            }
+
+                            /*Log.e("ddd",""+android.os.Build.VERSION.SDK_INT);
+                            Log.e("sss",""+Build.VERSION_CODES.O);
+                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+                                File file = new File(uri.getPath());//create path from uri
+                                final String[] split = file.getPath().split(":");//split the path.
+                                FilePath = split[1];//assign it to a string(your choice).
+                            }
+                            else {
+                                FilePath= PathUtil.getPath(MemberChatAct.this,uri);
+
+                            }*/
+                            //    FilePath = GetFilePathFromDevice.getPath(MemberChatAct.this, uri);
+                            Log.e("FILE SEL", "File Path: " + FilePath);
+
+
+                            new SendFilesMessage().execute();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        // Get the file instance
+                        // File file = new File(path);
+                        // Initiate the upload
+                    }
+                    break;
+
+            }
+        }
+
+
+    }
+
+    @SuppressLint("Range")
+    public String getPath(Uri uri) {
+        String path = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            //  Log.e("image_path.===..", "" + path);
+        }
+        cursor.close();
+        return path;
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateToStr = format.format(today);
+        ContextWrapper cw = new ContextWrapper(MemberChatAct.this);
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mypath.getAbsolutePath();
+    }
+
+    private String saveToInternalStorage2(Bitmap bitmapImage) {
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateToStr = format.format(today);
+        ContextWrapper cw = new ContextWrapper(MemberChatAct.this);
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mypath.getAbsolutePath();
+    }
+
+    public void decodeFile(String filePath) {
+        // Decode image size
+       /* BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, o);
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 1024;
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;*/
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.8), (int) (bitmap.getHeight() * 0.8), true);
+
+        ImagePath = saveToInternalStorage(bitmap);
+        Log.e("DECODE PATH", "ff " + ImagePath);
+        // user_img.setImageBitmap(bitmap);
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        date_time = format2.format(today);
+        date_time_show = format.format(today);
+        System.out.println("CURRENT " + date_time);
+        new SendImageMessage().execute();
+    }
+
+    private void browseDocuments() {
+
+        String[] mimeTypes =
+                {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "text/plain",
+                        "application/pdf",
+                        "application/zip"};
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
+            if (mimeTypes.length > 0) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            }
+        } else {
+            String mimeTypesStr = "";
+            for (String mimeType : mimeTypes) {
+                mimeTypesStr += mimeType + "|";
+            }
+            intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
+        }
+        startActivityForResult(Intent.createChooser(intent, "ChooseFile"), FILE_SELECT_CODE);
+
+    }
+
+    private String getPathTwo(final Uri uri) {
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        if (isKitKat) {
+            // MediaStore (and general)
+            return getForApi19(uri);
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    @TargetApi(19)
+    private String getForApi19(Uri uri) {
+        Log.e(tag, "+++ API 19 URI :: " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            Log.e(tag, "+++ Document URI");
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                Log.e(tag, "+++ External Document URI");
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    Log.e(tag, "+++ Primary External Document URI");
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+                Log.e(tag, "+++ Downloads External Document URI");
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                Log.e(tag, "+++ Media Document URI");
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    Log.e(tag, "+++ Image Media Document URI");
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    Log.e(tag, "+++ Video Media Document URI");
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    Log.e(tag, "+++ Audio Media Document URI");
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(contentUri, selection, selectionArgs);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            Log.e(tag, "+++ No DOCUMENT URI :: CONTENT ");
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            Log.e(tag, "+++ No DOCUMENT URI :: FILE ");
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public String getDataColumn(Uri uri, String selection,
+                                String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    private String fileExt(String url) {
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        if (url.lastIndexOf(".") == -1) {
+            return null;
+        } else {
+            String ext = url.substring(url.lastIndexOf(".") + 1);
+            if (ext.indexOf("%") > -1) {
+                ext = ext.substring(0, ext.indexOf("%"));
+            }
+            if (ext.indexOf("/") > -1) {
+                ext = ext.substring(0, ext.indexOf("/"));
+            }
+            return ext.toLowerCase();
+
+        }
+    }
+
+    public void uploadPost() {
+        prgressbar.setVisibility(View.VISIBLE);
+        type = type.replaceAll("(\\r|\\n)", "");
+        receiver_type = receiver_type.replaceAll("(\\r|\\n)", "");
+        MultipartBody.Part filePart;
+        if (!VideoPath.equalsIgnoreCase("")) {
+            File file = new File(VideoPath);
+            filePart = MultipartBody.Part.createFormData("file_name",
+                    file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
+        } else {
+            RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+            filePart = MultipartBody.Part.createFormData("attachment", "", attachmentEmpty);
+        }
+      /*  if (!ThumbnailPath.equalsIgnoreCase("")) {
+            File file = new File(ThumbnailPath);
+            filePart = MultipartBody.Part.createFormData("video_thumb_img",
+                    file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+        } else {
+            RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+            filePart = MultipartBody.Part.createFormData("attachment", "", attachmentEmpty);
+        }*/
+        Log.e("SENDER ", "ID" + user_id);
+        Log.e("SENDER-- IDtype", type.trim());
+        Log.e("SENDER-- IDreceiver_id", receiver_id);
+        Log.e("SENDER-- IDchat_message", "");
+        Log.e("SENDER-- IDtimezone", time_zone);
+        Log.e("SENDER-- IDdate", date_time);
+        Log.e("SENDER-- IDdate_time", date_time_show);
+        Log.e("SENDER-- IDmsg_type", "Video");
+        Log.e("SENDER-- IDreceiver_type", "" + receiver_type.trim());
+
+        RequestBody userId = RequestBody.create(MediaType.parse("text/plain"), user_id);
+        RequestBody typebody = RequestBody.create(MediaType.parse("text/plain"), type.trim());
+        RequestBody receiver_idbody = RequestBody.create(MediaType.parse("text/plain"), receiver_id);
+        RequestBody time_zonebody = RequestBody.create(MediaType.parse("text/plain"), time_zone);
+        RequestBody IDdate = RequestBody.create(MediaType.parse("text/plain"), date_time);
+        RequestBody date_timebody = RequestBody.create(MediaType.parse("text/plain"), date_time_show);
+        RequestBody msg_typebody = RequestBody.create(MediaType.parse("text/plain"), "Video");
+        RequestBody receiver_typebody = RequestBody.create(MediaType.parse("text/plain"), receiver_type.trim());
+        Call<ResponseBody> loginCall = ApiClient.getApiInterface().insert_chat(userId, typebody, receiver_idbody, time_zonebody, IDdate, date_timebody, msg_typebody, receiver_typebody, filePart);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                prgressbar.setVisibility(View.GONE);
+                try {
+                    Log.e("MapMap", "EDIT PROFILE RESPONSE" + response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Test Response :" + response.body());
+
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                prgressbar.setVisibility(View.GONE);
+
+                call.cancel();
+                Log.e(TAG, "Test Response :" + t.getCause());
+                Log.e(TAG, "Test Response :" + t.getLocalizedMessage());
+                Log.e(TAG, "Test Response :" + t.getMessage());
+            }
+        });
+    }
+
     public class ConversessionAdapter extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<ConverSession> converSessionArrayList;
+        private LayoutInflater inflater = null;
 
         public ConversessionAdapter(Activity chatActivity, ArrayList<ConverSession> converSessionArrayList) {
             // TODO Auto-generated constructor stub
@@ -386,13 +1171,6 @@ public class MemberChatAct extends AppCompatActivity {
             // TODO Auto-generated method stub
             return position;
         }
-
-        public class Holder {
-            TextView receivermessage, sendermessage;
-            ImageView prof_mess_img;
-            LinearLayout layout1, layout2;
-        }
-
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
@@ -459,7 +1237,7 @@ public class MemberChatAct extends AppCompatActivity {
             if (user_id.equalsIgnoreCase(converSessionArrayList.get(position).getSenderid())) {
 
 
-              //  Toast.makeText(context, "sssss!!!!", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(context, "sssss!!!!", Toast.LENGTH_SHORT).show();
 
                 String msgtype = converSessionArrayList.get(position).getMsg_type();
                 mylayout.setVisibility(View.VISIBLE);
@@ -470,8 +1248,7 @@ public class MemberChatAct extends AppCompatActivity {
                     myimage.setVisibility(View.GONE);
                     myfilelay.setVisibility(View.GONE);
                     my_video_lay.setVisibility(View.VISIBLE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getVideo_thumb_img()).into(myvideo_thumb);
-
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(myvideo_thumb);
                     Log.e("msg>>>>", converSessionArrayList.get(position).getMessage());
                 } else if (converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("Image")) {
                     mymessage.setVisibility(View.GONE);
@@ -495,16 +1272,15 @@ public class MemberChatAct extends AppCompatActivity {
 
                 } else if (msgtype.equalsIgnoreCase("mp4")) {
                     mymessage.setVisibility(View.GONE);
-
                     myimage.setVisibility(View.GONE);
                     myfilelay.setVisibility(View.GONE);
                     my_video_lay.setVisibility(View.VISIBLE);
-                    // Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getVideo_thumb_img()).into(myvideo_thumb);
+                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(myimage);
                 } else {
                     // String msg = fromBase64(converSessionArrayList.get(position).getMessage());
                     mymessage.setText("" + converSessionArrayList.get(position).getMessage());
 
-             //       Toast.makeText(context, converSessionArrayList.get(position).getMessage(), Toast.LENGTH_SHORT).show();
+                    //       Toast.makeText(context, converSessionArrayList.get(position).getMessage(), Toast.LENGTH_SHORT).show();
                     // mymessage.setText("" + msg);
 
                     mymessage.setVisibility(View.VISIBLE);
@@ -562,7 +1338,7 @@ public class MemberChatAct extends AppCompatActivity {
                     other_video_lay.setVisibility(View.VISIBLE);
                     otherfilelay.setVisibility(View.GONE);
                     //  otherimage_chat.setVisibility(View.GONE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getVideo_thumb_img()).into(othervideo_thumb);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(othervideo_thumb);
 
                 } else if (converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("Image")) {
 
@@ -573,8 +1349,8 @@ public class MemberChatAct extends AppCompatActivity {
                     //  otherimage_chat.setVisibility(View.GONE);
                     Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(othersendimgimage);
 
-                } else if (msgtype.equalsIgnoreCase("jpg") || msgtype.equalsIgnoreCase("jpeg") || msgtype.equalsIgnoreCase("png") || msgtype.equalsIgnoreCase("PNG")) {
-
+                } else if (msgtype.equalsIgnoreCase("jpg") || msgtype.equalsIgnoreCase("jpeg") ||
+                        msgtype.equalsIgnoreCase("png") || msgtype.equalsIgnoreCase("PNG")) {
                     othermsg.setVisibility(View.GONE);
                     othersendimgimage.setVisibility(View.VISIBLE);
                     other_video_lay.setVisibility(View.GONE);
@@ -589,9 +1365,13 @@ public class MemberChatAct extends AppCompatActivity {
                     other_video_lay.setVisibility(View.VISIBLE);
                     otherfilelay.setVisibility(View.GONE);
                     //  otherimage_chat.setVisibility(View.GONE);
-                    //Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getVideo_thumb_img()).into(othervideo_thumb);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(othervideo_thumb);
 
-                } else if (converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("zip") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("doc") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("docx") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("txt") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("pdf")) {
+                } else if (converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("zip")
+                        || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("doc")
+                        || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("docx")
+                        || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("txt")
+                        || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("pdf")) {
                     othermsg.setVisibility(View.GONE);
                     othersendimgimage.setVisibility(View.GONE);
                     other_video_lay.setVisibility(View.GONE);
@@ -606,7 +1386,7 @@ public class MemberChatAct extends AppCompatActivity {
 
 
                 } else {
-                //    String msg = fromBase64(converSessionArrayList.get(position).getMessage());
+                    //    String msg = fromBase64(converSessionArrayList.get(position).getMessage());
                     //  mymessage.setText("" + converSessionArrayList.get(position).getMessage());
                     othermsg.setText("" + converSessionArrayList.get(position).getMessage());
                     // othermsg.setText("" + converSessionArrayList.get(position).getMessage());
@@ -615,10 +1395,10 @@ public class MemberChatAct extends AppCompatActivity {
                     otherfilelay.setVisibility(View.GONE);
                     other_video_lay.setVisibility(View.GONE);
                 }
-
-
                 String imagelist = receiver_img;
-                if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                if (imagelist.equalsIgnoreCase("")
+                        || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)
+                        || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
                 } else {
                     Glide.with(MemberChatAct.this)
@@ -650,79 +1430,66 @@ public class MemberChatAct extends AppCompatActivity {
 
             }
 
-            otherfilelay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (converSessionArrayList.get(position).isFileIsAvb()) {
-                        if (converSessionArrayList.get(position).getFile() != null) {
-                            MimeTypeMap myMime = MimeTypeMap.getSingleton();
-                            Intent newIntent = new Intent(Intent.ACTION_VIEW);
-                            String mimeType = myMime.getMimeTypeFromExtension(fileExt(converSessionArrayList.get(position).getFile_path()).substring(1));
-                            newIntent.setDataAndType(Uri.fromFile(converSessionArrayList.get(position).getFile()), mimeType);
-                            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            try {
-                                context.startActivity(newIntent);
-                            } catch (ActivityNotFoundException e) {
-                                Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG).show();
-                            }
+            otherfilelay.setOnClickListener(v -> {
+                if (converSessionArrayList.get(position).isFileIsAvb()) {
+                    if (converSessionArrayList.get(position).getFile() != null) {
+                        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                        Intent newIntent = new Intent(Intent.ACTION_VIEW);
+                        String mimeType = myMime.getMimeTypeFromExtension(fileExt(converSessionArrayList.get(position).getFile_path()).substring(1));
+                        newIntent.setDataAndType(Uri.fromFile(converSessionArrayList.get(position).getFile()), mimeType);
+                        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        try {
+                            context.startActivity(newIntent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG).show();
                         }
-
                     }
 
                 }
-            });
-            otherdownload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new DownloadFileFromURL().execute(converSessionArrayList.get(position).getAttach_file_name(), converSessionArrayList.get(position).getMsg_type());
 
-                }
             });
-            othersendimgimage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MemberChatAct.this, SingleImageViewAct.class);
-                    i.putExtra("image_str", converSessionArrayList.get(position).getChat_image());
-                    startActivity(i);
-                }
+            otherdownload.setOnClickListener(v -> new DownloadFileFromURL().execute(converSessionArrayList.get(position).getAttach_file_name(), converSessionArrayList.get(position).getMsg_type()));
+            othersendimgimage.setOnClickListener(v -> {
+                Intent i = new Intent(MemberChatAct.this, SingleImageViewAct.class);
+                i.putExtra("image_str", converSessionArrayList.get(position).getChat_image());
+                startActivity(i);
             });
-            myimage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MemberChatAct.this, SingleImageViewAct.class);
-                    i.putExtra("image_str", converSessionArrayList.get(position).getChat_image());
-                    startActivity(i);
-                }
+            myimage.setOnClickListener(v -> {
+                Intent i = new Intent(MemberChatAct.this, SingleImageViewAct.class);
+                i.putExtra("image_str", converSessionArrayList.get(position).getChat_image());
+                startActivity(i);
             });
 
-            myvideo_thumb.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MemberChatAct.this, VideoPlayActivity.class);
-                    i.putExtra("video_url", converSessionArrayList.get(position).getChat_video());
-                    startActivity(i);
-                }
+            myvideo_thumb.setOnClickListener(v -> {
+                Log.e(TAG, "setOnClickListener: " + converSessionArrayList.get(position).getFile_name());
+                Intent i = new Intent(MemberChatAct.this, VideoPlayActivity.class);
+                i.putExtra("video_url", converSessionArrayList.get(position).getFile_name());
+                startActivity(i);
             });
 
-            othervideo_thumb.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MemberChatAct.this, VideoPlayActivity.class);
-                    i.putExtra("video_url", converSessionArrayList.get(position).getChat_video());
-                    startActivity(i);
-                }
+            othervideo_thumb.setOnClickListener(v -> {
+                Log.e(TAG, "setOnClickListener: " + converSessionArrayList.get(position).getFile_name());
+
+                Intent i = new Intent(MemberChatAct.this, VideoPlayActivity.class);
+                i.putExtra("video_url", converSessionArrayList.get(position).getFile_name());
+                startActivity(i);
             });
 
             return rowView;
         }
 
-    }
+        public class Holder {
+            TextView receivermessage, sendermessage;
+            ImageView prof_mess_img;
+            LinearLayout layout1, layout2;
+        }
 
+    }
 
     public class ChatMainAdapter extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<ChatBeanMain> chatBeanMainArrayList;
+        private LayoutInflater inflater = null;
 
         public ChatMainAdapter(Activity chatActivity, ArrayList<ChatBeanMain> chatBeanMainArrayList) {
             // TODO Auto-generated constructor stub
@@ -808,7 +1575,7 @@ public class MemberChatAct extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String postReceiverUrl = "https://international.myngrewards.com/wp-content/plugins/webservice/get_chat_detail.php?sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type;
+                String postReceiverUrl = "https://myngrewards.com/wp-content/plugins/webservice/get_chat_detail.php?sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type;
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "sender_id=" + user_id + "&receiver_id=" + receiver_id + "&type=" + type);
@@ -857,6 +1624,7 @@ public class MemberChatAct extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+
             Log.e("Chat MEssages >>", "" + result);
 
             if (result == null) {
@@ -896,7 +1664,6 @@ public class MemberChatAct extends AppCompatActivity {
                                 conversession.setSenderid(jsonObject3.getString("sender_id"));
                                 conversession.setMessage(jsonObject3.getString("chat_message"));
                                 conversession.setChat_image(jsonObject3.getString("chat_image"));
-
                                 conversession.setMsg_type(jsonObject3.getString("msg_type"));
                                 conversession.setChat_video(jsonObject3.getString("chat_video"));
                                 conversession.setVideo_thumb_img(jsonObject3.getString("video_thumb_img"));
@@ -1238,25 +2005,31 @@ public class MemberChatAct extends AppCompatActivity {
                 multipart.addFormField("type", type.trim());
                 multipart.addFormField("receiver_id", receiver_id);
                 multipart.addFormField("chat_message", "");
-
                 multipart.addFormField("timezone", time_zone);
                 multipart.addFormField("date", date_time);
                 multipart.addFormField("date_time", date_time_show);
                 multipart.addFormField("msg_type", "Video");
                 multipart.addFormField("receiver_type", "" + receiver_type.trim());
+                Log.e("SENDER ", "ID" + user_id);
+                Log.e("SENDER-- IDtype", type.trim());
+                Log.e("SENDER-- IDreceiver_id", receiver_id);
+                Log.e("SENDER-- IDchat_message", "");
+                Log.e("SENDER-- IDtimezone", time_zone);
+                Log.e("SENDER-- IDdate", date_time);
+                Log.e("SENDER-- IDdate_time", date_time_show);
+                Log.e("SENDER-- IDmsg_type", "Video");
+                Log.e("SENDER-- IDreceiver_type", "" + receiver_type.trim());
 
                 if (VideoPath == null || VideoPath.equalsIgnoreCase("")) {
-
                 } else {
                     File ImageFile = new File(VideoPath);
-                    multipart.addFilePart("chat_video", ImageFile);
+                    multipart.addFilePart("file_name", ImageFile);
                 }
-                if (ThumbnailPath == null || ThumbnailPath.equalsIgnoreCase("")) {
-
-                } else {
-                    File video_thumb_img = new File(ThumbnailPath);
-                    multipart.addFilePart("video_thumb_img", video_thumb_img);
-                }
+                //  if (ThumbnailPath == null || ThumbnailPath.equalsIgnoreCase("")) {
+                //   } else {
+                //       File video_thumb_img = new File(ThumbnailPath);
+                //      multipart.addFilePart("video_thumb_img", video_thumb_img);
+                //   }
 
                 List<String> response = multipart.finish();
 
@@ -1450,627 +2223,6 @@ public class MemberChatAct extends AppCompatActivity {
 
     }
 
-    private void selectImage() {
-        final Dialog dialogSts = new Dialog(MemberChatAct.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.select_img_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button camera = (Button) dialogSts.findViewById(R.id.camera);
-        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
-        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-        gallary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 1);
-
-            }
-        });
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 2);
-
-            }
-        });
-
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-        dialogSts.show();
-    }
-
-    private void selectFiles() {
-        final Dialog dialogSts = new Dialog(MemberChatAct.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.select_files_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button files = (Button) dialogSts.findViewById(R.id.files);
-        Button video_but = (Button) dialogSts.findViewById(R.id.video_but);
-        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-        files.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                browseDocuments();
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                intent.setType("*/*");
-//                Intent i = Intent.createChooser(intent, "File");
-//                startActivityForResult(i, FILE_SELECT_CODE);
-
-
-
-               /* Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file*//**//*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                // special intent for Samsung file manager
-                Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
-                // if you want any file type, you can skip next line
-                sIntent.putExtra("CONTENT_TYPE", "pdf*//**//*");
-                sIntent.addCategory(Intent.CATEGORY_DEFAULT);
-
-                Intent chooserIntent;
-                if (getPackageManager().resolveActivity(sIntent, 0) != null){
-                    // it is device with samsung file manager
-                    chooserIntent = Intent.createChooser(sIntent, "Open file");
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
-                }
-                else {
-                    chooserIntent = Intent.createChooser(intent, "Open file");
-                }
-
-                try {
-                    startActivityForResult(chooserIntent, FILE_SELECT_CODE);
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
-                }
-
-
-
-
-               *//* Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file*//**//*");
-                startActivityForResult(intent, FILE_SELECT_CODE);*/
-
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//              //  intent.setType("file/*");
-//                intent.setType("*/*");
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//
-//                try {
-//                    startActivityForResult(
-//                            Intent.createChooser(intent, "Select a File to Upload"),
-//                            FILE_SELECT_CODE);
-//                } catch (android.content.ActivityNotFoundException ex) {
-//                    // Potentially direct the user to the Market with a Dialog
-//
-//                }
-            }
-        });
-        video_but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 3);
-            }
-        });
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-        dialogSts.show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            Date today = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            date_time = format2.format(today);
-            date_time_show = format.format(today);
-            System.out.println("CURRENT " + date_time);
-
-            switch (requestCode) {
-                case 1:
-                    Uri selectedImage = data.getData();
-                    //getPath(selectedImage);
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String FinalPath = cursor.getString(columnIndex);
-                    cursor.close();
-                    String ImagePath = getPath(selectedImage);
-
-                    decodeFile(ImagePath);
-
-                    break;
-                case 2:
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    String cameraPath = saveToInternalStorage(photo);
-                    Log.e("PATH Camera", "" + cameraPath);
-                    //  String ImagePath = getPath(selectedImage);
-
-                    decodeFile(cameraPath);
-
-                    break;
-                case 3:
-                    Uri selectedVideo = data.getData();
-                    //getPath(selectedImage);
-                    Log.e("selectedVideo", " >> " + selectedVideo);
-                    VideoPath = GetFilePathFromDevice.getPath(MemberChatAct.this, selectedVideo);
-                    Log.e("Video Path On Result", " >> " + VideoPath);
-                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(VideoPath, MediaStore.Video.Thumbnails.MICRO_KIND);
-
-                    ThumbnailPath = saveToInternalStorage(bMap);
-                    Log.e("ThumbnailPath >> ", " ..." + ThumbnailPath);
-
-
-                    new SendVideoMessage().execute();
-                    break;
-
-                case FILE_SELECT_CODE:
-                    if (resultCode == RESULT_OK) {
-                        // Get the Uri of the selected file
-                        Uri uri = data.getData();
-                        //  FilePath = Commons.getPath(uri, MemberChatAct.this);
-
-
-                        // Get the path
-                        // String path = uri.uri.toString()
-                        try {
-                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-                                FilePath = getRealPathFromURI_API19(MemberChatAct.this, uri);
-
-                            } else {
-                                FilePath = Commons.getPath(uri, MemberChatAct.this);
-
-                            }
-
-                            /*Log.e("ddd",""+android.os.Build.VERSION.SDK_INT);
-                            Log.e("sss",""+Build.VERSION_CODES.O);
-                            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-
-                                File file = new File(uri.getPath());//create path from uri
-                                final String[] split = file.getPath().split(":");//split the path.
-                                FilePath = split[1];//assign it to a string(your choice).
-                            }
-                            else {
-                                FilePath= PathUtil.getPath(MemberChatAct.this,uri);
-
-                            }*/
-                            //    FilePath = GetFilePathFromDevice.getPath(MemberChatAct.this, uri);
-                            Log.e("FILE SEL", "File Path: " + FilePath);
-
-
-                            new SendFilesMessage().execute();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        // Get the file instance
-                        // File file = new File(path);
-                        // Initiate the upload
-                    }
-                    break;
-
-            }
-        }
-
-
-    }
-
-    public String getPath(Uri uri) {
-        String path = null;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        if (cursor.moveToFirst()) {
-            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            //  Log.e("image_path.===..", "" + path);
-        }
-        cursor.close();
-        return path;
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String dateToStr = format.format(today);
-        ContextWrapper cw = new ContextWrapper(MemberChatAct.this);
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return mypath.getAbsolutePath();
-    }
-
-
-    public void decodeFile(String filePath) {
-        // Decode image size
-       /* BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, o);
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 1024;
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                break;
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;*/
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-        bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * 0.8), (int) (bitmap.getHeight() * 0.8), true);
-
-        ImagePath = saveToInternalStorage(bitmap);
-        Log.e("DECODE PATH", "ff " + ImagePath);
-        // user_img.setImageBitmap(bitmap);
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        date_time = format2.format(today);
-        date_time_show = format.format(today);
-        System.out.println("CURRENT " + date_time);
-
-        new SendImageMessage().execute();
-    }
-
-
-    public static String fromBase64(String message) {
-
-        try {
-            byte[] data = Base64.decode(message, Base64.DEFAULT);
-            return new String(data, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return message;
-        }
-
-
-    }
-
-
-    private void browseDocuments() {
-
-        String[] mimeTypes =
-                {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-                        "text/plain",
-                        "application/pdf",
-                        "application/zip"};
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
-            if (mimeTypes.length > 0) {
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-            }
-        } else {
-            String mimeTypesStr = "";
-            for (String mimeType : mimeTypes) {
-                mimeTypesStr += mimeType + "|";
-            }
-            intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
-        }
-        startActivityForResult(Intent.createChooser(intent, "ChooseFile"), FILE_SELECT_CODE);
-
-    }
-
-
-    private String getPathTwo(final Uri uri) {
-
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        if (isKitKat) {
-            // MediaStore (and general)
-            return getForApi19(uri);
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-            return getDataColumn(uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
-    @TargetApi(19)
-    private String getForApi19(Uri uri) {
-        Log.e(tag, "+++ API 19 URI :: " + uri);
-        if (DocumentsContract.isDocumentUri(this, uri)) {
-            Log.e(tag, "+++ Document URI");
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                Log.e(tag, "+++ External Document URI");
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    Log.e(tag, "+++ Primary External Document URI");
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-                Log.e(tag, "+++ Downloads External Document URI");
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                Log.e(tag, "+++ Media Document URI");
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    Log.e(tag, "+++ Image Media Document URI");
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    Log.e(tag, "+++ Video Media Document URI");
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    Log.e(tag, "+++ Audio Media Document URI");
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
-
-                return getDataColumn(contentUri, selection, selectionArgs);
-            }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            Log.e(tag, "+++ No DOCUMENT URI :: CONTENT ");
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-            return getDataColumn(uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            Log.e(tag, "+++ No DOCUMENT URI :: FILE ");
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public String getDataColumn(Uri uri, String selection,
-                                String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getRealPathFromURI_API19(Context context, Uri uri) {
-        String filePath = "";
-
-        // ExternalStorageProvider
-        if (isExternalStorageDocument(uri)) {
-            final String docId = DocumentsContract.getDocumentId(uri);
-            final String[] split = docId.split(":");
-            final String type = split[0];
-
-            if ("primary".equalsIgnoreCase(type)) {
-                return Environment.getExternalStorageDirectory() + "/" + split[1];
-            } else {
-
-                if (Build.VERSION.SDK_INT > 20) {
-                    //getExternalMediaDirs() added in API 21
-                    File[] extenal = context.getExternalMediaDirs();
-                    if (extenal.length > 1) {
-                        filePath = extenal[1].getAbsolutePath();
-                        filePath = filePath.substring(0, filePath.indexOf("Android")) + split[1];
-                    }
-                } else {
-                    filePath = "/storage/" + type + "/" + split[1];
-                }
-                return filePath;
-            }
-
-        } else if (isDownloadsDocument(uri)) {
-            // DownloadsProvider
-            final String id = DocumentsContract.getDocumentId(uri);
-            //final Uri contentUri = ContentUris.withAppendedId(
-            // Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-            Cursor cursor = null;
-            final String column = "_data";
-            final String[] projection = {column};
-
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    final int index = cursor.getColumnIndexOrThrow(column);
-                    String result = cursor.getString(index);
-                    cursor.close();
-                    return result;
-                }
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        } else if (DocumentsContract.isDocumentUri(context, uri)) {
-            // MediaProvider
-            String wholeID = DocumentsContract.getDocumentId(uri);
-
-            // Split at colon, use second item in the array
-            String[] ids = wholeID.split(":");
-            String id;
-            String type;
-            if (ids.length > 1) {
-                id = ids[1];
-                type = ids[0];
-            } else {
-                id = ids[0];
-                type = ids[0];
-            }
-
-            Uri contentUri = null;
-            if ("image".equals(type)) {
-                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            } else if ("video".equals(type)) {
-                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            } else if ("audio".equals(type)) {
-                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            }
-
-            final String selection = "_id=?";
-            final String[] selectionArgs = new String[]{id};
-            final String column = "_data";
-            final String[] projection = {column};
-            Cursor cursor = context.getContentResolver().query(contentUri,
-                    projection, selection, selectionArgs, null);
-
-            if (cursor != null) {
-                int columnIndex = cursor.getColumnIndex(column);
-
-                if (cursor.moveToFirst()) {
-                    filePath = cursor.getString(columnIndex);
-                }
-                cursor.close();
-            }
-            return filePath;
-        } else {
-            String[] proj = {MediaStore.Audio.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
-            if (cursor != null) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-                if (cursor.moveToFirst())
-                    filePath = cursor.getString(column_index);
-                cursor.close();
-            }
-
-
-            return filePath;
-        }
-        return null;
-    }
-
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         /**
@@ -2147,7 +2299,7 @@ public class MemberChatAct extends AppCompatActivity {
 
             } catch (Exception e) {
 
-           //     Toast.makeText(MemberChatAct.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
+                //     Toast.makeText(MemberChatAct.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
 
                 Log.e("Error: ", e.getMessage());
             }
@@ -2176,25 +2328,6 @@ public class MemberChatAct extends AppCompatActivity {
 
         }
 
-    }
-
-    private String fileExt(String url) {
-        if (url.indexOf("?") > -1) {
-            url = url.substring(0, url.indexOf("?"));
-        }
-        if (url.lastIndexOf(".") == -1) {
-            return null;
-        } else {
-            String ext = url.substring(url.lastIndexOf(".") + 1);
-            if (ext.indexOf("%") > -1) {
-                ext = ext.substring(0, ext.indexOf("%"));
-            }
-            if (ext.indexOf("/") > -1) {
-                ext = ext.substring(0, ext.indexOf("/"));
-            }
-            return ext.toLowerCase();
-
-        }
     }
 
 }

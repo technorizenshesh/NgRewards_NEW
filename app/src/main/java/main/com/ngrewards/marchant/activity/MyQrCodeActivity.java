@@ -144,6 +144,7 @@ public class MyQrCodeActivity extends AppCompatActivity {
     }
 
     private void SaveImage(Bitmap finalBitmap) {
+
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/NgRewards");
         myDir.mkdirs();

@@ -798,30 +798,6 @@ public class FragItemDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-//                Log.e("share_url_str >>", " >> " + share_url_str);
-//                try {
-//                    Uri bmpUri = getLocalBitmapUri(proimg);
-//                    if (bmpUri != null) {
-//                        // Construct a ShareIntent with link to image
-//                        Intent shareIntent = new Intent();
-//                        shareIntent.setAction(Intent.ACTION_SEND);
-//                        shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-//                        shareIntent.putExtra(Intent.EXTRA_TEXT, "" + product_name + " \n" + " Price :$" + product_price + "\n" + share_url_str);
-//
-//                        shareIntent.setType("image/*");
-//                        // Launch sharing dialog for image
-//                        startActivity(Intent.createChooser(shareIntent, "Share Image"));
-
-//
-//                    } else {
-//                        Log.e("EXC", " > " + bmpUri);
-//                        // ...sharing failed, handle error
-//                    }
-//
-//                } catch (Exception e) {
-//                    Log.e("EXC", " > " + e.getMessage());
-//                    e.printStackTrace();
-//                }
             }
         });
         shipinfo_but.setOnClickListener(new View.OnClickListener() {
@@ -881,14 +857,6 @@ public class FragItemDetails extends AppCompatActivity {
 
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
-                            //  shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
-//                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + merchantListBeanArrayList.get(listPosition).getMerchantImage()
-//                                    + " \n" + " \n " + "Merchant Name - " + merchantListBeanArrayList.get(listPosition).getBusinessName() +
-//                                    " \n" + " \n " + "Merchant Number - " + merchantListBeanArrayList.get(listPosition).getBusinessNo()
-//                                    + " \n" + " \n " + "Merchant Address - " + merchantListBeanArrayList.get(listPosition).getAddress() +
-//                                    " \n " + "\n " + merchantListBeanArrayList.get(listPosition).getShare_link() + BuildConfig.APPLICATION_ID);
-                            //shareIntent.setType("image/*");
-
                             shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink+"");
                             shareIntent.setType("text/plain");
                             // Launch sharing dialog for image
@@ -904,62 +872,6 @@ public class FragItemDetails extends AppCompatActivity {
                 });
 
     }
-
-    /*
-        public Uri getLocalBitmapUri(ImageView imageView) {
-            // Extract Bitmap from ImageView drawable
-            Drawable drawable = imageView.getDrawable();
-            Bitmap bmp = null;
-            if (drawable instanceof BitmapDrawable){
-                bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            } else {
-                return null;
-            }
-            // Store image to default external storage directory
-            Uri bmpUri = null;
-            try {
-                File file =  new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-                file.getParentFile().mkdirs();
-                FileOutputStream out = new FileOutputStream(file);
-                bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-                out.close();
-                bmpUri = Uri.fromFile(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bmpUri;
-        }
-    */
-    public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
-        Drawable drawable = imageView.getDrawable();
-        Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable) {
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        } else {
-            return null;
-        }
-        // Store image to default external storage directory
-        Uri bmpUri = null;
-        try {
-            File file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-            file.getParentFile().mkdirs();
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-
-            Uri U = FileProvider.getUriForFile(FragItemDetails.this.getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
-
-            bmpUri = U;
-            //  bmpUri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmpUri;
-    }
-
 
     public void likedislikeproduct_fun(String id) {
         progresbar.setVisibility(View.VISIBLE);
@@ -1032,7 +944,7 @@ public class FragItemDetails extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_product_reviews.php?product_id=4521&member_id=4&review=serftggfdgcvscfd&rating=5
+
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "add_product_reviews.php?";
@@ -1216,7 +1128,7 @@ public class FragItemDetails extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_to_cart.php?user_id=23&product_id=5658&quantity=4
+
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_to_cart.php?";
                 Log.e("ADD CART URL", " >> " + postReceiverUrl + "user_id=" + user_id +

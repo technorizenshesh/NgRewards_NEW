@@ -143,7 +143,7 @@ mySession = new MySession(activity);
 
     private void APIStatusHide() {
 
-   /*     AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
+   /*     AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/menu_list.php?merchant_id=" + user_id)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

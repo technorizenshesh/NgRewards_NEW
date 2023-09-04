@@ -1108,31 +1108,6 @@ public class CheckOutAct extends AppCompatActivity {
     private void removeMySingleCartItem(String id) {
 
         Toast.makeText(getApplicationContext(),id,Toast.LENGTH_SHORT).show();
-      /*  HashMap<String,String> param=new HashMap<>();
-        new ApiCallBuilder().build(CheckOutAct.this)
-                .isShowProgressBar(true)
-                .setParam(param)
-                .setUrl("https://international.myngrewards.com/wp-content/plugins/webservice/remove_cart_product.php?cart_id="+id)
-                .execute(new ApiCallBuilder.onResponse() {
-                    @Override
-                    public void Success(String response) {
-                        try {
-                            JSONObject object=new JSONObject(response);
-                            boolean status=object.getString("status").contains("1");
-                            if (status){
-                                Toast.makeText(getApplicationContext(),"Success!!!",Toast.LENGTH_SHORT).show();
-                                getMyCartDetail();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void Failed(String error) {
-
-                    }
-                });*/
         swipeToRefresh.setRefreshing(true);
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().removeSinglecartItem(id);

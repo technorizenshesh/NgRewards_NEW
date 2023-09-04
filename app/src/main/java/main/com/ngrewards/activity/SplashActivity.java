@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -66,35 +67,32 @@ import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 public class SplashActivity extends AppCompatActivity implements
         //http://main.com.ngrewards/?productId=1
 
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        ResultCallback<LocationSettingsResult> {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<LocationSettingsResult> {
 
-    private static final int SPLASH_TIME_OUT = 3500;
-    MySession mySession;
-    private String user_type = "";
     public static final int RequestPermissionCode = 1;
-    protected static final String TAG = "MainActivityDummy";
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    protected static final String TAG = "MainActivityDummy";
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     protected final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
     protected final static String KEY_LOCATION = "location";
     protected final static String KEY_LAST_UPDATED_TIME_STRING = "last-updated-time-string";
+    private static final int SPLASH_TIME_OUT = 3500;
+    public static double latitude = 0.0, longitude = 0.0;
+    private final String mutableList = "test";
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest mLocationRequest;
     protected LocationSettingsRequest mLocationSettingsRequest;
     protected Location mCurrentLocation;
     protected Boolean mRequestingLocationUpdates;
     protected String mLastUpdateTime;
-    public static double latitude = 0.0, longitude = 0.0;
+    MySession mySession;
     GPSTracker gpsTracker;
     BroadcastReceiver mRegistrationBroadcastReceiver;
+    private String user_type = "";
     private Uri uri;
     private String hasData;
     private String result = "";
-    private final String mutableList = "test";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,47 +110,44 @@ public class SplashActivity extends AppCompatActivity implements
         try {
 //    Log.e(TAG, "onCreate: ", new Throwable());
             FirebaseApp.initializeApp(this);
-            FirebaseDynamicLinks.getInstance()
-                    .getDynamicLink(getIntent())
-                    .addOnSuccessListener(this, pendingDynamicLinkData -> {
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                            Log.d(TAG, "onSuccess:Deeplink " + deepLink);
-                        }
-                        Log.e("deepLink >>", " >" + deepLink);
-                        result = deepLink + "";
-                        String param = deepLink + "";
-                        if (param.contains("https://www.ngrewards.com/data/Ng?")) {
-                            result = param.replace("https://www.ngrewards.com/data/Ng?", "");
-                            result = "item" + result;
-                        } else if (param.contains("https://www.ngrewards.com/data/Merchent?")) {
-                            result = param.replace("https://www.ngrewards.com/data/Merchent?", "");
-                            result = "merchant" + result;
-                        } else if (param.contains("https://www.ngrewards.com/data/Offer?")) {
-                            result = param.replace("https://www.ngrewards.com/data/Offer?", "");
-                            result = "offer" + result;
-                        } else {
-                            if (param.contains("https://www.ngrewards.com%2Fdata/Ng?")) {
-                                result = param.replace("https://www.ngrewards.com%2Fdata/Ng?", "");
-                                result = "item" + result;
-                                Log.d(TAG, "onSuccess: " + result);
-                            } else if (param.contains("https://www.ngrewards.com%2Fdata/Merchent?")) {
-                                result = param.replace("https://www.ngrewards.com%2Fdata/Merchent?", "");
-                                result = "merchant" + result;
-                            } else if (param.contains("https://www.ngrewards.com%2Fdata/Offer?")) {
-                                result = param.replace("https://www.ngrewards.com%2Fdata/Offer?", "");
-                                result = "offer" + result;
-                            }
-                        }
-                    })
-                    .addOnFailureListener(this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("getDynamicLink", "getDynamicLink:onFailure", e);
-                            Log.e("deepLink >>Error", " >" + e);
-                        }
-                    });
+            FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent()).addOnSuccessListener(this, pendingDynamicLinkData -> {
+                Uri deepLink = null;
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.getLink();
+                    Log.d(TAG, "onSuccess:Deeplink " + deepLink);
+                }
+                Log.e("deepLink >>", " >" + deepLink);
+                result = deepLink + "";
+                String param = deepLink + "";
+                if (param.contains("https://www.ngrewards.com/data/Ng?")) {
+                    result = param.replace("https://www.ngrewards.com/data/Ng?", "");
+                    result = "item" + result;
+                } else if (param.contains("https://www.ngrewards.com/data/Merchent?")) {
+                    result = param.replace("https://www.ngrewards.com/data/Merchent?", "");
+                    result = "merchant" + result;
+                } else if (param.contains("https://www.ngrewards.com/data/Offer?")) {
+                    result = param.replace("https://www.ngrewards.com/data/Offer?", "");
+                    result = "offer" + result;
+                } else {
+                    if (param.contains("https://www.ngrewards.com%2Fdata/Ng?")) {
+                        result = param.replace("https://www.ngrewards.com%2Fdata/Ng?", "");
+                        result = "item" + result;
+                        Log.d(TAG, "onSuccess: " + result);
+                    } else if (param.contains("https://www.ngrewards.com%2Fdata/Merchent?")) {
+                        result = param.replace("https://www.ngrewards.com%2Fdata/Merchent?", "");
+                        result = "merchant" + result;
+                    } else if (param.contains("https://www.ngrewards.com%2Fdata/Offer?")) {
+                        result = param.replace("https://www.ngrewards.com%2Fdata/Offer?", "");
+                        result = "offer" + result;
+                    }
+                }
+            }).addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("getDynamicLink", "getDynamicLink:onFailure", e);
+                    Log.e("deepLink >>Error", " >" + e);
+                }
+            });
 
             uri = getIntent().getData();
 
@@ -215,26 +210,19 @@ public class SplashActivity extends AppCompatActivity implements
             };
 
             if (checkPermission()) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkLocationSettings();
-                    }
-                }, SPLASH_TIME_OUT);
+                new Handler().postDelayed(() -> checkLocationSettings(), SPLASH_TIME_OUT);
 
             } else {
                 requestPermission();
             }
 
 
-            byte[] sha1 = {
-                    (byte) 0xA8, (byte) 0x41, (byte) 0x5E, (byte) 0xCF, (byte) 0x95, (byte) 0x58, (byte) 0x0D, (byte) 0x9C, (byte) 0x16, (byte) 0xFD, (byte) 0x89, (byte) 0x76, (byte) 0x95, 0x34, (byte) 0x2E, (byte) 0x49, (byte) 0x03, (byte) 0x6D, (byte) 0x36, (byte) 0x3E
+            byte[] sha1 = {(byte) 0xA8, (byte) 0x41, (byte) 0x5E, (byte) 0xCF, (byte) 0x95, (byte) 0x58, (byte) 0x0D, (byte) 0x9C, (byte) 0x16, (byte) 0xFD, (byte) 0x89, (byte) 0x76, (byte) 0x95, 0x34, (byte) 0x2E, (byte) 0x49, (byte) 0x03, (byte) 0x6D, (byte) 0x36, (byte) 0x3E
                     //SHA1: A8:41:5E:CF:95:58:0D:9C:16:FD:89:76:95:34:2E:49:03:6D:36:3E
                     // C6:CC:60:1E:56:83:97:0A:35:D8:2C:0F:F7:F0:A3:A7:92:B4:A6:9B
             };
 
-            byte[] sha2 = {
-                    0x4A, (byte) 0x40, (byte) 0xA8, (byte) 0x17, (byte) 0x6C, (byte) 0x55, (byte) 0xB1, (byte) 0x54, (byte) 0x79, (byte) 0xCC, (byte) 0x4D, (byte) 0xF2, (byte) 0xE2, (byte) 0xFA, (byte) 0x8F, (byte) 0x1B, (byte) 0x63, (byte) 0x5D, (byte) 0xE5, (byte) 0x70
+            byte[] sha2 = {0x4A, (byte) 0x40, (byte) 0xA8, (byte) 0x17, (byte) 0x6C, (byte) 0x55, (byte) 0xB1, (byte) 0x54, (byte) 0x79, (byte) 0xCC, (byte) 0x4D, (byte) 0xF2, (byte) 0xE2, (byte) 0xFA, (byte) 0x8F, (byte) 0x1B, (byte) 0x63, (byte) 0x5D, (byte) 0xE5, (byte) 0x70
 
                     // SHA1: 4A:40:A8:17:6C:55:B1:54:79:CC:4D:F2:E2:FA:8F:1B:63:5D:E5:70
                     // C6:CC:60:1E:56:83:97:0A:35:D8:2C:0F:F7:F0:A3:A7:92:B4:A6:9B
@@ -267,7 +255,7 @@ public class SplashActivity extends AppCompatActivity implements
                 }
             });
         } catch (Exception e) {
-e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -300,72 +288,116 @@ e.printStackTrace();
 
 
     public boolean checkPermission() {
-        int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
-        int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int camera = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
-        int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_NETWORK_STATE);
-        int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION);
-        int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
-        return FirstPermissionResult == PackageManager.PERMISSION_GRANTED
-                && SecondPermissionResult == PackageManager.PERMISSION_GRANTED
-                && camera == PackageManager.PERMISSION_GRANTED && ThirdPermissionResult
-                == PackageManager.PERMISSION_GRANTED
-                && FourthPermissionResult ==
-                PackageManager.PERMISSION_GRANTED && FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT >= 33) {
+            int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_MEDIA_IMAGES);
+            int camera = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
+            int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_NETWORK_STATE);
+            int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION);
+            int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+            int FifthPermissionResult2 = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.POST_NOTIFICATIONS);
+            int FifthPermissionResult3 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_MEDIA_VIDEO);
+            return FirstPermissionResult == PackageManager.PERMISSION_GRANTED && camera == PackageManager.PERMISSION_GRANTED && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED && FourthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult2 == PackageManager.PERMISSION_GRANTED&& FifthPermissionResult3 == PackageManager.PERMISSION_GRANTED;
+        } else {
+            int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int camera = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
+            int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_NETWORK_STATE);
+            int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION);
+            int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+            return FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_GRANTED && camera == PackageManager.PERMISSION_GRANTED && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED && FourthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
     private void requestPermission() {
-
-        ActivityCompat.requestPermissions(SplashActivity.this, new String[]
-                {
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.CAMERA,
-                        android.Manifest.permission.ACCESS_NETWORK_STATE,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION
-                }, RequestPermissionCode);
+        if (Build.VERSION.SDK_INT >= 33) {
+            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_MEDIA_VIDEO}, RequestPermissionCode);
+        } else {
+            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, RequestPermissionCode);
+        }
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == RequestPermissionCode) {
-            if (grantResults.length > 0) {
+        if (Build.VERSION.SDK_INT >= 33) {
 
-                boolean read = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean write = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                boolean camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                boolean network = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                boolean coarseloc = grantResults[4] == PackageManager.PERMISSION_GRANTED;
-                boolean fineloc = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+            if (requestCode == RequestPermissionCode) {
+                if (grantResults.length > 0) {
+                    boolean write = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean camera = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean network = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean coarseloc = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                    boolean fineloc = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    boolean dd = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                    boolean dd2 = grantResults[6] == PackageManager.PERMISSION_GRANTED;
 
-                if (read && write && camera && network && coarseloc && fineloc) {
+                    if (write && camera && network && coarseloc && fineloc&&dd&&dd2) {
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
 
-                            if (mySession.IsLoggedIn()) {
-                                if (user_type.equalsIgnoreCase("Merchant")) {
-                                    Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                    startActivity(i);
-                                    finish();
+                                if (mySession.IsLoggedIn()) {
+                                    if (user_type.equalsIgnoreCase("Merchant")) {
+                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
                                 } else {
-                                    Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                    Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
                                     startActivity(i);
                                     finish();
                                 }
-                            } else {
-                                Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
-                                startActivity(i);
-                                finish();
                             }
-                        }
-                    }, SPLASH_TIME_OUT);
+                        }, SPLASH_TIME_OUT);
 
-                } else {
-                    nesePermission();
+                    } else {
+                        nesePermission();
+                    }
+                }
+            }
+        } else {
+
+            if (requestCode == RequestPermissionCode) {
+                if (grantResults.length > 0) {
+                    boolean read = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean write = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean network = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                    boolean coarseloc = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    boolean fineloc = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+
+                    if (read && write && camera && network && coarseloc && fineloc) {
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (mySession.IsLoggedIn()) {
+                                    if (user_type.equalsIgnoreCase("Merchant")) {
+                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                } else {
+                                    Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }
+                        }, SPLASH_TIME_OUT);
+
+                    } else {
+                        nesePermission();
+                    }
                 }
             }
         }
@@ -424,8 +456,7 @@ e.printStackTrace();
     private void updateValuesFromBundle(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             if (savedInstanceState.keySet().contains(KEY_REQUESTING_LOCATION_UPDATES)) {
-                mRequestingLocationUpdates = savedInstanceState.getBoolean(
-                        KEY_REQUESTING_LOCATION_UPDATES);
+                mRequestingLocationUpdates = savedInstanceState.getBoolean(KEY_REQUESTING_LOCATION_UPDATES);
             }
             if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
                 mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
@@ -438,11 +469,7 @@ e.printStackTrace();
 
     protected synchronized void buildGoogleApiClient() {
         Log.i(TAG, "Building GoogleApiClient");
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
     }
 
     protected void createLocationRequest() {
@@ -459,10 +486,7 @@ e.printStackTrace();
     }
 
     protected void checkLocationSettings() {
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        mGoogleApiClient,
-                        mLocationSettingsRequest);
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, mLocationSettingsRequest);
         result.setResultCallback(this);
     }
 
@@ -487,7 +511,7 @@ e.printStackTrace();
                                 latitude = mCurrentLocation.getLatitude();
                                 longitude = mCurrentLocation.getLongitude();
                             }
-                            Log.e(TAG, "user_typeuser_typeuser_typeuser_typeuser_type: "+ user_type);
+                            Log.e(TAG, "user_typeuser_typeuser_typeuser_typeuser_type: " + user_type);
                             if (user_type.equalsIgnoreCase("Merchant")) {
                                 Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
                                 startActivity(i);
@@ -528,22 +552,20 @@ e.printStackTrace();
                 break;
 
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" +
-                        "upgrade location settings ");
+                Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" + "upgrade location settings ");
 
-               // try {
+                // try {
                 try {
                     status.startResolutionForResult(SplashActivity.this, REQUEST_CHECK_SETTINGS);
                 } catch (IntentSender.SendIntentException e) {
                     throw new RuntimeException(e);
                 }
                 // } catch (IntentSender.SendIntentException e) {
-                    Log.i(TAG, "PendingIntent unable to execute request.");
-              //  }
+                Log.i(TAG, "PendingIntent unable to execute request.");
+                //  }
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " +
-                        "not created.");
+                Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " + "not created.");
                 break;
         }
     }
@@ -565,10 +587,8 @@ e.printStackTrace();
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
         }
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.REGISTRATION_COMPLETE));
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Config.PUSH_NOTIFICATION));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Config.REGISTRATION_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
         NotificationUtils.clearNotifications(getApplicationContext());
     }
 
@@ -641,11 +661,7 @@ e.printStackTrace();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient,
-                mLocationRequest,
-                this
-        ).setResultCallback(status -> {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this).setResultCallback(status -> {
             mRequestingLocationUpdates = true;
             //  setButtonsEnabledState();
 

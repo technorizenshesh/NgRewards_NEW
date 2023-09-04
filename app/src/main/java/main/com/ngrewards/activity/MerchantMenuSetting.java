@@ -143,7 +143,7 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
     private void InvestigatinList(String user_id) {
 
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST,
-                "https://international.myngrewards.com/wp-content/plugins/webservice/menu_list.php?",
+                "https://myngrewards.com/wp-content/plugins/webservice/menu_list.php?",
 
                 new Response.Listener<NetworkResponse>() {
                     @Override
@@ -335,7 +335,7 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
     }
 
     private void AddUpdateCategory(String editTextString, String id_item) {
-        AndroidNetworking.get("https://international.myngrewards.com/wp-content/plugins/webservice/update_menu.php?id=" + id_item + "&name=" + editTextString)
+        AndroidNetworking.get("https://myngrewards.com/wp-content/plugins/webservice/update_menu.php?id=" + id_item + "&name=" + editTextString)
                 .addPathParameter("pageNumber", "0")
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

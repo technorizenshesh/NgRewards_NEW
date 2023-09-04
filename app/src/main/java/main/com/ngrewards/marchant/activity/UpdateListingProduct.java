@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -64,6 +65,7 @@ import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
+import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity2;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -405,26 +407,22 @@ public class UpdateListingProduct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogSts.dismiss();
-                Intent i = new Intent(UpdateListingProduct.this, MultiPhotoSelectActivity.class);
-                startActivity(i);
+                if (Build.VERSION.SDK_INT >= 33) {
+                    Intent i = new Intent(UpdateListingProduct.this, MultiPhotoSelectActivity2.class);
+                    startActivity(i);
+                }else {
+                    Intent i = new Intent(UpdateListingProduct.this, MultiPhotoSelectActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+        camera.setOnClickListener(v -> {
+            dialogSts.dismiss();
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, 2);
 
-            }
         });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 2);
-
-            }
-        });
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
+        cont_find.setOnClickListener(v -> dialogSts.dismiss());
         dialogSts.show();
     }
 

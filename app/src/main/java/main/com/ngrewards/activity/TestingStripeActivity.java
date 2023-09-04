@@ -13,7 +13,7 @@ import android.widget.TextView;
 import main.com.ngrewards.R;
 
 public class TestingStripeActivity extends AppCompatActivity {
-    String url ="http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://international.myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";
+    String url ="http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";
     //https://connect.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq&scope=read_write
     private TextView stripeaccount;
     private WebView stripewebview;
@@ -25,8 +25,8 @@ public class TestingStripeActivity extends AppCompatActivity {
         stripeaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String url = "http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://international.myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";
-                String url = "connect.stripe.com/express/oauth/authorize?redirect_uri=https://international.myngrewards.com/demo/wp-content/plugins/webservice/stripe_payment_form.php&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq&state=1";
+
+                String url = "connect.stripe.com/express/oauth/authorize?redirect_uri=https://myngrewards.com/demo/wp-content/plugins/webservice/stripe_payment_form.php&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq&state=1";
 
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("https://" + url));

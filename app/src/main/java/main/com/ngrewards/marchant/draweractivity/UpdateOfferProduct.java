@@ -1,5 +1,8 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -11,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +49,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -53,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
@@ -121,7 +127,6 @@ public class UpdateOfferProduct extends AppCompatActivity {
             percantae.setText("" + cur_progress + " %");
             offer_discount_price_tv.setText("" + offer_discountprice_str);
             seekbar.setProgress((int) cur_progress);
-
             Picasso.with(UpdateOfferProduct.this).load(offer_image_url).into(uploadimg);
         }
         clickevent();
@@ -167,43 +172,30 @@ public class UpdateOfferProduct extends AppCompatActivity {
     }
 
     private void clickevent() {
-        backlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        backlay.setOnClickListener(v -> finish());
+        uploadimg.setOnClickListener(v -> selectImage());
+        publish_product.setOnClickListener(v -> {
+            tital_name_str = tital_name_et.getText().toString();
+            offer_desc_str = offer_desc.getText().toString();
+            offer_price_str = offer_price.getText().toString();
+            if (tital_name_str == null || tital_name_str.equalsIgnoreCase("")) {
+                Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.entertite), Toast.LENGTH_LONG).show();
             }
-        });
-        uploadimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
+            else if (category_id == null || category_id.equalsIgnoreCase("")) {
+                Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.selectoffercate), Toast.LENGTH_LONG).show();
+
             }
-        });
-        publish_product.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tital_name_str = tital_name_et.getText().toString();
-                offer_desc_str = offer_desc.getText().toString();
-                offer_price_str = offer_price.getText().toString();
-                if (tital_name_str == null || tital_name_str.equalsIgnoreCase("")) {
-                    Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.entertite), Toast.LENGTH_LONG).show();
-                }
-                else if (category_id == null || category_id.equalsIgnoreCase("")) {
-                    Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.selectoffercate), Toast.LENGTH_LONG).show();
+            else if (offer_desc_str == null || offer_desc_str.equalsIgnoreCase("")) {
+                Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.enterdesc), Toast.LENGTH_LONG).show();
 
-                }
-                else if (offer_desc_str == null || offer_desc_str.equalsIgnoreCase("")) {
-                    Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.enterdesc), Toast.LENGTH_LONG).show();
+            } /*else if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
+                Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.selectimage), Toast.LENGTH_LONG).show();
 
-                } /*else if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
-                    Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.selectimage), Toast.LENGTH_LONG).show();
+            }*//* else if (offer_price_str == null || offer_price_str.equalsIgnoreCase("")) {
+                Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.enterprice), Toast.LENGTH_LONG).show();
 
-                }*//* else if (offer_price_str == null || offer_price_str.equalsIgnoreCase("")) {
-                    Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.enterprice), Toast.LENGTH_LONG).show();
-
-                }*/ else {
-                    new UpdateProduct().execute();
-                }
+            }*/ else {
+                new UpdateProduct().execute();
             }
         });
     }
@@ -368,7 +360,6 @@ public class UpdateOfferProduct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_offer.php?offer_id=5520&offer_name=Test
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_offer.php?";
             Log.e("requestURL >>", requestURL);
@@ -470,6 +461,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
         dialogSts.show();
     }
 
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -544,19 +536,33 @@ public class UpdateOfferProduct extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1:
-                    Uri selectedImage = data.getData();
-
-                    String ImagePath = getPath(selectedImage);
-
-                    decodeFile(ImagePath);
-
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getApplicationContext().getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                uploadimg.setImageBitmap(bitmap);
+                                File tempfile = Tools.persistImage(bitmap, getApplicationContext());
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
+                        }
+                    } else {
+                        Uri selectedImage = data.getData();
+                        String ImagePath = getPath(selectedImage);
+                        decodeFile(ImagePath);
+                    }
                     break;
                 case 2:
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     String cameraPath = saveToInternalStorage(photo);
                     Log.e("PATH Camera", "" + cameraPath);
                     //  String ImagePath = getPath(selectedImage);
-
                     decodeFile(cameraPath);
                     break;
 

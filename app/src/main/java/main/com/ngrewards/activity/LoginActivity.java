@@ -216,46 +216,8 @@ public class LoginActivity extends AppCompatActivity {
         idint();
         clickevet();
 
-        if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
+
             new GetCountryList().execute();
-
-        } else {
-
-            JSONObject jsonObject = null;
-            try {
-
-                countryBeanArrayList = new ArrayList<>();
-                jsonObject = new JSONObject(myapisession.getKeyCountry());
-                String message = jsonObject.getString("message");
-                if (message.equalsIgnoreCase("successful")) {
-
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        CountryBean countryBean = new CountryBean();
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        countryBean.setId(jsonObject1.getString("id"));
-                        countryBean.setName(jsonObject1.getString("name"));
-                        countryBean.setSortname(jsonObject1.getString("sortname"));
-                        countryBean.setFlag_url(jsonObject1.getString("flag"));
-                        countryBeanArrayList.add(countryBean);
-                    }
-
-                    if (countryBeanArrayList != null) {
-                        Collections.reverse(countryBeanArrayList);
-                    }
-
-                    countryListAdapter = new CountryListAdapter(LoginActivity.this, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);
-                    countryListAdapter.notifyDataSetChanged();
-                } else {
-                    new GetCountryList().execute();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     private void clickevet() {
@@ -311,10 +273,7 @@ public class LoginActivity extends AppCompatActivity {
                 Random addition1 = new Random();
                 int additionint1 = addition1.nextInt(100) + 1;
                 String random_no = String.valueOf(additionint1);
-
-              //  Url = "https://myngrewards.com/signup.php?affiliate_name=OFFICIALNG&affiliate_no=" + random_no + "&how_invited_you=";
-                Url = "https://international.myngrewards.com/signup.php?affiliate_name=OFFICIALNG&affiliate_no=" + random_no + "&how_invited_you=";
-//https://international.myngrewards.com/signup.php?affiliate_name=bond&affiliate_no=289&how_invited_you=
+                Url = "https://myngrewards.com/signup.php?affiliate_name=OFFICIALNG&affiliate_no=" + random_no + "&how_invited_you=";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Url));
                 startActivity(intent);
 
@@ -1012,7 +971,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "countries.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 

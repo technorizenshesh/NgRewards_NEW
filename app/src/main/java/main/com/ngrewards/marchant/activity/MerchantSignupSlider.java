@@ -66,27 +66,35 @@ import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 public class MerchantSignupSlider extends AppCompatActivity {
 
-    public static String add_merchant_in_member = "NO";
-    private Button continue_button;
-    private CustomViewPager viewPager;
-    private CirclePageIndicator indicator;
-    String selectedItem;
-    ViewPagerAdapter adapter;
-    private final boolean back_click_sts = false;
-    private boolean click_sts = false;
-    private RelativeLayout backlay;
-    public static String ImagePath = "", bus_category_id = "",  selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = "", mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
-    private ProgressBar progresbar;
-    MySession mySession;
     //code for lat long
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static String add_merchant_in_member = "NO";
+    public static String ImagePath = "", bus_category_id = "", selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = ""
+            , mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
+    public static double mer_latitude = 0, mer_longitude = 0;
+    private final boolean back_click_sts = false;
+    String selectedItem;
+    ViewPagerAdapter adapter;
+    MySession mySession;
     LocationManager locationManager;
     Location location;
-    private double latitude = 0, longitude = 0;
-    public static double mer_latitude = 0, mer_longitude = 0;
     GPSTracker gpsTracker;
+    private Button continue_button;
+    private CustomViewPager viewPager;
+    private CirclePageIndicator indicator;
+    private boolean click_sts = false;
+    private RelativeLayout backlay;
+    private ProgressBar progresbar;
+    private double latitude = 0, longitude = 0;
     private String firebase_regid = "", time_zone = "";
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,11 +186,22 @@ public class MerchantSignupSlider extends AppCompatActivity {
                             // if (mer_businessname != null && !mer_businessname.equalsIgnoreCase("") && mer_phone_number != null && !mer_phone_number.equalsIgnoreCase("") && mer_address != null && !mer_address.equalsIgnoreCase("") && mer_city != null && !mer_city.equalsIgnoreCase("") && mer_state != null && !mer_state.equalsIgnoreCase("") && mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
                             if (mer_businessname != null && !mer_businessname.equalsIgnoreCase("") &&
                                     mer_phone_number != null && !mer_phone_number.equalsIgnoreCase("")
-                                    && bus_category_id != null  && selected_country != null
-                                    && !selected_country.equalsIgnoreCase("")&& !bus_category_id.equalsIgnoreCase("") && !selected_country.equalsIgnoreCase("0") && !bus_category_id.equalsIgnoreCase("0") && mer_address != null && !mer_address.equalsIgnoreCase("") && mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
+                                    && bus_category_id != null && selected_country != null
+                                    && !selected_country.equalsIgnoreCase("") &&
+                                    !bus_category_id.equalsIgnoreCase("") &&
+                                    !selected_country.equalsIgnoreCase("0") &&
+                                    !bus_category_id.equalsIgnoreCase("0")
+                                    && mer_address != null &&
+                                    mer_zipcode != null && !mer_zipcode.equalsIgnoreCase("")) {
                                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
 
                             } else {
+                                Log.e("TAG", "onClick: mer_businessname  ---   "+mer_businessname );
+                                Log.e("TAG", "onClick: mer_phone_number  ---   "+mer_phone_number );
+                                Log.e("TAG", "onClick: bus_category_id   ---   "+bus_category_id  );
+                                Log.e("TAG", "onClick: selected_country  ---   "+selected_country );
+                                Log.e("TAG", "onClick: mer_address       ---   "+mer_address      );
+                                Log.e("TAG", "onClick: mer_zipcode       ---   "+mer_zipcode      );
                                 Toast.makeText(MerchantSignupSlider.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
                             }
                         } else if (viewPager.getCurrentItem() == 5) {
@@ -264,6 +283,39 @@ public class MerchantSignupSlider extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    private void checkGps() {
+        gpsTracker = new GPSTracker(MerchantSignupSlider.this);
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+
+            }
+        } else {
+
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+            } else {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
+
+            }
+        }
+
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -293,12 +345,6 @@ public class MerchantSignupSlider extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
     public class SignupMerchant extends AsyncTask<String, String, String> {
 
         String Jsondata;
@@ -319,7 +365,6 @@ public class MerchantSignupSlider extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//http://mobileappdevelop.co/NAXCAN/webservice/user_update?user_id=21&first_name=er&last_name=vijay&mobile=8889994272&email=v@gmail.com&lang=en&currency=inr&place=indore&country=india&register_id=123&ios_register_id=321&lat=22.123456&lon=75.123456
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "signup_merchant.php?";
             Log.e("requestURL >>", requestURL);
@@ -345,10 +390,8 @@ public class MerchantSignupSlider extends AppCompatActivity {
                 multipart.addFormField("zip_code", mer_zipcode);
                 multipart.addFormField("address", mer_address);
                 multipart.addFormField("address_two", mer_address_two);
-                multipart.addFormField("country",selected_country_name);
-             //   multipart.addFormField("country", MarchantLogin.country_str);
-            //    multipart.addFormField("country_id", MarchantLogin.country_id);
-                multipart.addFormField("Country_id", selected_country);
+                multipart.addFormField("country", selected_country_name);
+                multipart.addFormField("country_id", selected_country);
                 multipart.addFormField("state", mer_state);
                 multipart.addFormField("city", mer_city);
                 multipart.addFormField("device_token", firebase_regid);
@@ -379,7 +422,24 @@ public class MerchantSignupSlider extends AppCompatActivity {
                 for (String line : response) {
                     Jsondata = line;
                 }
-                Log.e("SIGNUParems ", " >> " + multipart);
+                Log.e("SIGNUParems ", " >> " + "business_category" + bus_category_id);
+                Log.e("SIGNUParems ", " >> " + "zip_code" + mer_zipcode);
+                Log.e("SIGNUParems ", " >> " + "address" + mer_address);
+                Log.e("SIGNUParems ", " >> " + "address_two" + mer_address_two);
+                Log.e("SIGNUParems ", " >> " + "country" + selected_country_name);
+                Log.e("SIGNUParems ", " >> " + "country_id" + selected_country);
+                Log.e("SIGNUParems ", " >> " + "state" + mer_state);
+                Log.e("SIGNUParems ", " >> " + "city" + mer_city);
+                Log.e("SIGNUParems ", " >> " + "device_token" + firebase_regid);
+                Log.e("SIGNUParems ", " >> " + "reward_percent" + mer_reward);
+                Log.e("SIGNUParems ", " >> " + "how_invite_you" + MerchantSignupSlider.mer_who_invite);
+                Log.e("SIGNUParems ", " >> " + "sales_agent_key" + "1");
+                Log.e("SIGNUParems ", " >> " + "sales_agent_no" + "1");
+                Log.e("SIGNUParems ", " >> " + "sales_agent_name" + "1");
+                Log.e("SIGNUParems ", " >> " + "website_url" + "");
+                Log.e("SIGNUParems ", " >> " + "facebook_url" + "");
+                Log.e("SIGNUParems ", " >> " + "twitter_url" + "");
+                Log.e("SIGNUParems ", " >> " + "linkdin_url" + "");
                 Log.e("SIGNUPRESPONE ", " >> " + response);
                 JSONObject object = new JSONObject(Jsondata);
                 Log.e("SIGNUPRESPONEJSON ", " >> " + Jsondata);
@@ -427,33 +487,6 @@ public class MerchantSignupSlider extends AppCompatActivity {
         }
     }
 
-    private void checkGps() {
-        gpsTracker = new GPSTracker(MerchantSignupSlider.this);
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-
-            }
-        }
-
-    }
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -491,7 +524,6 @@ public class MerchantSignupSlider extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/check_member.php?user_name=&email=aaron.cruz1990@gmail.com
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "check_merchant.php?";
                 URL url = new URL(postReceiverUrl);
@@ -561,12 +593,5 @@ public class MerchantSignupSlider extends AppCompatActivity {
 
 
         }
-    }
-
-    public static boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }

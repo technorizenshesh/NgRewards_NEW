@@ -134,54 +134,54 @@ public class UpdateShipingAddress extends AppCompatActivity {
         clickevent();
         autocompleteView();
 
-        if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
+        //if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
             new GetCountryList().execute();
-        } else {
-            JSONObject jsonObject = null;
-            try {
-                countryBeanArrayList = new ArrayList<>();
-                jsonObject = new JSONObject(myapisession.getKeyCountry());
-                String message = jsonObject.getString("message");
-                if (message.equalsIgnoreCase("successful")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        CountryBean countryBean = new CountryBean();
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        countryBean.setId(jsonObject1.getString("id"));
-                        countryBean.setName(jsonObject1.getString("name"));
-                        countryBean.setSortname(jsonObject1.getString("sortname"));
-                        countryBean.setFlag_url(jsonObject1.getString("flag"));
-                        countryBeanArrayList.add(countryBean);
-                    }
-                    if (countryBeanArrayList != null) {
-                        Collections.reverse(countryBeanArrayList);
-                    }
-
-
-                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);*/
-                    countryListAdapter = new CountryListAdapter(UpdateShipingAddress.this, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);
-                    countryListAdapter.notifyDataSetChanged();
-                    if (countryBeanArrayList != null && !countryBeanArrayList.isEmpty()) {
-                        for (int i = 0; i < countryBeanArrayList.size(); i++) {
-                            if (country_str != null && !country_str.equalsIgnoreCase("")) {
-                                if (country_str.equalsIgnoreCase(countryBeanArrayList.get(i).getName())) {
-                                    country_spn.setSelection(i);
-                                }
-                            }
-                        }
-
-                    }
-
-
-                } else {
-                    new GetCountryList().execute();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        } else {
+//            JSONObject jsonObject = null;
+//            try {
+//                countryBeanArrayList = new ArrayList<>();
+//                jsonObject = new JSONObject(myapisession.getKeyCountry());
+//                String message = jsonObject.getString("message");
+//                if (message.equalsIgnoreCase("successful")) {
+//                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        CountryBean countryBean = new CountryBean();
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        countryBean.setId(jsonObject1.getString("id"));
+//                        countryBean.setName(jsonObject1.getString("name"));
+//                        countryBean.setSortname(jsonObject1.getString("sortname"));
+//                        countryBean.setFlag_url(jsonObject1.getString("flag"));
+//                        countryBeanArrayList.add(countryBean);
+//                    }
+//                    if (countryBeanArrayList != null) {
+//                        Collections.reverse(countryBeanArrayList);
+//                    }
+//
+//
+//                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);*/
+//                    countryListAdapter = new CountryListAdapter(UpdateShipingAddress.this, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);
+//                    countryListAdapter.notifyDataSetChanged();
+//                    if (countryBeanArrayList != null && !countryBeanArrayList.isEmpty()) {
+//                        for (int i = 0; i < countryBeanArrayList.size(); i++) {
+//                            if (country_str != null && !country_str.equalsIgnoreCase("")) {
+//                                if (country_str.equalsIgnoreCase(countryBeanArrayList.get(i).getName())) {
+//                                    country_spn.setSelection(i);
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//
+//
+//                } else {
+//                    new GetCountryList().execute();
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void checkGps() {
@@ -358,7 +358,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/update_address.php?address_id=1&user_id=1&fullname=kkkll55
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_address.php?";
                 URL url = new URL(postReceiverUrl);
@@ -394,7 +393,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     response += line;
                 }
-
                 writer.close();
                 reader.close();
                 Log.e("Update Address", ">>>>>>>>>>>>" + response);
@@ -453,9 +451,8 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?contry_id=" + mySession.getValueOf(MySession.CountryId);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 
@@ -557,7 +554,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -661,7 +657,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);

@@ -2,6 +2,7 @@ package main.com.ngrewards.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
@@ -27,6 +28,7 @@ public class VideoPlayActivity extends AppCompatActivity {
         }
         else {
             video_url = bundle.getString("video_url");
+            Log.e("TAG", "onCreate: -------------"+video_url );
             if (video_url!=null&&!video_url.equalsIgnoreCase("")&&!video_url.equalsIgnoreCase(BaseUrl.video_baseurl)){
                 videoplayer.setVideoPath(video_url);
                 videoplayer.start();

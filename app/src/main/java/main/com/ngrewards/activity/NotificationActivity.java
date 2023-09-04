@@ -324,7 +324,6 @@ public class NotificationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/member_notification_msg_lists.php?user_id=990&type=Member
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "member_notification_msg_lists.php?";
                 URL url = new URL(postReceiverUrl);

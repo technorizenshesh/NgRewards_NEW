@@ -1,6 +1,7 @@
 package main.com.ngrewards.marchant.fragments;
 
 import static android.app.Activity.RESULT_OK;
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,6 +22,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -58,6 +60,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -75,6 +78,7 @@ import java.util.concurrent.ExecutionException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.Models.CountryBeanList;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
@@ -82,6 +86,7 @@ import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
@@ -96,31 +101,31 @@ import retrofit2.Response;
  */
 
 public class MerBusinessFrag extends Fragment {
-    private final Integer THRESHOLD = 2;
-    GPSTracker gpsTracker;
-    private int count = 0;
-    CircleImageView merchant_img;
-    private double longitude = 0.0, latitude = 0.0;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    private static final int RC_SIGN_IN = 007;
+    private final Integer THRESHOLD = 2;
+    GPSTracker gpsTracker;
+    CircleImageView merchant_img;
     LocationManager locationManager;
     Location location;
     SignInButton google_signin;
-    private static final int RC_SIGN_IN = 007;
+    CountryListAdapter countryListAdapter;
+    CategoryAdpters categoryAdpters;
+    CountryAdpters countryAdpters;
+    View v;
+    boolean sts;
+    private int count = 0;
+    private double longitude = 0.0, latitude = 0.0;
     private GoogleApiClient mGoogleApiClient;
     private EditText businessname, phone_number, address, zipcode;
     private ProgressBar progresbar;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
-    private Spinner state_spn, country_spn, city_spn, category_spinner,select_country_spinner;
+    private Spinner state_spn, country_spn, city_spn, category_spinner, select_country_spinner;
     private AutoCompleteTextView streetaddress;
-    CountryListAdapter countryListAdapter;
-    CategoryAdpters categoryAdpters;
-    CountryAdpters countryAdpters;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private ArrayList<CountryBeanList> categoryBeanListArrayList2;
     private Myapisession myapisession;
-    View v;
-    boolean sts;
     private String ImagePath;
     private String cameraPath;
     private CheckBox check_box;
@@ -178,23 +183,43 @@ public class MerBusinessFrag extends Fragment {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1:
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                               // user_img.setImageBitmap(bitmap);
+                                merchant_img.setImageBitmap(bitmap);
+                                File tempfile = Tools.persistImage(bitmap, getActivity());
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
+                                MerchantSignupSlider.ImagePath=ImagePath;
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getActivity(), e.getLocalizedMessage());
+                        }
+                    } else {
+                        try {
+                            Uri selectedImage = data.getData();
+                            //getPath(selectedImage);
+                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                            Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                            cursor.moveToFirst();
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            String FinalPath = cursor.getString(columnIndex);
+                            cursor.close();
+                            ImagePath = getPath(selectedImage);
 
-                    try {
-                        Uri selectedImage = data.getData();
-                        //getPath(selectedImage);
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                        cursor.moveToFirst();
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String FinalPath = cursor.getString(columnIndex);
-                        cursor.close();
-                        ImagePath = getPath(selectedImage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        decodeFile(ImagePath);
                     }
 
-                    decodeFile(ImagePath);
 
                     break;
 
@@ -297,12 +322,12 @@ public class MerBusinessFrag extends Fragment {
         check_box.setOnClickListener(v1 -> {
             if (check_box.isChecked()) {
 
-                MerchantSignupSlider.add_merchant_in_member  = "add_member_list";
+                MerchantSignupSlider.add_merchant_in_member = "add_member_list";
 
-              //  Toast.makeText(getActivity(), "true!!!", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getActivity(), "true!!!", Toast.LENGTH_SHORT).show();
             } else {
 
-                MerchantSignupSlider.add_merchant_in_member  = "remove_member_list";
+                MerchantSignupSlider.add_merchant_in_member = "remove_member_list";
                 //Toast.makeText(getActivity(), "false!!!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -336,6 +361,10 @@ public class MerBusinessFrag extends Fragment {
                     } else {
                         MerchantSignupSlider.selected_country = categoryBeanListArrayList2.get(position).getId();
                         MerchantSignupSlider.selected_country_name = categoryBeanListArrayList2.get(position).getName();
+
+
+                        Log.e("TAG", "onItemSelected: " + MerchantSignupSlider.selected_country);
+                        Log.e("TAG", "onItemSelected: " + MerchantSignupSlider.selected_country_name);
                     }
 
                 }
@@ -370,6 +399,7 @@ public class MerBusinessFrag extends Fragment {
 
                 } else {
                     MerchantSignupSlider.country_str = countryBeanArrayList.get(position).getName();
+                    MerchantSignupSlider.selected_country = countryBeanArrayList.get(position).getId();
                     new GetStateList().execute(countryBeanArrayList.get(position).getId());
 
                 }
@@ -513,134 +543,247 @@ public class MerBusinessFrag extends Fragment {
         });
         getCategoryType();
         getCountryList();
-       /* if (myapisession.getKeyMerchantcate()==null||myapisession.getKeyMerchantcate().equalsIgnoreCase("")){
+    }
 
+    @SuppressLint("Range")
+    public String getPath(Uri uri) {
+        String path = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            //  Log.e("image_path.===..", "" + path);
         }
-        else {
+        cursor.close();
+        return path;
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateToStr = format.format(today);
+        ContextWrapper cw = new ContextWrapper(getActivity());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                categoryBeanListArrayList = new ArrayList<>();
-                CategoryBeanList categoryBeanList = new CategoryBeanList();
-                categoryBeanList.setCategoryId("0");
-                categoryBeanList.setCategoryName("Select category");
-                categoryBeanListArrayList.add(categoryBeanList);
-                JSONObject object = new JSONObject(myapisession.getKeyMerchantcate());
-                Log.e("loginCall >", " >" + myapisession.getKeyMerchantcate());
-                if (object.getString("status").equals("1")) {
-
-                    CategoryBean successData = new Gson().fromJson(myapisession.getKeyMerchantcate(), CategoryBean.class);
-                    categoryBeanListArrayList.addAll(successData.getResult());
-
-                }
-
-                categoryAdpters = new CategoryAdpters(getActivity(), categoryBeanListArrayList);
-                category_spinner.setAdapter(categoryAdpters);
-
-
-            } catch (Exception e) {
+                fos.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        return mypath.getAbsolutePath();
+    }
 
+    public void decodeFile(String filePath) {
 
-        }*/
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(filePath, o);
+            // The new size we want to scale to
+            final int REQUIRED_SIZE = 1024;
+            // Find the correct scale value. It should be the power of 2.
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
+            MerchantSignupSlider.ImagePath = saveToInternalStorage(bitmap);
+            Log.e("DECODE PATH", "ff " + MerchantSignupSlider.ImagePath);
+            merchant_img.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
+    private void selectImage() {
+        try {
 
-    private class GetCountryList extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-            countryBeanArrayList = new ArrayList<>();
-            CountryBean countryListBean = new CountryBean();
-            countryListBean.setId("0");
-            countryListBean.setName("Country");
-            countryListBean.setSortname("");
-            countryBeanArrayList.add(countryListBean);
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+            final Dialog dialogSts = new Dialog(getActivity(), R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.select_img_lay);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button camera = (Button) dialogSts.findViewById(R.id.camera);
+            Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
+            TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+            gallary.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogSts.dismiss();
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 1);
 
-        @Override
-        protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                 }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
+            });
+
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogSts.dismiss();
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, 2);
+
                 }
-                writer.close();
-                reader.close();
-                Log.e("Json Country Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
+            });
 
-                e1.printStackTrace();
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
+            cont_find.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogSts.dismiss();
+                }
+            });
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progresbar.setVisibility(View.GONE);
-            if (result == null) {
-            } else if (result.isEmpty()) {
+    private void checkGps() {
+        gpsTracker = new GPSTracker(getActivity());
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+
+            }
+        } else {
+
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
 
             } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String message = jsonObject.getString("message");
-                    if (message.equalsIgnoreCase("successful")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            CountryBean countryBean = new CountryBean();
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            countryBean.setId(jsonObject1.getString("id"));
-                            countryBean.setName(jsonObject1.getString("name"));
-                            countryBean.setSortname(jsonObject1.getString("sortname"));
-                            countryBeanArrayList.add(countryBean);
-                        }
-
-                        countryListAdapter = new CountryListAdapter(getActivity(), countryBeanArrayList);
-                        country_spn.setAdapter(countryListAdapter);
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
 
             }
-
-
         }
+
+
     }
 
+    private void getCategoryType() {
+        progresbar.setVisibility(View.VISIBLE);
+        categoryBeanListArrayList = new ArrayList<>();
+        CategoryBeanList categoryBeanList = new CategoryBeanList();
+        categoryBeanList.setCategoryId("0");
+        categoryBeanList.setCategoryName("Select category");
+        categoryBeanListArrayList.add(categoryBeanList);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("loginCall >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setMerchantcat(responseData);
+
+                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
+                            categoryBeanListArrayList.addAll(successData.getResult());
+
+                        }
+
+                        categoryAdpters = new CategoryAdpters(getActivity(), categoryBeanListArrayList);
+                        category_spinner.setAdapter(categoryAdpters);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    private void getCountryList() {
+        progresbar.setVisibility(View.VISIBLE);
+        categoryBeanListArrayList2 = new ArrayList<>();
+        CountryBeanList categoryBeanList = new CountryBeanList();
+        categoryBeanList.setId("0");
+        categoryBeanList.setName("Select Country");
+        categoryBeanListArrayList2.add(categoryBeanList);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCountry();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("loginCall >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setMerchantcountry(responseData);
+
+                            main.com.ngrewards.beanclasses.CountryBean successData = new Gson().fromJson(responseData, main.com.ngrewards.beanclasses.CountryBean.class);
+                            categoryBeanListArrayList2.addAll(successData.getResult());
+
+                        }
+
+                        countryAdpters = new CountryAdpters(getActivity(), categoryBeanListArrayList2);
+                        select_country_spinner.setAdapter(countryAdpters);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
 
     private class GetStateList extends AsyncTask<String, String, String> {
         @Override
@@ -831,10 +974,9 @@ public class MerBusinessFrag extends Fragment {
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -874,150 +1016,6 @@ public class MerBusinessFrag extends Fragment {
         }
     }
 
-    @SuppressLint("Range")
-    public String getPath(Uri uri) {
-        String path = null;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-        cursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        if (cursor.moveToFirst()) {
-            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            //  Log.e("image_path.===..", "" + path);
-        }
-        cursor.close();
-        return path;
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String dateToStr = format.format(today);
-        ContextWrapper cw = new ContextWrapper(getActivity());
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return mypath.getAbsolutePath();
-    }
-
-    public void decodeFile(String filePath) {
-
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(filePath, o);
-            // The new size we want to scale to
-            final int REQUIRED_SIZE = 1024;
-            // Find the correct scale value. It should be the power of 2.
-            int width_tmp = o.outWidth, height_tmp = o.outHeight;
-            int scale = 1;
-            while (true) {
-                if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                    break;
-                width_tmp /= 2;
-                height_tmp /= 2;
-                scale *= 2;
-            }
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-            MerchantSignupSlider.ImagePath = saveToInternalStorage(bitmap);
-            Log.e("DECODE PATH", "ff " + MerchantSignupSlider.ImagePath);
-            merchant_img.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void selectImage() {
-        try {
-
-            final Dialog dialogSts = new Dialog(getActivity(), R.style.DialogSlideAnim);
-            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialogSts.setCancelable(false);
-            dialogSts.setContentView(R.layout.select_img_lay);
-            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            Button camera = (Button) dialogSts.findViewById(R.id.camera);
-            Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
-            TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-            gallary.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogSts.dismiss();
-                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(i, 1);
-
-                }
-            });
-
-            camera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogSts.dismiss();
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, 2);
-
-                }
-            });
-
-            cont_find.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogSts.dismiss();
-                }
-            });
-            dialogSts.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void checkGps() {
-        gpsTracker = new GPSTracker(getActivity());
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-
-            }
-        }
-
-
-    }
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -1041,11 +1039,11 @@ public class MerBusinessFrag extends Fragment {
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private List<String> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
         private final WebOperations wo;
         private final String lat;
         private final String lon;
+        private List<String> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;
@@ -1291,9 +1289,9 @@ public class MerBusinessFrag extends Fragment {
     }
 
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -1326,10 +1324,11 @@ public class MerBusinessFrag extends Fragment {
             return view;
         }
     }
+
     public class CountryAdpters extends BaseAdapter {
+        private final ArrayList<CountryBeanList> categoryBeanLists2;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CountryBeanList> categoryBeanLists2;
 
         public CountryAdpters(Context applicationContext, ArrayList<CountryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -1361,101 +1360,6 @@ public class MerBusinessFrag extends Fragment {
             names.setText(categoryBeanLists2.get(i).getName());
             return view;
         }
-    }
-
-    private void getCategoryType() {
-        progresbar.setVisibility(View.VISIBLE);
-        categoryBeanListArrayList = new ArrayList<>();
-        CategoryBeanList categoryBeanList = new CategoryBeanList();
-        categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName("Select category");
-        categoryBeanListArrayList.add(categoryBeanList);
-        Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("loginCall >", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setMerchantcat(responseData);
-
-                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
-                            categoryBeanListArrayList.addAll(successData.getResult());
-
-                        }
-
-                        categoryAdpters = new CategoryAdpters(getActivity(), categoryBeanListArrayList);
-                        category_spinner.setAdapter(categoryAdpters);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-    private void getCountryList() {
-        progresbar.setVisibility(View.VISIBLE);
-        categoryBeanListArrayList2 = new ArrayList<>();
-        CountryBeanList categoryBeanList = new CountryBeanList();
-        categoryBeanList.setId("0");
-        categoryBeanList.setName("Select Country");
-        categoryBeanListArrayList2.add(categoryBeanList);
-        Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCountry();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("loginCall >", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setMerchantcountry(responseData);
-
-                            main.com.ngrewards.beanclasses.CountryBean successData = new Gson().fromJson(responseData, main.com.ngrewards.beanclasses.CountryBean.class);
-                            categoryBeanListArrayList2.addAll(successData.getResult());
-
-                        }
-
-                        countryAdpters = new CountryAdpters(getActivity(), categoryBeanListArrayList2);
-                        select_country_spinner.setAdapter(countryAdpters);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
     }
 
 }

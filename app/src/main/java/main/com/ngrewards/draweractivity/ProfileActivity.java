@@ -1,5 +1,8 @@
 package main.com.ngrewards.draweractivity;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +56,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -71,6 +76,7 @@ import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.beanclasses.AddressBean;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -90,31 +96,38 @@ import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_QR_SCAN = 3;
+    MySession mySession;
+    GenderAdpter genderAdpter;
+    ArrayList<String> genderlist, agelist;
+    CustomAddresAdp customAddresAdp;
+    int count = 0;
     private EditText name_et, username, email_id, phone_number, gender;
     private String age_str = "", name_str = "", username_str = "", email_id_str = "", phone_number_str = "", gender_str = "";
     private RelativeLayout backlay, addaddressdlay;
     private TextView update_tv;
     private ProgressBar progresbar;
-    MySession mySession;
-    private static final int REQUEST_CODE_QR_SCAN = 3;
     private String user_id = "", ImagePath = "", how_invited_you_name = "", who_invite_str = "", time_zone = "";
     private CircleImageView user_img;
     private Spinner genderspn, agespn;
-    GenderAdpter genderAdpter;
-    ArrayList<String> genderlist, agelist;
     private ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
     private LinearLayout whoinvitelay;
     private AutoCompleteTextView whoinvite;
     private ExpandableHeightListView addresslist;
-    CustomAddresAdp customAddresAdp;
-    int count = 0;
     private ImageView qrcode;
     private ArrayList<AddressBean> addressBeanArrayList;
     private String fullname;
     private String zipcode;
     private EditText zipcode1;
     private String zipcode_string = "";
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,7 +258,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private void idinit() {
 
         addaddressdlay = findViewById(R.id.addaddressdlay);
@@ -351,7 +363,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void getUsername() {
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -383,6 +395,221 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("TAG", "onActivityResult:+requestCode )--------" + requestCode);
+        Log.e("TAG", "onActivityResult:+resultCode );--------" + resultCode);
+        Log.e("TAG", "onActivityResult:+data );--------" + data);
+        if (resultCode == RESULT_OK) {
+
+            switch (requestCode) {
+
+                case 1:
+                    if (Build.VERSION.SDK_INT >= 33) {
+                            if (data == null) return;
+                            // Get photo picker response for single select.
+                            final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                user_img.setImageBitmap(bitmap);
+                             File tempfile =   Tools.persistImage(bitmap,ProfileActivity.this);
+                                ImagePath= tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: "+ImagePath );
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getApplicationContext(),e.getLocalizedMessage());
+                        }
+                    } else {
+                        Uri selectedImage = data.getData();
+                        //getPath(selectedImage);
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String FinalPath = cursor.getString(columnIndex);
+                        cursor.close();
+                        String ImagePath = getPath(selectedImage);
+                        decodeFile(ImagePath);
+                    }
+                    break;
+
+                case 2:
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    String cameraPath = saveToInternalStorage(photo);
+                    Log.e("PATH Camera", "" + cameraPath);
+                    //  String ImagePath = getPath(selectedImage);
+                    decodeFile(cameraPath);
+                    break;
+
+                case 3:
+                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                    try {
+                        String[] arr = result.split(",");
+                        whoinvite.setText(arr[1]);
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    break;
+            }
+        }
+    }
+
+    @SuppressLint("Range")
+    public String getPath(Uri uri) {
+        String path = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            //  Log.e("image_path.===..", "" + path);
+        }
+        cursor.close();
+        return path;
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateToStr = format.format(today);
+        ContextWrapper cw = new ContextWrapper(ProfileActivity.this);
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mypath.getAbsolutePath();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (myapisession.getKeyAddressdata() == null ||
+                myapisession.getKeyAddressdata().equalsIgnoreCase("")) {
+            new GetSavedAddress().execute();
+        } else {
+            try {
+                addressBeanArrayList = new ArrayList<>();
+                String result = myapisession.getKeyAddressdata();
+                JSONObject jsonObject = new JSONObject(result);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    myapisession.setKeyAddressdata(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        AddressBean addressBean = new AddressBean();
+                        addressBean.setId(jsonObject1.getString("id"));
+                        addressBean.setUser_id(jsonObject1.getString("user_id"));
+                        addressBean.setFullname(jsonObject1.getString("fullname"));
+                        addressBean.setPhone_number(jsonObject1.getString("phone_number"));
+                        addressBean.setCountry(jsonObject1.getString("country"));
+                        addressBean.setState(jsonObject1.getString("state"));
+                        addressBean.setCity(jsonObject1.getString("city"));
+                        addressBean.setAddress_1(jsonObject1.getString("address_1"));
+                        addressBean.setAddress_2(jsonObject1.getString("address_2"));
+                        addressBean.setZipcode(jsonObject1.getString("zipcode"));
+                        addressBean.setCreated_date(jsonObject1.getString("created_date"));
+                        addressBeanArrayList.add(addressBean);
+                    }
+
+                    customAddresAdp = new CustomAddresAdp(ProfileActivity.this, addressBeanArrayList);
+                    addresslist.setAdapter(customAddresAdp);
+                    customAddresAdp.notifyDataSetChanged();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void decodeFile(String filePath) {
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, o);
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 1024;
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
+        ImagePath = saveToInternalStorage(bitmap);
+        Log.e("DECODE PATH", "ff " + ImagePath);
+        user_img.setImageBitmap(bitmap);
+    }
+
+    private void selectImage() {
+
+        final Dialog dialogSts = new Dialog(ProfileActivity.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.select_img_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button camera = (Button) dialogSts.findViewById(R.id.camera);
+        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
+        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+
+        gallary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 1);
+
+            }
+        });
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 2);
+
+            }
+        });
+
+        cont_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+
+        dialogSts.show();
     }
 
     private class GetProfile extends AsyncTask<String, String, String> {
@@ -552,162 +779,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-
-            switch (requestCode) {
-
-                case 1:
-                    Uri selectedImage = data.getData();
-                    //getPath(selectedImage);
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String FinalPath = cursor.getString(columnIndex);
-                    cursor.close();
-                    String ImagePath = getPath(selectedImage);
-                    decodeFile(ImagePath);
-                    break;
-
-                case 2:
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    String cameraPath = saveToInternalStorage(photo);
-                    Log.e("PATH Camera", "" + cameraPath);
-                    //  String ImagePath = getPath(selectedImage);
-
-                    decodeFile(cameraPath);
-
-                    break;
-
-                case 3:
-                    String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-                    try {
-
-                        String[] arr = result.split(",");
-                        whoinvite.setText(arr[1]);
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    break;
-            }
-        }
-    }
-
-    public String getPath(Uri uri) {
-        String path = null;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        if (cursor.moveToFirst()) {
-            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            //  Log.e("image_path.===..", "" + path);
-        }
-        cursor.close();
-        return path;
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String dateToStr = format.format(today);
-        ContextWrapper cw = new ContextWrapper(ProfileActivity.this);
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return mypath.getAbsolutePath();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (myapisession.getKeyAddressdata() == null ||
-                myapisession.getKeyAddressdata().equalsIgnoreCase("")) {
-            new GetSavedAddress().execute();
-        } else {
-            try {
-                addressBeanArrayList = new ArrayList<>();
-                String result = myapisession.getKeyAddressdata();
-                JSONObject jsonObject = new JSONObject(result);
-                String message = jsonObject.getString("status");
-                if (message.equalsIgnoreCase("1")) {
-                    myapisession.setKeyAddressdata(result);
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        AddressBean addressBean = new AddressBean();
-                        addressBean.setId(jsonObject1.getString("id"));
-                        addressBean.setUser_id(jsonObject1.getString("user_id"));
-                        addressBean.setFullname(jsonObject1.getString("fullname"));
-                        addressBean.setPhone_number(jsonObject1.getString("phone_number"));
-                        addressBean.setCountry(jsonObject1.getString("country"));
-                        addressBean.setState(jsonObject1.getString("state"));
-                        addressBean.setCity(jsonObject1.getString("city"));
-                        addressBean.setAddress_1(jsonObject1.getString("address_1"));
-                        addressBean.setAddress_2(jsonObject1.getString("address_2"));
-                        addressBean.setZipcode(jsonObject1.getString("zipcode"));
-                        addressBean.setCreated_date(jsonObject1.getString("created_date"));
-                        addressBeanArrayList.add(addressBean);
-                    }
-
-                    customAddresAdp = new CustomAddresAdp(ProfileActivity.this, addressBeanArrayList);
-                    addresslist.setAdapter(customAddresAdp);
-                    customAddresAdp.notifyDataSetChanged();
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void decodeFile(String filePath) {
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, o);
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 1024;
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                break;
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-        ImagePath = saveToInternalStorage(bitmap);
-        Log.e("DECODE PATH", "ff " + ImagePath);
-        user_img.setImageBitmap(bitmap);
-    }
-
     public class UpdateProfile extends AsyncTask<String, String, String> {
 
         String Jsondata;
@@ -727,12 +798,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/update_member_profile.php?member_id=882&fullname=kapil&gender=Male
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_member_profile.php?";
             Log.e("requestURL >>", requestURL + "member_id=" + user_id + "&email=" + email_id_str + "&phone=" + phone_number_str + "&affiliate_name=" + username_str + "&gender=" + gender_str + "&fullname=" + name_str + "&age=" + age_str + "&timezone=" + time_zone + "&how_invited_you_name=" + how_invited_you_name + "&how_invited_you=" + who_invite_str.trim());
             try {
-
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("member_id", user_id);
                 multipart.addFormField("email", email_id_str);
@@ -758,7 +827,6 @@ public class ProfileActivity extends AppCompatActivity {
                     File ImageFile = new File(ImagePath);
                     multipart.addFilePart("member_image", ImageFile);
                 }
-
                 List<String> response = multipart.finish();
 
                 for (String line : response) {
@@ -842,9 +910,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     public class GenderAdpter extends BaseAdapter {
 
+        private final ArrayList<String> values;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<String> values;
 
         public GenderAdpter(Context applicationContext, ArrayList<String> values) {
             this.context = applicationContext;
@@ -879,52 +947,11 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void selectImage() {
-
-        final Dialog dialogSts = new Dialog(ProfileActivity.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.select_img_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button camera = (Button) dialogSts.findViewById(R.id.camera);
-        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
-        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-
-        gallary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 1);
-
-            }
-        });
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 2);
-
-            }
-        });
-
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-
-        dialogSts.show();
-    }
-
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -1145,8 +1172,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     public class CustomAddresAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<AddressBean> addressBeanArrayList;
+        private LayoutInflater inflater = null;
 
         public CustomAddresAdp(Context contexts, ArrayList<AddressBean> addressBeanArrayList) {
             this.context = contexts;
@@ -1171,10 +1198,6 @@ public class ProfileActivity extends AppCompatActivity {
         public long getItemId(int position) {
             // TODO Auto-generated method stub
             return position;
-        }
-
-        public class Holder {
-
         }
 
         @Override
@@ -1219,13 +1242,10 @@ public class ProfileActivity extends AppCompatActivity {
             return rowView;
         }
 
-    }
+        public class Holder {
 
-    public static boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        }
+
     }
 
 

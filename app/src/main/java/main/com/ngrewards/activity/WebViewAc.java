@@ -35,14 +35,14 @@ public class WebViewAc extends AppCompatActivity {
         int additionint1 = addition1.nextInt(100) + 1;
         String random_no = String.valueOf(additionint1);
 
-        Url = "https://international.myngrewards.com/signup.php?affiliate_name=ngrewardsllc&affiliate_no=" + random_no + "&how_invited_you=";
+        Url = "https://myngrewards.com/signup.php?affiliate_name=ngrewardsllc&affiliate_no=" + random_no + "&how_invited_you=";
 
         TermsWV.getSettings().setLoadsImagesAutomatically(true);
         TermsWV.getSettings().setJavaScriptEnabled(true);
         TermsWV.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         TermsWV.setWebViewClient(new HelloWebViewClient());
         TermsWV.getSettings().setDomStorageEnabled(true);
-        TermsWV.getSettings().setAppCacheEnabled(true);
+        TermsWV.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         TermsWV.getSettings().setLoadsImagesAutomatically(true);
         TermsWV.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         TermsWV.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);

@@ -85,7 +85,7 @@ public class NotificationUtils {
                     mContext,
                     0,
                     intent1,
-                    PendingIntent.FLAG_IMMUTABLE);
+                    PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_MUTABLE);
 
         } else {
             resultPendingIntent = PendingIntent.getActivity(

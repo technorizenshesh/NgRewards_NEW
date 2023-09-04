@@ -307,6 +307,11 @@ public class BaseActivity extends AppCompatActivity {
             dialogSts = new Dialog(BaseActivity.this, R.style.DialogSlideAnim);
         }
 
+
+    }
+
+    @Override
+    protected void onResumeFragments() {
         mySession = new MySession(this);
 
         String user_log_data = mySession.getKeyAlldata();
@@ -346,6 +351,7 @@ public class BaseActivity extends AppCompatActivity {
 
             }
         }
+        super.onResumeFragments();
     }
 
     private void clcickev() {

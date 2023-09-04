@@ -1,5 +1,7 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -56,12 +59,14 @@ import java.util.Date;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -365,7 +370,6 @@ public class AddOffersAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_offer.php?user_id=36&offer_name=sdfds&offer_description=dsfdsfgdsg&offer_image=1.png&offer_discount=20&offer_price=28
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "add_offer.php?";
             try {
@@ -556,7 +560,6 @@ public class AddOffersAct extends AppCompatActivity {
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
             Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-            ImagePath = saveToInternalStorage(bitmap);
             Log.e("DECODE PATH", "ff " + ImagePath);
             uploadimg.setImageBitmap(bitmap);
         }catch (Exception e){
@@ -573,9 +576,26 @@ public class AddOffersAct extends AppCompatActivity {
 
             switch (requestCode) {
                 case 1:
-
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                uploadimg.setImageBitmap(bitmap);
+                                File tempfile =   Tools.persistImage(bitmap, getApplicationContext());
+                                ImagePath= tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: "+ImagePath );
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getApplicationContext(),e.getLocalizedMessage());
+                        }
+                    }
+                    else {
                     Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
@@ -587,7 +607,7 @@ public class AddOffersAct extends AppCompatActivity {
 
                     uploadimg.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-                    Log.e("picturePath",picturePath);
+                    Log.e("picturePath", picturePath);
 
                     file = new File(picturePath);
                     String fileName = file.getName();
@@ -602,7 +622,7 @@ public class AddOffersAct extends AppCompatActivity {
                     imageBytes = convertImageToByte(selectedImage, extension);
                     Log.e("fileName", "" + imageBytes.length);
                     decodeFile(picturePath);
-
+            }
                     break;
 
                 case 2:
@@ -610,7 +630,6 @@ public class AddOffersAct extends AppCompatActivity {
                     String cameraPath = saveToInternalStorage(photo);
                     Log.e("PATH Camera", "" + cameraPath);
                     //  String ImagePath = getPath(selectedImage);
-
                     decodeFile(cameraPath);
                     break;
 

@@ -247,7 +247,6 @@ public class AddStripeConnectAccount extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/create_external_account.php?token=433g53656356&account_id=63464543
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "create_external_account.php?";
@@ -492,7 +491,6 @@ public class AddStripeConnectAccount extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/merchant_stripe_account.php?user_id=412
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_stripe_account.php?";
                 URL url = new URL(postReceiverUrl);

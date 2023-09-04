@@ -51,12 +51,10 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<String> selectedItems = imageAdpterGrid.getCheckedItems();
 
-
                 if (selectedItems!= null && selectedItems.size() > 0) {
                      image = imageAdpterGrid.getCheckedItems();
                     Log.e("Images Path",""+image.get(0));
                     finish();
-                  //  Toast.makeText(MultiPhotoSelectActivity.this, "Total photos selected: " + selectedItems.size(), Toast.LENGTH_SHORT).show();
                     Log.e(MultiPhotoSelectActivity.class.getSimpleName(), "Selected Items: " + selectedItems);
                 }
                 else {

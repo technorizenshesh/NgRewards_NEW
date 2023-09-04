@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
@@ -65,6 +67,7 @@ import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
+import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity2;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -73,27 +76,27 @@ import retrofit2.Response;
 
 public class StartYourListing extends AppCompatActivity {
     public static ArrayList<String> ImagePathArrayList;
-    private RelativeLayout backlay;
-    private ImageView uploadimg;
     HorizontalAdapter horizontalAdapter;
-    private RecyclerView add_product_list;
-    private Spinner category_spinner;
     ProgressBar progresbar;
-    private ArrayList<CategoryBeanList> categoryBeanListArrayList;
-    private CategoryAdpters categoryAdpters;
-    private String category_id = "";
-           private String split_amount = "";
-    private  String split_payments = "";
     boolean IsSplited = false;
-    private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
-    private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
-    private TextView  show_pricing_type ,list_item_tv;
     File[] filearray;
     MySession mySession;
     LinearLayout split_lay;
     CheckBox split_check;
     Myapisession myapisession;
     Uri imageUri;
+    private RelativeLayout backlay;
+    private ImageView uploadimg;
+    private RecyclerView add_product_list;
+    private Spinner category_spinner;
+    private ArrayList<CategoryBeanList> categoryBeanListArrayList;
+    private CategoryAdpters categoryAdpters;
+    private String category_id = "";
+    private String split_amount = "";
+    private String split_payments = "";
+    private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
+    private String user_id = "", stripe_account_id = "", time_zone = "", shipping_price_str = "", stock_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
+    private TextView show_pricing_type, list_item_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,10 +142,9 @@ public class StartYourListing extends AppCompatActivity {
         }
 
 
-        if (myapisession.getProductdata()==null||myapisession.getProductdata().equalsIgnoreCase("")){
+        if (myapisession.getProductdata() == null || myapisession.getProductdata().equalsIgnoreCase("")) {
             getCategoryType();
-        }
-        else {
+        } else {
             try {
                 categoryBeanListArrayList = new ArrayList<>();
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
@@ -187,11 +189,9 @@ public class StartYourListing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (stripe_account_id==null||stripe_account_id.equalsIgnoreCase(""))
-                {
-                   Toast.makeText(StartYourListing.this,getResources().getString(R.string.plseftcrtestractt),Toast.LENGTH_LONG).show();
-                }
-                else {
+                if (stripe_account_id == null || stripe_account_id.equalsIgnoreCase("")) {
+                    Toast.makeText(StartYourListing.this, getResources().getString(R.string.plseftcrtestractt), Toast.LENGTH_LONG).show();
+                } else {
                     tital_name_str = tital_name_et.getText().toString();
                     description_str = description_et.getText().toString();
                     price_str = price_et.getText().toString();
@@ -207,12 +207,10 @@ public class StartYourListing extends AppCompatActivity {
                     } else if (description_str == null || description_str.equalsIgnoreCase("")) {
                         Toast.makeText(StartYourListing.this, getResources().getString(R.string.enterdesc), Toast.LENGTH_LONG).show();
 
-                    }
-                    else if (stock_str == null || stock_str.equalsIgnoreCase("")) {
+                    } else if (stock_str == null || stock_str.equalsIgnoreCase("")) {
                         Toast.makeText(StartYourListing.this, getResources().getString(R.string.enteritemstockquantity), Toast.LENGTH_LONG).show();
 
-                    }
-                    else if (price_str == null || price_str.equalsIgnoreCase("")) {
+                    } else if (price_str == null || price_str.equalsIgnoreCase("")) {
                         Toast.makeText(StartYourListing.this, getResources().getString(R.string.enterprice), Toast.LENGTH_LONG).show();
 
                     } else if (shipping_str == null || shipping_str.equalsIgnoreCase("")) {
@@ -238,8 +236,6 @@ public class StartYourListing extends AppCompatActivity {
                 }
 
 
-
-
             }
         });
     }
@@ -261,7 +257,7 @@ public class StartYourListing extends AppCompatActivity {
         progresbar = findViewById(R.id.progresbar);
         add_product_list = findViewById(R.id.add_product_list);
         show_pricing_type = findViewById(R.id.show_pricing_type);
-        show_pricing_type.setText(getString(R.string.pricing)+" ("+mySession.getValueOf(MySession.CurrencyCode)+")");
+        show_pricing_type.setText(getString(R.string.pricing) + " (" + mySession.getValueOf(MySession.CurrencyCode) + ")");
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(StartYourListing.this, LinearLayoutManager.HORIZONTAL, false);
         add_product_list.setLayoutManager(horizontalLayoutManagaer);
@@ -287,7 +283,7 @@ public class StartYourListing extends AppCompatActivity {
             }
         });
 
-        price_et.setFilters(new InputFilter[] {
+        price_et.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
                     final int afterDecimal = 2;
@@ -317,20 +313,20 @@ public class StartYourListing extends AppCompatActivity {
         });
         split_lay.setOnClickListener(v -> {
 
-             if (IsSplited){
-                 split_amount ="";
-                 IsSplited = false;
-                 split_check.setChecked(false);
-                 Toast.makeText(StartYourListing.this, "Split Payments Removed",
-                         Toast.LENGTH_SHORT).show();
-             }
-             else {
-            if (price_et.getText().toString().equalsIgnoreCase("")) {
-                Toast.makeText(StartYourListing.this, "Please Enter Amount First",
+            if (IsSplited) {
+                split_amount = "";
+                IsSplited = false;
+                split_check.setChecked(false);
+                Toast.makeText(StartYourListing.this, "Split Payments Removed",
                         Toast.LENGTH_SHORT).show();
             } else {
-                enterNoOfSplits(price_et.getText().toString());
-            }}
+                if (price_et.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(StartYourListing.this, "Please Enter Amount First",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    enterNoOfSplits(price_et.getText().toString());
+                }
+            }
 
         });
 
@@ -406,10 +402,10 @@ public class StartYourListing extends AppCompatActivity {
             recy_list.setLayoutManager(new LinearLayoutManager(this));
             recy_list.setAdapter(finalPuzzelAdapter);
             submitt.setOnClickListener(v -> {
-                split_amount   =     TextUtils.join(", ", peopleList);
-                split_payments   =    ""+noofemi;
-                Log.e("TAG", "listSplits:split_amountsplit_amount "+split_amount );
-                IsSplited = true ;
+                split_amount = TextUtils.join(", ", peopleList);
+                split_payments = "" + noofemi;
+                Log.e("TAG", "listSplits:split_amountsplit_amount " + split_amount);
+                IsSplited = true;
                 split_check.setChecked(true);
                 dialogSts.dismiss();
             });
@@ -421,42 +417,6 @@ public class StartYourListing extends AppCompatActivity {
             Log.e("TAG", "listSplits: " + e.getLocalizedMessage());
         }
 
-    }
-
-    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
-        private final ArrayList<String> peopleList;
-
-        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
-            this.peopleList = peopleList;
-        }
-
-        @NonNull
-        @Override
-        public SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
-            SelectTimeViewHolder viewHolder = new SelectTimeViewHolder(listItem);
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
-            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
-            int prop = position + 1;
-            ivFinalImage.setText("Payment " + prop + " - "+mySession.getValueOf(MySession.CurrencySign)+" " + peopleList.get(position));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return peopleList.size();
-        }
-
-        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
-            public SelectTimeViewHolder(@NonNull View itemView) {
-                super(itemView);
-            }
-        }
     }
 
     private void selectImage() {
@@ -472,8 +432,14 @@ public class StartYourListing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogSts.dismiss();
-                Intent i = new Intent(StartYourListing.this, MultiPhotoSelectActivity.class);
-                startActivity(i);
+                if (Build.VERSION.SDK_INT >= 33) {
+                    Intent i = new Intent(StartYourListing.this, MultiPhotoSelectActivity2.class);
+                    startActivity(i);
+                }else {
+                    Intent i = new Intent(StartYourListing.this, MultiPhotoSelectActivity.class);
+                    startActivity(i);
+
+                }
 
             }
         });
@@ -493,7 +459,7 @@ public class StartYourListing extends AppCompatActivity {
                 startActivityForResult(intent, PICTURE_RESULT);*/
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-             //   cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                //   cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(cameraIntent, 2);
 
 
@@ -534,72 +500,6 @@ public class StartYourListing extends AppCompatActivity {
 
     }
 
-    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
-
-        private ArrayList<Bitmap> horizontalList;
-        private final ArrayList<String> ImagePathArrayList_adp;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public ImageView ProductImageImagevies,removeimages;
-            //   RelativeLayout RLRemovePhoto;
-
-            public MyViewHolder(View view) {
-                super(view);
-
-                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
-                removeimages = (ImageView) view.findViewById(R.id.removeimages);
-                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
-
-            }
-        }
-
-
-        public HorizontalAdapter(ArrayList<String> ImagePathArrayList_adp) {
-            this.horizontalList = horizontalList;
-            this.ImagePathArrayList_adp = ImagePathArrayList_adp;
-        }
-
-        @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.horizontal_list_item, parent, false);
-
-            return new HorizontalAdapter.MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-            if (ImagePathArrayList_adp.get(position) != null) {
-                holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArrayList_adp.get(position))));
-
-            }
-            holder.removeimages.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ImagePathArrayList != null && !ImagePathArrayList.isEmpty()) {
-                        ImagePathArrayList.remove(position);
-
-                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-                        add_product_list.setAdapter(horizontalAdapter);
-                        horizontalAdapter.notifyDataSetChanged();
-                        if (ImagePathArrayList == null || ImagePathArrayList.isEmpty()) {
-                            add_product_list.setVisibility(View.GONE);
-                        }
-                    }
-
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return ImagePathArrayList_adp == null ? 0 : ImagePathArrayList_adp.size();
-
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -608,13 +508,10 @@ public class StartYourListing extends AppCompatActivity {
             switch (requestCode) {
                 case 1:
                     Uri selectedImage = data.getData();
-
                     String ImagePath = getPath(selectedImage);
                     ImagePathArrayList.add(ImagePath);
-
                     //  decodeFile(ImagePath);
                     add_product_list.setVisibility(View.VISIBLE);
-
                     horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
                     add_product_list.setAdapter(horizontalAdapter);
                     horizontalAdapter.notifyDataSetChanged();
@@ -667,40 +564,43 @@ public class StartYourListing extends AppCompatActivity {
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage) {
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String dateToStr = format.format(today);
-        ContextWrapper cw = new ContextWrapper(StartYourListing.this);
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_"+dateToStr+".PNG");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
+        String ppath = "";
+        if (Build.VERSION.SDK_INT >= 33) {
+            File tempfile = Tools.persistImage(bitmapImage, getApplicationContext());
+            ppath = tempfile.getAbsolutePath();
 
-           /* int size = bitmapImage.getRowBytes() * bitmapImage.getHeight();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-            bitmapImage.copyPixelsToBuffer(byteBuffer);
-            //byteArray = byteBuffer.array();
+        } else {
 
-
-            fos.write(byteBuffer.array());*/
-            Bitmap.createScaledBitmap(bitmapImage, 1000, 1000,true);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            //
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+            Date today = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String dateToStr = format.format(today);
+            ContextWrapper cw = new ContextWrapper(StartYourListing.this);
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            File mypath = new File(directory, "profile_" + dateToStr + ".PNG");
+            FileOutputStream fos = null;
             try {
-                fos.close();
-            } catch (IOException e) {
+                fos = new FileOutputStream(mypath);
+                Bitmap.createScaledBitmap(bitmapImage, 1000, 1000, true);
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                //
+
+            } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+            ppath = mypath.getAbsolutePath();
         }
-        return mypath.getAbsolutePath();
+        return ppath;
     }
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
-        Bitmap OutImage = Bitmap.createScaledBitmap(inImage, 1000, 1000,true);
+        Bitmap OutImage = Bitmap.createScaledBitmap(inImage, 1000, 1000, true);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), OutImage, "Title", null);
         return Uri.parse(path);
     }
@@ -779,10 +679,130 @@ public class StartYourListing extends AppCompatActivity {
         });
     }
 
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
+        private final ArrayList<String> peopleList;
+
+        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
+            this.peopleList = peopleList;
+        }
+
+        @NonNull
+        @Override
+        public SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
+            SelectTimeViewHolder viewHolder = new SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            int prop = position + 1;
+            ivFinalImage.setText("Payment " + prop + " - " + mySession.getValueOf(MySession.CurrencySign) + " " + peopleList.get(position));
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+        private final ArrayList<String> ImagePathArrayList_adp;
+        private ArrayList<Bitmap> horizontalList;
+
+        public HorizontalAdapter(ArrayList<String> ImagePathArrayList_adp) {
+            this.horizontalList = horizontalList;
+            this.ImagePathArrayList_adp = ImagePathArrayList_adp;
+        }
+
+        @Override
+        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.horizontal_list_item, parent, false);
+
+            return new HorizontalAdapter.MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            if (ImagePathArrayList_adp.get(position) != null) {
+                if (Build.VERSION.SDK_INT >= 33) {
+
+                    Log.e("TAG", "onBindViewHolder: ---------- "+ImagePathArrayList_adp.get(position) );
+                  //  File tempfile = Tools.persistImage(bitmapImage, getApplicationContext());
+                  //  ppath = tempfile.getAbsolutePath();
+                 //   holder.ProductImageImagevies.setImageURI(Uri.fromFile(Tools.persistImage()));
+                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArrayList_adp.get(position))));
+
+                } else {
+                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArrayList_adp.get(position))));
+
+                }
+
+            }
+            holder.removeimages.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ImagePathArrayList != null && !ImagePathArrayList.isEmpty()) {
+                        ImagePathArrayList.remove(position);
+
+                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+                        add_product_list.setAdapter(horizontalAdapter);
+                        horizontalAdapter.notifyDataSetChanged();
+                        if (ImagePathArrayList == null || ImagePathArrayList.isEmpty()) {
+                            add_product_list.setVisibility(View.GONE);
+                        }
+                    }
+
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return ImagePathArrayList_adp == null ? 0 : ImagePathArrayList_adp.size();
+
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public ImageView ProductImageImagevies, removeimages;
+            //   RelativeLayout RLRemovePhoto;
+
+            public MyViewHolder(View view) {
+                super(view);
+
+                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
+                removeimages = (ImageView) view.findViewById(R.id.removeimages);
+                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
+
+            }
+        }
+    }
+
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -818,6 +838,7 @@ public class StartYourListing extends AppCompatActivity {
 
     public class AddProductsAsc extends AsyncTask<String, String, String> {
         String Jsondata;
+
         protected void onPreExecute() {
             try {
                 super.onPreExecute();
@@ -826,9 +847,9 @@ public class StartYourListing extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_product.php?user_id=1&product_name=shdjfgdshjfg&product_description=xcvcxvxv&product_price=500&shipping_time=4-5
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "add_product.php?";
             Log.e("requestURL >>", requestURL);
@@ -844,13 +865,12 @@ public class StartYourListing extends AppCompatActivity {
                 multipart.addFormField("size", sizes_str);
                 multipart.addFormField("stock", stock_str);
                 multipart.addFormField("timezone", time_zone);
-                 multipart.addFormField("split_amount",    split_amount);
+                multipart.addFormField("split_amount", split_amount);
                 multipart.addFormField("split_payments", split_payments);
                 multipart.addFormField("tax_price", " ");
-                if (shipping_price_str==null){
+                if (shipping_price_str == null) {
                     multipart.addFormField("shipping_price", "");
-                }
-                else {
+                } else {
                     multipart.addFormField("shipping_price", shipping_price_str);
                 }
 
@@ -906,14 +926,6 @@ public class StartYourListing extends AppCompatActivity {
         }
 
 
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 
 

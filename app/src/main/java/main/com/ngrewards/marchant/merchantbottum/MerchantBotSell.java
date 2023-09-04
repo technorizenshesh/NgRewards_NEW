@@ -43,12 +43,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MerchantBotSell extends MerchantBaseActivity {
+    public static ArrayList<MerchantItemList> myproductslist;
     FrameLayout contentFrameLayout;
+    SwipeRefreshLayout swipeToRefresh;
     private RecyclerView activity_list;
     private LinearLayout lay_out, lay_removed;
     private TextView listitem;
-    SwipeRefreshLayout swipeToRefresh;
-    public static ArrayList<MerchantItemList> myproductslist;
     private MySession mySession;
     private String user_id = "";
     private TextView cont_find, active_count_tv, sold_count_tv, unsold_count_tv, total_earning;
@@ -61,19 +61,17 @@ public class MerchantBotSell extends MerchantBaseActivity {
         contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame);
         getLayoutInflater().inflate(R.layout.activity_merchant_bot_sell, contentFrameLayout);
         mySession = new MySession(this);
-        Log.e("TAG", "onCreate: "+mySession.getadmin_created_password() );
+        Log.e("TAG", "onCreate: " + mySession.getadmin_created_password());
         idinits();
         clickevent();
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
 
         } else {
-
             if (mySession.getsell_items_reomve_access().equalsIgnoreCase("remove")) {
                 lay_out.setVisibility(View.GONE);
                 lay_removed.setVisibility(View.VISIBLE);
             } else {
-
                 if (mySession.getPassSet().equalsIgnoreCase("")) {
                     lay_out.setVisibility(View.GONE);
                     setSellPassDialog();
@@ -105,10 +103,16 @@ public class MerchantBotSell extends MerchantBaseActivity {
             dialogSts.setContentView(R.layout.removed_item);
             dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+
+            TextView close = (TextView) dialogSts.findViewById(R.id.close);
+            close.setOnClickListener(v -> {
+                Intent Intent5 = new Intent(this, MerchantBottumAct.class);
+                startActivity(Intent5);
+                finish();
+            });
             TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
             EditText pass = (EditText) dialogSts.findViewById(R.id.pass);
             CheckBox acceptcondition = (CheckBox) dialogSts.findViewById(R.id.acceptcondition);
-
             submitt.setOnClickListener(v -> {
                 if (!acceptcondition.isChecked()) {
                     new SweetAlertDialog(MerchantBotSell.this, SweetAlertDialog.WARNING_TYPE)
@@ -138,8 +142,8 @@ public class MerchantBotSell extends MerchantBaseActivity {
                                 }
                             })
                             .show();
-                }else {
-                    Snackbar.make(v,"Password Matched",Snackbar.LENGTH_SHORT ).show();
+                } else {
+                    Snackbar.make(v, "Password Matched", Snackbar.LENGTH_SHORT).show();
                     mySession.setPassSet(mySession.getadmin_created_password());
                     dialogSts.dismiss();
                     lay_out.setVisibility(View.VISIBLE);
@@ -253,16 +257,16 @@ public class MerchantBotSell extends MerchantBaseActivity {
                             unsold_count_tv.setText("" + successData.getUnsoldProductCount());
                             sold_count_tv.setText("" + successData.getSoldProductCount());
                             if (successData.getTotal_earning_with_shipping() == null || successData.getTotal_earning_with_shipping().equalsIgnoreCase("") || successData.getTotal_earning_with_shipping().equalsIgnoreCase("null") || successData.getTotal_earning_with_shipping().equalsIgnoreCase("0")) {
-                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                             } else {
-                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_earning_with_shipping());
+                                total_earning.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_earning_with_shipping());
                             }
 
                         } else {
                             active_count_tv.setText("0");
                             unsold_count_tv.setText("0");
                             sold_count_tv.setText("0");
-                            total_earning.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                            total_earning.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
 
                         }
 

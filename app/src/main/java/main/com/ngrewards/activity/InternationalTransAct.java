@@ -77,10 +77,10 @@ public class InternationalTransAct extends AppCompatActivity {
         myapisession = new Myapisession(this);
         idint();
         clcikevent();
-        if (myapisession.getKeyCountry()==null||myapisession.getKeyCountry().equalsIgnoreCase("")){
+      //  if (myapisession.getKeyCountry()==null||myapisession.getKeyCountry().equalsIgnoreCase("")){
             new GetCountryList().execute();
-        }
-        else {
+      //  }
+       /* else {
             JSONObject jsonObject = null;
             try {
                 countryBeanArrayList= new ArrayList<>();
@@ -102,8 +102,8 @@ public class InternationalTransAct extends AppCompatActivity {
                     }
 
 
-                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);*/
+                   *//* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
+                    country_spn.setAdapter(countryListAdapter);*//*
                     countryListAdapter = new CountryListAdapter(InternationalTransAct.this, countryBeanArrayList);
                     country_spn.setAdapter(countryListAdapter);
                     countryListAdapter.notifyDataSetChanged();
@@ -113,9 +113,9 @@ public class InternationalTransAct extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
 
-        }
+       // }
     }
 
     private void clcikevent() {
@@ -225,9 +225,8 @@ public class InternationalTransAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?contry_id=" + mySession.getValueOf(MySession.CountryId);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 

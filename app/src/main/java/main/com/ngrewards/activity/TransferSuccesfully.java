@@ -18,6 +18,7 @@ import java.util.TimeZone;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,12 +40,12 @@ public class TransferSuccesfully extends AppCompatActivity {
     private String Transfer;
     private String time_zone;
     private JSONObject result;
-
+MySession mySession ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_paid_succesfully);
-
+mySession = new MySession(this);
         progresbar = findViewById(R.id.progresbar);
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();
@@ -71,7 +72,8 @@ public class TransferSuccesfully extends AppCompatActivity {
 
         Log.e("transfer_money", "user_id" + user_id + "member_id" + member_id + "comment_str" + comment_str + "amount_str" + amount_str + "card_id" + card_id + "card_number" + card_number + "card_brand" + card_brand + "customer_id" + customer_id + "Transfer" + Transfer);
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().transferorrequest(user_id, member_id, comment_str, amount_str, apply_ngcassh, card_id, card_number, card_brand, customer_id, Transfer, time_zone);
+        Call<ResponseBody> call = ApiClient.getApiInterface().transferorrequest(user_id, member_id, comment_str, amount_str,
+                apply_ngcassh, card_id, card_number, card_brand, customer_id, Transfer, time_zone,mySession.getValueOf(MySession.CurrencyCode));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

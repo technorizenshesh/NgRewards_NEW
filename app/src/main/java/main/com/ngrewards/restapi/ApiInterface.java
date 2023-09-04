@@ -3,12 +3,16 @@ package main.com.ngrewards.restapi;
 import java.util.Map;
 
 import main.com.ngrewards.Models.NotificationModel;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -84,7 +88,7 @@ public interface ApiInterface {
     Call<ResponseBody> getMerchnantReview(@Query("user_id") String user_id, @Query("merchant_id") String merchant_id);
 
     @GET("member_list.php?")
-    Call<ResponseBody> getMembersusername(@Query("user_id") String user_id);
+    Call<ResponseBody> getMembersusername(@Query("user_id") String user_id,@Query("country_id") String country_id);
 
     @GET("category_lists.php?")
     Call<ResponseBody> getCategory();
@@ -184,7 +188,7 @@ public interface ApiInterface {
     Call<ResponseBody> getMerchantSalesAudience(@Query("merchant_id") String merchant_id);
 
     @GET("member_transfer_request.php?")
-    Call<ResponseBody> transferorrequest(@Query("member_id") String user_id, @Query("transfer_request_user_id") String transfer_request_user_id, @Query("comment") String comment, @Query("amount") String due_amount_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone);
+    Call<ResponseBody> transferorrequest(@Query("member_id") String user_id, @Query("transfer_request_user_id") String transfer_request_user_id, @Query("comment") String comment, @Query("amount") String due_amount_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("currency") String currency);
 
     @GET("merchant_commission_list_for_member.php?")
     Call<ResponseBody> getCommissionData(@Query("how_invite_you") String how_invite_you);
@@ -214,5 +218,16 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("deactivate_account_memeber.php")
     Call<ResponseBody> deleteMyAccount(@FieldMap Map<String, String> paramHashMap);
-
+    @Multipart
+    @POST("insert_chat.php")
+    Call<ResponseBody> insert_chat(
+            @Part("sender_id") RequestBody sender_id,
+            @Part("type") RequestBody type,
+            @Part("receiver_id") RequestBody receiver_id,
+            @Part("timezone") RequestBody timezone,
+            @Part("date") RequestBody date,
+            @Part("date_time") RequestBody date_time,
+            @Part("msg_type") RequestBody msg_type,
+            @Part("receiver_type") RequestBody receiver_type,
+            @Part MultipartBody.Part file);
 }

@@ -132,7 +132,6 @@ public class MerchantNotificationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_member_card_details.php?member_id=1&card_name=ks&card_number=122334455&expiry_date=12/08&expiry_year=2020
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_chat_status.php?";
                 URL url = new URL(postReceiverUrl);
@@ -355,7 +354,7 @@ public class MerchantNotificationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/member_notification_msg_lists.php?user_id=990&type=Member
+
             try {
 //                String postReceiverUrl = BaseUrl.baseurl + "admin_notification_list.php?";
                 String postReceiverUrl = BaseUrl.baseurl + "admin_notification_list_new.php?";
@@ -613,7 +612,6 @@ public class MerchantNotificationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_member_card_details.php?member_id=1&card_name=ks&card_number=122334455&expiry_date=12/08&expiry_year=2020
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "update_chat_status.php?";
                 URL url = new URL(postReceiverUrl);
@@ -839,7 +837,6 @@ public class MerchantNotificationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/member_notification_msg_lists.php?user_id=990&type=Member
             try {
 //                String postReceiverUrl = BaseUrl.baseurl + "admin_notification_list.php?";
                 String postReceiverUrl = BaseUrl.baseurl + "admin_notification_list_new.php?";

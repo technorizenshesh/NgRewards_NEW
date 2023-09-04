@@ -328,7 +328,7 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/add_member_card_details.php?member_id=1&card_name=ks&card_number=122334455&expiry_date=12/08&expiry_year=2020
+
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_member_card_details.php?";
                 URL url = new URL(postReceiverUrl);
@@ -425,7 +425,7 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/payment.php?user_id=1&payment_method=ONLINE&total_amount=23&token=78657787696&currency=USD&cart_id=1,2
+
             try {
                 //String postReceiverUrl = BaseUrl.baseurl + "payment.php?";
                 String postReceiverUrl = BaseUrl.baseurl + "stripe_split_payment.php?";

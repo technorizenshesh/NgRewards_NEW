@@ -605,8 +605,7 @@ public class OffersFrag extends Fragment {
 
     private void getOffers() {
 
-        // Log.e("user_iddddd",user_id);
-//https://international.myngrewards.com/demo/wp-content/plugins/webservice/offer_lists.php?user_id=6&category_id=&average_rate=&order_by=LowToHigh
+
         swipeToRefresh.setRefreshing(true);
         // progresbar.setVisibility(View.VISIBLE);
         offerBeanListArrayList = new ArrayList<>();

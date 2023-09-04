@@ -235,7 +235,7 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
     }
 
     private void ApiUpdateCall(String tital_name_str, String offer_desc_str, String offer_price_str) {
-        AndroidNetworking.upload("https://international.myngrewards.com/wp-content/plugins/webservice/update_item.php")
+        AndroidNetworking.upload("https://myngrewards.com/wp-content/plugins/webservice/update_item.php")
                 .addMultipartFile("menu_image", file)
                 .addMultipartParameter("merchant_id", user_id)
                 .addMultipartParameter("id", id_item_string)

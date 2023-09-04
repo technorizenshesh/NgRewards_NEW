@@ -149,45 +149,45 @@ public class MarchantLogin extends AppCompatActivity {
 
         clickevet();
 
-        if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
+      //  if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
             new GetCountryList().execute();
-        } else {
-            JSONObject jsonObject = null;
-            try {
-                countryBeanArrayList = new ArrayList<>();
-                jsonObject = new JSONObject(myapisession.getKeyCountry());
-                String message = jsonObject.getString("message");
-                if (message.equalsIgnoreCase("successful")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        CountryBean countryBean = new CountryBean();
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        countryBean.setId(jsonObject1.getString("id"));
-                        countryBean.setName(jsonObject1.getString("name"));
-                        countryBean.setSortname(jsonObject1.getString("sortname"));
-                        countryBean.setFlag_url(jsonObject1.getString("flag"));
-                        countryBeanArrayList.add(countryBean);
-                    }
-                    if (countryBeanArrayList != null) {
-                        Collections.reverse(countryBeanArrayList);
-                    }
-
-                    FacebookSdk.sdkInitialize(getApplicationContext());
-                    Log.d("AppLog", "key:" + FacebookSdk.getApplicationSignature(this));
-
-                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);*/
-                    countryListAdapter = new CountryListAdapter(MarchantLogin.this, countryBeanArrayList);
-                    country_spn.setAdapter(countryListAdapter);
-                    countryListAdapter.notifyDataSetChanged();
-                } else {
-                    new GetCountryList().execute();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
+//        } else {
+//            JSONObject jsonObject = null;
+//            try {
+//                countryBeanArrayList = new ArrayList<>();
+//                jsonObject = new JSONObject(myapisession.getKeyCountry());
+//                String message = jsonObject.getString("message");
+//                if (message.equalsIgnoreCase("successful")) {
+//                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        CountryBean countryBean = new CountryBean();
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        countryBean.setId(jsonObject1.getString("id"));
+//                        countryBean.setName(jsonObject1.getString("name"));
+//                        countryBean.setSortname(jsonObject1.getString("sortname"));
+//                        countryBean.setFlag_url(jsonObject1.getString("flag"));
+//                        countryBeanArrayList.add(countryBean);
+//                    }
+//                    if (countryBeanArrayList != null) {
+//                        Collections.reverse(countryBeanArrayList);
+//                    }
+//
+//                    FacebookSdk.sdkInitialize(getApplicationContext());
+//                    Log.d("AppLog", "key:" + FacebookSdk.getApplicationSignature(this));
+//
+//                   /* countryListAdapter = new CountryListAdapter(LoginActivity.this, android.R.layout.simple_spinner_item, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);*/
+//                    countryListAdapter = new CountryListAdapter(MarchantLogin.this, countryBeanArrayList);
+//                    country_spn.setAdapter(countryListAdapter);
+//                    countryListAdapter.notifyDataSetChanged();
+//                } else {
+//                    new GetCountryList().execute();
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
     }
 
     private void clickevet() {
@@ -351,7 +351,6 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_login.php?email=merte@g.com&password=1
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_login.php?";
                 URL url = new URL(postReceiverUrl);
@@ -537,7 +536,7 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_social_login.php?fullname=kapil&social_id=567&merchant_image=https://s0.2mdn.net/6629020/Q1-2018-GET-STARTED-25_-OFF-728X90.jpg&email=a@g.com
+
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_social_login.php?";
                 URL url = new URL(postReceiverUrl);
@@ -650,9 +649,8 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "countries.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 

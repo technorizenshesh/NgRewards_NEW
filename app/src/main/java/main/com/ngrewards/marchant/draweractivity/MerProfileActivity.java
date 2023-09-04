@@ -1,5 +1,8 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -19,6 +22,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -59,6 +63,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -76,6 +81,7 @@ import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
@@ -89,7 +95,9 @@ import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
+import main.com.ngrewards.marchant.activity.StartYourListing;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
+import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity2;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -891,7 +899,7 @@ public class MerProfileActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             if (ImagePathArray.get(position) != null) {
 
                 if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
@@ -940,6 +948,29 @@ public class MerProfileActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1:
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
+                        try {
+                            assert selectedImage != null;
+                            try (final InputStream stream = getApplicationContext().getContentResolver().openInputStream(selectedImage)) {
+                                final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                                // user_img.setImageBitmap(bitmap);
+                                user_img.setImageBitmap(bitmap);
+                                File tempfile = Tools.persistImage(bitmap, getApplicationContext());
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
+                                //MerchantSignupSlider.ImagePath=ImagePath;
+                            }
+                        } catch (IOException e) {
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
+                        }
+                    } else {
+                    try {
+
+
+
                     Uri selectedImage = data.getData();
                     //getPath(selectedImage);
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -949,9 +980,11 @@ public class MerProfileActivity extends AppCompatActivity {
                     String FinalPath = cursor.getString(columnIndex);
                     cursor.close();
                     String ImagePath = getPath(selectedImage);
-
                     decodeFile(ImagePath);
-
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    }
                     break;
                 case 2:
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -1142,7 +1175,6 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/merchant_profile.php?merchant_id=332
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "merchant_profile.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1408,7 +1440,6 @@ public class MerProfileActivity extends AppCompatActivity {
                         }
 //Monday , Tuesday , Wednesday , Thursday , Friday , Saturday , Sunday
 
-                        //  new GetCountryList().execute();
                         if (ImagePathArrayList != null && !ImagePathArrayList.isEmpty()) {
                             business_galleryimage.setVisibility(View.VISIBLE);
                             horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
@@ -1485,9 +1516,8 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/country_lists.php
             try {
-                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?";
+                String postReceiverUrl = BaseUrl.baseurl + "country_lists.php?contry_id=" + mySession.getValueOf(MySession.CountryId);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
 
@@ -1598,7 +1628,6 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/state_lists.php?country_id=101
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "state_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1704,7 +1733,6 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/city_lists.php?state_id=21
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "city_lists.php?";
                 URL url = new URL(postReceiverUrl);
@@ -1832,6 +1860,7 @@ public class MerProfileActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -1916,7 +1945,6 @@ public class MerProfileActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/update_merchant_profile.php?merchant_id=337&contact_name=fghdfh
             String charset = "UTF-8";
             String requestURL = BaseUrl.baseurl + "update_merchant_profile.php?";
             Log.e("requestURL >>", requestURL + "merchant_id=" + user_id + "&email=" + busines_email_str + "&day_name=" + day_name_str + "&opening_time=" + opening_hour_str + "&closing_time=" + closing_hour_str + "&opening_status=" + open_close_str);
@@ -2460,8 +2488,13 @@ public class MerProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogSts.dismiss();
+
+                if (Build.VERSION.SDK_INT >= 33) {
+                    Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity2.class);
+                    startActivity(i);
+                }else {
                 Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity.class);
-                startActivity(i);
+                startActivity(i);}
 
             }
         });

@@ -134,7 +134,6 @@ public class MainTabActivity extends TabActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//https://international.myngrewards.com/wp-content/plugins/webservice/member_profile.php?member_id=31
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
                 URL url = new URL(postReceiverUrl);
