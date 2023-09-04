@@ -1001,7 +1001,7 @@ public class CheckOutAct extends AppCompatActivity {
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
-                Log.e("PlaceOrderURL4", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&merchant_id=" + merchant_id_comma_sep + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + AllAddedAddressAct.address1_str + "&address_2=" + AllAddedAddressAct.address2_str + "&city=" + AllAddedAddressAct.city_str + "&state=" + AllAddedAddressAct.state_str + "&postcode=" + zipcode_code_str + "&timezone=" + time_zone + "&payment_method=Card&ngcash=" + ngcash_send_str + "&card_id=" + SelectPaymentMethodAct.card_id + "&card_number=" + SelectPaymentMethodAct.card_number + "&card_brand=" + SelectPaymentMethodAct.card_brand + "&shipping_price=" + shipping_price + "&customer_id=" + SelectPaymentMethodAct.customer_id);
+                Log.e("PlaceOrderURL4", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&merchant_id=" + merchant_id_comma_sep + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + AllAddedAddressAct.address1_str + "&address_2=" + AllAddedAddressAct.address2_str + "&city=" + AllAddedAddressAct.city_str + "&state=" + AllAddedAddressAct.state_str + "&postcode=" + zipcode_code_str + "&timezone=" + time_zone + "&payment_method=Card&ngcash=" + ngcash_send_str + "&card_id=" + SelectPaymentMethodAct.card_id + "&card_number=" + SelectPaymentMethodAct.card_number + "&card_brand=" + SelectPaymentMethodAct.card_brand + "&shipping_price=" + shipping_price + "&customer_id=" + SelectPaymentMethodAct.customer_id+"&currency="+mySession.getValueOf(MySession.CurrencyCode));
 
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
@@ -1028,7 +1028,7 @@ public class CheckOutAct extends AppCompatActivity {
                 params.put("card_brand", SelectPaymentMethodAct.card_brand);
                 params.put("shipping_price", shipping_price);
                 params.put("timezone", time_zone);
-
+                params.put("currency", mySession.getValueOf(MySession.CurrencyCode));
                 StringBuilder postData = new StringBuilder();
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');

@@ -19,6 +19,7 @@ import java.util.TimeZone;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -46,7 +47,7 @@ public class ManualPaybillSucess extends AppCompatActivity {
     private String tip_amt_str;
     private String merchant_name;
     private String myFormattedtime;
-
+MySession mySession ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +56,7 @@ public class ManualPaybillSucess extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();
         time_zone = tz.getID();
-
+        mySession = new MySession(this);
         final Calendar c1 = Calendar.getInstance(TimeZone.getTimeZone("Asia/Calcutta"));
         SimpleDateFormat format = new SimpleDateFormat("h:mm a");
         format.setTimeZone(c1.getTimeZone());
@@ -77,7 +78,6 @@ public class ManualPaybillSucess extends AppCompatActivity {
             card_number = bundle.getString("card_number");
             card_brand = bundle.getString("card_brand");
             customer_id = bundle.getString("customer_id");
-
             employee_name = bundle.getString("employee_name");
             employee_id = bundle.getString("employee_id");
         }
@@ -101,7 +101,8 @@ if (type.equalsIgnoreCase("payemi")){
         Log.e("employee_name",employee_name);
 
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
+        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(mySession.getValueOf(MySession.CurrencyCode),
+                user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -189,7 +190,7 @@ if (type.equalsIgnoreCase("payemi")){
 
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().payBillEmiToMerchant
-                (user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str,
+                (mySession.getValueOf(MySession.CurrencyCode),user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str,
                         ngcash_app_str, card_id, card_number, card_brand, customer_id,
                         "Paybill", time_zone, employee_id, employee_name,cart_id);
         call.enqueue(new Callback<ResponseBody>() {

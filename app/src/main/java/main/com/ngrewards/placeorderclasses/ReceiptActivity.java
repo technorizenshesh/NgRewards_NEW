@@ -75,13 +75,9 @@ public class ReceiptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_receipt);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
-
         if (user_log_data == null) {
-
         } else {
-
             try {
-
                 JSONObject jsonObject = new JSONObject(user_log_data);
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
@@ -89,7 +85,6 @@ public class ReceiptActivity extends AppCompatActivity {
                     user_id = jsonObject1.getString("id");
                     business_name = jsonObject1.getString("fullname");
                     username = jsonObject1.getString("affiliate_name");
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -99,7 +94,8 @@ public class ReceiptActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && !bundle.isEmpty()) {
-
+            Log.e("TAG", " bundlebundlebundle   -------"+bundle.toString());
+            Order_cart_id_str = bundle.getString("order_cart_id");
             order_id_str = bundle.getString("order_id");
             merchant_name_str = bundle.getString("merchant_name");
             member_name_str = bundle.getString("member_name");
@@ -128,9 +124,7 @@ public class ReceiptActivity extends AppCompatActivity {
             member_user_name = bundle.getString("member_user_name");
             Order_guset_No_str = bundle.getString("Order_guset_No");
             Order_Table_No_str = bundle.getString("Order_Table_No");
-            Order_cart_id_str = bundle.getString("order_cart_id");
             type123 = bundle.getString("type123");
-
         }
 
         idinit();
@@ -186,7 +180,7 @@ public class ReceiptActivity extends AppCompatActivity {
         busseness_name = findViewById(R.id.busseness_name);
         busseness_name.setText(merchant_name_str);
         merchant_name.setText("Merchant No. :-" + member_name_str);
-        member_name.setText("Name :- " + "");
+        member_name.setText("Name :- " + username);
         employee_tv.setText("Employee Name:- " + employee_name);
         special_request.setText("Special Request :- " + " " + order_special);
         order_id.setText("#" + order_id_str);

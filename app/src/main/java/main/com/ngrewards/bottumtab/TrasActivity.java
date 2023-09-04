@@ -225,7 +225,7 @@ public class TrasActivity extends BaseActivity {
         Context context;
         ArrayList<OrderBean> orderBeanArrayList;
         ArrayList<OrderBean> searchmerchantListBeanArrayList;
-
+MySession mySession;
         public ActivityRecAdp(TrasActivity myContacts, ArrayList<OrderBean> orderBeanArrayList) {
             this.context = myContacts;
             this.orderBeanArrayList = orderBeanArrayList;
@@ -261,7 +261,7 @@ public class TrasActivity extends BaseActivity {
 
                             if (wp.getSearch_id().toLowerCase().startsWith(charText) ||
                                     wp.getB_name().toLowerCase().startsWith(charText) ||
-                                        wp.getSymbol_amount().toLowerCase().startsWith(charText) ||
+                                        wp.getTotal_amount().toLowerCase().startsWith(charText) ||
                                     wp.getCreated_date().toLowerCase().startsWith(charText) || wp.getMemberDetail().get(0).getB_name().toLowerCase().startsWith(charText)) {
                                 orderBeanArrayList.add(wp);
 
@@ -282,11 +282,12 @@ public class TrasActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            Log.e("TAG", "onBindViewHolder:orderBeanArrayList.get(position).getType() "+orderBeanArrayList.get(position).getType());
+            Log.e("TAG", "onBindViewHolder:orderBeanArrayList.get(position).getType"+orderBeanArrayList.get(position).getType());
+            mySession = new MySession(context);
             if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
-
-                holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)
+                        +orderBeanArrayList.get(position).getTotal_amount());
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
@@ -385,7 +386,7 @@ public class TrasActivity extends BaseActivity {
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order"))
             {
                 //holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
-                holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
@@ -426,7 +427,7 @@ public class TrasActivity extends BaseActivity {
             } else
             {
 
-                holder.total_order_price.setText(orderBeanArrayList.get(position).getSymbol_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
 
@@ -498,6 +499,7 @@ public class TrasActivity extends BaseActivity {
                 public void onClick(View v) {
 
                     Log.e("TYPE >> ", " >> " + orderBeanArrayList.get(position).getType());
+                    Log.e("TYPE >> ", " >> orderBeanArrayList.get(position).getOrder_cart_id()---------" + orderBeanArrayList.get(position).getOrder_cart_id());
 
                     if (orderBeanArrayList.get(position).getType() != null
                             && orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {

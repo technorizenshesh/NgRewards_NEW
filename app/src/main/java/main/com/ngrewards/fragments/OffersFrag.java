@@ -264,6 +264,7 @@ public class OffersFrag extends Fragment {
     class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
         ArrayList<OfferBeanList> offerBeanLists;
         ArrayList<OfferBeanList> searchofferBeanLists;
+        MySession  mySession = new MySession(getActivity());
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView liketv, distance_tv, offername, merchant_name, offer_desc, pricediscount, likecount, discounts, real_price;
@@ -323,12 +324,16 @@ public class OffersFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+
+            Log.e("TAG", "onBindViewHolder:  mySession.getValueOf(MySession.CurrencySign) "+mySession.getValueOf(MySession.CurrencySign) );
             if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
                 holder.discounts.setVisibility(View.GONE);
             } else {
-                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
+                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition)
+                        .getOffer_discount_price().equalsIgnoreCase("")
+                        && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
                     holder.discounts.setVisibility(View.VISIBLE);
-                    holder.pricediscount.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
+                    holder.pricediscount.setText(String.format("%s%s", mySession.getValueOf(MySession.CurrencySign), offerBeanLists.get(listPosition).getOffer_discount_price().trim()));
                     double offresp = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
                     int ddd = (int) offresp;
                     holder.discounts.setText("" + ddd + "% OFF");

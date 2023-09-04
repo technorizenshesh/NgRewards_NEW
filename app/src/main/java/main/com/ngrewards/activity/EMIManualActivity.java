@@ -1235,7 +1235,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
     private void payBiilMerchant(String user_id, String merchant_id, String merchant_number, String due_amount_str, String tip_amt_str, String ngcash_app_str, String card_id, String card_number, String card_brand, String customer_id) {
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
+        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(mySession.getValueOf(MySession.CurrencyCode),user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

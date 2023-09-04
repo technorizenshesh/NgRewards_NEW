@@ -28,6 +28,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.placeorderclasses.AllAddedAddressAct;
 import main.com.ngrewards.placeorderclasses.SelectPaymentMethodAct;
@@ -43,13 +44,14 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
     private SweetAlertDialog pDialog;
     private String status;
     private String   dateToStr ="";
-
+    MySession mySession;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_order_pay_success_fully);
         progresbar = (ProgressBar) findViewById(R.id.progresbar);
         myapisession = new Myapisession(this);
+        mySession = new MySession(this);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -134,7 +136,7 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
 
                 if (payment_made_by_emi.equalsIgnoreCase("Yes"))
                 {
-                    postReceiverUrl= BaseUrl.baseurl + "place_order_emi.php?";
+                    postReceiverUrl= BaseUrl.baseurl +  "place_order_emi.php?";
                 }else {
                     postReceiverUrl=    BaseUrl.baseurl + "place_order.php?";
                 }
@@ -153,7 +155,7 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
                         shipping_price+"&customer_id="+
                         SelectPaymentMethodAct.customer_id
                         +"&payment_made_by_emi="+payment_made_by_emi
-                        +"&country=" + AllAddedAddressAct.countrytv_str);
+                        +"&country=" + AllAddedAddressAct.countrytv_str+"&currency="+mySession.getValueOf(MySession.CurrencyCode));
 
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
@@ -183,6 +185,7 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
                 params.put("f_amount", amount);
                 params.put("payment_made_by_emi", payment_made_by_emi);
                 params.put("purchase_date", dateToStr);
+                params.put("currency", mySession.getValueOf(MySession.CurrencyCode));
                 Log.e("paramsss", "" + params);
                 StringBuilder postData = new StringBuilder();
 

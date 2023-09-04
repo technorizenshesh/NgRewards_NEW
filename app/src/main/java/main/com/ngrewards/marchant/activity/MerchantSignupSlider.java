@@ -348,7 +348,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
                 multipart.addFormField("country",selected_country_name);
              //   multipart.addFormField("country", MarchantLogin.country_str);
             //    multipart.addFormField("country_id", MarchantLogin.country_id);
-                multipart.addFormField("country_id", selected_country);
+                multipart.addFormField("Country_id", selected_country);
                 multipart.addFormField("state", mer_state);
                 multipart.addFormField("city", mer_city);
                 multipart.addFormField("device_token", firebase_regid);
@@ -379,6 +379,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
                 for (String line : response) {
                     Jsondata = line;
                 }
+                Log.e("SIGNUParems ", " >> " + multipart);
                 Log.e("SIGNUPRESPONE ", " >> " + response);
                 JSONObject object = new JSONObject(Jsondata);
                 Log.e("SIGNUPRESPONEJSON ", " >> " + Jsondata);

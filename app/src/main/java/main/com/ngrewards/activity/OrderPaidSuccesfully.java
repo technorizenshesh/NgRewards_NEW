@@ -14,6 +14,7 @@ import java.util.HashMap;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.placeorderclasses.AllAddedAddressAct;
 import www.develpoeramit.mapicall.ApiCallBuilder;
 
@@ -24,12 +25,13 @@ public class OrderPaidSuccesfully extends AppCompatActivity {
     private String reciept_url;
     private String order_cart_id;
     private String merchant_number;
+    MySession mySession ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_paid_succesfully);
-
+mySession =new MySession(this);
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && !bundle.isEmpty()) {
@@ -77,7 +79,8 @@ public class OrderPaidSuccesfully extends AppCompatActivity {
         param.put("customer_id", customer_id);
         param.put("type", "order");
         param.put("order_cart_id", order_cart_id);
-
+        param.put("currency",mySession.getValueOf(MySession.CurrencyCode));
+//ToDo{PENDING_WORK}
         new ApiCallBuilder().build(this).setUrl(BaseUrl.orderPayBill()).setParam(param).isShowProgressBar(true).execute(new ApiCallBuilder.onResponse() {
             @Override
             public void Success(String response) {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -53,6 +54,7 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
         }
         else {
             stripe_login_url = bundle.getString("stripe_login_url");
+            Log.e("", "onCreate: stripe_login_urlstripe_login_url===="+ stripe_login_url  );
         }idinitn();
         clickevent();
     }
@@ -71,7 +73,6 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
         backlay = findViewById(R.id.backlay);
         stripewebview = findViewById(R.id.stripewebview);
         stripewebview.clearCache(true);
-
         String stripeurl = stripe_login_url;
        /* stripewebview.getSettings().setJavaScriptEnabled(true);
         stripewebview.getSettings().setPluginState(WebSettings.PluginState.ON);

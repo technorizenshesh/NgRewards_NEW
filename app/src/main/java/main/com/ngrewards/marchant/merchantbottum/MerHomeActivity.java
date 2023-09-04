@@ -369,7 +369,7 @@ MySession mySessione;
 
                             if (wp.getSearch_id().toLowerCase().startsWith(charText) ||
                                     wp.getB_name().toLowerCase().startsWith(charText) ||
-                                    wp.getSymbol_amount().toLowerCase().startsWith(charText) ||
+                                    wp.getTotal_amount().toLowerCase().startsWith(charText) ||
                                     wp.getCreated_date().toLowerCase().startsWith(charText)) {
                                 orderBeanArrayList.add(wp);
 

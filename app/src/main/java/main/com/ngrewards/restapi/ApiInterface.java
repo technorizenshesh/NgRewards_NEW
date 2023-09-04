@@ -20,13 +20,14 @@ public interface ApiInterface {
 
     @GET("near_by_merchant_list.php?")
     Call<ResponseBody> getNearMarchant(@Query("latitude")
-                                               String latitude, @Query("longitude")
-                                               String longitude, @Query("country_id") String country_id,
+                                       String latitude, @Query("longitude")
+                                       String longitude, @Query("country_id") String country_id,
                                        @Query("category_id") String category_id,
-                                       @Query("user_id") String user_id, @Query("current_time")
-                                               String current_time, @Query("sort_distance")
-                                               String sort_distance, @Query("average_rate")
-                                               String average_rate, @Query("order_by") String order_by);
+                                       @Query("user_id") String user_id,
+                                       @Query("current_time")
+                                       String current_time, @Query("sort_distance")
+                                       String sort_distance, @Query("average_rate")
+                                       String average_rate, @Query("order_by") String order_by);
 
     @GET("all_business_list.php?")
     Call<ResponseBody> getMerchantBusNum(@Query("country_id") String country_id);
@@ -48,6 +49,7 @@ public interface ApiInterface {
 
     @GET("my_offer.php?")
     Call<ResponseBody> getMyOfferProduct(@Query("user_id") String user_id);
+
     @GET("member_profile.php?")
     Call<ResponseBody> member_profile(@Query("user_id") String user_id);
 
@@ -92,6 +94,7 @@ public interface ApiInterface {
 
     @GET("business_category_lists.php?")
     Call<ResponseBody> getBusnessCategory();
+
     @GET("countries.php?")
     Call<ResponseBody> getBusnessCountry();
 
@@ -118,6 +121,7 @@ public interface ApiInterface {
 
     @GET("member_notification_msg_lists.php?")
     Call<ResponseBody> getMemberNotification(@Query("member_id") String member_id);
+
     @GET("admin_notification_list_new.php")
     Call<NotificationModel> admin_notification_list_new(@Query("user_id") String member_id,
                                                         @Query("type") String type);
@@ -145,20 +149,22 @@ public interface ApiInterface {
 
     @GET("merchant_order_lists.php?")
     Call<ResponseBody> getMerchantOrder(@Query("merchant_id") String merchant_id);
-   @GET("notification-emi.php")
+
+    @GET("notification-emi.php")
     Call<ResponseBody> notification_emi(@QueryMap Map<String, String> paramHashMap);
 
     @GET("pay_bill.php?")
-    Call<ResponseBody> payBillToMerchant(@Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);
+    Call<ResponseBody> payBillToMerchant(@Query("currency") String currency,@Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);
 
-/*/*pay_bill_emi.php?member_id=\(USER_DEFAULT.value(forKey: MemberID)!)&merchant_id=\(self.strMerchntId!)
-&merchant_no=\(text_Search.text!)&amount=\(text_AmountDue.text!)&tip_amount=\(strAmountTip!)&ngcash=\
-(strNgCash!)&card_id=\(dic_SelectCard["id"] ?? "")&card_number=\(dic_SelectCard["last4"] ?? "")
-&card_brand=\(dic_SelectCard["brand"] ?? "")&customer_id=\(dic_SelectCard["customer"] ?? "")
-&type=Paybill&timezone=\(Calendar.current.timeZone.identifier)&employee_name=\(lbl_Employee.text ??
-"")&employee_id=\(strEmployeeinviteId ?? "")&cart_id=\(strOrderCartId!)*/
+    /*/*pay_bill_emi.php?member_id=\(USER_DEFAULT.value(forKey: MemberID)!)&merchant_id=\(self.strMerchntId!)
+    &merchant_no=\(text_Search.text!)&amount=\(text_AmountDue.text!)&tip_amount=\(strAmountTip!)&ngcash=\
+    (strNgCash!)&card_id=\(dic_SelectCard["id"] ?? "")&card_number=\(dic_SelectCard["last4"] ?? "")
+    &card_brand=\(dic_SelectCard["brand"] ?? "")&customer_id=\(dic_SelectCard["customer"] ?? "")
+    &type=Paybill&timezone=\(Calendar.current.timeZone.identifier)&employee_name=\(lbl_Employee.text ??
+    "")&employee_id=\(strEmployeeinviteId ?? "")&cart_id=\(strOrderCartId!)*/
     @GET("pay_bill_emi.php?")
-    Call<ResponseBody> payBillEmiToMerchant(@Query("member_id") String user_id,
+    Call<ResponseBody> payBillEmiToMerchant(@Query("currency") String currency,
+                                            @Query("member_id") String user_id,
                                             @Query("merchant_id") String merchant_id,
                                             @Query("merchant_no") String merchant_number,
                                             @Query("amount") String due_amount_str,
@@ -171,7 +177,7 @@ public interface ApiInterface {
                                             @Query("type") String type,
                                             @Query("timezone") String timezone,
                                             @Query("employee_id") String employee_id,
-                                            @Query("employee_name") String employee_name ,
+                                            @Query("employee_name") String employee_name,
                                             @Query("cart_id") String cart_id);
 
     @GET("audience_lists.php?")

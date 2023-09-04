@@ -89,6 +89,8 @@ private  MySession mySession;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e("TAG", "onCreateDialog: "+e.getMessage() );
+                Log.e("TAG", "onCreateDialog: "+e.getLocalizedMessage() );
             }
         }
 
@@ -99,11 +101,8 @@ private  MySession mySession;
     }
 
     private void getMenuList() {
-
         HashMap<String, String> param = new HashMap<>();
-
         param.put("order_cart_id", CartID);
-
         Log.e("CartID",CartID);
 
         new ApiCallBuilder().build(getActivity())
@@ -115,7 +114,6 @@ private  MySession mySession;
                     public void Success(String response) {
 
                         try {
-
                             JSONObject object_rs = new JSONObject(response);
                             boolean status = object_rs.getString("status").contains("1");
 

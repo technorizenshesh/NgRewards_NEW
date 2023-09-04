@@ -163,13 +163,11 @@ public class AddMemberCard extends AppCompatActivity {
                     year_int = Integer.parseInt(expiryyear_str);
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
-                    Card card = new Card(cardnumber_str, month, year_int, security_code_str);  // pk_test_2khGozRubEhBZxFXj3TnxrkO
-                 //   card.setCurrency("usd");
+                    Card card = new Card(cardnumber_str, month, year_int, security_code_str);
                     card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
                     card.setName(cardname_str);
 
-                //  Stripe stripe = new Stripe(AddMemberCard.this, BaseUrl.stripe_publish);  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya
-                    Stripe stripe = new Stripe(AddMemberCard.this, "pk_live_OP15yODmjzdV2KnPWSjh5Pgo");  //pk_test_DpAdEXE4slfMy2FR7vsSj0ya//pk_test_tuLF7lx5bPZpsfwM4OzqE0HJ
+                    Stripe stripe = new Stripe(AddMemberCard.this, BaseUrl.stripe_publish);
                     prgressbar.setVisibility(View.VISIBLE);
                     stripe.createToken(
                             card,

@@ -130,8 +130,16 @@ public class StripeExpressAcountAct extends AppCompatActivity {
         backlay = findViewById(R.id.backlay);
         stripewebview = findViewById(R.id.stripewebview);
         stripewebview.clearCache(true);
+        String stripeurl="";
+if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
+    https://connect.stripe.com/oauth/v2/authorize?" +
+    stripeurl= BaseUrl.STRIPE_OAUTH_URL+ user_id +
+            "&response_type=code&scope=read_write&country=" +
+            mySession.getValueOf(MySession.CountryId) +
+            "&currency=" + mySession.getValueOf(MySession.CurrencyCode);
+}else {
 
-        String stripeurl = BaseUrl.STRIPE_OAUTH_URL + user_id;
+         stripeurl = BaseUrl.STRIPE_OAUTH_URL + user_id;}
        /* stripewebview.getSettings().setJavaScriptEnabled(true);
         stripewebview.getSettings().setPluginState(WebSettings.PluginState.ON);
         stripewebview.setWebViewClient(new Callback());
@@ -141,7 +149,7 @@ public class StripeExpressAcountAct extends AppCompatActivity {
 
         stripewebview.loadUrl(stripeurl);*/
 
-
+        Log.e("", "idinit: stripeurlstripeurl     "+stripeurl );
 
         stripewebview.getSettings().setLoadsImagesAutomatically(true);
         stripewebview.getSettings().setJavaScriptEnabled(true);
