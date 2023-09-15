@@ -46,14 +46,49 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import main.com.ngrewards.activity.ManualActivity;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.qrcodes.CaptureActivityHandler;
 
 public class QrCodeActivity extends AppCompatActivity implements Callback, OnClickListener {
-    private RelativeLayout backlay;
-    private static final int REQUEST_SYSTEM_PICTURE = 0;
-    private static final int REQUEST_PICTURE = 1;
     public static final int MSG_DECODE_SUCCEED = 1;
     public static final int MSG_DECODE_FAIL = 2;
+    private static final int REQUEST_SYSTEM_PICTURE = 0;
+    private static final int REQUEST_PICTURE = 1;
+    private static final float BEEP_VOLUME = 0.10f;
+    private static final long VIBRATE_DURATION = 200L;
+    private final DecodeManager mDecodeManager = new DecodeManager();
+    private final String GOT_RESULT = "com.blikoon.qrcodescanner.got_qr_scan_relult";
+    private final String ERROR_DECODING_IMAGE = "com.blikoon.qrcodescanner.error_decoding_image";
+    private final String LOGTAG = "QRScannerQRCodeActivity";
+    private final DecodeImageCallback mDecodeImageCallback = new DecodeImageCallback() {
+        @Override
+        public void decodeSucceed(Result result) {
+            //Got scan result from scaning an image loaded by the user
+            Log.d(LOGTAG, "Decoded the image successfully :" + result.getText());
+            Intent data = new Intent();
+            data.putExtra(GOT_RESULT, result.getText());
+            setResult(Activity.RESULT_OK, data);
+            finish();
+        }
+
+        @Override
+        public void decodeFail(int type, String reason) {
+            Log.d(LOGTAG, "Something went wrong decoding the image :" + reason);
+            Intent data = new Intent();
+            data.putExtra(ERROR_DECODING_IMAGE, reason);
+            setResult(Activity.RESULT_CANCELED, data);
+            finish();
+        }
+    };
+    /**
+     * When the beep has finished playing, rewind to queue up another one.
+     */
+    private final MediaPlayer.OnCompletionListener mBeepListener = new MediaPlayer.OnCompletionListener() {
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            mediaPlayer.seekTo(0);
+        }
+    };
+    private RelativeLayout backlay;
     private CaptureActivityHandler mCaptureActivityHandler;
     private boolean mHasSurface;
     private boolean mPermissionOk;
@@ -61,9 +96,6 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
     private QrCodeFinderView mQrCodeFinderView;
     private SurfaceView mSurfaceView;
     private View mLlFlashLight;
-    private final DecodeManager mDecodeManager = new DecodeManager();
-    private static final float BEEP_VOLUME = 0.10f;
-    private static final long VIBRATE_DURATION = 200L;
     private MediaPlayer mMediaPlayer;
     private boolean mPlayBeep;
     private boolean mVibrate;
@@ -72,10 +104,8 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
     private TextView mTvFlashLightText;
     private Executor mQrCodeExecutor;
     private Handler mHandler;
-    private final String GOT_RESULT = "com.blikoon.qrcodescanner.got_qr_scan_relult";
-    private final String ERROR_DECODING_IMAGE = "com.blikoon.qrcodescanner.error_decoding_image";
-    private final String LOGTAG = "QRScannerQRCodeActivity";
     private Context mApplicationContext;
+    private MySession mySession;
 
     private static Intent createIntent(Context context) {
         Intent i = new Intent(context, QrCodeActivity.class);
@@ -87,12 +117,12 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
         context.startActivity(i);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code);
+        mySession = new MySession(this);
         initView();
         initData();
         mApplicationContext = getApplicationContext();
@@ -190,28 +220,6 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
         super.onDestroy();
     }
 
-
-    private final DecodeImageCallback mDecodeImageCallback = new DecodeImageCallback() {
-        @Override
-        public void decodeSucceed(Result result) {
-            //Got scan result from scaning an image loaded by the user
-            Log.d(LOGTAG, "Decoded the image successfully :" + result.getText());
-            Intent data = new Intent();
-            data.putExtra(GOT_RESULT, result.getText());
-            setResult(Activity.RESULT_OK, data);
-            finish();
-        }
-
-        @Override
-        public void decodeFail(int type, String reason) {
-            Log.d(LOGTAG, "Something went wrong decoding the image :" + reason);
-            Intent data = new Intent();
-            data.putExtra(ERROR_DECODING_IMAGE, reason);
-            setResult(Activity.RESULT_CANCELED, data);
-            finish();
-        }
-    };
-
     private void initCamera(SurfaceHolder surfaceHolder) {
         try {
             CameraManager.get().openDriver(surfaceHolder);
@@ -296,15 +304,6 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
             vibrator.vibrate(VIBRATE_DURATION);
         }
     }
-
-    /**
-     * When the beep has finished playing, rewind to queue up another one.
-     */
-    private final MediaPlayer.OnCompletionListener mBeepListener = new MediaPlayer.OnCompletionListener() {
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.seekTo(0);
-        }
-    };
 
     @Override
     public void onClick(View v) {
@@ -445,21 +444,54 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
                     String[] arr = resultString.split(",");
                     //   JSONObject jsonObject = new JSONObject(result);
                     //   String murchant_name = jsonObject.getString("murchant_name");
+                    Log.e("COME IN JSON", "onActivityResultresultresultresult" + arr.length);
+                    String country_id = "";
+                    String amount = "";
                     String member_id = arr[2];
                     String usernameauto = arr[1];
                     String memname = (arr[0]);
+                    if (arr.length > 3) {
+                        amount = arr[3];
+                        Log.e("COME IN JSON", " <<amountamount" + amount);
+                    }
+                    if (arr.length > 4) {
+                        country_id = arr[4];
+                        Log.e("COME IN JSON", " <<country_id" + country_id);
+                    }
                     //  jsonObject = new JSONObject(resultString);
                     Log.e("COME IN JSON", " <<" + resultString);
              /*   String mername = jsonObject.getString("murchant_name");
                 if (jsonObject.getString("murchant_name") != null && !jsonObject.getString("murchant_name").equalsIgnoreCase("")) {
                     mername = mername.replace("?", "'");
                 }*/
-                    Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
-                    i.putExtra("merchant_id", member_id);
-                    i.putExtra("merchant_name", memname);
-                    i.putExtra("merchant_number", usernameauto);
-                    i.putExtra("type", "paybill");
-                    startActivity(i);
+                    Log.e("COME IN JSON", " <<country_idcountry_idcountry_id" + country_id);
+                    Log.e("COME IN JSON", " <<country_idcountry_idcountry_idmySession.getValueOf(MySession.CountryId) " + mySession.getValueOf(MySession.CountryId));
+
+                    if (country_id.equalsIgnoreCase("")) {
+                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                        i.putExtra("merchant_id", member_id);
+                        i.putExtra("merchant_name", memname);
+                        i.putExtra("merchant_number", usernameauto);
+                        i.putExtra("country_id", country_id);
+                        i.putExtra("total_amount_due", amount);
+                        i.putExtra("type", "paybill");
+                        startActivity(i);
+                    } else if (country_id.equalsIgnoreCase(mySession.getValueOf(MySession.CountryId))) {
+                        Intent i = new Intent(QrCodeActivity.this, ManualActivity.class);
+                        i.putExtra("merchant_id", member_id);
+                        i.putExtra("merchant_name", memname);
+                        i.putExtra("merchant_number", usernameauto);
+                     //   i.putExtra("country_id", country_id);
+                        i.putExtra("total_amount_due", amount);
+                        i.putExtra("type", "paybill");
+                        startActivity(i);
+                    } else {
+                        onBackPressed();
+                        Toast.makeText(QrCodeActivity.this, "Invalid Country!!!", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(QrCodeActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();

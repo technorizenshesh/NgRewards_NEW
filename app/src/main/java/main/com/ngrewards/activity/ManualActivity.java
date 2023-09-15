@@ -102,7 +102,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ManualActivity extends AppCompatActivity {
-
+    TextView tenPer,  otherPer, fifteenPer,
+    twentyPer ;
     private RelativeLayout backlay;
     private EditText dueamount_et, tipamount_et, ngcashavb;
     private RadioButton creditcard_rbut;
@@ -245,11 +246,6 @@ public class ManualActivity extends AppCompatActivity {
 
         employee_id = PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.employee_id, employee_id);
         employee_name = PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.employee_name, employee_name);
-
-        progresbar = findViewById(R.id.progresbar);
-
-        edt_name = findViewById(R.id.edt_name);
-
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();
         edit_text_string = edt_name.getText().toString().trim();
@@ -415,7 +411,6 @@ public class ManualActivity extends AppCompatActivity {
 
         // edt_name = findViewById(R.id.edt_name);
 
-        qrcode = findViewById(R.id.qrcode);
 
         qrcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -594,6 +589,10 @@ public class ManualActivity extends AppCompatActivity {
     }
 
     private void clickevet() {
+         tenPer =findViewById(R.id.ten_per);
+        otherPer =findViewById(R.id.other_per);
+        fifteenPer =findViewById(R.id.fifteen_per);
+        twentyPer  =findViewById(R.id.twenty_per);
 
         backlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -670,46 +669,124 @@ public class ManualActivity extends AppCompatActivity {
             }
         });
 
-        tipamount_et.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+        tenPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 10 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
 
-            }
+                });
+        fifteenPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 15 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-            }
+                });
+        twentyPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 20 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String tip_amt = tipamount_et.getText().toString();
-                String due_amt = dueamount_et.getText().toString();
+                });
 
-                if (tip_amt == null || tip_amt.equalsIgnoreCase("")) {
-                    tip_amt = "0.0";
-                }
-                if (due_amt == null || due_amt.equalsIgnoreCase("")) {
-                    due_amt = "0.0";
-                }
+        otherPer.setOnClickListener(
+                v -> {
+                    try {
+                        if (! dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                            tipamount_et.setEnabled(true);
+                            tipamount_et.setText("");
+                            tipamount_et.requestFocus();
+                            total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " "
+                                    + String.format("%.2f", new BigDecimal(dueamount_et.getText().toString())));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
-                double sp_dob = Double.parseDouble(tip_amt);
-                double wait_dob = Double.parseDouble(due_amt);
+       tipamount_et.addTextChangedListener(new TextWatcher() {
 
-                double tot = sp_dob + wait_dob;
+           @Override
+           public void onTextChanged(CharSequence s, int start, int before,
+                                     int count) {
 
-                total_amt_calculate = tot;
-                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
-                card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+           }
 
-                if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
-                    double amt = tot - apply_ng_cash;
-                    card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
-                }
-            }
-        });
+           @Override
+           public void beforeTextChanged(CharSequence s, int start, int count,
+                                         int after) {
+           }
+
+           @Override
+           public void afterTextChanged(Editable s) {
+               String tip_amt = tipamount_et.getText().toString();
+               String due_amt = dueamount_et.getText().toString();
+
+               if (tip_amt == null || tip_amt.equalsIgnoreCase("")) {
+                   tip_amt = "0.0";
+               }
+               if (due_amt == null || due_amt.equalsIgnoreCase("")) {
+                   due_amt = "0.0";
+               }
+
+               double sp_dob = Double.parseDouble(tip_amt);
+               double wait_dob = Double.parseDouble(due_amt);
+               double tot = sp_dob + wait_dob;
+               total_amt_calculate = tot;
+               total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
+               card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+               if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                   double amt = tot - apply_ng_cash;
+                   card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+               }
+           }
+       });
 
         ngcashavb.addTextChangedListener(new TextWatcher() {
 
@@ -854,7 +931,7 @@ public class ManualActivity extends AppCompatActivity {
                         tip_amt_str = tipamount_et.getText().toString();
                         int TotalAmount = Integer.parseInt(due_amount_str);
 
-                  //      Toast.makeText(getApplicationContext(), "test123  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
+                        //      Toast.makeText(getApplicationContext(), "test123  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
 
                         merchant_number = merchant_num_auto.getText().toString();
 
@@ -939,7 +1016,9 @@ public class ManualActivity extends AppCompatActivity {
     }
 
     private void idint() {
-
+        qrcode = findViewById(R.id.qrcode);
+        progresbar = findViewById(R.id.progresbar);
+        edt_name = findViewById(R.id.edt_name);
         card_amount_tv = findViewById(R.id.card_amount_tv);
         avbngcash = findViewById(R.id.avbngcash);
         applytv = findViewById(R.id.applytv);
@@ -1004,7 +1083,7 @@ public class ManualActivity extends AppCompatActivity {
         });
 
 
-        tipamount_et.setFilters(new InputFilter[]{
+       /* tipamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
@@ -1031,9 +1110,9 @@ public class ManualActivity extends AppCompatActivity {
                         return super.filter(source, start, end, dest, dstart, dend);
                     }
                 }
-          });
+        });*/
 
-             dueamount_et.setFilters(new InputFilter[]{
+        dueamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
@@ -1151,7 +1230,7 @@ public class ManualActivity extends AppCompatActivity {
         progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
         Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum(
-                  mySession.getValueOf(MySession.CountryId));
+                mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1302,8 +1381,8 @@ public class ManualActivity extends AppCompatActivity {
                     .build());
             keyGenerator.generateKey();
         } catch (NoSuchAlgorithmException |
-                InvalidAlgorithmParameterException
-                | CertificateException | IOException e) {
+                 InvalidAlgorithmParameterException
+                 | CertificateException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -1877,3 +1956,1314 @@ public class ManualActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+package main.com.ngrewards.activity;
+
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.blikoon.qrcodescanner.QrCodeActivity;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TimeZone;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+import main.com.ngrewards.R;
+import main.com.ngrewards.beanclasses.CardBean;
+import main.com.ngrewards.beanclasses.MarchantBean;
+import main.com.ngrewards.beanclasses.MemberBean;
+import main.com.ngrewards.beanclasses.MemberDetail;
+import main.com.ngrewards.beanclasses.MerchantListBean;
+import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.ExpandableHeightListView;
+import main.com.ngrewards.constant.GPSTracker;
+import main.com.ngrewards.constant.MySavedCardInfo;
+import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.databinding.ActivityManualBinding;
+import main.com.ngrewards.restapi.ApiClient;
+import main.com.ngrewards.stripepaymentclasses.CreditCardFormatTextWatcher;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ManualActivity extends AppCompatActivity {
+boolean customTip =false;
+    private static final int REQUEST_CODE_QR_SCAN = 3;
+    private final String ngcash_app_str = "";
+    private final String order_guset_No = "";
+    private final String order_Table_No = "";
+    private final String order_Address_Id = "";
+    private final String order_special_request = "";
+    private final String order_Date = "";
+    private final String order_Time = "";
+    public String card_id = "", time_zone = "", member_ngcash = "", apply_ngcassh = "0", card_number = "", card_brand = "", customer_id = "";
+    public ArrayList<MemberDetail> memberDetailArrayList;
+    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    int count = 0;
+    int count1 = 0;
+    KeyStore keyStore;
+    String KEY_NAME = "NgRewards", employee_id = "", employee_name = "", status_touchid = "", user_id = "", merchant_id = "", merchant_name = "", merchant_number = "";
+    Cipher cipher;
+    CreditCardFormatTextWatcher tv, tv2;
+    CustomCardAdp customCardAdp;
+    */
+/*private RelativeLayout  binding.backlay;
+    private EditText  binding.dueamountEt,  binding.tipamountEt, ngcashavb;
+    private RadioButton creditcard_rbut;
+    private RadioButton paypalbut;
+    private TextView total_amt, merchantname;
+    private ProgressBar binding.progresbar;
+    private AutoCompleteTextView  binding.merchantNumAuto;
+    private TextView paybill_tv, textView;*//*
+
+    private Myapisession myapisession;
+    private MySession mySession;
+    private MySavedCardInfo mySavedCardInfo;
+    //private TextView cardnumber, binding.avbngcash, applytv, card_amount_tv;
+  //  private RelativeLayout addcardlay;
+    private ArrayList<CardBean> cardBeanArrayList;
+   // private ExpandableHeightListView savedcardlist;
+    boolean  tenclick=false;
+    boolean  fiftclick=false;
+    boolean  twentytclick=false;
+    boolean  fix=false;
+
+    private double ngcash_val = 0, total_amt_calculate = 0, apply_ng_cash = 0;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+
+                    String ngcash_str = intent.getExtras().getString("ngcash");
+                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
+                        binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00 Available");
+                    } else {
+                        binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + ngcash_str + " Available");
+                        ngcash_val = Double.parseDouble(ngcash_str);
+                    }
+                }
+
+            } catch (Exception e) {
+
+            }
+        }
+    };
+   // private ImageView qrcode;
+ //   private AutoCompleteTextView edt_name;
+    private MerchantListBean MerchantData;
+    private String sub_total_price;
+    private String phone;
+    private String due_amount_str = "";
+    private String tip_amt_str = "";
+    private String order_cart_id;
+    private String result;
+    private String tax_price;
+    private String total_amount_due;
+    private String card_amount_tv1;
+    private String type;
+ //   private TextView ten_per, fifteen_per, twenty_per, other_per;
+    private double apply_ng;
+    private String username_str;
+    private String who_invite_str;
+    private String quantity;
+    private boolean employee;
+    private String invited_user_name;
+    private String employee_sales_id = "";
+    private String employee_slaes_name;
+    private GPSTracker gpsTracker;
+    private double latitude;
+    private double longitude;
+    private String country_id;
+    private ArrayList<String> distance_filter_list;
+    private String edit_text_string = "";
+    private String fullname = "";
+
+    private void checkGps() {
+
+        gpsTracker = new GPSTracker(getApplicationContext());
+        if (gpsTracker.canGetLocation()) {
+
+            latitude = gpsTracker.getLatitude();
+            Log.e("REFRESH_LOCATION ", " >> " + latitude);
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+
+            }
+        }
+    }
+    private ActivityManualBinding binding ;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_manual);
+        //setContentView(R.layout.activity_manual);
+        idinit2();
+        Log.e("TAG", "onCreate: activity_manualactivity_manualactivity_manual");
+        mySession = new MySession(ManualActivity.this);
+        myapisession = new Myapisession(ManualActivity.this);
+        distance_filter_list = new ArrayList<>();
+        distance_filter_list.add("Any Distance");
+        distance_filter_list.add("5.0");
+        distance_filter_list.add("10.0");
+        distance_filter_list.add("20.0");
+        distance_filter_list.add("50.0");
+
+        checkGps();
+        idint();
+
+        String user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+
+        } else {
+
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                    country_id = jsonObject1.getString("country_id");
+                    Log.e("country_id >>", " >" + country_id);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        employee_id = PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.employee_id, employee_id);
+        employee_name = PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.employee_name, employee_name);
+
+
+        Calendar c = Calendar.getInstance();
+        TimeZone tz = c.getTimeZone();
+        edit_text_string =  binding.edtName.getText().toString().trim();
+        time_zone = tz.getID();
+        mySavedCardInfo = new MySavedCardInfo(this);
+
+         binding.edtName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s == null || s.equals("")) {
+
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (count1 == 0) {
+
+                    Log.e("FIRST", "KK");
+                    ArrayList<MemberDetail> l1 = new ArrayList<>();
+                    Log.e("l1kamal", String.valueOf(l1));
+
+                    if (s == null) {
+
+                    } else {
+                        MemberDetail memberlist = new MemberDetail();
+                        memberlist.setAffiliateName(s.toString());
+                        l1.add(memberlist);
+
+                        GeoAutoCompleteAdapter1 ga = new GeoAutoCompleteAdapter1(ManualActivity.this, l1, "", "");
+                         binding.edtName.setAdapter(ga);
+
+                        if (edit_text_string.equals(null) && edit_text_string.equals("null")) {
+                             binding.edtName.setText("");
+                        }
+
+                        ga.notifyDataSetChanged();
+
+                    }
+                }
+                count1++;
+            }
+        });
+
+        Log.e("USER DATA", ">>user_log_datauser_log_data  " + user_log_data);
+
+        if (user_log_data != null) {
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+
+                    status_touchid = jsonObject1.getString("touch_status");
+                    user_id = jsonObject1.getString("id");
+                    phone = jsonObject1.getString("phone");
+                    fullname = jsonObject1.getString("fullname");
+                    member_ngcash = jsonObject1.getString("member_ngcash");
+                    Log.e("", "onCreate:  member_ngcashmember_ngcashmember_ngcash " + member_ngcash);
+
+                    if (member_ngcash.equalsIgnoreCase("")) {
+                    } else {
+                        ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                        Log.e("", "onCreate:  ngcash_valngcash_valngcash_val " + ngcash_val);
+                    }
+
+                }
+
+            } catch (JSONException ee) {
+                ee.printStackTrace();
+            }
+        }
+
+        getUsername();
+
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null && !bundle.isEmpty()) {
+
+            merchant_id = bundle.getString("merchant_id");
+            merchant_name = bundle.getString("merchant_name");
+            merchant_number = bundle.getString("merchant_number");
+            order_cart_id = bundle.getString("order_cart_id");
+            sub_total_price = bundle.getString("sub_total_price");
+            tax_price = bundle.getString("tax_price");
+            total_amount_due = bundle.getString("total_amount_due");
+            type = bundle.getString("type");
+            quantity = bundle.getString("quantity");
+            employee_sales_id = bundle.getString("employee_sales_id");
+            employee_slaes_name = bundle.getString("employee_slaes_name");
+
+            if (merchant_name != null) {
+                binding.merchantNumAuto.setText("" + merchant_number);
+                 binding.merchantname.setText("" + merchant_name);
+            }
+
+            if (edit_text_string.equals(null) && edit_text_string.equals("null") && edit_text_string == null) {
+
+            }
+
+            if (total_amount_due != null) {
+                 binding.dueamountEt.setText("" + total_amount_due);
+                 binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + total_amount_due);
+                binding.cardAmountTv.setText(total_amount_due);
+
+            }
+        }
+
+        if (getIntent().getExtras() != null) {
+            MerchantData = (MerchantListBean) getIntent().getExtras().getSerializable("merchant_data");
+
+            try {
+
+                merchant_number = MerchantData.getBusinessNo();
+                merchant_id = MerchantData.getId();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                merchant_name = MerchantData.getBusinessName();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            binding.merchantNumAuto.setText(merchant_number);
+             binding.merchantname.setText(merchant_name);
+        }
+
+
+        try {
+
+            if (type.equals("paybill")) {
+
+                binding.paybillTv.setText("Paybill");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        clickevet();
+
+        getBusnessNumber();
+
+        // edt_name = findViewById(R.id.edt_name);
+
+
+        binding.qrcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ManualActivity.this, QrCodeActivity.class);
+                startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+            }
+        });
+
+
+        //getprofile();
+    }
+
+    private void idinit2() {
+       */
+/* qrcode = findViewById(R.id.qrcode);
+        ten_per = findViewById(R.id.ten_per);
+        fifteen_per = findViewById(R.id.fifteen_per);
+        twenty_per = findViewById(R.id.twenty_per);
+        other_per = findViewById(R.id.other_per);
+        savedcardlist = findViewById(R.id.savedcardlist);
+      *//*
+  binding.savedcardlist.setExpanded(true);
+      //  addcardlay = findViewById(R.id.addcardlay);
+      //  cardlay = findViewById(R.id.cardlay);
+        tv = new CreditCardFormatTextWatcher(binding.cardnumber);
+        binding.cardAmountTv.addTextChangedListener(tv);
+     //   cardimg = findViewById(R.id.cardimg);
+     //   edt_name = findViewById(R.id.edt_name);
+    //    edt_name = findViewById(R.id.edt_name);
+    }
+
+    private void getUsername() {
+
+        binding.progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                binding.progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User", responseData);
+                        Log.e("User name list>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                binding.progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    private void getprofile() {
+        Call<ResponseBody> call = ApiClient.getApiInterface().member_profile(user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                binding.progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            Log.e("jsonObjectresult", String.valueOf(jsonObject));
+
+                            String message = jsonObject.getString("status");
+
+                            if (message.equalsIgnoreCase("1")) {
+
+                                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                                Log.e("TAG", "jsonObject1jsonObject1jsonObject1: " + jsonObject1);
+                                username_str = jsonObject1.getString("affiliate_name");
+                                fullname = jsonObject1.getString("fullname");
+                                who_invite_str = jsonObject1.getString("how_invited_you");
+                                invited_user_name = jsonObject1.getString("invited_user_name");
+                                member_ngcash = jsonObject1.getString("member_ngcash");
+
+
+                                 binding.edtName.setEnabled(true);
+
+                                if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
+                                    binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+
+                                } else {
+
+                                    binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + member_ngcash);
+                                    ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                                }
+
+                                Log.e("employeesalesname", "yyu" + employee_slaes_name);
+
+                                if (employee_name == null) {
+
+                                     binding.edtName.setText("");
+
+                                } else {
+
+                                }
+
+                                if (who_invite_str != null) {
+
+                                    who_invite_str = who_invite_str.replaceAll("(\\r|\\n)", "");
+                                }
+
+                                String social_id = jsonObject1.getString("social_id");
+
+                                if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+
+                                }
+
+                                if (social_id != null && !social_id.equalsIgnoreCase("") && !social_id.equalsIgnoreCase("0") && !social_id.equalsIgnoreCase("null")) {
+                                    if (who_invite_str != null && !who_invite_str.equalsIgnoreCase("") && !who_invite_str.equalsIgnoreCase("0") && !who_invite_str.equalsIgnoreCase("null")) {
+                                        //  binding.edtName.setText(""+employee_slaes_name);
+                                         binding.edtName.setEnabled(true);
+
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                binding.progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 3) {
+                String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+
+                try {
+
+                    String[] arr = result.split(",");
+                     binding.edtName.setText(arr[1]);
+                    employee_name = arr[1];
+                    employee_id = arr[4];
+                     binding.edtName.setVisibility(View.VISIBLE);
+                    employee = true;
+
+                    Log.e("employee_iddddd", result);
+                    //  binding.edtName.setText(employee_name);
+
+                    PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, employee_id);
+                    PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, employee_name);
+
+
+                } catch (Exception e) {
+                    Toast.makeText(ManualActivity.this, "Wrong QR Code!!!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void clickevet() {
+
+         binding.backlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+        binding.tenPer.setOnClickListener(
+                v -> {
+                  //  ten_per.setBackgroundColor(getColor(R.color.black));
+                    fix=true;
+                        if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                             binding.tipamountEt.setEnabled(false);
+                            String due_amt =  binding.dueamountEt.getText().toString();
+                            String tip_amt  = ""+Double.parseDouble(due_amt) * 10 / 100;
+                             if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                            if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                            double sp_dob = Double.parseDouble(tip_amt);
+                            double wait_dob = Double.parseDouble(due_amt);
+                            double tot = sp_dob + wait_dob;
+                            total_amt_calculate = tot;
+                            binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                             binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                            if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                                double amt = tot - apply_ng_cash;
+                                binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                            }
+                        }
+                        if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                             binding.tipamountEt.setEnabled(false);
+                            String due_amt =  binding.dueamountEt.getText().toString();
+                            String tip_amt  = ""+Double.parseDouble(due_amt) * 10 / 100;
+                             if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                            if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                            double sp_dob = Double.parseDouble(tip_amt);
+                            double wait_dob = Double.parseDouble(due_amt);
+                            double tot = sp_dob + wait_dob;
+                            total_amt_calculate = tot;
+                            binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                             binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                            if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                                double amt = tot - apply_ng_cash;
+                                binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                            }
+                        }
+
+                });
+        binding.fifteenPer.setOnClickListener(
+                v -> {
+                    fix=true;
+
+                    if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                         binding.tipamountEt.setEnabled(false);
+                        String due_amt =  binding.dueamountEt.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 15 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                         binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                         binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+                    if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                         binding.tipamountEt.setEnabled(false);
+                        String due_amt =  binding.dueamountEt.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 15 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                         binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                         binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+
+
+                });
+        binding.twentyPer.setOnClickListener(
+                v -> {
+                    fix=true;
+
+                    if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                         binding.tipamountEt.setEnabled(false);
+                        String due_amt =  binding.dueamountEt.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 20 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                         binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                         binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+                    if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                         binding.tipamountEt.setEnabled(false);
+                        String due_amt =  binding.dueamountEt.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 20 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                         binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                         binding.tipamountEt.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+
+                });
+        binding.otherPer.setOnClickListener(
+                v -> {
+                    try {
+                        fix=false;
+                        if (! binding.dueamountEt.getText().toString().equalsIgnoreCase("")) {
+                             binding.tipamountEt.setEnabled(true);
+                             binding.tipamountEt.setText("");
+                             binding.tipamountEt.addTextChangedListener( new TextWatcher() {
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before,
+                                                          int count) {
+
+                                }
+
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count,
+                                                              int after) {
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    if (!fix){
+                                        Log.e("TAG", "afterTextChanged: tip_amttip_amt  "+s.toString() );
+
+                                        String tip_amt =  binding.tipamountEt.getText().toString();
+                                        String due_amt =  binding.dueamountEt.getText().toString();
+                                        Log.e("TAG", "afterTextChanged: tip_amttip_amt  "+tip_amt );
+                                        Log.e("TAG", "afterTextChanged: due_amtdue_amt"+due_amt );
+
+                                        if (tip_amt.equalsIgnoreCase("")) {
+                                            tip_amt = "0.0";
+                                        }
+                                        if (due_amt.equalsIgnoreCase("")) {
+                                            due_amt = "0.0";
+                                        }
+
+                                        double sp_dob = Double.parseDouble(tip_amt);
+                                        double wait_dob = Double.parseDouble(due_amt);
+
+                                        double tot = sp_dob + wait_dob;
+
+                                        total_amt_calculate = tot;
+                                         binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+                                        if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                                            double amt = tot - apply_ng_cash;
+                                            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                                        }
+                                    }
+
+                                }
+                            });
+                             binding.tipamountEt.requestFocus();
+                             binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal( binding.dueamountEt.getText().toString())));
+
+                        }
+                    } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    //  binding.totalAmt.setText(""+(amountt+tip_amount));
+                });
+         binding.tipamountEt.setEnabled(true);
+         binding.tipamountEt.addTextChangedListener( new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!fix) {
+                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + s.toString());
+                    String tip_amt =  binding.tipamountEt.getText().toString();
+                    String due_amt =  binding.dueamountEt.getText().toString();
+                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + tip_amt);
+                    Log.e("TAG", "afterTextChanged: due_amtdue_amt" + due_amt);
+
+                    if (tip_amt.equalsIgnoreCase("")) {
+                        tip_amt = "0.0";
+                    }
+                    if (due_amt.equalsIgnoreCase("")) {
+                        due_amt = "0.0";
+                    }
+
+                    double sp_dob = Double.parseDouble(tip_amt);
+                    double wait_dob = Double.parseDouble(due_amt);
+
+                    double tot = sp_dob + wait_dob;
+
+                    total_amt_calculate = tot;
+                     binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                    binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+                    if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                        double amt = tot - apply_ng_cash;
+                        binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                    }
+                }
+            }
+        });
+
+        binding.paypalbut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                binding.creditcardRbut.setChecked(!isChecked);
+            }
+        });
+
+         binding.creditcardRbut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                binding.paypalbut.setChecked(!isChecked);
+            }
+        });
+
+        binding.applytv.setOnClickListener(v -> {
+
+            Log.e("total_amt_calculate", String.valueOf(ngcash_val));
+
+            String tip_amt =  binding.tipamountEt.getText().toString();
+            String due_amt =  binding.dueamountEt.getText().toString();
+            if (tip_amt == null || tip_amt.equalsIgnoreCase("")) {
+                tip_amt = "0.0";
+            }
+            if (due_amt == null || due_amt.equalsIgnoreCase("")) {
+                due_amt = "0.0";
+            }
+
+            double sp_dob = Double.parseDouble(tip_amt);
+            double wait_dob = Double.parseDouble(due_amt);
+
+            double tot = sp_dob + wait_dob;
+
+            total_amt_calculate = tot;
+
+             binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+            binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+            if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                double amt = tot - apply_ng_cash;
+                binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+            }
+
+            try {
+                apply_ngcassh = binding.ngcashavb.getText().toString();
+                apply_ng = Double.parseDouble(apply_ngcassh);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.e("apply_ng", String.valueOf(apply_ng));
+
+            if (ngcash_val < apply_ng) {
+                Toast.makeText(ManualActivity.this, getResources().getString(R.string.amountgreterthendue), Toast.LENGTH_LONG).show();
+            } else {
+                apply_ng_cash = apply_ng;
+                double amt = total_amt_calculate - apply_ng;
+                //card_amount_tv.setText();
+                binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                binding.applytv.setText("" + getResources().getString(R.string.applied));
+            }
+
+        });
+
+
+        binding.ngcashavb.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                binding.applytv.setText("" + getResources().getString(R.string.apply));
+                //  grandtotal.setText(" " + tot);
+
+                try {
+                    binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(total_amount_due)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                    double amt = total_amt_calculate - apply_ng_cash;
+                    binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                }
+            }
+        });
+
+
+         binding.dueamountEt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String tip_amt =  binding.tipamountEt.getText().toString();
+                String due_amt =  binding.dueamountEt.getText().toString();
+
+                if (tip_amt == null || tip_amt.equalsIgnoreCase("")) {
+                    tip_amt = "0.0";
+                }
+
+                if (due_amt == null || due_amt.equalsIgnoreCase("")) {
+                    due_amt = "0.0";
+                }
+
+                double sp_dob = Double.parseDouble(tip_amt);
+                double wait_dob = Double.parseDouble(due_amt);
+
+                double tot = sp_dob + wait_dob;
+                total_amt_calculate = tot;
+                 binding.totalAmt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(tot)));
+                if (binding.applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                    double amt = tot - apply_ng_cash;
+                    binding.cardAmountTv.setText(String.format("%.2f", new BigDecimal(amt)));
+                }
+            }
+        });
+
+        binding.paybillTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                due_amount_str =  binding.dueamountEt.getText().toString();
+                tip_amt_str =  binding.tipamountEt.getText().toString();
+                merchant_number =  binding.merchantNumAuto.getText().toString();
+                if (due_amount_str == null || due_amount_str.equalsIgnoreCase("") || due_amount_str.equalsIgnoreCase("0") || due_amount_str.equalsIgnoreCase("0.00") || due_amount_str.equalsIgnoreCase("0.0")) {
+                    Toast.makeText(ManualActivity.this, getResources().getString(R.string.enterdueamt), Toast.LENGTH_LONG).show();
+
+                } else if (card_id == null || card_id.equalsIgnoreCase("")) {
+                    Toast.makeText(ManualActivity.this, getResources().getString(R.string.selectpaymentmethod), Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    // Toast.makeText(getApplicationContext(), "emplouyyee_id" + employee_name +"tesst"+ employee_slaes_name, Toast.LENGTH_LONG).show();
+
+                    apply_ngcassh = binding.ngcashavb.getText().toString();
+
+                    if (apply_ngcassh != null || !apply_ngcassh.equalsIgnoreCase("") || !apply_ngcassh.equalsIgnoreCase("0")) {
+
+                        if (type.equals("paybill")) {
+
+                            employee_name =  binding.edtName.getText().toString().trim();
+                            card_amount_tv1 = binding.cardAmountTv.getText().toString().trim();
+
+                            Intent intent = new Intent(ManualActivity.this, ManualPaybillSucess.class);
+                            intent.putExtra("type", type);
+                            intent.putExtra("user_id", user_id);
+                            intent.putExtra("merchant_id", merchant_id);
+                            intent.putExtra("merchant_number", merchant_number);
+                            intent.putExtra("due_amount_str", due_amount_str);
+                            intent.putExtra("tip_amt_str", tip_amt_str);
+                            intent.putExtra("apply_ngcassh", apply_ngcassh);
+                            intent.putExtra("card_id", card_id);
+                            intent.putExtra("card_number", card_number);
+                            intent.putExtra("card_brand", card_brand);
+                            intent.putExtra("customer_id", customer_id);
+                            intent.putExtra("order_cart_id", order_cart_id);
+                            intent.putExtra("merchant_name", merchant_name);
+                            intent.putExtra("employee_name", employee_name);
+
+                            if (employee) {
+
+                                intent.putExtra("employee_id", employee_id);
+
+                            } else {
+
+                                intent.putExtra("employee_id", employee_id);
+
+                            }
+
+                            intent.putExtra("quantity", quantity);
+                            startActivity(intent);
+                            //finish();
+
+
+                            //  payBiilMerchant(user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
+                        } else {
+                            PayOrderBill(order_cart_id);
+                        }
+
+                    } else {
+
+                        due_amount_str = binding.totalAmt.getText().toString();
+                        tip_amt_str =  binding.tipamountEt.getText().toString();
+                        int TotalAmount = Integer.parseInt(due_amount_str);
+
+                        //      Toast.makeText(getApplicationContext(), "test123  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
+
+                        merchant_number =  binding.merchantNumAuto.getText().toString();
+
+                        double apply_ng = Double.parseDouble(apply_ngcassh);
+
+                        if (apply_ng > ngcash_val) {
+
+                            Toast.makeText(ManualActivity.this, getResources().getString(R.string.appliedamtisgreaterthanngcash), Toast.LENGTH_LONG).show();
+                            binding.applytv.setText("" + getResources().getString(R.string.apply));
+
+                        } else {
+                            if (total_amt_calculate < apply_ng) {
+
+                                Toast.makeText(ManualActivity.this, getResources().getString(R.string.amountgreterthendue), Toast.LENGTH_LONG).show();
+                            } else {
+
+                                binding.applytv.setText("" + getResources().getString(R.string.applied));
+
+                                Log.e("user_id >> ", " >> " + user_id);
+
+                                if (type.equals("paybill")) {
+
+                                    apply_ngcassh = binding.ngcashavb.getText().toString();
+
+                                    //  Toast.makeText(getApplicationContext(),"dssuccess!!!!",Toast.LENGTH_LONG).show();
+
+                                    card_amount_tv1 = binding.cardAmountTv.getText().toString().trim();
+                                    Log.e("card_amount_tv1", card_amount_tv1);
+                                    Log.e("customer_id", customer_id);
+
+                                    Intent intent = new Intent(ManualActivity.this, ManualPaybillSucess.class);
+                                    intent.putExtra("type", type);
+                                    intent.putExtra("user_id", user_id);
+                                    intent.putExtra("member_id", merchant_id);
+                                    intent.putExtra("merchant_number", merchant_number);
+                                    intent.putExtra("due_amount_str", "" + TotalAmount);
+                                    intent.putExtra("tip_amt_str", tip_amt_str);
+                                    intent.putExtra("apply_ngcassh", apply_ngcassh);
+                                    intent.putExtra("card_id", card_id);
+                                    intent.putExtra("card_number", card_number);
+                                    intent.putExtra("card_brand", card_brand);
+                                    intent.putExtra("customer_id", customer_id);
+                                    intent.putExtra("order_cart_id", order_cart_id);
+                                    intent.putExtra("merchant_name", merchant_name);
+                                    intent.putExtra("employee_name", employee_name);
+
+                                    if (employee) {
+                                        intent.putExtra("employee_id", employee_id);
+                                    } else {
+                                        intent.putExtra("employee_id", employee_sales_id);
+                                    }
+
+                                    intent.putExtra("quantity", quantity);
+                                    startActivity(intent);
+                                    */
+/*finish();*//*
+
+
+
+                                    // payBiilMerchant(user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
+                                } else {
+                                    //TODO:=========PayOrderBill==============
+                                    PayOrderBill(order_cart_id);
+                                }
+
+                            }
+
+                        }
+                    }
+
+
+                }
+
+            }
+        });
+
+        binding.addcardlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ManualActivity.this, AddMemberCard.class);
+                startActivity(i);
+            }
+        });
+    }
+
+    private void idint() {
+
+        binding.dueamountEt.setHint(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+         binding.tipamountEt.setHint(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+         binding.totalAmt.setHint(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0")
+                || member_ngcash.equalsIgnoreCase("")
+                || member_ngcash.equalsIgnoreCase("0.0")
+                || member_ngcash.equalsIgnoreCase("null")) {
+            binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+
+        } else {
+
+            binding.avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + member_ngcash);
+            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+        }
+        binding.ngcashavb.setFilters(new InputFilter[]{
+                new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
+
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end,
+                                               Spanned dest, int dstart, int dend) {
+                        String temp = binding.ngcashavb.getText() + source.toString();
+
+                        if (temp.equals(".")) {
+                            return "0.";
+                        } else if (temp.indexOf(".") == -1) {
+                            // no decimal point placed yet
+                            if (temp.length() > beforeDecimal) {
+                                return "";
+                            }
+                        } else {
+                            temp = temp.substring(temp.indexOf(".") + 1);
+                            if (temp.length() > afterDecimal) {
+                                return "";
+                            }
+                        }
+
+                        return super.filter(source, start, end, dest, dstart, dend);
+                    }
+                }
+        });
+
+
+         binding.tipamountEt.setFilters(new InputFilter[]{
+
+                new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
+
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                        String temp =  binding.tipamountEt.getText() + source.toString();
+
+                        if (temp.equals(".")) {
+                            return "0.";
+                        } else if (temp.indexOf(".") == -1) {
+                            // no decimal point placed yet
+                            if (temp.length() > beforeDecimal) {
+                                return "";
+                            }
+                        } else {
+                            temp = temp.substring(temp.indexOf(".") + 1);
+                            if (temp.length() > afterDecimal) {
+                                return "";
+                            }
+                        }
+
+                        return super.filter(source, start, end, dest, dstart, dend);
+                    }
+                }
+        });
+
+         binding.dueamountEt.setFilters(new InputFilter[]{
+
+                new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
+                    final int beforeDecimal = 8;
+                    final int afterDecimal = 2;
+
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end,
+                                               Spanned dest, int dstart, int dend) {
+                        String temp =  binding.dueamountEt.getText() + source.toString();
+
+                        if (temp.equals(".")) {
+                            return "0.";
+                        } else if (temp.indexOf(".") == -1) {
+                            // no decimal point placed yet
+                            if (temp.length() > beforeDecimal) {
+                                return "";
+                            }
+                        } else {
+                            temp = temp.substring(temp.indexOf(".") + 1);
+                            if (temp.length() > afterDecimal) {
+                                return "";
+                            }
+                        }
+
+                        return super.filter(source, start, end, dest, dstart, dend);
+                    }
+                }
+        });
+
+         binding.merchantNumAuto.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (s == null || s.equals("")) {
+                     binding.merchantname.setText("");
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (count == 0) {
+                    Log.e("FIRST", "KK");
+                    ArrayList<MerchantListBean> l1 = new ArrayList<>();
+                    if (s == null) {
+
+                    } else {
+                        MerchantListBean memberlist = new MerchantListBean();
+                        memberlist.setBusinessNo(s.toString());
+                        l1.add(memberlist);
+
+                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(ManualActivity.this, l1, "", "");
+                         binding.merchantNumAuto.setAdapter(ga);
+                        ga.notifyDataSetChanged();
+
+                    }
+                }
+
+                count++;
+
+            }
+        });
+
+    }
+
+
+}*/

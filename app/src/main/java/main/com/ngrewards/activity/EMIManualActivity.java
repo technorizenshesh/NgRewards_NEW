@@ -101,7 +101,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EMIManualActivity extends AppCompatActivity {
-
+    private TextView tenPer, fifteenPer, twentyPer, otherPer;
     private RelativeLayout backlay;
     private EditText dueamount_et, tipamount_et, ngcashavb;
     private RadioButton creditcard_rbut;
@@ -193,6 +193,11 @@ public class EMIManualActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emi_manual);
+        tenPer = findViewById(R.id.ten_per);
+        fifteenPer = findViewById(R.id.fifteen_per);
+        twentyPer = findViewById(R.id.twenty_per);
+        otherPer = findViewById(R.id.other_per);
+
         mySession = new MySession(getApplicationContext());
         myapisession = new Myapisession(getApplicationContext());
         distance_filter_list = new ArrayList<>();
@@ -808,6 +813,87 @@ public class EMIManualActivity extends AppCompatActivity {
             }
         });
 
+
+
+        tenPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 10 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+
+                });
+        fifteenPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 15 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+
+                });
+        twentyPer.setOnClickListener(
+                v -> {
+                    if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        String due_amt =  dueamount_et.getText().toString();
+                        String tip_amt  = ""+Double.parseDouble(due_amt) * 20 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
+                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        double sp_dob = Double.parseDouble(tip_amt);
+                        double wait_dob = Double.parseDouble(due_amt);
+                        double tot = sp_dob + wait_dob;
+                        total_amt_calculate = tot;
+                        total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+                        tipamount_et.setText(String.format("%.2f", new BigDecimal(sp_dob)));
+                        if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                            double amt = tot - apply_ng_cash;
+                            card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                        }
+                    }
+
+                });
+
+        otherPer.setOnClickListener(
+                v -> {
+                    try {
+                        if (! dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                            tipamount_et.setEnabled(true);
+                            tipamount_et.setText("");
+                            tipamount_et.requestFocus();
+                            total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " "
+                                    + String.format("%.2f", new BigDecimal(dueamount_et.getText().toString())));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
         tipamount_et.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -835,9 +921,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
                 double sp_dob = Double.parseDouble(tip_amt);
                 double wait_dob = Double.parseDouble(due_amt);
-
                 double tot = sp_dob + wait_dob;
-
                 total_amt_calculate = tot;
                 total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
@@ -847,6 +931,51 @@ public class EMIManualActivity extends AppCompatActivity {
                     card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
                 }
             }
+        });
+        tipamount_et.addTextChangedListener( new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + s.toString());
+                    String tip_amt = tipamount_et.getText().toString();
+                    String due_amt = dueamount_et.getText().toString();
+                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + tip_amt);
+                    Log.e("TAG", "afterTextChanged: due_amtdue_amt" + due_amt);
+
+                    if (tip_amt.equalsIgnoreCase("")) {
+                        tip_amt = "0.0";
+                    }
+                    if (due_amt.equalsIgnoreCase("")) {
+                        due_amt = "0.0";
+                    }
+
+                    double sp_dob = Double.parseDouble(tip_amt);
+                    double wait_dob = Double.parseDouble(due_amt);
+
+                    double tot = sp_dob + wait_dob;
+
+                    total_amt_calculate = tot;
+                    total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                    card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+                    if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                        double amt = tot - apply_ng_cash;
+                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                    }
+                }
+
         });
 
         ngcashavb.addTextChangedListener(new TextWatcher() {
@@ -1134,7 +1263,7 @@ public class EMIManualActivity extends AppCompatActivity {
         });
 
 
-        tipamount_et.setFilters(new InputFilter[]{
+    /*    tipamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
@@ -1161,7 +1290,7 @@ public class EMIManualActivity extends AppCompatActivity {
                         return super.filter(source, start, end, dest, dstart, dend);
                     }
                 }
-          });
+          });*/
 
              dueamount_et.setFilters(new InputFilter[]{
 

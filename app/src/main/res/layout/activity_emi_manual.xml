@@ -179,6 +179,7 @@
                             android:background="@null"
                             android:gravity="right|center_vertical"
                             android:hint="0.00"
+                            android:digits=".1234567890"
                             android:inputType="numberDecimal"
                             android:singleLine="true"
                             android:textColor="@color/black"
@@ -190,8 +191,91 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="@color/black"></View>
-
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:orientation="horizontal">
+
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/tip"
+                                android:layout_margin="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/medium" />
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/ten_per"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text=" 10% "
+                                android:padding="2dp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/fifteen_per"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text=" 15% "
+                                android:padding="2dp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:id="@+id/twenty_per"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text=" 20% "
+                                android:padding="2dp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+                            <main.com.ngrewards.fonttypeclasses.NoramlTextView
+                                android:layout_width="wrap_content"
+                                android:id="@+id/other_per"
+
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:background="@color/red"
+                                android:gravity="center"
+                                android:text=" Other "
+                                android:padding="2dp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small" />
+                        </LinearLayout>
+
+
+                        <main.com.ngrewards.fonttypeclasses.NormalEditText
+                            android:id="@+id/tipamount_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1.5"
+                            android:background="@null"
+                            android:gravity="right|center_vertical"
+                            android:hint="0.00"
+                            android:inputType="numberDecimal"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium" />
+
+                    </LinearLayout>
+
+                    <!--<LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -220,7 +304,7 @@
                             android:textColor="@color/black"
                             android:textSize="@dimen/medium" />
 
-                    </LinearLayout>
+                    </LinearLayout>-->
 
                     <View
                         android:layout_width="match_parent"
