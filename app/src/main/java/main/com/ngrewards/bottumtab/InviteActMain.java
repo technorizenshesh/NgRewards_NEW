@@ -39,7 +39,7 @@ import main.com.ngrewards.draweractivity.BaseActivity;
 public class InviteActMain extends BaseActivity {
 
     FrameLayout contentFrameLayout;
-    private TextView invitefriends, usernametv;
+    private TextView invitefriendsbusiness,invitefriends, usernametv;
     MySession mySession;
     private String username;
     public final static int QRcodeWidth = 500;
@@ -51,7 +51,7 @@ public class InviteActMain extends BaseActivity {
     private String username_s;
     private String user_id;
     private ProgressBar progresbar;
-    private String invite_str;
+    private String invite_str,invite_str2;
     private String id;
 
     @Override
@@ -202,13 +202,15 @@ public class InviteActMain extends BaseActivity {
                         usernametv = findViewById(R.id.usernametv);
                         usernametv.setText("@" + username);
                         invite_str = "https://myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
-
+                        invite_str2 = "https://myngrewards.com/signup-merchant.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
+                                      /*https://myngrewards.com/signup-merchant.php?affiliate_name=Ios&affiliate_no=287&how_invited_you=&country=101&source=app*/
                         Log.e("id>>", id);
                         Log.e("afflited_no>>", affiliate_number);
 
                         Log.e("invite_str>>", invite_str);
 
                         invitefriends = findViewById(R.id.invitefriends);
+                        invitefriendsbusiness = findViewById(R.id.invitefriendsbusiness);
 
                         invitefriends.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -216,6 +218,17 @@ public class InviteActMain extends BaseActivity {
                                 Intent sendIntent = new Intent();
                                 sendIntent.setAction(Intent.ACTION_SEND);
                                 sendIntent.putExtra(Intent.EXTRA_TEXT, invite_str);
+                                sendIntent.setType("text/plain");
+                                startActivity(sendIntent);
+                            }
+                        });
+                        invitefriendsbusiness.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.e("TAG", "onClick:---- "+invite_str2 );
+                                Intent sendIntent = new Intent();
+                                sendIntent.setAction(Intent.ACTION_SEND);
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, invite_str2);
                                 sendIntent.setType("text/plain");
                                 startActivity(sendIntent);
                             }

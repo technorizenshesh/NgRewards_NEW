@@ -304,6 +304,7 @@
     <string name="yourusername">Your Username</string>
     <string name="usena">\@username</string>
     <string name="invitefriend">Invite Friends</string>
+    <string name="invitebusiness">Invite Business</string>
     <string name="friends">Friends</string>
     <string name="spent">Spent This Week</string>
     <string name="earngcash">Earn NG Cash</string>
@@ -534,6 +535,7 @@
     <string name="paymentreqsendsucc">Payment request send successfully</string>
     <string name="shippriceing">Standard Shipping :</string>
     <string name="nocommisionisavailable">No commission is available</string>
+    <string name="noreferenceisavailable">No Reference is available</string>
     <string name="pleasewaitforweekcomplete">This amount will be available for withdraw, when this week will complete.</string>
     <string name="size_s">Size</string>
     <string name="color">Color</string>

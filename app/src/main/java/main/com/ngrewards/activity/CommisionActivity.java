@@ -52,7 +52,7 @@ import retrofit2.Response;
 public class CommisionActivity extends AppCompatActivity {
 
     private RecyclerView commision_list;
-    private RelativeLayout backlay;
+    private RelativeLayout   menulay,backlay;
     private CommisionAdpter commisionAdpter;
     MySession mySession;
     private String user_id = "", affiliate_number = "",stripe_account_id="",stripe_account_login_link="";
@@ -116,6 +116,13 @@ public class CommisionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        menulay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CommisionActivity.this, MemberRefListAct.class);
+                startActivity(i);
             }
         });
 
@@ -184,6 +191,7 @@ public class CommisionActivity extends AppCompatActivity {
 
         commision_list.setLayoutManager(horizontalLayoutManagaer);
         backlay = findViewById(R.id.backlay);
+        menulay = findViewById(R.id.menulay);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -22,6 +22,9 @@
         tools:replace="android:icon"
        >
         <activity
+            android:name=".activity.MemberRefListAct"
+            android:exported="false" />
+        <activity
             android:name=".activity.WebViewAc"
             android:exported="false" />
         <activity

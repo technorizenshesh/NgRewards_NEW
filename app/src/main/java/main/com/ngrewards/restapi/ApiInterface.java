@@ -192,6 +192,8 @@ public interface ApiInterface {
 
     @GET("merchant_commission_list_for_member.php?")
     Call<ResponseBody> getCommissionData(@Query("how_invite_you") String how_invite_you);
+    @GET("get_merchant_referral.php?")
+    Call<ResponseBody> get_merchant_referral(@Query("how_invite_you") String how_invite_you);
 
     @GET("member_withdraw.php?")
     Call<ResponseBody> withdrawCommision(@Query("member_id") String member_id, @Query("week_no") String week_no, @Query("week_year") String week_year, @Query("withdraw_total_amount") String withdraw_total_amount, @Query("ngcash_amount") String ngcash_amount, @Query("bank_amount") String bank_amount, @Query("account_id") String account_id);
