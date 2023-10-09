@@ -312,7 +312,13 @@ public class SplashActivity extends AppCompatActivity implements
         if (Build.VERSION.SDK_INT >= 33) {
             ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_MEDIA_VIDEO}, RequestPermissionCode);
         } else {
-            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, RequestPermissionCode);
+            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    , android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    , android.Manifest.permission.CAMERA
+                    , android.Manifest.permission.ACCESS_NETWORK_STATE
+                    , android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    , android.Manifest.permission.ACCESS_FINE_LOCATION}, RequestPermissionCode);
         }
 
     }
@@ -396,7 +402,29 @@ public class SplashActivity extends AppCompatActivity implements
                         }, SPLASH_TIME_OUT);
 
                     } else {
-                        nesePermission();
+                        Log.e(TAG, "onRequestPermissionsResult: "+grantResults.toString() );
+                      //  nesePermission();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (mySession.IsLoggedIn()) {
+                                    if (user_type.equalsIgnoreCase("Merchant")) {
+                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                } else {
+                                    Intent i = new Intent(SplashActivity.this, StartSliderAct.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }
+                        }, SPLASH_TIME_OUT);
                     }
                 }
             }
