@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">NG Rewards</string>
-
     <string name="FACEBOOK_APP_ID">396537575068789</string>
     <string name="facebook_app_id">396537575068789</string>
     <string name="fb_login_protocol_scheme">fb396537575068789</string>
-    <string name="cancel">Cancel</string>
     <string name="googlekey">AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU</string>
     <string name="google_search">AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU</string>
+    <string name="amper"><![CDATA[&]]></string>
+    <string name="privacysefty"><![CDATA[Privacy & Sefty]]></string>
+    <string name="bytapingwithdraw"><![CDATA[By tapping withdraw you agree to our Terms & Conditions.]]></string>
+    <string name="or_in_5_easy_payments">O en 5 pagos fáciles</string>
+    <string name="fulldayopen">24 horas</string>
+    <string name="youleave">Puedes subir hasta 10 imágenes.</string>
+    <string name="streetaddopt">Dirección 2 (opcional)</string>
+    <string name="addopt">Línea de dirección 2 (opcional)</string>
+    <string name="alreadyadded">Ya se agregaron 7 fotos.</string>
+    <string name="tnc">Please accept our Terms of Service to continue</string>
+    <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="rotate">Rotate</string>
     <string name="drawer_open">Open</string>
@@ -27,7 +36,7 @@
     <string name="connectfacebook">Connect With Facebook</string>
     <string name="byregistering">By registering you agree to our Terms of Service</string>
     <string name="easy_pay">I want to make Easy Payments</string>
-        <string name="byreg">By registering you agree to our</string>
+    <string name="byreg">By registering you agree to our</string>
     <string name="termsser">Terms of Service</string>
     <string name="privacy">Privacy Policy</string>
     <string name="allready">Already have an account?</string>
@@ -58,7 +67,7 @@
     <string name="login">LOG IN</string>
     <string name="forgotpass">Forgot Password?</string>
     <string name="bytap">By tapping Log in you agree to our</string>
-    <string name="amper"><![CDATA[&]]></string>
+
     <string name="donthavemar">Don’t have a member account yet?</string>
     <string name="donthavemarchant">Don\'t have a merchant account yet?</string>
     <string name="signup">Sign up</string>
@@ -110,7 +119,7 @@
     <string name="howcanwehelp">How can we help?</string>
     <string name="usingngreward">Using NG Rewards</string>
     <string name="managingaccount">Managing your account</string>
-    <string name="privacysefty"><![CDATA[Privacy & Sefty]]></string>
+
     <string name="whatsnew">Whats New</string>
     <string name="blog">Blog</string>
     <string name="touchid">Touch ID</string>
@@ -243,7 +252,6 @@
     <string name="itsthatsimple">It\'s that simple.</string>
     <string name="photos">Photos</string>
     <string name="startyourlisting">Start Your Listing</string>
-    <string name="youleave">You can upload up to 10 images.</string>
     <string name="title">Title</string>
     <string name="selectcat">Select category</string>
     <string name="selectcountry">Select Country</string>
@@ -266,7 +274,7 @@
     <string name="marchantforgotpass">Forgot Password?</string>
     <string name="submit">Submit</string>
     <string name="pleaseheck">New password was sent to your email successfully.</string>
-    <string name="nghelpsyou">NG Rewards Helps you.\nEarn NGCash while you shop!</string>
+    <string name="nghelpsyou">NG Rewards te ayuda.\n¡Gana NGCash mientras compras!</string>
     <string name="nghelpsyou1">Earn NGCash while you shop!</string>
     <string name="discoverhelp">Discover local\nstores</string>
     <string name="findout">Find out what stores in\nyour area are rewarding NGCash.</string>
@@ -340,17 +348,13 @@
     <string name="reportabuse">Report Abuse</string>
     <string name="comment">Comment</string>
     <string name="zipcode2">Zip/Postal Code</string>
-    <string name="streetaddopt">Street Address 2 (optional)</string>
-    <string name="addopt">Address Line 2 (optional)</string>
+
+
     <string name="notificatio">Notifications</string>
     <string name="offerdeleted">Offer is deleted successfully.</string>
     <string name="merchantcode">Merchant Code</string>
-    <string name="alreadyadded">Already 7 photos added.</string>
     <string name="signedup">Signed up to NgRewards\nwith your user name</string>
     <string name="plsenteremail">Please enter your email. We’ll email you a temporary password.</string>
-
-    <!--finger print strings-->
-
     <string name="title_activity_main">MainActivity</string>
     <string name="title_fingerprint">One-touch Sign In</string>
     <string name="desc_fingerprint">Please place your fingertip on the scanner to verify your identity</string>
@@ -405,7 +409,6 @@
     <string name="commision">Commission</string>
     <string name="totalcommisions">Total Commissions</string>
     <string name="chooseanamount">Choose an amount</string>
-    <string name="bytapingwithdraw"><![CDATA[By tapping withdraw you agree to our Terms & Conditions.]]></string>
     <string name="completed">Completed</string>
     <string name="submitreview">Submit Review</string>
     <string name="plswricmt">Please write comment.</string>
@@ -540,7 +543,6 @@
     <string name="size_s">Size</string>
     <string name="color">Color</string>
     <string name="youtube">YouTube Page Link</string>
-    <string name="fulldayopen">24 Hr</string>
     <string name="earnedgcash">NGCash Earned</string>
     <string name="sendtransfer">Send Transfer</string>
     <string name="plswaititemdetailisfatching">Please wait item detail is fetching.</string>
@@ -576,12 +578,10 @@
     <string name="youenteredwrongpass">You have entered wrong old password</string>
     <string name="usemyrefusername">I\'ve been using NG Rewards to get rewarded for everyday shopping! Download the app in myngrewards.com and be sure to enter my referral username</string>
     <string name="order">Order</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="revocked_acces_to_sell">Your access to sell items has been revoked. Please contact us at info@myngrewards.com to resume selling items online.</string>
     <string name="enter_password">Enter Password</string>
     <string name="please_contact_admin"> Please contact  info@myngrewards.com to receive approved password to sell item online</string>
     <string name="wrong_password"> Wrong password please contact info@myngrewards.com to receive approved password to sell item online</string>
-    <string name="tnc"> Please accept our Terms of Service to continue</string>
-    <string name="or_in_5_easy_payments">Or in 5 easy Payments</string>
+    <string name="user_name">User Name</string>
 </resources>

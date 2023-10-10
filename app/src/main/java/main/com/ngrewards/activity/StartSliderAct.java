@@ -1,5 +1,9 @@
 package main.com.ngrewards.activity;
 
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,9 +11,22 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
@@ -20,10 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.start_fragment.BecontrolFrag;
 import main.com.ngrewards.start_fragment.DiscoverFrag;
@@ -37,16 +56,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StartSliderAct extends AppCompatActivity {
+    public static String country_str = "", country_id = "";
+    public static ArrayList<CountryBean> countryBeanArrayList;
+    public ArrayList<LanguageBean> language_list = new ArrayList<>();
+    ViewPagerAdapter adapter;
+    MySession mySession;
+    Myapisession myapisession;
+    CountryListAdapter languageListAdapter;
     private Button continue_button;
     private CustomViewPager viewPager;
     private CirclePageIndicator indicator;
     private RelativeLayout backlay;
-    ViewPagerAdapter adapter;
     private boolean click_sts = false;
-    public static String country_str="",country_id="";
-    public static ArrayList<CountryBean> countryBeanArrayList;
-    MySession mySession;
-    Myapisession myapisession;
+    private Spinner language_spn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +106,40 @@ public class StartSliderAct extends AppCompatActivity {
     }
 
     private void idint() {
+        language_spn = findViewById(R.id.language_spn);
+        language_list.add(new LanguageBean("1", "en", "English", ""));
+        language_list.add(new LanguageBean("2", "hi", "Hindi", ""));
+        language_list.add(new LanguageBean("3", "es", "Spanish", ""));
+        languageListAdapter = new
+                CountryListAdapter(
+                StartSliderAct.this,
+                language_list);
+        language_spn.setAdapter(languageListAdapter);
+        Log.e("TAG", "idint: mySession.getValueOf(KEY_LANGUAGE)" + mySession.getValueOf(KEY_LANGUAGE));
+        for (int i = 0; i < language_list.size(); i++) {
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase(language_list.get(i).sortname)) {
+                language_spn.setSelection(i);
+            }
 
+        }
+        language_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (language_list != null && !language_list.isEmpty()) {
+                    if (!mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase(language_list.get(position).getSortname())) {
+                        Tools.updateResources(StartSliderAct.this, language_list.get(position).getSortname());
+                        mySession.setValueOf(KEY_LANGUAGE, language_list.get(position).getSortname());
+                        startActivity(new Intent(getApplicationContext(), StartSliderAct.class));
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void clicklistener() {
@@ -109,7 +164,6 @@ public class StartSliderAct extends AppCompatActivity {
             public void onPageSelected(int i) {
 
 
-
             }
 
             @Override
@@ -131,45 +185,11 @@ public class StartSliderAct extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
     private void getCategoryType() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         Log.e("loginCall >", " > FIRST");
-      Call<ResponseBody> call = ApiClient.getApiInterface().getCategory();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getCategory();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -203,9 +223,10 @@ public class StartSliderAct extends AppCompatActivity {
 
 
     }
+
     private void getOfferCategory() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-      Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -274,6 +295,154 @@ public class StartSliderAct extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    public static class CountryListAdapter extends BaseAdapter {
+        private final ArrayList<LanguageBean> values;
+        Context context;
+        LayoutInflater inflter;
+
+        public CountryListAdapter(Context applicationContext, ArrayList<LanguageBean> values) {
+            this.context = applicationContext;
+            this.values = values;
+
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+
+            return values == null ? 0 : values.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.country_item_lay_flag, null);
+
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+        /*    //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
+
+            } else {
+                Glide.with(context)
+                        .load(values.get(i).getFlag_url())
+                        .thumbnail(0.5f)
+                        .override(50, 50)
+                        .centerCrop()
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                return false;
+
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+                                return false;
+                            }
+                        })
+                        .into(country_flag);
+            }*/
+
+            country_flag.setVisibility(View.GONE);
+            names.setText(values.get(i).getName());
+
+
+            return view;
+        }
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    /**
+     * Created by technorizen on 2/7/18.
+     */
+
+    public class LanguageBean {
+        String id;
+        String sortname;
+        String name;
+        String flag_url;
+
+        public LanguageBean(String id, String sortname, String name, String flag_url) {
+            this.id = id;
+            this.sortname = sortname;
+            this.name = name;
+            this.flag_url = flag_url;
+        }
+
+        public String getFlag_url() {
+            return flag_url;
+        }
+
+        public void setFlag_url(String flag_url) {
+            this.flag_url = flag_url;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getSortname() {
+            return sortname;
+        }
+
+        public void setSortname(String sortname) {
+            this.sortname = sortname;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
 }

@@ -731,7 +731,7 @@ public class MarchantLogin extends AppCompatActivity {
         }
     }
 
-    public class CountryListAdapter extends BaseAdapter {
+    public static class CountryListAdapter extends BaseAdapter {
         Context context;
 
         LayoutInflater inflter;
@@ -770,7 +770,7 @@ public class MarchantLogin extends AppCompatActivity {
             if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
 
             } else {
-                Glide.with(MarchantLogin.this)
+                Glide.with(context)
                         .load(values.get(i).getFlag_url())
                         .thumbnail(0.5f)
                         .override(50, 50)

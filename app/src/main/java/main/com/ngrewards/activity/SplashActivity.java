@@ -57,6 +57,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.bottumtab.MainTabActivity;
@@ -103,6 +104,8 @@ public class SplashActivity extends AppCompatActivity implements
         mySession = new MySession(this);
         gpsTracker = new GPSTracker(SplashActivity.this);
         mRequestingLocationUpdates = false;
+        mySession = new MySession(this);
+        Tools.updateResources(this, mySession.getValueOf(MySession.KEY_LANGUAGE));
 
         String newMutableList = "Test";
 

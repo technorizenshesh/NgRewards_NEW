@@ -404,9 +404,7 @@ public class ProfileActivity extends AppCompatActivity {
         Log.e("TAG", "onActivityResult:+resultCode );--------" + resultCode);
         Log.e("TAG", "onActivityResult:+data );--------" + data);
         if (resultCode == RESULT_OK) {
-
             switch (requestCode) {
-
                 case 1:
                     if (Build.VERSION.SDK_INT >= 33) {
                             if (data == null) return;
@@ -572,7 +570,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void selectImage() {
-
         final Dialog dialogSts = new Dialog(ProfileActivity.this, R.style.DialogSlideAnim);
         dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogSts.setCancelable(false);
@@ -581,34 +578,22 @@ public class ProfileActivity extends AppCompatActivity {
         Button camera = (Button) dialogSts.findViewById(R.id.camera);
         Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
         TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-
-        gallary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 1);
-
-            }
+        gallary.setOnClickListener(v -> {
+            dialogSts.dismiss();
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, 1);
         });
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 2);
-
-            }
+        camera.setOnClickListener(v -> {
+            dialogSts.dismiss();
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, 2);
         });
-
         cont_find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogSts.dismiss();
             }
         });
-
         dialogSts.show();
     }
 

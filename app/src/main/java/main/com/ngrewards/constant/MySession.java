@@ -27,6 +27,7 @@ public class MySession {
     public static final String KEY_COUNTRY = "country_data";
     public static final String KEY_MERCHANTCATE = "merchant_category";
     public static final String KEY_PRODUCTCATE = "product_category";
+    public static final String KEY_LANGUAGE = "key_language";
     public static final String KEY_TOUCH_ENABLED = "touchid";
     public static final String APP_UPDATE = "appupdates";
     public static final String admin_created_password = "admin_created_password";

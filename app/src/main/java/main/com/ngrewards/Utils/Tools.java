@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Address;
@@ -22,6 +24,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -45,6 +48,29 @@ import main.com.ngrewards.Interfaces.onDateSetListener;
 import main.com.ngrewards.R;
 
 public class Tools {
+
+    public static void updateResources(Context context, String language) {
+        try{
+        Log.e("TAG", "updateResources: languagelanguage----- "+language );
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Resources resources = context.getResources();
+
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+            Resources res = context.getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = locale;
+            res.updateConfiguration(conf, dm);
+        }catch (Exception e){
+            Log.e("TAG", "updateResources: "+e.getMessage() );
+            Log.e("TAG", "updateResources: "+e.getLocalizedMessage() );
+            Log.e("TAG", "updateResources: "+e.getCause() );
+        }
+    }
+
     public static File persistImage(Bitmap bitmap, Context cOntext) {
         File filesDir = cOntext.getCacheDir();
         @SuppressLint("SimpleDateFormat")
