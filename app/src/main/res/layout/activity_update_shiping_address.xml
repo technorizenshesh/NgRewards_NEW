@@ -201,6 +201,7 @@
                 android:visibility="visible">
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/city_spn"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"></Spinner>
@@ -220,7 +221,7 @@
                 android:padding="6dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium"
-                android:visibility="gone" />
+           />
 
             <main.com.ngrewards.fonttypeclasses.NormalEditText
                 android:id="@+id/state"

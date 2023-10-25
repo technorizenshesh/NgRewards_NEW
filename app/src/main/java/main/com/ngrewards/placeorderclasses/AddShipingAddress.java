@@ -76,7 +76,7 @@ public class AddShipingAddress extends AppCompatActivity {
     private String user_id = "", email_str = "", order_landmarkadd = "", fullname_str = "", country_str = "", optionaladdress_str = "", city_str = "", state_str = "", zipcode_str = "", phone_number_str = "";
     private AutoCompleteTextView gettypedlocation;
     private TextView add_adress;
-    private Spinner state_spn, country_spn, city_spn;
+    private Spinner state_spn, country_spn;// city_spn;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
     private ProgressBar progresbar;
     private MySession mySession;
@@ -204,6 +204,7 @@ public class AddShipingAddress extends AppCompatActivity {
                 phone_number_str = phone_number.getText().toString();
                 order_landmarkadd = gettypedlocation.getText().toString();
                 zipcode_str = zipcode.getText().toString();
+                city_str = city.getText().toString();
 
                 if (fullname_str == null || fullname_str.equalsIgnoreCase("")) {
                     Toast.makeText(AddShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
@@ -241,7 +242,7 @@ public class AddShipingAddress extends AppCompatActivity {
         progresbar = findViewById(R.id.progresbar);
         state_spn = findViewById(R.id.state_spn);
         country_spn = findViewById(R.id.country_spn);
-        city_spn = findViewById(R.id.city_spn);
+      //  city_spn = findViewById(R.id.city_spn);
         add_adress = findViewById(R.id.add_adress);
         gettypedlocation = findViewById(R.id.gettypedlocation);
         backlay = findViewById(R.id.backlay);
@@ -280,7 +281,7 @@ public class AddShipingAddress extends AppCompatActivity {
 
                     } else {
                         state_str = statelistbean.get(position).getName();
-                        new GetCityList().execute(statelistbean.get(position).getId());
+                     //   new GetCityList().execute(statelistbean.get(position).getId());
                     }
 
                 }
@@ -291,7 +292,7 @@ public class AddShipingAddress extends AppCompatActivity {
 
             }
         });
-        city_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+     /*   city_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (citylistbean != null && !citylistbean.isEmpty()) {
@@ -309,6 +310,8 @@ public class AddShipingAddress extends AppCompatActivity {
 
             }
         });
+
+    */
 
     }
 
@@ -727,7 +730,7 @@ public class AddShipingAddress extends AppCompatActivity {
                         }
 
                         countryListAdapter = new CountryListAdapter(AddShipingAddress.this, citylistbean);
-                        city_spn.setAdapter(countryListAdapter);
+                      //  city_spn.setAdapter(countryListAdapter);
 
                     }
 

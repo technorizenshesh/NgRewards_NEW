@@ -225,8 +225,10 @@ public class MainTabActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab);
+        if (getIntent().getExtras() != null) {
 
-        result = getIntent().getExtras().getString("result");
+            result = getIntent().getExtras().getString("result");
+        }
 
         if(result==null)
         {

@@ -203,6 +203,7 @@
         <Spinner
 
             android:id="@+id/city_spn"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="35dp"></Spinner>
 
@@ -211,8 +212,6 @@
 
     <main.com.ngrewards.fonttypeclasses.NormalEditText
         android:id="@+id/city"
-
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/greyborder"

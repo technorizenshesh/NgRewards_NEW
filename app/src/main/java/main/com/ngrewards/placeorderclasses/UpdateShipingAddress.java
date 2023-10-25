@@ -78,7 +78,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
             optionaladdress_str = "", city_str = "", state_str = "", zipcode_str = "", phone_number_str = "";
     private AutoCompleteTextView gettypedlocation;
     private TextView update_adress;
-    private Spinner state_spn, country_spn, city_spn;
+    private Spinner state_spn, country_spn;// city_spn;
     CountryListAdapter countryListAdapter;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
     private ProgressBar progresbar;
@@ -227,6 +227,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
                 phone_number_str = phone_number.getText().toString();
                 order_landmarkadd = gettypedlocation.getText().toString();
                 zipcode_str = zipcode.getText().toString();
+                city_str = city.getText().toString();
 
                 if (fullname_str == null || fullname_str.equalsIgnoreCase("")) {
                     Toast.makeText(UpdateShipingAddress.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
@@ -263,7 +264,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
         progresbar = findViewById(R.id.progresbar);
         state_spn = findViewById(R.id.state_spn);
         country_spn = findViewById(R.id.country_spn);
-        city_spn = findViewById(R.id.city_spn);
+       // city_spn = findViewById(R.id.city_spn);
         update_adress = findViewById(R.id.update_adress);
         gettypedlocation = findViewById(R.id.gettypedlocation);
         backlay = findViewById(R.id.backlay);
@@ -279,6 +280,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
         phone_number.setText("" + phone_number_str);
         zipcode.setText("" + zipcode_str);
+        city.setText("" + city_str);
 
         country_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -309,7 +311,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
                     } else {
                         state_str = statelistbean.get(position).getName();
-                        new GetCityList().execute(statelistbean.get(position).getId());
+                     //   new GetCityList().execute(statelistbean.get(position).getId());
                     }
 
                 }
@@ -321,6 +323,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
             }
         });
 
+/*
         city_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -339,6 +342,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
             }
         });
+*/
     }
 
     // country state city
@@ -719,13 +723,13 @@ public class UpdateShipingAddress extends AppCompatActivity {
                         }
 
                         countryListAdapter = new CountryListAdapter(UpdateShipingAddress.this, citylistbean);
-                        city_spn.setAdapter(countryListAdapter);
+                    //    city_spn.setAdapter(countryListAdapter);
 
                         if (citylistbean != null && !citylistbean.isEmpty()) {
                             for (int i = 0; i < citylistbean.size(); i++) {
                                 if (city_str != null && !city_str.equalsIgnoreCase("")) {
                                     if (city_str.equalsIgnoreCase(citylistbean.get(i).getName())) {
-                                        city_spn.setSelection(i);
+                                      //  city_spn.setSelection(i);
                                     }
                                 }
                             }

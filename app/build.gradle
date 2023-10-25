@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        /*debug {
+        release{
             storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
             storePassword 'ngrewards123'
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
-        }*/
+        }
     }
     compileSdkVersion 33
     useLibrary 'org.apache.http.legacy'
@@ -19,8 +19,8 @@ android {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 61
-        versionName "11.03"
+        versionCode 62
+        versionName "11.04"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -30,6 +30,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
