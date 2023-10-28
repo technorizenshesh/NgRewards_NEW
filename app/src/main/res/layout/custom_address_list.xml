@@ -60,24 +60,42 @@
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/small" />
+            <RelativeLayout
+                android:layout_width="match_parent"
 
-            <TextView
-                android:id="@+id/address2"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="@dimen/small" />
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:id="@+id/address2"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/delete_btn"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small" />
+
+                <ImageView
+                    android:id="@+id/delete_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    app:srcCompat="@drawable/baseline_delete_outline" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/phonetv"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/small" />
+
 
         </LinearLayout>
 

@@ -78,7 +78,9 @@
                    android:layout_margin="5dp"
                    android:layout_width="match_parent"
                     android:id="@+id/addresslist"
-                    android:layout_height="wrap_content"></main.com.ngrewards.constant.ExpandableHeightListView>
+                    android:layout_height="wrap_content">
+
+               </main.com.ngrewards.constant.ExpandableHeightListView>
             <View
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/mainlay"

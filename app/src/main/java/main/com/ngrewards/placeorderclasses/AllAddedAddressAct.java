@@ -33,13 +33,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.activity.AddressClickListener;
 import main.com.ngrewards.beanclasses.AddressBean;
+import main.com.ngrewards.beanclasses.OfferBeanList;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.fragments.OffersFrag;
+import main.com.ngrewards.restapi.ApiClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class AllAddedAddressAct extends AppCompatActivity {
+public class AllAddedAddressAct extends AppCompatActivity
+        implements AddressClickListener {
 
     private ArrayList<AddressBean> addressBeanArrayList;
     private ExpandableHeightListView addresslist;
@@ -51,6 +60,42 @@ public class AllAddedAddressAct extends AppCompatActivity {
     public static String fullname_str="",state_str="",city_str="",zippcode_str="",address1_str="",address2_str="",statecityadd_str="",countrytv_str="",phonetv_str="",AddressID="";
     Myapisession myapisession;
 
+    private void deleteAddressApi(int postion,String id) {
+
+        progresbar.setVisibility(View.VISIBLE);
+
+        Call<ResponseBody> call = ApiClient.getApiInterface().remove_address(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            addressBeanArrayList.remove(postion);
+                            customAddresAdp.notifyData(addressBeanArrayList);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +129,10 @@ public class AllAddedAddressAct extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (myapisession.getKeyAddressdata()==null||myapisession.getKeyAddressdata().equalsIgnoreCase("")){
+       // if (myapisession.getKeyAddressdata()==null||myapisession.getKeyAddressdata().equalsIgnoreCase("")){
             new GetSavedAddress().execute();
-        }
-        else {
+      //  }
+       /* else {
             try {
                 addressBeanArrayList = new ArrayList<>();
                 String result =myapisession.getKeyAddressdata();
@@ -121,7 +166,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
                     addresslist.setAdapter(customAddresAdp);
                     customAddresAdp.notifyDataSetChanged();
 
-/*
+*//*
                         if (genderlist!=null&&!genderlist.isEmpty()){
                             for (int i=0;i<genderlist.size();i++){
                                 if (gender_str!=null&&!gender_str.equalsIgnoreCase("")){
@@ -132,7 +177,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
                             }
 
                         }
-*/
+*//*
 
 
                 }
@@ -140,7 +185,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }
+        }*/
     }
 
     private void clickevent() {
@@ -167,6 +212,11 @@ public class AllAddedAddressAct extends AppCompatActivity {
         addresslist.setExpanded(true);
     }
 
+    @Override
+    public void callback(int position, String result) {
+        deleteAddressApi(position,result);
+    }
+
 
     private class GetSavedAddress extends AsyncTask<String, String, String> {
         @Override
@@ -189,6 +239,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("user_id", user_id);
                 StringBuilder postData = new StringBuilder();
+                Log.e("TAG", "doInBackground: "+postReceiverUrl+"?user_id="+user_id );
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');
                     postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
@@ -256,7 +307,9 @@ public class AllAddedAddressAct extends AppCompatActivity {
 
                         }
 
-                        customAddresAdp = new CustomAddresAdp(AllAddedAddressAct.this,addressBeanArrayList);
+                        customAddresAdp = new CustomAddresAdp(
+                                AllAddedAddressAct.this,addressBeanArrayList,
+                                AllAddedAddressAct.this::callback);
                         addresslist.setAdapter(customAddresAdp);
 
 /*
@@ -288,12 +341,19 @@ public class AllAddedAddressAct extends AppCompatActivity {
         Context context;
         private LayoutInflater inflater = null;
         ArrayList<AddressBean> addressBeanArrayList;
-
-        public CustomAddresAdp(Context contexts, ArrayList<AddressBean> addressBeanArrayList) {
+private AddressClickListener addressClickListener;
+        public CustomAddresAdp(Context contexts, ArrayList<AddressBean> addressBeanArrayList, AddressClickListener addressClickListener) {
             this.context = contexts;
+            this.addressClickListener = addressClickListener;
             this.addressBeanArrayList = addressBeanArrayList;
             inflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+
+        public void notifyData(ArrayList<AddressBean> addressBeanArrayList) {
+            this.addressBeanArrayList=addressBeanArrayList;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -326,6 +386,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
             View rowView;
 
             rowView = inflater.inflate(R.layout.custom_address_list, null);
+            ImageView delete_btn = rowView.findViewById(R.id.delete_btn);
             ImageView edit_but = rowView.findViewById(R.id.edit_but);
             RadioButton addsel_rdb = rowView.findViewById(R.id.addsel_rdb);
             TextView fullname = rowView.findViewById(R.id.fullname);
@@ -353,20 +414,22 @@ public class AllAddedAddressAct extends AppCompatActivity {
                 }
             });
 
-
+            delete_btn.setOnClickListener(v -> {
+                addressClickListener.callback(position,addressBeanArrayList.get(position).getId());
+            });
             edit_but.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                    Intent i = new Intent(AllAddedAddressAct.this,UpdateShipingAddress.class);
-                   i.putExtra("addid",addressBeanArrayList.get(position).getId());
-                   i.putExtra("fullname_str",addressBeanArrayList.get(position).getFullname());
-                   i.putExtra("address1_str",addressBeanArrayList.get(position).getAddress_1());
-                   i.putExtra("address2_str",addressBeanArrayList.get(position).getAddress_2());
-                   i.putExtra("state_str",addressBeanArrayList.get(position).getState());
-                   i.putExtra("city_str",addressBeanArrayList.get(position).getCity());
+                   i.putExtra("addid",        addressBeanArrayList.get(position).getId());
+                   i.putExtra("fullname_str", addressBeanArrayList.get(position).getFullname());
+                   i.putExtra("address1_str", addressBeanArrayList.get(position).getAddress_1());
+                   i.putExtra("address2_str", addressBeanArrayList.get(position).getAddress_2());
+                   i.putExtra("state_str",    addressBeanArrayList.get(position).getState());
+                   i.putExtra("city_str",     addressBeanArrayList.get(position).getCity());
                    i.putExtra("countrytv_str",addressBeanArrayList.get(position).getCountry());
-                   i.putExtra("phonetv_str",addressBeanArrayList.get(position).getPhone_number());
-                   i.putExtra("zippcode_str",addressBeanArrayList.get(position).getZipcode());
+                   i.putExtra("phonetv_str",  addressBeanArrayList.get(position).getPhone_number());
+                   i.putExtra("zippcode_str", addressBeanArrayList.get(position).getZipcode());
                    startActivity(i);
 
                 }

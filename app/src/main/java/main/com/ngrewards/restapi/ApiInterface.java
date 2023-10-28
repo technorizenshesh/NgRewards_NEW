@@ -110,6 +110,8 @@ public interface ApiInterface {
 
     @GET("like_offer.php?")
     Call<ResponseBody> likedislikeoffer(@Query("offer_id") String offer_id, @Query("user_id") String user_id);
+  @GET("remove_address.php?")
+    Call<ResponseBody> remove_address(@Query("address_id") String address_id);
 
     @GET("like_merchant.php?")
     Call<ResponseBody> likedislikemerchant(@Query("merchant_id") String merchant_id, @Query("user_id") String user_id);

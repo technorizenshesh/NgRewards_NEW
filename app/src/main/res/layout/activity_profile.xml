@@ -83,9 +83,10 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/editlay"
             android:layout_marginTop="96dp"
+            android:nestedScrollingEnabled="true"
             android:fillViewport="true">
 
             <LinearLayout
@@ -468,11 +469,12 @@
                     android:layout_marginRight="20dp"
                     android:orientation="vertical">
 
-                    <main.com.ngrewards.constant.ExpandableHeightListView
-                        android:id="@+id/addresslist"
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_margin="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"></main.com.ngrewards.constant.ExpandableHeightListView>
+                        android:id="@+id/addresslist"
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                        android:layout_height="wrap_content"/>
 
                     <View
                         android:layout_width="match_parent"

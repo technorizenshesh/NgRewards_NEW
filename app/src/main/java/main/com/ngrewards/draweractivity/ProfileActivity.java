@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -77,6 +78,7 @@ import java.util.regex.Pattern;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.Tools;
+import main.com.ngrewards.activity.AddressClickListener;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.beanclasses.AddressBean;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -94,13 +96,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity
+        implements AddressClickListener {
 
     private static final int REQUEST_CODE_QR_SCAN = 3;
     MySession mySession;
     GenderAdpter genderAdpter;
     ArrayList<String> genderlist, agelist;
-    CustomAddresAdp customAddresAdp;
+    AddressAdapter2 customAddresAdp;
     int count = 0;
     private EditText name_et, username, email_id, phone_number, gender;
     private String age_str = "", name_str = "", username_str = "", email_id_str = "", phone_number_str = "", gender_str = "";
@@ -114,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Myapisession myapisession;
     private LinearLayout whoinvitelay;
     private AutoCompleteTextView whoinvite;
-    private ExpandableHeightListView addresslist;
+    private RecyclerView addresslist;
     private ImageView qrcode;
     private ArrayList<AddressBean> addressBeanArrayList;
     private String fullname;
@@ -363,7 +366,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void getUsername() {
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -409,20 +412,20 @@ public class ProfileActivity extends AppCompatActivity {
 
                 case 1:
                     if (Build.VERSION.SDK_INT >= 33) {
-                            if (data == null) return;
-                            // Get photo picker response for single select.
-                            final Uri selectedImage = data.getData();
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
                         try {
                             assert selectedImage != null;
                             try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
                                 final Bitmap bitmap = BitmapFactory.decodeStream(stream);
                                 user_img.setImageBitmap(bitmap);
-                             File tempfile =   Tools.persistImage(bitmap,ProfileActivity.this);
-                                ImagePath= tempfile.getAbsolutePath();
-                                Log.e("ImagePath", "onActivityResult: "+ImagePath );
+                                File tempfile = Tools.persistImage(bitmap, ProfileActivity.this);
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
                             }
                         } catch (IOException e) {
-                            ToolsShowDialog(getApplicationContext(),e.getLocalizedMessage());
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
                         }
                     } else {
                         Uri selectedImage = data.getData();
@@ -505,44 +508,44 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (myapisession.getKeyAddressdata() == null ||
-                myapisession.getKeyAddressdata().equalsIgnoreCase("")) {
-            new GetSavedAddress().execute();
-        } else {
-            try {
-                addressBeanArrayList = new ArrayList<>();
-                String result = myapisession.getKeyAddressdata();
-                JSONObject jsonObject = new JSONObject(result);
-                String message = jsonObject.getString("status");
-                if (message.equalsIgnoreCase("1")) {
-                    myapisession.setKeyAddressdata(result);
-                    JSONArray jsonArray = jsonObject.getJSONArray("result");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        AddressBean addressBean = new AddressBean();
-                        addressBean.setId(jsonObject1.getString("id"));
-                        addressBean.setUser_id(jsonObject1.getString("user_id"));
-                        addressBean.setFullname(jsonObject1.getString("fullname"));
-                        addressBean.setPhone_number(jsonObject1.getString("phone_number"));
-                        addressBean.setCountry(jsonObject1.getString("country"));
-                        addressBean.setState(jsonObject1.getString("state"));
-                        addressBean.setCity(jsonObject1.getString("city"));
-                        addressBean.setAddress_1(jsonObject1.getString("address_1"));
-                        addressBean.setAddress_2(jsonObject1.getString("address_2"));
-                        addressBean.setZipcode(jsonObject1.getString("zipcode"));
-                        addressBean.setCreated_date(jsonObject1.getString("created_date"));
-                        addressBeanArrayList.add(addressBean);
-                    }
-
-                    customAddresAdp = new CustomAddresAdp(ProfileActivity.this, addressBeanArrayList);
-                    addresslist.setAdapter(customAddresAdp);
-                    customAddresAdp.notifyDataSetChanged();
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        //  if (myapisession.getKeyAddressdata() == null ||
+        //          myapisession.getKeyAddressdata().equalsIgnoreCase("")) {
+        new GetSavedAddress().execute();
+//        } else {
+//            try {
+//                addressBeanArrayList = new ArrayList<>();
+//                String result = myapisession.getKeyAddressdata();
+//                JSONObject jsonObject = new JSONObject(result);
+//                String message = jsonObject.getString("status");
+//                if (message.equalsIgnoreCase("1")) {
+//                    myapisession.setKeyAddressdata(result);
+//                    JSONArray jsonArray = jsonObject.getJSONArray("result");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        AddressBean addressBean = new AddressBean();
+//                        addressBean.setId(jsonObject1.getString("id"));
+//                        addressBean.setUser_id(jsonObject1.getString("user_id"));
+//                        addressBean.setFullname(jsonObject1.getString("fullname"));
+//                        addressBean.setPhone_number(jsonObject1.getString("phone_number"));
+//                        addressBean.setCountry(jsonObject1.getString("country"));
+//                        addressBean.setState(jsonObject1.getString("state"));
+//                        addressBean.setCity(jsonObject1.getString("city"));
+//                        addressBean.setAddress_1(jsonObject1.getString("address_1"));
+//                        addressBean.setAddress_2(jsonObject1.getString("address_2"));
+//                        addressBean.setZipcode(jsonObject1.getString("zipcode"));
+//                        addressBean.setCreated_date(jsonObject1.getString("created_date"));
+//                        addressBeanArrayList.add(addressBean);
+//                    }
+//
+//                    customAddresAdp = new CustomAddresAdp(ProfileActivity.this, addressBeanArrayList,this::callback);
+//                    addresslist.setAdapter(customAddresAdp);
+//                    customAddresAdp.notifyDataSetChanged();
+//
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     public void decodeFile(String filePath) {
@@ -610,6 +613,50 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         dialogSts.show();
+    }
+
+    @Override
+    public void callback(int position, String result) {
+        deleteAddressApi(position, result);
+    }
+
+    private void deleteAddressApi(int postion, String id) {
+
+        progresbar.setVisibility(View.VISIBLE);
+
+        Call<ResponseBody> call = ApiClient.getApiInterface().remove_address(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            addressBeanArrayList.remove(postion);
+                            customAddresAdp.notifyData(addressBeanArrayList);
+                            //  new GetSavedAddress().execute();
+
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+                Log.e("TAG", t.toString());
+            }
+        });
     }
 
     private class GetProfile extends AsyncTask<String, String, String> {
@@ -1156,7 +1203,7 @@ public class ProfileActivity extends AppCompatActivity {
                             addressBeanArrayList.add(addressBean);
                         }
 
-                        customAddresAdp = new CustomAddresAdp(ProfileActivity.this, addressBeanArrayList);
+                        customAddresAdp = new AddressAdapter2(ProfileActivity.this, addressBeanArrayList, ProfileActivity.this::callback);
                         addresslist.setAdapter(customAddresAdp);
 
                     }
@@ -1174,12 +1221,23 @@ public class ProfileActivity extends AppCompatActivity {
         Context context;
         ArrayList<AddressBean> addressBeanArrayList;
         private LayoutInflater inflater = null;
+        private AddressClickListener addressClickListener;
 
-        public CustomAddresAdp(Context contexts, ArrayList<AddressBean> addressBeanArrayList) {
+        public CustomAddresAdp(Context contexts,
+                               ArrayList<AddressBean>
+                                       addressBeanArrayList,
+                               AddressClickListener addressClickListener) {
             this.context = contexts;
+            this.addressClickListener = addressClickListener;
+
             this.addressBeanArrayList = addressBeanArrayList;
             inflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        public void notifyData(ArrayList<AddressBean> addressBeanArrayList) {
+            this.addressBeanArrayList = addressBeanArrayList;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -1209,6 +1267,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             rowView = inflater.inflate(R.layout.custom_profile_address_list, null);
             ImageView edit_but = rowView.findViewById(R.id.edit_but);
+            ImageView delete_btn = rowView.findViewById(R.id.delete_btn);
+
+
             RadioButton addsel_rdb = rowView.findViewById(R.id.addsel_rdb);
             TextView fullname = rowView.findViewById(R.id.fullname);
             TextView address1 = rowView.findViewById(R.id.address1);
@@ -1219,7 +1280,9 @@ public class ProfileActivity extends AppCompatActivity {
             address1.setText("" + addressBeanArrayList.get(position).getAddress_1());
             address2.setText("" + addressBeanArrayList.get(position).getAddress_2());
             phonetv.setText("" + addressBeanArrayList.get(position).getPhone_number());
-
+            delete_btn.setOnClickListener(v -> {
+                addressClickListener.callback(position, addressBeanArrayList.get(position).getId());
+            });
             edit_but.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1248,5 +1311,87 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public class AddressAdapter2 extends RecyclerView.Adapter<AddressAdapter2.MyViewHolder> {
+        Context context;
+        ArrayList<AddressBean> addressBeanArrayList;
+        private LayoutInflater inflater = null;
+        private AddressClickListener addressClickListener;
+
+        public AddressAdapter2(Context contexts, ArrayList<AddressBean> addressBeanArrayList, AddressClickListener addressClickListener) {
+            this.context = contexts;
+            this.addressClickListener = addressClickListener;
+            this.addressBeanArrayList = addressBeanArrayList;
+        }
+
+        public void notifyData(ArrayList<AddressBean> addressBeanArrayList) {
+            this.addressBeanArrayList = addressBeanArrayList;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public AddressAdapter2.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_profile_address_list, parent, false);
+            AddressAdapter2.MyViewHolder holder
+                    = new AddressAdapter2.MyViewHolder(itemView);
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final AddressAdapter2.MyViewHolder holder,
+                                     final int position) {
+
+           holder.fullname.setText("" + addressBeanArrayList.get(position).getFullname());
+           holder.address1.setText("" + addressBeanArrayList.get(position).getAddress_1());
+           holder.address2.setText("" + addressBeanArrayList.get(position).getAddress_2());
+           holder.phonetv.setText("" + addressBeanArrayList.get(position).getPhone_number());
+           holder.delete_btn.setOnClickListener(v -> {
+                addressClickListener.callback(position,addressBeanArrayList.get(position).getId());
+            });
+            holder.edit_but.setOnClickListener(v -> {
+                Intent i = new Intent(ProfileActivity.this, UpdateShipingAddress.class);
+                i.putExtra("addid", addressBeanArrayList.get(position).getId());
+                i.putExtra("fullname_str", addressBeanArrayList.get(position).getFullname());
+                i.putExtra("address1_str", addressBeanArrayList.get(position).getAddress_1());
+                i.putExtra("address2_str", addressBeanArrayList.get(position).getAddress_2());
+                i.putExtra("state_str", addressBeanArrayList.get(position).getState());
+                i.putExtra("city_str", addressBeanArrayList.get(position).getCity());
+                i.putExtra("countrytv_str", addressBeanArrayList.get(position).getCountry());
+                i.putExtra("phonetv_str", addressBeanArrayList.get(position).getPhone_number());
+                i.putExtra("zippcode_str", addressBeanArrayList.get(position).getZipcode());
+                startActivity(i);
+
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 6;
+            return addressBeanArrayList == null ? 0 : addressBeanArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView edit_but;
+            ImageView delete_btn;
+            RadioButton addsel_rdb;
+            TextView fullname;
+            TextView address1;
+            TextView address2;
+            TextView phonetv;
+
+            public MyViewHolder(View view) {
+                super(view);
+                edit_but = itemView.findViewById(R.id.edit_but);
+                delete_btn = itemView.findViewById(R.id.delete_btn);
+                addsel_rdb = itemView.findViewById(R.id.addsel_rdb);
+                fullname = itemView.findViewById(R.id.fullname);
+                address1 = itemView.findViewById(R.id.address1);
+                address2 = itemView.findViewById(R.id.address2);
+                phonetv = itemView.findViewById(R.id.phonetv);
+            }
+        }
+    }
 
 }
