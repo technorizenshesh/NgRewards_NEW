@@ -53,6 +53,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.ItemOrderPaySuccessFully;
 import main.com.ngrewards.beanclasses.CartBean;
 import main.com.ngrewards.beanclasses.CartListBean;
@@ -849,10 +851,13 @@ public class CheckOutAct extends AppCompatActivity {
 
         finish();
     }
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
         registerReceiver(broadcastReceiver, new IntentFilter("Unseen Count"));
         if (AllAddedAddressAct.fullname_str == null || AllAddedAddressAct.fullname_str.equalsIgnoreCase("")) {
             selectedaddlay.setVisibility(View.GONE);

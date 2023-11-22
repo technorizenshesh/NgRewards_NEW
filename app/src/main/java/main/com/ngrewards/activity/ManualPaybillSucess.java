@@ -146,7 +146,7 @@ if (type.equalsIgnoreCase("payemi")){
                             new SweetAlertDialog(ManualPaybillSucess.this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Unsuccessful Transaction !")
                                     .hideConfirmButton()
-                                    .setCancelButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                                    .setCancelButton(getString(R.string.ok), new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sDialog) {
                                             finish();
@@ -236,7 +236,7 @@ if (type.equalsIgnoreCase("payemi")){
                             new SweetAlertDialog(ManualPaybillSucess.this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Unsuccessful Transaction !")
                                     .hideConfirmButton()
-                                    .setCancelButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                                    .setCancelButton(getString(R.string.ok), new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sDialog) {
                                             sDialog.dismissWithAnimation();

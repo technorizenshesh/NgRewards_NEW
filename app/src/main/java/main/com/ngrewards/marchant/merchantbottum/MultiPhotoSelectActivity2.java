@@ -158,7 +158,7 @@ public class MultiPhotoSelectActivity2 extends AppCompatActivity {
 
     private void showPermissionRationaleSnackBar() {
         Snackbar.make(findViewById(R.id.button1), getString(R.string.permission_rationale),
-                Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok), new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
             @Override
             public void onClick(View view) {

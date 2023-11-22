@@ -48,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.beanclasses.GalleryBean;
@@ -66,7 +68,10 @@ public class MerchantBottumAct extends TabActivity {
     String currentVersion = "";
     private Dialog canceldialog;
     public static ArrayList<GalleryBean> ImagePathArrayList;
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -217,6 +222,7 @@ public class MerchantBottumAct extends TabActivity {
         super.onCreate(savedInstanceState);
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         lbm.registerReceiver(broadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
+        Tools.reupdateResources(this);
 
         setContentView(R.layout.activity_main_tab);
         ImagePathArrayList = new ArrayList<>();
@@ -382,6 +388,7 @@ public class MerchantBottumAct extends TabActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
         new GetProfile().execute();
 
         registerReceiver(broadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));

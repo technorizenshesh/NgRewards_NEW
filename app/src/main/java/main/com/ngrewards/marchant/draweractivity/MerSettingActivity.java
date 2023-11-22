@@ -1,6 +1,9 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
+
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,9 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,17 +36,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.SeeMyStripeDashBoardAct;
+import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.StripeExpressAcountAct;
+import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.draweractivity.SettingActivity;
+import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 import main.com.ngrewards.marchant.stripemerchantclasses.AddStripeConnectAccount;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.settingclasses.AboutNgReward;
@@ -55,17 +68,19 @@ import retrofit2.Response;
 
 public class MerSettingActivity extends AppCompatActivity {
 
-    private RelativeLayout changepass,seestripedashboard,genrateloginlinklay,addstripeact,addcardlay, backlay, career_lay, aboutng_rew, helpcenter, reportproblem, touchidlay,deleteAccount;
+    private RelativeLayout   changelang,changepass,seestripedashboard,genrateloginlinklay,addstripeact,addcardlay, backlay, career_lay, aboutng_rew, helpcenter, reportproblem, touchidlay,deleteAccount;
     private ProgressBar progresbar;
     private MySession mySession;
     private String user_id="",stripe_account_id="",stripe_account_login_link="",user_type="";
     private Myapisession myapisession;
+    SettingActivity.CountryListAdapter languageListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mer_setting);
         idinti();
+
         myapisession = new Myapisession(this);
         mySession  = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
@@ -158,6 +173,8 @@ public class MerSettingActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        changelang.setOnClickListener(v -> setSellPassDialog());
+
         addstripeact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -344,6 +361,7 @@ public class MerSettingActivity extends AppCompatActivity {
     }
 
     private void idinti() {
+        changelang = findViewById(R.id.changelang);
         changepass = findViewById(R.id.changepass);
         seestripedashboard = findViewById(R.id.seestripedashboard);
         genrateloginlinklay = findViewById(R.id.genrateloginlinklay);
@@ -365,12 +383,15 @@ public class MerSettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
         if (stripe_account_id==null||stripe_account_id.equalsIgnoreCase("")||stripe_account_login_link==null||stripe_account_login_link.equalsIgnoreCase(""))
         {
             new GetProfile().execute();
         }
     }
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private class GetProfile extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -542,6 +563,77 @@ public class MerSettingActivity extends AppCompatActivity {
 
         }
     }
+    private void setSellPassDialog() {
+        try {
+            final Dialog dialogSts = new Dialog(MerSettingActivity.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.switch_lang_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView close = (TextView) dialogSts.findViewById(R.id.close);
+            close.setOnClickListener(v -> {
+                dialogSts.dismiss();
+            });
+            Spinner language_spn = (Spinner) dialogSts.findViewById(R.id.language_spn);
+            ArrayList<SettingActivity.LanguageBean> language_list = new ArrayList<>();
+            language_list.add(new SettingActivity.LanguageBean("1", "en", "English", ""));
+            language_list.add(new SettingActivity.LanguageBean("2", "hi", "Hindi", ""));
+            language_list.add(new SettingActivity.LanguageBean("3", "es", "Spanish", ""));
+            languageListAdapter = new SettingActivity.CountryListAdapter(MerSettingActivity.this, language_list);
+            language_spn.setAdapter(languageListAdapter);
+            Log.e("TAG", "idint: mySession.getValueOf(KEY_LANGUAGE)" + mySession.getValueOf(KEY_LANGUAGE));
+            for (int i = 0; i < language_list.size(); i++) {
+                if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase(language_list.get(i).getSortname())) {
+                    language_spn.setSelection(i);
+                }
+
+            }
+
+
+            language_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (language_list != null && !language_list.isEmpty()) {
+                        if (!mySession.getValueOf(KEY_LANGUAGE)
+                                .equalsIgnoreCase(language_list.get(position).getSortname())) {
+                            selected_lang=language_list.get(position).getSortname();
+
+                        }else {
+                            selected_lang = "";
+
+                        }
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    selected_lang="";
+                }
+            });
+
+            submitt.setOnClickListener(v -> {
+                if (selected_lang.equalsIgnoreCase("")) {
+                    dialogSts.dismiss();
+                } else {
+                    Tools.updateResources(getApplicationContext(), selected_lang);
+                    mySession.setValueOf(KEY_LANGUAGE, selected_lang);
+                    dialogSts.dismiss();
+                    Intent i = new Intent(MerSettingActivity.this, MerchantBottumAct.class);
+                    startActivity(i);
+                    finish();
+
+
+                }
+
+            });
+
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    String selected_lang = "";
 
 
 }

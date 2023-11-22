@@ -50,6 +50,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.QrCodeActivity;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.CommisionActivity;
 import main.com.ngrewards.activity.EmployeesalesActivity;
@@ -187,6 +189,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         mySession = new MySession(this);
+        Tools.reupdateResources(this);
+
         idinit();
         user_log_data = mySession.getKeyAlldata();
         dialogSts = new Dialog(BaseActivity.this, R.style.DialogSlideAnim);
@@ -277,7 +281,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onRestart();
         new GetProfile().execute();
     }
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private void idinitui() {
 
         Toast.makeText(this, "status : " + logout_status, Toast.LENGTH_SHORT).show();
@@ -590,7 +597,7 @@ public class BaseActivity extends AppCompatActivity {
         if (exit) {
             finish();
         } else {
-            Toast.makeText(this, "Press Back again to Exit.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show();
             exit = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -609,9 +616,11 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+         super.onResume();
         new GetProfile().execute();
+        Tools.reupdateResources(this);
         registerReceiver(broadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
-        super.onResume();
+
     }
 
     public void createUserName() {

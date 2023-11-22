@@ -121,9 +121,9 @@ mySession = new MySession(this);
                         } else {
 
                             new SweetAlertDialog(TransferSuccesfully.this, SweetAlertDialog.WARNING_TYPE)
-                                    .setTitleText("Unsuccessful Transaction !")
+                                    .setTitleText(getString(R.string.unsuccessful_transaction))
                                     .hideConfirmButton()
-                                    .setCancelButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                                    .setCancelButton(getString(R.string.ok), new SweetAlertDialog.OnSweetClickListener() {
                                         @Override
                                         public void onClick(SweetAlertDialog sDialog) {
                                             finish();

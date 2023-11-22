@@ -28,7 +28,7 @@
           <EditText
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:hint="Enter Category"
+            android:hint="@string/enter_category"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:textColorHint="#a4a4a4"

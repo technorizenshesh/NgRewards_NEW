@@ -442,17 +442,17 @@ public class NearbyFrag extends Fragment {
                         end.setTime(mCal.getTimeInMillis());
                     }
                     if (userDate.after(start) && userDate.before(end)) {
-                        holder.mer_openstatus.setText("OPEN");
+                        holder.mer_openstatus.setText(getString(R.string.open));
                         holder.mer_openstatus.setTextColor(R.color.green);
                     } else {
-                        holder.mer_openstatus.setText("CLOSED");
+                        holder.mer_openstatus.setText(getString(R.string.close));
                         holder.mer_openstatus.setTextColor(getResources().getColor(R.color.red));
                     }
                 } catch (ParseException e) {
                 }
             } else {
                 holder.mer_openstatus.setTextColor(getResources().getColor(R.color.red));
-                holder.mer_openstatus.setText("CLOSED");
+                holder.mer_openstatus.setText(getString(R.string.closed));
             }
 
             String rat_str = merchantListBeanArrayList.get(listPosition).getAverageRating();

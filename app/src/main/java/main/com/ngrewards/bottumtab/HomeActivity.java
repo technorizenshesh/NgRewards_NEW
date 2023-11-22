@@ -1,5 +1,6 @@
 package main.com.ngrewards.bottumtab;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.fragments.ItemsFrag;
@@ -157,8 +160,13 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        Tools.reupdateResources(this);
         super.onResume();
     }
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
 
     private void getCategoryType() {
 

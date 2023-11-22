@@ -23,6 +23,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -46,6 +47,7 @@ import java.util.Locale;
 import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.Interfaces.onDateSetListener;
 import main.com.ngrewards.R;
+import main.com.ngrewards.constant.MySession;
 
 public class Tools {
 
@@ -64,6 +66,34 @@ public class Tools {
             Configuration conf = res.getConfiguration();
             conf.locale = locale;
             res.updateConfiguration(conf, dm);
+          //  AppCompatDelegate.setApplicationLocales(appLocale)
+            LocaleHelper.setLocale(context, language);
+        }catch (Exception e){
+            Log.e("TAG", "updateResources: "+e.getMessage() );
+            Log.e("TAG", "updateResources: "+e.getLocalizedMessage() );
+            Log.e("TAG", "updateResources: "+e.getCause() );
+        }
+    }
+    public static void reupdateResources(Context context) {
+        try{
+            MySession mySession =new MySession(context);
+            mySession.getValueOf(MySession.KEY_LANGUAGE);
+        Log.e("TAG", "updateResources: languagelanguage-----" +
+                " "+mySession.getValueOf(MySession.KEY_LANGUAGE) );
+        Locale locale = new Locale(mySession.getValueOf(MySession.KEY_LANGUAGE));
+        Locale.setDefault(locale);
+        Resources resources = context.getResources();
+
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+            Resources res = context.getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = locale;
+            res.updateConfiguration(conf, dm);
+          //  AppCompatDelegate.setApplicationLocales(appLocale)
+            LocaleHelper.setLocale(context, mySession.getValueOf(MySession.KEY_LANGUAGE));
         }catch (Exception e){
             Log.e("TAG", "updateResources: "+e.getMessage() );
             Log.e("TAG", "updateResources: "+e.getLocalizedMessage() );
@@ -406,15 +436,15 @@ public class Tools {
     public void isLocationEnabled(Context mContext, LocationManager locationManager) {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-            alertDialog.setTitle("Enable Location");
-            alertDialog.setMessage("Your locations setting is not enabled. Please enabled it in settings menu.");
-            alertDialog.setPositiveButton("Location Settings", new DialogInterface.OnClickListener() {
+            alertDialog.setTitle(mContext.getString(R.string.enable_location));
+            alertDialog.setMessage(mContext.getString(R.string.your_locations_setting_is_not_enabled_please_enabled_it_in_settings_menu));
+            alertDialog.setPositiveButton(mContext.getString(R.string.location_settings), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     mContext.startActivity(intent);
                 }
             });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }

@@ -399,7 +399,7 @@ public class StartSliderAct extends AppCompatActivity {
      * Created by technorizen on 2/7/18.
      */
 
-    public class LanguageBean {
+    public static class LanguageBean {
         String id;
         String sortname;
         String name;

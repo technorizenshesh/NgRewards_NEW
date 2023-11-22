@@ -116,11 +116,11 @@ mySession = new MySession(activity);
 
                 if (status.equalsIgnoreCase("publish")) {
                     // APIStatusHide(fghu);
-                    bedMenuItem.setTitle("Hide");
+                    bedMenuItem.setTitle(activity.getString(R.string.hide));
 
                 } else {
                     //APIStatusPublish(fghu);
-                    bedMenuItem.setTitle("Publish");
+                    bedMenuItem.setTitle(activity.getString(R.string.publish));
                 }
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

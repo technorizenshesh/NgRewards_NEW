@@ -1,6 +1,7 @@
 package main.com.ngrewards.marchant.merchantbottum;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.MerchantItem;
 import main.com.ngrewards.beanclasses.MerchantItemList;
 import main.com.ngrewards.constant.MySession;
@@ -118,7 +121,7 @@ public class MerchantBotSell extends MerchantBaseActivity {
                     new SweetAlertDialog(MerchantBotSell.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText(getString(R.string.tnc))
                             .hideConfirmButton()
-                            .setCancelButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                            .setCancelButton(getString(R.string.ok), new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.dismissWithAnimation();
@@ -135,7 +138,7 @@ public class MerchantBotSell extends MerchantBaseActivity {
                     new SweetAlertDialog(MerchantBotSell.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText(getString(R.string.wrong_password))
                             .hideConfirmButton()
-                            .setCancelButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                            .setCancelButton(getString(R.string.ok), new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.dismissWithAnimation();
@@ -231,9 +234,13 @@ public class MerchantBotSell extends MerchantBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
+
         getSoldItems();
     }
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private void getSoldItems() {
         swipeToRefresh.setRefreshing(true);
         //progresbar.setVisibility(View.VISIBLE);

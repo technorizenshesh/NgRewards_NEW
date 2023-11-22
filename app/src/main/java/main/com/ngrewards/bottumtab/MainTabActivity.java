@@ -48,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 
 import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.EMIManualActivity;
 import main.com.ngrewards.activity.MemberMessageAct;
 import main.com.ngrewards.constant.BaseUrl;
@@ -102,16 +104,16 @@ public class MainTabActivity extends TabActivity {
                     Log.e("MEMBER_HOMEMEMBER_HOME",
                             "-----------------------------messagemessage----"+message);
                     AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
-                    alertDialog.setTitle("Payment");
+                    alertDialog.setTitle(context.getString(R.string.payment));
                     alertDialog.setMessage(
-                            "Reminder for "+number_of_emi+str+" Payment "+split_amount_x+"Due on "+due_date);
-                    alertDialog.setPositiveButton(" Pay Now ", (dialog, which) -> {
+                            getString(R.string.reminder_for)+number_of_emi+str+context.getString(R.string.payment)+split_amount_x+context.getString(R.string.due_on)+due_date);
+                    alertDialog.setPositiveButton(context.getString(R.string.pay_now), (dialog, which) -> {
                          dialog.dismiss();
                        Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
                        intentw.putExtra("object",data.toString());
                         context.startActivity(intentw);
                     });
-                    alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    alertDialog.setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.cancel());
                     AlertDialog alert=alertDialog.create();
                     alert.show();
                 } catch (Exception e) {
@@ -121,117 +123,25 @@ public class MainTabActivity extends TabActivity {
                 }
     }};
 
-    private class GetProfile extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("member_id", user_id);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("MainTab GetProfile Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String message = jsonObject.getString("status");
-
-                    if (message.equalsIgnoreCase("1")) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                        Log.e(TAG, "onCreate:  currency_code   ----  "+ jsonObject1.toString() );
-
-                        String unseen_count = jsonObject1.getString("unseen_count");
-                      //  currency_code = jsonObject1.getString("currency_code");
-                       // currency_sign = jsonObject1.getString("currency_sign");
-                       // country_name  = jsonObject1.getString("country_name");
-
-                       // Log.e(TAG, "onCreate:  currency_code   ----  "+ currency_code );
-                     //   Log.e(TAG, "onCreate:  currency_sign   ----  "+ currency_sign );
-                       // Log.e(TAG, "onCreate:  country_name    ----  "+ country_name  );
-
-                        if (unseen_count.equals("0")) {
-                            reqcounft.setVisibility(View.GONE);
-
-                        } else {
-                            reqcounft.setVisibility(View.VISIBLE);
-                            reqcounft.setText("" + unseen_count);
-                        }
-
-                        Log.e("unseen_count>>>", unseen_count);
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "onPostExecute: "+e.getMessage() );
-                    Log.e(TAG, "onPostExecute: "+e.getLocalizedMessage() );
-                    Log.e(TAG, "onPostExecute: "+e.getCause() );
-                }
-
-            }
-        }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab);
+        Tools.reupdateResources(this);
 
-        result = getIntent().getExtras().getString("result");
+         if (getIntent().getExtras()!=null){
+             result = getIntent().getExtras().getString("result");
+             if(result==null)
+             {
+                 result = "";
+             }
+         }
 
-        if(result==null)
-        {
-            result = "";
-        }
+
 
         notification_unseen_count = "";
         cart_unseen_count = "";
@@ -523,6 +433,7 @@ public class MainTabActivity extends TabActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(broadcastReceiver, new IntentFilter("MEMBER_HOME"));
+        Tools.reupdateResources(this);
 
         try {
             scheduleTaskExecutor = Executors.newScheduledThreadPool(5);

@@ -1,3 +1,4 @@
+/*
 package main.com.ngrewards.activity;
 
 import android.app.Dialog;
@@ -34,6 +35,8 @@ import org.json.JSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.QrCodeActivity;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySavedCardInfo;
@@ -76,8 +79,6 @@ public class BaseActivityUpdate extends AppCompatActivity {
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         idinit();
-
-        mySession = new MySession(this);
         craete_profile =  PreferenceConnector.readString(BaseActivityUpdate.this, PreferenceConnector.Create_Profile,"");
 
 
@@ -193,8 +194,10 @@ public class BaseActivityUpdate extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(BaseActivityUpdate.this, TransferToaFriend.class);
                 startActivity(i);
-                /*Intent i = new Intent(BaseActivity.this,MemberTransfer.class);
-                startActivity(i);*/
+                */
+/*Intent i = new Intent(BaseActivity.this,MemberTransfer.class);
+                startActivity(i);*//*
+
             }
         });
 
@@ -269,7 +272,9 @@ public class BaseActivityUpdate extends AppCompatActivity {
             }
         });
     }
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private void idinit() {
 
         ngcash = findViewById(R.id.ngcash);
@@ -422,6 +427,7 @@ public class BaseActivityUpdate extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
 
         isVisible = true;
         registerReceiver(broadcastReceiver, new IntentFilter("Unseen Count"));
@@ -566,3 +572,4 @@ public class BaseActivityUpdate extends AppCompatActivity {
     }
 
 }
+*/

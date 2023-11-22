@@ -1,5 +1,7 @@
 package main.com.ngrewards.draweractivity;
 
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,17 +9,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,16 +48,22 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.AddMemberCard;
+import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.UpdateMemberCard;
 import main.com.ngrewards.beanclasses.CardBean;
+import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.settingclasses.AboutNgReward;
 import main.com.ngrewards.settingclasses.CareeersAct;
@@ -65,21 +78,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SettingActivity extends AppCompatActivity {
+    String selected_lang = "";
 
-    private RelativeLayout changepass,addcardlay, invitecontact, invitefacelay, backlay, career_lay, aboutng_rew, helpcenter, reportproblem, touchidlay,deleteAccount;
+    CountryListAdapter languageListAdapter;
+    private RelativeLayout changelang, changepass, addcardlay, invitecontact, invitefacelay, backlay, career_lay, aboutng_rew, helpcenter, reportproblem, touchidlay, deleteAccount;
     private ExpandableHeightListView addedcardlist;
     private CustomCardAdp customCardAdp;
     private ArrayList<CardBean> cardBeanArrayList;
     private MySavedCardInfo mySavedCardInfo;
     private ProgressBar progresbar;
     private MySession mySession;
-    private String user_id="",user_type="";
+    private String user_id = "", user_type = "";
     private Myapisession myapisession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
         mySession = new MySession(this);
         mySavedCardInfo = new MySavedCardInfo(this);
         String user_log_data = mySession.getKeyAlldata();
@@ -111,9 +127,9 @@ public class SettingActivity extends AppCompatActivity {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         progresbar.setVisibility(View.VISIBLE);
 
-        Map<String,String> map = new HashMap<>();
-        map.put("user_id",user_id);
-        map.put("type",user_type);
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", user_id);
+        map.put("type", user_type);
 
         Call<ResponseBody> call = ApiClient.getApiInterface().requestOtp(map);
         call.enqueue(new Callback<ResponseBody>() {
@@ -123,19 +139,17 @@ public class SettingActivity extends AppCompatActivity {
                     progresbar.setVisibility(View.GONE);
                     try {
                         String responseData = response.body().string();
-                        Log.e("SALE DATA"," >>"+responseData);
+                        Log.e("SALE DATA", " >>" + responseData);
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equalsIgnoreCase("1")) {
                             selectImage();
-                        }
-                        else {
-                            Toast.makeText(SettingActivity.this,object.getString("message"),Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SettingActivity.this, object.getString("message"), Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     progresbar.setVisibility(View.GONE);
                 }
 
@@ -152,8 +166,6 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
-
-
 
     private void clickevent() {
 
@@ -218,34 +230,32 @@ public class SettingActivity extends AppCompatActivity {
 
         addcardlay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-               // Intent i = new Intent(SettingActivity.this, AddMemberCard.class);
+            public void onClick(View v) {
+                // Intent i = new Intent(SettingActivity.this, AddMemberCard.class);
                 Intent i = new Intent(SettingActivity.this, AddMemberCard.class);
                 startActivity(i);
             }
         });
 
-       deleteAccount.setOnClickListener(v ->
-                {
-                    senOTP();
-                }
-                );
+        deleteAccount.setOnClickListener(v -> {
+            senOTP();
+        });
 
 
         changepass.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-               // Intent i = new Intent(SettingActivity.this, AddMemberCard.class);
+            public void onClick(View v) {
+                // Intent i = new Intent(SettingActivity.this, AddMemberCard.class);
                 Intent i = new Intent(SettingActivity.this, ChangePasswordAct.class);
-                i.putExtra("type","Member");
+                i.putExtra("type", "Member");
                 startActivity(i);
             }
         });
+        changelang.setOnClickListener(v -> setSellPassDialog());
     }
 
     private void idinti() {
+        changelang = findViewById(R.id.changelang);
         changepass = findViewById(R.id.changepass);
         addedcardlist = findViewById(R.id.addedcardlist);
         addedcardlist.setExpanded(true);
@@ -265,6 +275,8 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
+
         if (mySavedCardInfo.getKeyCarddata() != null && !mySavedCardInfo.getKeyCarddata().isEmpty()) {
             try {
                 JSONObject jsonObject = new JSONObject(mySavedCardInfo.getKeyCarddata());
@@ -298,7 +310,7 @@ public class SettingActivity extends AppCompatActivity {
                         cardBeanArrayList.add(cardBean);
 
                     }
-                    customCardAdp = new CustomCardAdp(SettingActivity.this,cardBeanArrayList);
+                    customCardAdp = new CustomCardAdp(SettingActivity.this, cardBeanArrayList);
                     addedcardlist.setAdapter(customCardAdp);
                     customCardAdp.notifyDataSetChanged();
 
@@ -310,8 +322,7 @@ public class SettingActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }
-        else {
+        } else {
             new GetAddedCard().execute();
         }
 
@@ -321,10 +332,10 @@ public class SettingActivity extends AppCompatActivity {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         progresbar.setVisibility(View.VISIBLE);
 
-        Map<String,String> map = new HashMap<>();
-        map.put("user_id",user_id);
-        map.put("type",user_type);
-        map.put("code",code);
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", user_id);
+        map.put("type", user_type);
+        map.put("code", code);
 
         Call<ResponseBody> call = ApiClient.getApiInterface().deleteMyAccount(map);
         call.enqueue(new Callback<ResponseBody>() {
@@ -334,7 +345,7 @@ public class SettingActivity extends AppCompatActivity {
                     progresbar.setVisibility(View.GONE);
                     try {
                         String responseData = response.body().string();
-                        Log.e("SALE DATA"," >>"+responseData);
+                        Log.e("SALE DATA", " >>" + responseData);
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equalsIgnoreCase("1")) {
 
@@ -354,16 +365,14 @@ public class SettingActivity extends AppCompatActivity {
                             i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(i);
 
-                        }
-                        else {
-                            Toast.makeText(SettingActivity.this,object.getString("message"),Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SettingActivity.this, object.getString("message"), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     progresbar.setVisibility(View.GONE);
                 }
 
@@ -380,6 +389,10 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
 
@@ -402,33 +415,247 @@ public class SettingActivity extends AppCompatActivity {
 
         tvCancel.setOnClickListener(v -> dialogSts.dismiss());
 
-        tvSubmit.setOnClickListener(v ->
-                {
-                    if(!etVerification.getText().toString().equalsIgnoreCase(""))
-                    {
-                        dialogSts.dismiss();
-                        deleteAccount(etVerification.getText().toString());
-                    }
-                    else
-                    {
-                        Toast.makeText(SettingActivity.this,"Please enter verification code.",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                );
+        tvSubmit.setOnClickListener(v -> {
+            if (!etVerification.getText().toString().equalsIgnoreCase("")) {
+                dialogSts.dismiss();
+                deleteAccount(etVerification.getText().toString());
+            } else {
+                Toast.makeText(SettingActivity.this, "Please enter verification code.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         dialogSts.show();
     }
 
+    private void sureDelete(final String customer, final String id) {
+        final Dialog dialogSts = new Dialog(SettingActivity.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.custom_popup);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView no_tv = dialogSts.findViewById(R.id.no_tv);
+        TextView yes_tv = dialogSts.findViewById(R.id.yes_tv);
+
+        yes_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                new DeleteCardAsc().execute(customer, id);
+
+            }
+        });
+
+        no_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+
+
+            }
+        });
+        dialogSts.show();
+    }
+
+    private void setSellPassDialog() {
+        try {
+            final Dialog dialogSts = new Dialog(SettingActivity.this, R.style.DialogSlideAnim);
+            dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogSts.setCancelable(false);
+            dialogSts.setContentView(R.layout.switch_lang_item);
+            dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button submitt = (Button) dialogSts.findViewById(R.id.submitt);
+            TextView close = (TextView) dialogSts.findViewById(R.id.close);
+            close.setOnClickListener(v -> {
+                dialogSts.dismiss();
+            });
+            Spinner language_spn = (Spinner) dialogSts.findViewById(R.id.language_spn);
+            ArrayList<LanguageBean> language_list = new ArrayList<>();
+            language_list.add(new LanguageBean("1", "en", "English", ""));
+            language_list.add(new LanguageBean("2", "hi", "Hindi", ""));
+            language_list.add(new LanguageBean("3", "es", "Spanish", ""));
+            languageListAdapter = new CountryListAdapter(SettingActivity.this, language_list);
+            language_spn.setAdapter(languageListAdapter);
+            Log.e("TAG", "idint: mySession.getValueOf(KEY_LANGUAGE)" + mySession.getValueOf(KEY_LANGUAGE));
+            for (int i = 0; i < language_list.size(); i++) {
+                if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase(language_list.get(i).getSortname())) {
+                    language_spn.setSelection(i);
+                }
+
+            }
+
+
+            language_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (language_list != null && !language_list.isEmpty()) {
+                        if (!mySession.getValueOf(KEY_LANGUAGE)
+                                .equalsIgnoreCase(language_list.get(position).getSortname())) {
+                            selected_lang=language_list.get(position).getSortname();
+
+                        }else {
+                             selected_lang = "";
+
+                        }
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    selected_lang="";
+                }
+            });
+
+            submitt.setOnClickListener(v -> {
+                if (selected_lang.equalsIgnoreCase("")) {
+                    dialogSts.dismiss();
+                } else {
+                    Tools.updateResources(getApplicationContext(), selected_lang);
+                    mySession.setValueOf(KEY_LANGUAGE, selected_lang);
+                    dialogSts.dismiss();
+                    Intent i = new Intent(SettingActivity.this, MainTabActivity.class);
+                    startActivity(i);
+                    finish();
+
+
+                }
+
+            });
+
+            dialogSts.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getLastfour(String myString) {
+        if (myString.length() > 4) return myString.substring(myString.length() - 4);
+        else return myString;
+    }
+
+    public static class LanguageBean {
+        String id;
+        String sortname;
+        String name;
+        String flag_url;
+
+        public LanguageBean(String id, String sortname, String name, String flag_url) {
+            this.id = id;
+            this.sortname = sortname;
+            this.name = name;
+            this.flag_url = flag_url;
+        }
+
+        public String getFlag_url() {
+            return flag_url;
+        }
+
+        public void setFlag_url(String flag_url) {
+            this.flag_url = flag_url;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getSortname() {
+            return sortname;
+        }
+
+        public void setSortname(String sortname) {
+            this.sortname = sortname;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    public static class CountryListAdapter extends BaseAdapter {
+        private final ArrayList<LanguageBean> values;
+        Context context;
+        LayoutInflater inflter;
+
+        public CountryListAdapter(Context applicationContext, ArrayList<LanguageBean> values) {
+            this.context = applicationContext;
+            this.values = values;
+
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+
+            return values == null ? 0 : values.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.country_item_lay_flag, null);
+
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+        /*    //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
+
+            } else {
+                Glide.with(context)
+                        .load(values.get(i).getFlag_url())
+                        .thumbnail(0.5f)
+                        .override(50, 50)
+                        .centerCrop()
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                return false;
+
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+                                return false;
+                            }
+                        })
+                        .into(country_flag);
+            }*/
+
+            country_flag.setVisibility(View.GONE);
+            names.setText(values.get(i).getName());
+
+
+            return view;
+        }
+    }
+
     public class CustomCardAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<CardBean> cardBeanArrayList;
+        private LayoutInflater inflater = null;
 
         public CustomCardAdp(Context contexts, ArrayList<CardBean> cardBeanArrayList) {
             this.context = contexts;
             this.cardBeanArrayList = cardBeanArrayList;
-            inflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -449,10 +676,6 @@ public class SettingActivity extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -469,35 +692,32 @@ public class SettingActivity extends AppCompatActivity {
             ImageView delete_card = rowView.findViewById(R.id.delete_card);
             ImageView update_card = rowView.findViewById(R.id.update_card);
 
-            if (position==0){
+            if (position == 0) {
                 savedcardtv.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 savedcardtv.setVisibility(View.GONE);
             }
 
             String cardbrandstr = cardBeanArrayList.get(position).getBrand();
             String carnum = cardBeanArrayList.get(position).getLast4();
-            if (cardbrandstr.length() > 4)
-
-            {
+            if (cardbrandstr.length() > 4) {
                 cardbrandstr = cardbrandstr.substring(0, 4);
             }
             String stars = "**** ****";
-            savedcardnumber.setText(""+cardbrandstr+" "+stars+" "+carnum);
+            savedcardnumber.setText("" + cardbrandstr + " " + stars + " " + carnum);
 
-           // savedcardnumber.setText(""+cardBeanArrayList.get(position).getSetfullcardnumber());
+            // savedcardnumber.setText(""+cardBeanArrayList.get(position).getSetfullcardnumber());
 
 
-             validdate.setText("" + cardBeanArrayList.get(position).getSetfullexpyearmonth());
-             cardbrand.setText("" + cardBeanArrayList.get(position).getBrand());
-             cardtype.setText("" + cardBeanArrayList.get(position).getFunding());
-             cardtype.setAllCaps(true);
+            validdate.setText("" + cardBeanArrayList.get(position).getSetfullexpyearmonth());
+            cardbrand.setText("" + cardBeanArrayList.get(position).getBrand());
+            cardtype.setText("" + cardBeanArrayList.get(position).getFunding());
+            cardtype.setAllCaps(true);
 
             delete_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sureDelete(cardBeanArrayList.get(position).getCustomer(),cardBeanArrayList.get(position).getId());
+                    sureDelete(cardBeanArrayList.get(position).getCustomer(), cardBeanArrayList.get(position).getId());
 
                 }
             });
@@ -507,48 +727,23 @@ public class SettingActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Intent i = new Intent(SettingActivity.this, UpdateMemberCard.class);
-                    i.putExtra("cardnumber_str",cardBeanArrayList.get(position).getSetfullcardnumber());
-                    i.putExtra("cardholder_name",cardBeanArrayList.get(position).getCard_name());
-                    i.putExtra("expmonth",cardBeanArrayList.get(position).getExp_month());
-                    i.putExtra("expyear",cardBeanArrayList.get(position).getExp_year());
-                    i.putExtra("card_id",cardBeanArrayList.get(position).getId());
-                    i.putExtra("customer_id",cardBeanArrayList.get(position).getCustomer());
+                    i.putExtra("cardnumber_str", cardBeanArrayList.get(position).getSetfullcardnumber());
+                    i.putExtra("cardholder_name", cardBeanArrayList.get(position).getCard_name());
+                    i.putExtra("expmonth", cardBeanArrayList.get(position).getExp_month());
+                    i.putExtra("expyear", cardBeanArrayList.get(position).getExp_year());
+                    i.putExtra("card_id", cardBeanArrayList.get(position).getId());
+                    i.putExtra("customer_id", cardBeanArrayList.get(position).getCustomer());
                     startActivity(i);
                 }
             });
-           // cardnumber.setText(""+getLastfour(cardBeanArrayList.get(position).getCard_number()));
+            // cardnumber.setText(""+getLastfour(cardBeanArrayList.get(position).getCard_number()));
             return rowView;
         }
 
-    }
+        public class Holder {
 
-    private void sureDelete(final String customer, final String id) {
-        final Dialog dialogSts = new Dialog(SettingActivity.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.custom_popup);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView no_tv =  dialogSts.findViewById(R.id.no_tv);
-        TextView yes_tv =  dialogSts.findViewById(R.id.yes_tv);
+        }
 
-        yes_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                new DeleteCardAsc().execute(customer,id);
-
-            }
-        });
-
-        no_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-
-
-            }
-        });
-        dialogSts.show();
     }
 
     private class GetAddedCard extends AsyncTask<String, String, String> {
@@ -644,7 +839,7 @@ public class SettingActivity extends AppCompatActivity {
                             cardBeanArrayList.add(cardBean);
 
                         }
-                        customCardAdp = new CustomCardAdp(SettingActivity.this,cardBeanArrayList);
+                        customCardAdp = new CustomCardAdp(SettingActivity.this, cardBeanArrayList);
                         addedcardlist.setAdapter(customCardAdp);
                         customCardAdp.notifyDataSetChanged();
 
@@ -733,7 +928,7 @@ public class SettingActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                       new GetAddedCard().execute();
+                        new GetAddedCard().execute();
 
 
                         //  new TransferAmount().execute(customer_id);
@@ -750,10 +945,4 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    public String getLastfour(String myString) {
-        if(myString.length() > 4)
-            return myString.substring(myString.length()-4);
-        else
-            return myString;
-    }
 }

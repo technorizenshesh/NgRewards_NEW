@@ -251,7 +251,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:hint="Female"
+                        android:hint="@string/female"
                         android:inputType="phone"
                         android:maxLength="35"
                         android:textSize="@dimen/medium"
@@ -352,7 +352,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="23dp"
-                    android:text="Who Invited you to Ng Rewards : "
+                    android:text="@string/who_invited_you_to_ng_rewards"
                     android:textColor="@color/black"
                     android:textSize="@dimen/medium"
                     android:visibility="gone" />

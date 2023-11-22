@@ -108,7 +108,7 @@
                                 android:layout_toLeftOf="@+id/amount"
                                 android:background="@null"
                                 android:gravity="center_vertical"
-                                android:hint=" @username"
+                                android:hint="@string/username"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="2dp"
                                 android:textColor="@color/black" />
@@ -150,7 +150,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:background="@null"
-                            android:hint=" Name"
+                            android:hint="@string/name"
                             android:textColor="@color/black"
                             android:textSize="@dimen/medium" />
 

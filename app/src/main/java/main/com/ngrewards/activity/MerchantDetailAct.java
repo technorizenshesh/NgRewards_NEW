@@ -239,7 +239,7 @@ public class MerchantDetailAct extends AppCompatActivity {
                             if (merchantListBeanArrayList.get(0).getOpenCloseStatus() != null) {
 
                                 if (merchantListBeanArrayList.get(0).getOpenCloseStatus().equalsIgnoreCase("OPEN")) {
-                                    open_close_status.setText("" + merchantListBeanArrayList.get(0).getOpenCloseStatus());
+                                    open_close_status.setText("" + getString(R.string.open));
                                     open_close_status.setTextColor(getResources().getColor(R.color.darkgreen));
                                 } else {
                                     open_close_status.setTextColor(getResources().getColor(R.color.red));
@@ -247,7 +247,7 @@ public class MerchantDetailAct extends AppCompatActivity {
                                 }
                             } else {
                                 open_close_status.setTextColor(getResources().getColor(R.color.red));
-                                open_close_status.setText("CLOSE");
+                                open_close_status.setText(R.string.close);
                             }
 
                         }

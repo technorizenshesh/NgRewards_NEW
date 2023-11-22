@@ -1,5 +1,6 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -38,6 +39,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.MerchantMenuSetting;
 import main.com.ngrewards.activity.TutorialAct;
@@ -62,6 +65,9 @@ public class MerchantBaseActivity extends AppCompatActivity {
     private Myapisession myapisession;
     public static TextView reqcounft;
     private String user_id;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,7 +354,7 @@ public class MerchantBaseActivity extends AppCompatActivity {
         if (exit) {
             finish(); // finish activity
         } else {
-            Toast.makeText(this, "Press Back again to Exit.",
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit),
                     Toast.LENGTH_SHORT).show();
             exit = true;
             new Handler().postDelayed(new Runnable() {
@@ -365,6 +371,8 @@ public class MerchantBaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Tools.reupdateResources(this);
+
         mySession = new MySession(this);
 
         String user_log_data = mySession.getKeyAlldata();

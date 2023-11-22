@@ -27,55 +27,30 @@
                 android:padding="10dp">
 
                 <TextView
-                     android:id="@+id/close"
+                    android:id="@+id/close"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="@string/enter_password"
+                    android:text="@string/change_language"
                     android:textColor="@color/darkgrey"
                     android:textSize="@dimen/medium"
                     android:textStyle="bold"
-                     android:drawableRight="@drawable/ic_baseline_close"/>
+                    android:drawableRight="@drawable/ic_baseline_close"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:gravity="center"
-                    android:text="@string/please_contact_admin"
-                    android:textColor="@color/darkgrey"
-                    android:textSize="@dimen/small"
-                    android:textStyle="normal"/>
 
-                <main.com.ngrewards.fonttypeclasses.NormalEditText
-                    android:id="@+id/pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@color/greyborder"
-                    android:hint="@string/password"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:padding="10dp" />
-                <CheckBox
-                    android:id="@+id/acceptcondition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                     android:textAlignment="textStart"
-                    android:text="@string/aceptstriptermsaur" />
 
+
+                <Spinner
+                    android:id="@+id/language_spn"
+                    android:layout_margin="20dp"
+                    android:padding="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </Spinner>
 
                 <LinearLayout
                     android:visibility="visible"
@@ -131,20 +106,7 @@
                 </LinearLayout>
 
 
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/cont_find"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/border_rounded"
-                    android:gravity="center"
-                    android:text="@string/cancel"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/large"
-                    android:textStyle="bold" />
+
 
 
             </LinearLayout>

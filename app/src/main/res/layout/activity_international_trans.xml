@@ -98,7 +98,7 @@
                     android:layout_toLeftOf="@+id/amount"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint=" @username"
+                    android:hint="@string/username"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:textColor="@color/black" />
@@ -129,7 +129,7 @@
 
                     android:layout_centerVertical="true"
                     android:background="@null"
-                    android:hint=" Name"
+                    android:hint="@string/name"
                     android:textColor="@color/black"
                     android:textSize="@dimen/medium" />
 
@@ -198,17 +198,17 @@
 
     <RadioButton
         android:textSize="@dimen/medium"
-        android:text="  Next day (15%)"
+        android:text="@string/next_day_15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <RadioButton
         android:textSize="@dimen/medium"
-        android:text="  2-4 days (10%)"
+        android:text="@string/_2_4_days_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <RadioButton
         android:textSize="@dimen/medium"
-        android:text="  5-7 days (5%)"
+        android:text="@string/_5_7_days_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

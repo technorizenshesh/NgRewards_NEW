@@ -372,21 +372,22 @@ public class LoginActivity extends AppCompatActivity {
              * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
              * startActivity(intent);
              */
-            textView.setText("Your Device does not have a Fingerprint Sensor");
+            textView.setText(getString(
+                    R.string.your_device_does_not_have_a_fingerprint_sensor));
 
         } else {
             // Checks whether fingerprint permission is set on manifest
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                textView.setText("Fingerprint authentication permission not enabled");
+                textView.setText(getString(R.string.fingerprint_authentication_permission_not_enabled));
 
             } else {
                 // Check whether at least one fingerprint is registered
                 if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    textView.setText("Register at least one fingerprint in Settings");
+                    textView.setText(getString(R.string.register_at_least_one_fingerprint_in_settings));
                 } else {
                     // Checks whether lock screen security is enabled or not
                     if (!keyguardManager.isKeyguardSecure()) {
-                        textView.setText("Lock screen security not enabled in Settings");
+                        textView.setText(getString(R.string.lock_screen_security_not_enabled_in_settings));
                     } else {
 
                         generateKey();
@@ -445,7 +446,7 @@ public class LoginActivity extends AppCompatActivity {
         String sourceString = "<b>" + www + "</b> ";
         String ssss = "<b>" + wwww + "</b> ";
 
-        sss.setText(Html.fromHtml("" + txt + "" + sourceString + " or " + ssss + "" + txtfor));
+        sss.setText(Html.fromHtml("" + txt + "" + sourceString +getString(R.string.or)+ ssss + "" + txtfor));
         String first_hh = getResources().getString(R.string.donthavemar);
         String first = getResources().getString(R.string.bytap);
         String first_am = getResources().getString(R.string.amper);

@@ -210,7 +210,7 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
                 // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
 
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " request for "+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.request_for)+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
@@ -222,7 +222,7 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
                 // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
 
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " just signed up using your username. " + notificationBeanNewArrayList.get(position).getTimeago());
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.just_signed_up_using_your_username) + notificationBeanNewArrayList.get(position).getTimeago());
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
