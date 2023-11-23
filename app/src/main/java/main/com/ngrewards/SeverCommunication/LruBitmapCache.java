@@ -1,3 +1,4 @@
+/*
 package main.com.ngrewards.SeverCommunication;
 
 import android.content.Context;
@@ -7,9 +8,11 @@ import android.util.DisplayMetrics;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 
+*/
 /**
  * Created by SERVERPC5 on 09-02-2017.
- */
+ *//*
+
 
 public class LruBitmapCache extends LruCache<String, Bitmap>
         implements ImageCache {
@@ -49,3 +52,4 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
         put(url, bitmap);
     }
 }
+*/

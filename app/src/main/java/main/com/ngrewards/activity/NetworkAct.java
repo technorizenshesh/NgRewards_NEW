@@ -6,10 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.numetriclabz.numandroidcharts.BarChart;
 import com.numetriclabz.numandroidcharts.ChartData;
@@ -404,7 +405,7 @@ public class NetworkAct extends AppCompatActivity {
             if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
             } else {
-                Picasso.with(NetworkAct.this).load(imagelist).into(holder.friendimg);
+                Glide.with(NetworkAct.this).load(imagelist).into(holder.friendimg);
             }
 
             if (memberDetailArrayList.get(listPosition).getUserType() != null && memberDetailArrayList.get(listPosition).getUserType().equalsIgnoreCase("Merchant")) {

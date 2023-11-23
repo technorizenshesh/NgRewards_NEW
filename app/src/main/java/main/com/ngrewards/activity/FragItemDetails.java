@@ -12,11 +12,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
@@ -247,7 +248,7 @@ public class FragItemDetails extends AppCompatActivity {
                  }
 
                  getFeaturedProductsDetail(product_id);
-                 Picasso.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
+                 Glide.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
 
              }
 
@@ -343,7 +344,7 @@ public class FragItemDetails extends AppCompatActivity {
 
                                 String image_url = productDetailArrayList.get(0).getUserDetails().get(0).getMerchantImage();
                                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                                    Picasso.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                                    Glide.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                                 }
                             }
                             like_status = productDetailArrayList.get(0).getLikeStatus();
@@ -1290,7 +1291,7 @@ public class FragItemDetails extends AppCompatActivity {
             review.setText("" + productTopReview.get(position).getReview());
             String image_url = productTopReview.get(position).getMemberImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                Glide.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
             }
 
             if (productTopReview.get(position).getRating() != null && !productTopReview.get(position).getRating().equalsIgnoreCase("")) {
@@ -1347,7 +1348,7 @@ public class FragItemDetails extends AppCompatActivity {
             TextView price = rowView.findViewById(R.id.price);
             String image_url = similarProducts.get(position).getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(similar_pro_image);
+                Glide.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(similar_pro_image);
             }
             price.setText(mySession.getValueOf(MySession.CurrencySign)  + similarProducts.get(position).getPrice());
             return rowView;
@@ -1376,7 +1377,7 @@ public class FragItemDetails extends AppCompatActivity {
             ImageView productimg = itemView.findViewById(R.id.productimg);
             String image_url = productImages.get(position).getProductImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(productimg);
+                Glide.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(productimg);
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

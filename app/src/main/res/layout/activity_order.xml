@@ -12,7 +12,7 @@
         android:clickable="true"
         android:focusable="true">
 
-         <android.support.v7.widget.CardView
+         <androidx.cardview.widget.CardView
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
          <Button
             android:id="@+id/btn_continue"
@@ -50,7 +50,7 @@
             android:layout_alignParentBottom="true"
             android:text="Continue"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recy_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,7 +58,7 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:layout_above="@+id/btn_continue">
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
         <FrameLayout

@@ -2,10 +2,10 @@ package main.com.ngrewards.marchant.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -201,7 +202,7 @@ public class ActiveProductsAct extends AppCompatActivity {
             if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
             } else {
-                Picasso.with(ActiveProductsAct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.offer_img);
+                Glide.with(ActiveProductsAct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.offer_img);
             }
 
             holder.option.setOnClickListener(new View.OnClickListener() {

@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -341,7 +342,7 @@ public class CheckOutAct extends AppCompatActivity {
 
             String image_url = mycartlist.get(position).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(product_img);
+                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(product_img);
             }
 
 
@@ -440,7 +441,7 @@ public class CheckOutAct extends AppCompatActivity {
 
             String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
+                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
             }
 
 

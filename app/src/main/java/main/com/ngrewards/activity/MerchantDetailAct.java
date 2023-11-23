@@ -18,14 +18,16 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -182,7 +184,7 @@ public class MerchantDetailAct extends AppCompatActivity {
 
             Log.e("merchant_image >> ", " >> " + merchant_img_str);
             if (merchant_img_str != null && !merchant_img_str.equalsIgnoreCase("") && !merchant_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(MerchantDetailAct.this).load(merchant_img_str).placeholder(R.drawable.placeholder).into(user_img);
+                Glide.with(MerchantDetailAct.this).load(merchant_img_str).placeholder(R.drawable.placeholder).into(user_img);
 
             }
 

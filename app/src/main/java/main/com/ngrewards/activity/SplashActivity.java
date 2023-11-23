@@ -18,11 +18,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -63,6 +65,7 @@ import main.com.ngrewards.activity.app.NotificationUtils;
 import main.com.ngrewards.bottumtab.MainTabActivity;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 public class SplashActivity extends AppCompatActivity implements
@@ -328,6 +331,7 @@ public class SplashActivity extends AppCompatActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (Build.VERSION.SDK_INT >= 33) {
 
             if (requestCode == RequestPermissionCode) {
@@ -340,7 +344,7 @@ public class SplashActivity extends AppCompatActivity implements
                     boolean dd = grantResults[5] == PackageManager.PERMISSION_GRANTED;
                     boolean dd2 = grantResults[6] == PackageManager.PERMISSION_GRANTED;
 
-                    if (write && camera && network && coarseloc && fineloc&&dd&&dd2) {
+                    if (write && camera && network && coarseloc && fineloc && dd && dd2) {
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -348,7 +352,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                       // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -388,7 +393,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -405,15 +411,16 @@ public class SplashActivity extends AppCompatActivity implements
                         }, SPLASH_TIME_OUT);
 
                     } else {
-                        Log.e(TAG, "onRequestPermissionsResult: "+grantResults.toString() );
-                      //  nesePermission();
+                        Log.e(TAG, "onRequestPermissionsResult: " + grantResults.toString());
+                        //  nesePermission();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                        Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -544,7 +551,8 @@ public class SplashActivity extends AppCompatActivity implements
                             }
                             Log.e(TAG, "user_typeuser_typeuser_typeuser_typeuser_type: " + user_type);
                             if (user_type.equalsIgnoreCase("Merchant")) {
-                                Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                 startActivity(i);
                                 finish();
 
@@ -626,6 +634,7 @@ public class SplashActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check for the integer request code originally supplied to startResolutionForResult().
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CHECK_SETTINGS) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
@@ -645,7 +654,8 @@ public class SplashActivity extends AppCompatActivity implements
                                 // Intent i = new Intent(SplashAct.this, CheckLocationActivity.class);
                                 if (user_type.equalsIgnoreCase("Merchant")) {
 
-                                    Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                    // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                    Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                     startActivity(i);
                                     finish();
 

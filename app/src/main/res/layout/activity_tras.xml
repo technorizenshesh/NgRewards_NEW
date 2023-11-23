@@ -51,21 +51,21 @@
 
          </RelativeLayout>
 
-          <android.support.v4.widget.SwipeRefreshLayout
+          <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
             android:layout_below="@+id/searchlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
              android:layout_marginTop="65dp">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
              android:id="@+id/activity_list"
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:visibility="gone"

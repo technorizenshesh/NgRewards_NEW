@@ -3,19 +3,27 @@ package main.com.ngrewards.drawlocation;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Environment;
-
-import com.android.internal.http.multipart.MultipartEntity;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+//
+//
+//import org.apache.http.HttpEntity;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
  * Created by bhupesh on 9/7/2016.
@@ -23,7 +31,7 @@ import java.io.FileOutputStream;
 public class WebOperations {
 
     private String url = null;
-    private MultipartEntity reqEntity = null;
+    private HttpEntity reqEntity = null;
     private String json = null;
     private final String BaseUrl = "";
     //  private String BaseUrl = "http://technorizen.co.in/";
@@ -41,11 +49,11 @@ public class WebOperations {
         myInternalFile = new File(directory , filename);
     }
 
-    public MultipartEntity getReqEntity() {
+    public HttpEntity getReqEntity() {
         return reqEntity;
     }
 
-    public void setReqEntity(MultipartEntity reqEntity) {
+    public void setReqEntity(HttpEntity reqEntity) {
         this.reqEntity = reqEntity;
     }
 

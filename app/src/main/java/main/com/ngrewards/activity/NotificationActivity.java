@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -187,7 +188,7 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getMessage_key());
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Picasso.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
                 }
             } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Transfer")) {
                 holder.reqcount.setVisibility(View.GONE);
@@ -202,7 +203,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Picasso.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
                 }
             } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Request")) {
                 holder.reqcount.setVisibility(View.GONE);
@@ -214,7 +215,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Picasso.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
                 }
             } else {
                 holder.reqcount.setVisibility(View.GONE);
@@ -226,7 +227,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 String image_url = notificationBeanNewArrayList.get(position).getImage();
                 if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Picasso.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
                 }
             }
 

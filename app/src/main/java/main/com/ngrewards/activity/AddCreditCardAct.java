@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
 import org.json.JSONException;
@@ -163,13 +164,13 @@ public class AddCreditCardAct extends AppCompatActivity {
                     year_int = Integer.parseInt(expiryyear_str);
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
-                    Card card = new Card(cardnumber_str, month, year_int, security_code_str);  //
+                    CardParams card = new CardParams(cardnumber_str, month, year_int, security_code_str);  //
                     card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
                     Stripe stripe = new Stripe(AddCreditCardAct.this, BaseUrl.stripe_publish);
                     progressBar.setVisibility(View.VISIBLE);
-                    stripe.createToken(
+                    stripe.createCardToken(
                             card,
-                            new TokenCallback() {
+                            new ApiResultCallback<Token>() {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
                                     progressBar.setVisibility(View.GONE);
@@ -205,9 +206,11 @@ public class AddCreditCardAct extends AppCompatActivity {
         });
     }
     public void onClickSomething(String cardNumber, int cardExpMonth, int cardExpYear, String cardCVC) {
-        Card card = new Card(cardNumber, cardExpMonth, cardExpYear, cardCVC);
+        CardParams cardParams = new CardParams(cardNumber, cardExpMonth, cardExpYear, cardCVC);
+
+       /* Card card = new Card(cardNumber, cardExpMonth, cardExpYear, cardCVC);
         card.validateNumber();
-        card.validateCVC();
+        card.validateCVC();*/
     }
 
     private void idinti() {

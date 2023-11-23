@@ -254,7 +254,7 @@
             android:exported="false"
             android:label=""
             android:screenOrientation="portrait" />
-        <activity
+     <!--   <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:exported="false"
@@ -270,7 +270,7 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name=".activity.WelcomeActivity"
             android:exported="false"
@@ -637,8 +637,18 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!--provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="main.com.ngrewards"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="androidx.core.content.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+
+        </provider>-->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="main.com.ngrewards"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -646,22 +656,24 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <service
             android:name=".service.MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="Notification">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
+     <!--   <service
             android:name=".service.MyFirebaseInstanceIDService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service>
+        </service>-->
         <provider
             android:name=".UncaughtExceptionHandlerContentProvider"
             android:authorities="main.com.ngrewards.MainApplication"

@@ -3,9 +3,11 @@ package main.com.ngrewards.constant;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

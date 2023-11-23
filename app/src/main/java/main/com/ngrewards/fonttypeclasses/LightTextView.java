@@ -10,7 +10,7 @@ import android.widget.TextView;
  * Created by technorizen on 14/6/18.
  */
 
-public class LightTextView extends TextView {
+public class LightTextView extends androidx.appcompat.widget.AppCompatTextView {
 
 
     public LightTextView(Context context) {

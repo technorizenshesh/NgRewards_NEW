@@ -9,8 +9,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
+/*import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -30,7 +30,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.LoginButton;*/
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,10 +74,10 @@ public class WelcomeActivity extends AppCompatActivity {
     private final String country_str = "";
     private final String country_id = "";
 
-    private LoginButton loginButton;
+   // private LoginButton loginButton;
     private LinearLayout facebook_button;
     String facebook_name, facebook_email, facebook_id, facebook_image, face_gender, face_locale, facebook_lastname = "", face_username;
-    private CallbackManager callbackManager;
+   // private CallbackManager callbackManager;
     private MySession mySession;
     private String firebase_regid = "";
     private RelativeLayout backlay;
@@ -85,10 +85,10 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+     //   FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_welcome);
 
-        callbackManager = CallbackManager.Factory.create();
+      //  callbackManager = CallbackManager.Factory.create();
         mySession = new MySession(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -106,7 +106,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+       // callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -116,10 +116,11 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                loginButton.performClick();
+            //    loginButton.performClick();
             }
         });
 
+/*
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +130,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 facebookData();
             }
         });
+*/
 
         createaccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +179,7 @@ public class WelcomeActivity extends AppCompatActivity {
         termscheck1 = findViewById(R.id.termscheck1);
 
 
-        loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+      //  loginButton = (LoginButton) findViewById(R.id.login_button_fb);
         facebook_button = (LinearLayout) findViewById(R.id.facebook_button);
         progresbar = findViewById(R.id.progresbar);
         member_email = findViewById(R.id.member_email);
@@ -291,15 +293,16 @@ public class WelcomeActivity extends AppCompatActivity {
 
         Log.e("hello >>>>>", "call method");
 
-        callbackManager = CallbackManager.Factory.create();
+      /*  callbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions("public_profile email");
 
         if (AccessToken.getCurrentAccessToken() != null) {
             RequestData();
             Log.e("hello >>>>>", "if");
-        }
+        }*/
 
 
+/*
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -321,61 +324,62 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
+*/
     }
 
-    public void RequestData() {
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                JSONObject json = response.getJSONObject();
-                try {
-                    if (json != null) {
-                        Log.e("Access facebook >>>>", "" + AccessToken.getCurrentAccessToken());
-                        Log.e("json facebook >>>>", "" + json);
-
-                        facebook_id = json.getString("id");
-                        Log.e("json >>>>", "" + json);
-                        if (json.has("email")) {
-                            facebook_email = json.getString("email");
-                        } else {
-                            facebook_email = "";
-                        }
-
-                        facebook_image = "http://graph.facebook.com/" + facebook_id + "/picture?type=large&height=320&width=420";
-                        Log.e("facebook_image >>", facebook_image);
-
-                        facebook_name = json.getString("first_name") + " " + json.getString("last_name");
-                        facebook_lastname = json.getString("last_name");
-                        face_username = json.getString("name");
-                        // face_gender = json.getString("gender");
-
-                        Log.e("face_gender >>>", "" + face_gender);
-                        Log.e("facebook_name >>>", "" + facebook_name);
-                        Log.e("facebook_id >>>", "" + facebook_id);
-                        Log.e("facebook_image >>>", "" + facebook_image);
-                        Log.e("facebook_name >>>", "" + facebook_name);
-                        Log.e("facebook_id >>>", "" + facebook_id);
-
-
-                        String value_fb = "1";
-                        if (facebook_name.length() > 0) {
-
-                            new SocialLogin().execute();
-                            // new SocialLogin2().execute();
-                        }
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,first_name,last_name,name,link,email,picture,gender,locale");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
+//    public void RequestData() {
+//        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(JSONObject object, GraphResponse response) {
+//                JSONObject json = response.getJSONObject();
+//                try {
+//                    if (json != null) {
+//                        Log.e("Access facebook >>>>", "" + AccessToken.getCurrentAccessToken());
+//                        Log.e("json facebook >>>>", "" + json);
+//
+//                        facebook_id = json.getString("id");
+//                        Log.e("json >>>>", "" + json);
+//                        if (json.has("email")) {
+//                            facebook_email = json.getString("email");
+//                        } else {
+//                            facebook_email = "";
+//                        }
+//
+//                        facebook_image = "http://graph.facebook.com/" + facebook_id + "/picture?type=large&height=320&width=420";
+//                        Log.e("facebook_image >>", facebook_image);
+//
+//                        facebook_name = json.getString("first_name") + " " + json.getString("last_name");
+//                        facebook_lastname = json.getString("last_name");
+//                        face_username = json.getString("name");
+//                        // face_gender = json.getString("gender");
+//
+//                        Log.e("face_gender >>>", "" + face_gender);
+//                        Log.e("facebook_name >>>", "" + facebook_name);
+//                        Log.e("facebook_id >>>", "" + facebook_id);
+//                        Log.e("facebook_image >>>", "" + facebook_image);
+//                        Log.e("facebook_name >>>", "" + facebook_name);
+//                        Log.e("facebook_id >>>", "" + facebook_id);
+//
+//
+//                        String value_fb = "1";
+//                        if (facebook_name.length() > 0) {
+//
+//                            new SocialLogin().execute();
+//                            // new SocialLogin2().execute();
+//                        }
+//
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields", "id,first_name,last_name,name,link,email,picture,gender,locale");
+//        request.setParameters(parameters);
+//        request.executeAsync();
+//    }
 
     private class SocialLogin extends AsyncTask<String, String, String> {
         @Override

@@ -12,11 +12,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -39,6 +39,7 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
@@ -360,7 +361,7 @@ public class OffersFrag extends Fragment {
             String product_img = offerBeanLists.get(listPosition).getOfferImage();
             if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
             } else {
-                Picasso.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
+                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
             }
             if (offerBeanLists.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
                 holder.likeimg.setImageResource(R.drawable.filled_like);

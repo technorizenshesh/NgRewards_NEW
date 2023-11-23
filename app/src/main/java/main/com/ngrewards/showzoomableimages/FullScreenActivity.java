@@ -1,13 +1,15 @@
 package main.com.ngrewards.showzoomableimages;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+
+import androidx.viewpager.widget.ViewPager;
+import android.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -178,7 +181,7 @@ public class FullScreenActivity extends AppCompatActivity {
 
             }
             else {
-                Picasso.with(_activity).load(_imagePaths.get(position).getGallery_image()).into(img);
+                Glide.with(_activity).load(_imagePaths.get(position).getGallery_image()).into(img);
             }
 
 

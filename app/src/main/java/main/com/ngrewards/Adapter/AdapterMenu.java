@@ -2,9 +2,9 @@ package main.com.ngrewards.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,6 +22,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -270,7 +271,7 @@ mySession = new MySession(activity);
 
         }
 
-        Picasso.with(activity).load(BaseUrl.image_baseurl + image_menu).into(holder.image_menu_item);
+        Glide.with(activity).load(BaseUrl.image_baseurl + image_menu).into(holder.image_menu_item);
 
     }
 

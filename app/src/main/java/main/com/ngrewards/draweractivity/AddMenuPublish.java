@@ -14,7 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +31,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -180,7 +181,7 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
         if (!image_item_string.equals("")) {
 
             complete_image = BaseUrl.image_baseurl + image_item_string;
-            Picasso.with(getApplicationContext()).load(complete_image).into(uploadimg);
+            Glide.with(getApplicationContext()).load(complete_image).into(uploadimg);
         }
 
         if (publish_string.equals("edit")) {

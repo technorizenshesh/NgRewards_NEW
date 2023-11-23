@@ -3,7 +3,7 @@ package main.com.ngrewards.start_fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -117,21 +118,9 @@ public class NgHelpFrag extends Fragment {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                        .crossFade()
+                         
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
+                         
                         .into(country_flag);
             }
 
@@ -199,7 +188,7 @@ public class NgHelpFrag extends Fragment {
             if (items.get(position).getFlag_url() == null || items.get(position).getFlag_url().equalsIgnoreCase("")) {
 
             } else {
-                Picasso.with(getActivity()).load(items.get(position).getFlag_url()).into(holder.country_flag);
+                Glide.with(getActivity()).load(items.get(position).getFlag_url()).into(holder.country_flag);
             }
             return convertView;
         }
@@ -226,7 +215,7 @@ public class NgHelpFrag extends Fragment {
           /*  if (items.get(position).getFlag_url() == null || items.get(position).getFlag_url().equalsIgnoreCase("")) {
 
             } else {
-                Picasso.with(getActivity()).load(items.get(position).getFlag_url()).into(holder.country_flag);
+                Glide.with(getActivity()).load(items.get(position).getFlag_url()).into(holder.country_flag);
             }*/
 //			Log.v("", "in custome spinner"+items.get(position).getItemName());
 

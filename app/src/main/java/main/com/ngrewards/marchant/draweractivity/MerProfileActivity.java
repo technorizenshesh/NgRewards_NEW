@@ -25,10 +25,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -52,6 +52,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -910,7 +911,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
                     } else {
 
-                        Picasso.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
+                        Glide.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
 
                     }
                 }
@@ -1270,7 +1271,7 @@ public class MerProfileActivity extends AppCompatActivity {
 
                         String image_url = jsonObject1.getString("merchant_image");
                         if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                            Picasso.with(MerProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                            Glide.with(MerProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                         }
                         JSONArray jsonArray = jsonObject1.getJSONArray("hours");
                         for (int k = 0; k < jsonArray.length(); k++) {

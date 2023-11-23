@@ -27,10 +27,10 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +50,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+   
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.squareup.picasso.Picasso;
@@ -1255,7 +1255,7 @@ public class MemberChatAct extends AppCompatActivity {
                     myimage.setVisibility(View.VISIBLE);
                     my_video_lay.setVisibility(View.GONE);
                     myfilelay.setVisibility(View.GONE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(myimage);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(myimage);
                 } else if (converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("zip") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("doc") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("docx") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("txt") || converSessionArrayList.get(position).getMsg_type().equalsIgnoreCase("pdf")) {
                     mymessage.setVisibility(View.GONE);
                     myimage.setVisibility(View.GONE);
@@ -1268,14 +1268,14 @@ public class MemberChatAct extends AppCompatActivity {
                     myimage.setVisibility(View.VISIBLE);
                     my_video_lay.setVisibility(View.GONE);
                     myfilelay.setVisibility(View.GONE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(myimage);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(myimage);
 
                 } else if (msgtype.equalsIgnoreCase("mp4")) {
                     mymessage.setVisibility(View.GONE);
                     myimage.setVisibility(View.GONE);
                     myfilelay.setVisibility(View.GONE);
                     my_video_lay.setVisibility(View.VISIBLE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(myimage);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getFile_name()).into(myimage);
                 } else {
                     // String msg = fromBase64(converSessionArrayList.get(position).getMessage());
                     mymessage.setText("" + converSessionArrayList.get(position).getMessage());
@@ -1302,23 +1302,9 @@ public class MemberChatAct extends AppCompatActivity {
                             .override(200, 200)
                             .centerCrop()
                             //  .placeholder(R.drawable.profile_ic)
-                            .crossFade()
+                             
                             //.dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<String, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    //  myplaceholder.setVisibility(View.GONE);
-                                    return false;
-
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    // myplaceholder.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
                             .into(my_profile);
 
                 }
@@ -1347,7 +1333,7 @@ public class MemberChatAct extends AppCompatActivity {
                     other_video_lay.setVisibility(View.GONE);
                     otherfilelay.setVisibility(View.GONE);
                     //  otherimage_chat.setVisibility(View.GONE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(othersendimgimage);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(othersendimgimage);
 
                 } else if (msgtype.equalsIgnoreCase("jpg") || msgtype.equalsIgnoreCase("jpeg") ||
                         msgtype.equalsIgnoreCase("png") || msgtype.equalsIgnoreCase("PNG")) {
@@ -1356,7 +1342,7 @@ public class MemberChatAct extends AppCompatActivity {
                     other_video_lay.setVisibility(View.GONE);
                     otherfilelay.setVisibility(View.GONE);
                     //  otherimage_chat.setVisibility(View.GONE);
-                    Picasso.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(othersendimgimage);
+                    Glide.with(MemberChatAct.this).load(converSessionArrayList.get(position).getChat_image()).into(othersendimgimage);
 
                 } else if (msgtype.equalsIgnoreCase("mp4")) {
 
@@ -1407,22 +1393,8 @@ public class MemberChatAct extends AppCompatActivity {
                             .override(200, 200)
                             .centerCrop()
                             // .placeholder(R.drawable.profile_ic)
-                            .crossFade(1000)
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<String, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    // otherplaceholder.setVisibility(View.GONE);
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    // otherplaceholder.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
                             .into(otherimage);
 
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
  * Created by technorizen on 14/6/18.
  */
 
-public class NoramlTextView extends TextView {
+public class NoramlTextView extends androidx.appcompat.widget.AppCompatTextView {
 
 
     public NoramlTextView(Context context) {

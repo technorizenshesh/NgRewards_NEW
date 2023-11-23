@@ -9,7 +9,7 @@ import android.widget.EditText;
  * Created by technorizen on 14/6/18.
  */
 
-public class BoldEditText extends EditText {
+public class BoldEditText extends androidx.appcompat.widget.AppCompatEditText {
 
     public BoldEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

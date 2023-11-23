@@ -13,14 +13,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -29,8 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+/*import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;*/
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -342,8 +346,8 @@ public class BaseActivity extends AppCompatActivity {
 
                     String image_url = jsonObject1.getString("member_image");
                     if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                        Picasso.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
-                        Picasso.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                        Glide.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
+                        Glide.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                     }
 
                     if (username == null || username.equalsIgnoreCase("") || username.equalsIgnoreCase("null")) {
@@ -481,10 +485,10 @@ public class BaseActivity extends AppCompatActivity {
 
                 PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, "");
                 PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, "");
-
+/*
                 if (AccessToken.getCurrentAccessToken() != null) {
                     LoginManager.getInstance().logOut();
-                }
+                }*/
 
                 mySession.signinusers(false);
                 mySavedCardInfo.clearCardData();
@@ -508,9 +512,9 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mSlideState) {
-                    drawer_layout.openDrawer(Gravity.END);
+                    drawer_layout.openDrawer(GravityCompat.END);
                 } else {
-                    drawer_layout.openDrawer(Gravity.START);
+                    drawer_layout.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -784,7 +788,7 @@ public class BaseActivity extends AppCompatActivity {
                         String image_url = jsonObject1.getString("member_image");
 
                         if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                            Picasso.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                            Glide.with(BaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                         }
                     }
 

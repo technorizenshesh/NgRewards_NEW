@@ -6,11 +6,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,8 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+/*import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;*/
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -53,7 +57,7 @@ import main.com.ngrewards.marchant.activity.MyQrCodeActivity;
 public class MerchantBaseActivity extends AppCompatActivity {
     private DrawerLayout drawer_layout_mer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private Toolbar toolbar_mer;
+    private androidx.appcompat.widget.Toolbar toolbar_mer;
     private NavigationView navigationview_mer;
     boolean exit = false;
     MySession mySession;
@@ -103,9 +107,9 @@ public class MerchantBaseActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    LoginManager.getInstance().logOut();
-                }
+//                if (AccessToken.getCurrentAccessToken() != null) {
+//                    LoginManager.getInstance().logOut();
+//                }
                 myapisession.setProductdata("");
                 myapisession.setKeyOffercate("");
                 mySession.signinusers(false);
@@ -204,10 +208,10 @@ public class MerchantBaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mSlideState) {
-                    drawer_layout_mer.openDrawer(Gravity.END);
+                    drawer_layout_mer.openDrawer(GravityCompat.END);
 
                 } else {
-                    drawer_layout_mer.openDrawer(Gravity.START);
+                    drawer_layout_mer.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -397,8 +401,8 @@ public class MerchantBaseActivity extends AppCompatActivity {
 
                     String image_url = jsonObject1.getString("merchant_image");
                     if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                        Picasso.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
-                        Picasso.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
+                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                     }
                 }
             } catch (JSONException e) {

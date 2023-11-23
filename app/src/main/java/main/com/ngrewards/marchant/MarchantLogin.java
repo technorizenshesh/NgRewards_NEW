@@ -20,9 +20,9 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,9 +42,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+   
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+/*
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -54,6 +55,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,10 +112,10 @@ public class MarchantLogin extends AppCompatActivity {
     private ProgressBar progresbar;
     private Spinner country_spn;
     CountryListAdapter countryListAdapter;
-    private LoginButton loginButton;
+    //private LoginButton loginButton;
     private LinearLayout facebook_button;
     String facebook_name, facebook_email, facebook_id, facebook_image, face_gender, face_locale, facebook_lastname = "", face_username;
-    private CallbackManager callbackManager;
+    //private CallbackManager callbackManager;
     private ArrayList<CountryBean> countryBeanArrayList;
     //code for lat long
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
@@ -132,12 +134,12 @@ public class MarchantLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+    //    FacebookSdk.sdkInitialize(getApplicationContext());
         // AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_marchant_login);
         mySession = new MySession(this);
         myapisession = new Myapisession(this);
-        callbackManager = CallbackManager.Factory.create();
+      //  callbackManager = CallbackManager.Factory.create();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(MarchantLogin.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MarchantLogin.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -260,9 +262,10 @@ public class MarchantLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                loginButton.performClick();
+               // loginButton.performClick();
             }
         });
+/*
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,6 +274,7 @@ public class MarchantLogin extends AppCompatActivity {
                 facebookData();
             }
         });
+*/
        /* countryListAdapter = new CountryListAdapter(MarchantLogin.this, StartSliderAct.countryBeanArrayList);
         country_spn.setAdapter(countryListAdapter);*/
         /*countryListAdapter = new CountryListAdapter(MarchantLogin.this, android.R.layout.simple_spinner_item, StartSliderAct.countryBeanArrayList);
@@ -279,7 +283,7 @@ public class MarchantLogin extends AppCompatActivity {
 
     private void idint() {
 
-        loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+    //    loginButton = (LoginButton) findViewById(R.id.login_button_fb);
         facebook_button = (LinearLayout) findViewById(R.id.facebook_button);
         country_spn = findViewById(R.id.country_spn);
         login_with_touch = findViewById(R.id.login_with_touch);
@@ -331,7 +335,7 @@ public class MarchantLogin extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+       // callbackManager.onActivityResult(requestCode, resultCode, data);
 
 
     }
@@ -431,7 +435,7 @@ public class MarchantLogin extends AppCompatActivity {
         }
     }
 
-    private void facebookData() {
+/*    private void facebookData() {
         Log.e("hello >>>>>", "call method");
 
         callbackManager = CallbackManager.Factory.create();
@@ -519,7 +523,7 @@ public class MarchantLogin extends AppCompatActivity {
         parameters.putString("fields", "id,first_name,last_name,name,link,email,picture,gender,locale");
         request.setParameters(parameters);
         request.executeAsync();
-    }
+    }*/
 
     private class SocialLogin extends AsyncTask<String, String, String> {
         @Override
@@ -775,21 +779,9 @@ public class MarchantLogin extends AppCompatActivity {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                        .crossFade()
+                         
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
+                         
                         .into(country_flag);
             }
 

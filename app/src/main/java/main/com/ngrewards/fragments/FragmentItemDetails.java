@@ -1,11 +1,13 @@
 package main.com.ngrewards.fragments;
 
 import android.app.Dialog;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +88,7 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 
 
         dfhh = data.getOther_notes();
-        Picasso.with(getActivity()).load(BaseUrl.image_baseurl + data.getMenu_image()).into(binding.image);
+        Glide.with(getActivity()).load(BaseUrl.image_baseurl + data.getMenu_image()).into(binding.image);
         count = Integer.parseInt(data.getNewquantity());
         binding.tvCount.setText("" + count);
 

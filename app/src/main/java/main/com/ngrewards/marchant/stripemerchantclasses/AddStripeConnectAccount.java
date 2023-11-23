@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +23,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
 import org.json.JSONArray;
@@ -160,15 +163,16 @@ public class AddStripeConnectAccount extends AppCompatActivity {
                     year_int = Integer.parseInt(expiryyear_str);
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
-                    Card card = new Card(cardnumber_str, month, year_int, security_code_str);  //
-                    card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
+                    CardParams cardParams = new CardParams(cardnumber_str, month, year_int, security_code_str);
+                    cardParams.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
 
                     Stripe stripe = new Stripe(AddStripeConnectAccount.this, BaseUrl.stripe_publish);
                     prgressbar.setVisibility(View.VISIBLE);
-                    stripe.createToken(
-                            card,
-                            new TokenCallback() {
-                                public void onSuccess(Token token) {
+                    stripe.createCardToken(
+                            cardParams,
+                            new ApiResultCallback<Token>() {
+                                @Override
+                                public void onSuccess(@NonNull Token token) {
                                     // Send token to your server
                                     prgressbar.setVisibility(View.GONE);
                                     Log.e("Token", ">>" + token.getId());
@@ -178,16 +182,16 @@ public class AddStripeConnectAccount extends AppCompatActivity {
 
                                 }
 
-                                public void onError(Exception error) {
+                                @Override
+                                public void onError(@NonNull Exception e) {
                                     prgressbar.setVisibility(View.GONE);
-                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
+                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + e.toString());
                                     // Show localized error message
-                                    Toast.makeText(AddStripeConnectAccount.this, "\n" + error,
+                                    Toast.makeText(AddStripeConnectAccount.this, "\n" + e,
                                             Toast.LENGTH_LONG
                                     ).show();
-
-
                                 }
+
                             });
                 }
             }
@@ -217,9 +221,7 @@ public class AddStripeConnectAccount extends AppCompatActivity {
     }
 
     public void onClickSomething(String cardNumber, int cardExpMonth, int cardExpYear, String cardCVC) {
-        Card card = new Card(cardNumber, cardExpMonth, cardExpYear, cardCVC);
-        card.validateNumber();
-        card.validateCVC();
+        CardParams cardParams = new CardParams(cardNumber, cardExpMonth, cardExpYear, cardCVC);
     }
 
     private void paymentwithcard() {

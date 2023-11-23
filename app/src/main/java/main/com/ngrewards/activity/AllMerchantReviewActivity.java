@@ -3,9 +3,9 @@ package main.com.ngrewards.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -174,7 +175,7 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
                 holder.rating.setRating(Float.parseFloat(merchantTopReviewArrayList.get(listPosition).getRating()));
             }
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(AllMerchantReviewActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                Glide.with(AllMerchantReviewActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
             }
             if (merchantTopReviewArrayList.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
                 holder.likeimg.setImageResource(R.drawable.filled_like);

@@ -17,7 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -40,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -127,7 +128,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
             percantae.setText("" + cur_progress + " %");
             offer_discount_price_tv.setText("" + offer_discountprice_str);
             seekbar.setProgress((int) cur_progress);
-            Picasso.with(UpdateOfferProduct.this).load(offer_image_url).into(uploadimg);
+            Glide.with(UpdateOfferProduct.this).load(offer_image_url).into(uploadimg);
         }
         clickevent();
 

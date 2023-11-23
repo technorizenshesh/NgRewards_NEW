@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,7 +17,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/botumlay"
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
             android:fillViewport="true">
@@ -99,7 +98,7 @@
                     android:textColor="@color/black" />
 
 
-                 <android.support.design.widget.TextInputLayout
+                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -123,7 +122,7 @@
                         android:padding="5dp"
                         android:textSize="@dimen/medium" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
@@ -253,7 +252,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone" />
-         <com.facebook.login.widget.LoginButton
+     <!--    <com.facebook.login.widget.LoginButton
              android:id="@+id/login_button_fb"
              android:layout_width="match_parent"
              android:layout_height="50dp"
@@ -261,7 +260,7 @@
              android:layout_marginLeft="10dp"
              android:layout_marginTop="15dp"
              android:layout_marginRight="10dp"
-             android:visibility="gone" />
+             android:visibility="gone" />-->
 
 
         <RelativeLayout
@@ -280,4 +279,4 @@
 
     </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

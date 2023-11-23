@@ -1,12 +1,13 @@
 package main.com.ngrewards.activity;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -113,7 +115,7 @@ public class OrderActivity extends AppCompatActivity {
             LinearLayout parent_layout = holder.itemView.findViewById(R.id.parent_layout);
             tv_name.setText(arrayList.get(possion).getName());
 
-            Picasso.with(OrderActivity.this).load(BaseUrl.image_baseurl + arrayList.get(possion).getImage()).into(image);
+            Glide.with(OrderActivity.this).load(BaseUrl.image_baseurl + arrayList.get(possion).getImage()).into(image);
             parent_layout.setBackgroundResource(arrayList.get(possion).isSelected() ? R.drawable.bg_gray_light : R.drawable.border_grey_whtstroke);
             parent_layout.setOnClickListener(v -> {
                 for (int i = 0; i < arrayList.size(); i++) {

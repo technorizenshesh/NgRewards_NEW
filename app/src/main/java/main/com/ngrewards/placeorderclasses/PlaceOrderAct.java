@@ -1,5 +1,6 @@
 package main.com.ngrewards.placeorderclasses;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -8,13 +9,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -207,7 +211,7 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
         }
 
         @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
             holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
             holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
             holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
@@ -216,7 +220,7 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
 
             String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(PlaceOrderAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
+                Glide.with(PlaceOrderAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
             }
 
 

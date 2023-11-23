@@ -9,8 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+/*import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -349,9 +348,9 @@ public class SettingActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equalsIgnoreCase("1")) {
 
-                            if (AccessToken.getCurrentAccessToken() != null) {
-                                LoginManager.getInstance().logOut();
-                            }
+//                            if (AccessToken.getCurrentAccessToken() != null) {
+//                                LoginManager.getInstance().logOut();
+//                            }
 
                             mySession.signinusers(false);
                             mySavedCardInfo.clearCardData();
@@ -621,21 +620,9 @@ public class SettingActivity extends AppCompatActivity {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                        .crossFade()
+                         
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
+                         
                         .into(country_flag);
             }*/
 

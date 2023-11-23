@@ -1,13 +1,12 @@
 package main.com.ngrewards.merchant_fragment;
 
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -141,8 +144,8 @@ private int current_offer_pos;
         Log.e("USER ID=="+user_id," > MERchant Id "+merchant_id);
         //progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
-        Log.e(TAG, "getMerchantsDetailgetMerchantsDetail: "+user_id );
-        Log.e(TAG, "getMerchantsDetailgetMerchantsDetail: "+merchant_id );
+        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: "+user_id );
+        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: "+merchant_id );
         Call<ResponseBody> call = ApiClient.getApiInterface().getMerchnantReview(user_id,merchant_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -370,7 +373,7 @@ private int current_offer_pos;
                 liketv.setText("" + getResources().getString(R.string.like));
             }
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Picasso.with(getActivity()).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                Glide.with(getActivity()).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
             }
             likebut.setOnClickListener(new View.OnClickListener() {
                 @Override

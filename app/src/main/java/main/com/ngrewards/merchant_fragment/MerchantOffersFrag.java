@@ -1,5 +1,6 @@
 package main.com.ngrewards.merchant_fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -8,10 +9,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -218,7 +220,7 @@ public class MerchantOffersFrag extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
             if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
                 holder.discounts.setVisibility(View.GONE);
             } else {
@@ -261,7 +263,7 @@ public class MerchantOffersFrag extends Fragment {
             if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
             } else {
-                Picasso.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
+                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
 
             }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="250dp">
 <com.google.android.youtube.player.YouTubePlayerView
     android:layout_width="match_parent"
     android:id="@+id/youtube_player"
     android:layout_height="250dp"></com.google.android.youtube.player.YouTubePlayerView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

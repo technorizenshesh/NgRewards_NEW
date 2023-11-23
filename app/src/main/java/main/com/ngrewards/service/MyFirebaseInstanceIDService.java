@@ -1,19 +1,22 @@
+/*
 package main.com.ngrewards.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+
 
 import main.com.ngrewards.activity.app.Config;
 
 
+*/
 /**
  * Created by technorizen on 7/9/17.
- */
+ *//*
+
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
@@ -40,10 +43,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         Log.e(TAG, "sendRegistrationToServer: " + token);
     }
 
-    private void storeRegIdInPref(String token) {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+    private void storeRegIdInPref(String token , Context contect) {
+        SharedPreferences pref = contect.getSharedPreferences(Config.SHARED_PREF, 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("regId", token);
         editor.commit();
     }
-}
+}*/

@@ -15,10 +15,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -41,6 +41,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -627,7 +628,7 @@ public class UpdateListingProduct extends AppCompatActivity {
 
                     } else {
 
-                        Picasso.with(UpdateListingProduct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
+                        Glide.with(UpdateListingProduct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
 
 
 /*
@@ -636,7 +637,7 @@ public class UpdateListingProduct extends AppCompatActivity {
                                 .thumbnail(0.5f)
                                 .override(150, 150)
                                 .centerCrop()
-                                .crossFade()
+                                 
                                 .placeholder(R.drawable.placeholder)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .listener(new RequestListener<String, GlideDrawable>() {

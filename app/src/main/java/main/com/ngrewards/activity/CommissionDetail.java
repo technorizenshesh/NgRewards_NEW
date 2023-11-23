@@ -3,8 +3,8 @@ package main.com.ngrewards.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -311,7 +312,7 @@ public class CommissionDetail extends AppCompatActivity {
             if (merchant_img_str == null || merchant_img_str.equalsIgnoreCase("") || merchant_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
             } else {
-                Picasso.with(CommissionDetail.this).load(BaseUrl.image_baseurl + merchant_img_str).placeholder(R.drawable.user_propf).into(marchant_img);
+                Glide.with(CommissionDetail.this).load(BaseUrl.image_baseurl + merchant_img_str).placeholder(R.drawable.user_propf).into(marchant_img);
 
             }
             mer_name_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getBusinessName());

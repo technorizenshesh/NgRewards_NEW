@@ -10,7 +10,7 @@ import android.widget.TextView;
  * Created by technorizen on 14/6/18.
  */
 
-public class BoldTextView extends TextView {
+public class BoldTextView extends androidx.appcompat.widget.AppCompatTextView {
 
 
     public BoldTextView(Context context) {

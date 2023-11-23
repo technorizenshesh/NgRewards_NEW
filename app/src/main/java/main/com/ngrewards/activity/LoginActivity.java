@@ -24,9 +24,9 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -49,10 +49,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+   
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.facebook.AccessToken;
+/*import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -60,7 +60,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.LoginButton;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,11 +115,11 @@ public class LoginActivity extends AppCompatActivity {
     MySession mySession;
     Myapisession myapisession;
     private ProgressBar progresbar;
-    private LoginButton loginButton;
+ //   private LoginButton loginButton;
     private LinearLayout facebook_button;
     String facebook_name, facebook_email, facebook_id, facebook_image,
             face_gender, face_locale, facebook_lastname = "", face_username;
-    private CallbackManager callbackManager;
+   // private CallbackManager callbackManager;
     private Spinner country_spn;
     CountryListAdapter countryListAdapter;
     private ArrayList<CountryBean> countryBeanArrayList;
@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
     String KEY_NAME = "NgRewards";
     Cipher cipher;
     TextView textView;
-    private AccessToken accessToken;
+   // private AccessToken accessToken;
     private String result;
     private String phone;
     private String invited_user_name;
@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(LoginActivity.this);
+      //  FacebookSdk.sdkInitialize(LoginActivity.this);
 
         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "true");
 
@@ -164,11 +164,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        Log.e("applog", FacebookSdk.getApplicationSignature(LoginActivity.this));
+     //   FacebookSdk.sdkInitialize(getApplicationContext());
+      //  Log.e("applog", FacebookSdk.getApplicationSignature(LoginActivity.this));
         myapisession = new Myapisession(this);
         mySession = new MySession(this);
-        callbackManager = CallbackManager.Factory.create();
+      //  callbackManager = CallbackManager.Factory.create();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
@@ -307,12 +307,12 @@ public class LoginActivity extends AppCompatActivity {
 
                 PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Status_Facebook, "true");
                 PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "true");
-                loginButton.performClick();
+              //  loginButton.performClick();
             }
         });
 
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+     /*   loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -327,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
                 facebookData();
 
             }
-        });
+        });*/
 
         login_with_touch.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -416,12 +416,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+    //    callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
     private void idint() {
-        loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+        //loginButton = (LoginButton) findViewById(R.id.login_button_fb);
         facebook_button = (LinearLayout) findViewById(R.id.facebook_button);
         country_spn = findViewById(R.id.country_spn);
         login_with_touch = findViewById(R.id.login_with_touch);
@@ -602,7 +602,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void facebookData() {
+   /* private void facebookData() {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions("public_profile email");
@@ -719,7 +719,7 @@ public class LoginActivity extends AppCompatActivity {
         parameters.putString("fields", "id,first_name,last_name,name,link,email,picture,gender,locale");
         request.setParameters(parameters);
         request.executeAsync();
-    }
+    }*/
 
     private class SocialLogin extends AsyncTask<String, String, String> {
 
@@ -931,21 +931,9 @@ public class LoginActivity extends AppCompatActivity {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                        .crossFade()
+                         
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                return false;
-                            }
-                        })
+                         
                         .into(country_flag);
             }
             names.setText(values.get(i).getName());

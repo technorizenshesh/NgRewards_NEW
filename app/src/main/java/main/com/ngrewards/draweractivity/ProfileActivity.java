@@ -18,7 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -45,8 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -729,7 +729,7 @@ public class ProfileActivity extends AppCompatActivity {
                         phone_number.setText("" + jsonObject1.getString("phone"));
                         String image_url = jsonObject1.getString("member_image");
                         if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                            Picasso.with(ProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                            Glide.with(ProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                         }
 
                         if (agelist != null && !agelist.isEmpty()) {
@@ -864,7 +864,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         String image_url = jsonObject1.getString("member_image");
                         if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                            Picasso.with(ProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                            Glide.with(ProfileActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
                         }
 
                         mySession.setlogindata(result);

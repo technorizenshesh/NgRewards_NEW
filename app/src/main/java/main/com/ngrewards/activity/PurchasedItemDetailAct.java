@@ -8,10 +8,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -346,7 +347,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
         shipaddress.setText(str);}
        // upspackage.setText(delivery_date_str);
         if (product_img_str != null && !product_img_str.equalsIgnoreCase("") && !product_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-            Picasso.with(PurchasedItemDetailAct.this).load(product_img_str).placeholder(R.drawable.placeholder).into(product_img);
+            Glide.with(PurchasedItemDetailAct.this).load(product_img_str).placeholder(R.drawable.placeholder).into(product_img);
         }
 
     }

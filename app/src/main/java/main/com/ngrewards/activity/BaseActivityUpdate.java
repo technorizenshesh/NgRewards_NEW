@@ -11,11 +11,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -461,8 +461,7 @@ public class BaseActivityUpdate extends AppCompatActivity {
                     String image_url = jsonObject1.getString("member_image");
 
                     if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                        Picasso.with(BaseActivityUpdate.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
-                        Picasso.with(BaseActivityUpdate.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+
                     }
 
                     if(username == null || username.equalsIgnoreCase("") || username.equalsIgnoreCase("null")) {

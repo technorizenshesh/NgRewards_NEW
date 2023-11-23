@@ -9,12 +9,18 @@ buildscript {
     repositories {
 //        google()
         jcenter()
+        mavenCentral()
+
         google()
+        maven { url 'https://jitpack.io'
+            allowInsecureProtocol = true
+        }
     }
     dependencies {
       //  classpath 'com.android.tools.build:gradle:3.4.0'
         classpath "com.android.tools.build:gradle:$agp_version1"
         classpath 'com.google.gms:google-services:4.3.0'
+        classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
 
 /*
         classpath 'com.android.tools.build:gradle:3.2.0-alpha17'
@@ -29,13 +35,11 @@ allprojects {
     repositories {
         mavenCentral()
 
-        //  google()
+          google()
         jcenter()
         maven { url 'https://jitpack.io'
             allowInsecureProtocol = true
         }
-
-        google()
     }
 }
 

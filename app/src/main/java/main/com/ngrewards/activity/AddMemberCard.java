@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +21,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
 import org.json.JSONException;
@@ -163,15 +164,15 @@ public class AddMemberCard extends AppCompatActivity {
                     year_int = Integer.parseInt(expiryyear_str);
 
                     onClickSomething(cardnumber_str, month, year_int, security_code_str);
-                    Card card = new Card(cardnumber_str, month, year_int, security_code_str);
-                    card.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
-                    card.setName(cardname_str);
+                    CardParams cardParams = new CardParams(cardnumber_str, month, year_int, security_code_str);
+                    cardParams.setCurrency(mySession.getValueOf(MySession.CurrencyCode));
+                    cardParams.setName(cardname_str);
 
                     Stripe stripe = new Stripe(AddMemberCard.this, BaseUrl.stripe_publish);
                     prgressbar.setVisibility(View.VISIBLE);
-                    stripe.createToken(
-                            card,
-                            new TokenCallback() {
+                    stripe.createCardToken(
+                            cardParams,
+                            new ApiResultCallback<Token>() {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
 
@@ -199,9 +200,9 @@ public class AddMemberCard extends AppCompatActivity {
     }
 
     public void onClickSomething(String cardNumber, int cardExpMonth, int cardExpYear, String cardCVC) {
-        Card card = new Card(cardNumber, cardExpMonth, cardExpYear, cardCVC);
-        card.validateNumber();
-        card.validateCVC();
+        CardParams card = new CardParams(cardNumber, cardExpMonth, cardExpYear, cardCVC);
+       /* card.validateNumber();
+        card.validateCVC();*/
     }
 
     private void paymentwithcard() {

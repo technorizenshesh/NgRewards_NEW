@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,8 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+//import com.facebook.AccessToken;
+//import com.facebook.login.LoginManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -317,9 +317,9 @@ public class MerSettingActivity extends AppCompatActivity {
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equalsIgnoreCase("1")) {
 
-                            if (AccessToken.getCurrentAccessToken() != null) {
+                            /*if (AccessToken.getCurrentAccessToken() != null) {
                                 LoginManager.getInstance().logOut();
-                            }
+                            }*/
 
                             mySession.signinusers(false);
                             myapisession.setKeyAddressdata("");

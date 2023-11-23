@@ -9,7 +9,7 @@ import android.widget.EditText;
  * Created by technorizen on 14/6/18.
  */
 
-public class NormalEditText extends EditText {
+public class NormalEditText extends androidx.appcompat.widget.AppCompatEditText {
 
     public NormalEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

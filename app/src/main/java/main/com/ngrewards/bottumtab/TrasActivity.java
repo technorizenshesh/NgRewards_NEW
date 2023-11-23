@@ -5,12 +5,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -65,7 +67,6 @@ public class TrasActivity extends BaseActivity {
     private String employee_name;
     private String order_cart_id;
     private List<OrderBean> contactListFiltered;
-    private SearchView searchView;
     private String OrderTime;
     private EditText search_et_home;
     private Integer order_cart_idq;
@@ -194,7 +195,8 @@ public class TrasActivity extends BaseActivity {
 
                         activityRecAdp = new ActivityRecAdp(TrasActivity.this, orderBeanArrayList);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        activity_list.addItemDecoration(new MyDividerItemDecoration(TrasActivity.this, DividerItemDecoration.VERTICAL, 36));
+                        activity_list.addItemDecoration(new MyDividerItemDecoration(TrasActivity.this,
+                                DividerItemDecoration.VERTICAL, 36));
                         activity_list.setLayoutManager(mLayoutManager);
                         activity_list.setItemAnimator(new DefaultItemAnimator());
                         activity_list.setAdapter(activityRecAdp);

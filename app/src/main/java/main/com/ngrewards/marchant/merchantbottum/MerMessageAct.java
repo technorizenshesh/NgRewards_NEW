@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+   
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
@@ -416,8 +416,8 @@ public class MerMessageAct extends MerchantBaseActivity {
 
         View v = snack.getView();
         v.setBackgroundColor(getResources().getColor(R.color.darkgrey));
-        ((TextView) v.findViewById(android.support.design.R.id.snackbar_text)).setTextColor(Color.WHITE);
-        ((TextView) v.findViewById(android.support.design.R.id.snackbar_action)).setTextColor(Color.BLACK);
+        ((TextView) v.findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+        ((TextView) v.findViewById(R.id.snackbar_action)).setTextColor(Color.BLACK);
 
         snack.show();
     }
@@ -634,24 +634,7 @@ public class MerMessageAct extends MerchantBaseActivity {
                         .thumbnail(0.5f)
                         .override(200, 200)
                         .centerCrop()
-                        //  .placeholder(R.drawable.profile_ic)
-                        .crossFade()
-                        //.dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                //  myplaceholder.setVisibility(View.GONE);
-                                return false;
-
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                // myplaceholder.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
                         .into(holder.propic);
 
             }

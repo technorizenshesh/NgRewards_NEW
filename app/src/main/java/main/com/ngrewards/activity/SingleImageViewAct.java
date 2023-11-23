@@ -1,11 +1,12 @@
 package main.com.ngrewards.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import main.com.ngrewards.R;
@@ -28,7 +29,7 @@ public class SingleImageViewAct extends AppCompatActivity {
         else {
             image_str = bundle.getString("image_str");
             if (image_str!=null){
-                Picasso.with(SingleImageViewAct.this).load(image_str).into(fullimage);
+                Glide.with(SingleImageViewAct.this).load(image_str).into(fullimage);
 
             }
 

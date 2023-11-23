@@ -2,17 +2,18 @@ package main.com.ngrewards.marchant.merchantbottum;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -102,7 +103,7 @@ public class MerStatusAct extends MerchantBaseActivity {
 
         merchant_name.setText(""+murchant_name);
         if (merchant_img_url != null && !merchant_img_url.equalsIgnoreCase("") && !merchant_img_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-            Picasso.with(MerStatusAct.this).load(merchant_img_url).placeholder(R.drawable.user_propf).into(userimg);
+            Glide.with(MerStatusAct.this).load(merchant_img_url).placeholder(R.drawable.user_propf).into(userimg);
         }
     }
     private void setupviewpager() {

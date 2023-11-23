@@ -1,17 +1,21 @@
 package main.com.ngrewards;
 
 import android.app.Application;
-import android.support.multidex.MultiDexApplication;
+import android.content.Context;
 
-import main.com.ngrewards.Utils.Tools;
-import main.com.ngrewards.activity.StartSliderAct;
-import main.com.ngrewards.constant.MySession;
 
 public class MainApplication extends Application {
-    MySession mySession;
+    private MainApplication smsApp;
+
+    public MainApplication getInstance() {
+        return smsApp;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        smsApp =this;
        }
+
+
 }
