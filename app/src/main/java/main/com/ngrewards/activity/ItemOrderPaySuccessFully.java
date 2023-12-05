@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -27,6 +28,8 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
@@ -46,8 +49,13 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
     private String   dateToStr ="";
     MySession mySession;
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_item_order_pay_success_fully);
         progresbar = (ProgressBar) findViewById(R.id.progresbar);
         myapisession = new Myapisession(this);
@@ -241,7 +249,8 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
 
                     try {
 
-                        Intent intent = new Intent(ItemOrderPaySuccessFully.this, AlertDailoge.class);
+                        Intent intent = new Intent(ItemOrderPaySuccessFully.this,
+                                AlertDailoge.class);
                         intent.putExtra("reciept_url", reciept_url);
                         startActivity(intent);
                         finish();

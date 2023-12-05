@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import main.com.ngrewards.Models.ModalMenuList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.RecyclerViewClickListener1;
 import main.com.ngrewards.SeverCommunication.VolleyMultipartRequest;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.draweractivity.Die_TakeOut;
 
@@ -78,7 +80,10 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
     private String employe_sale_name;
     private String employe_sale_id;
     private IMethodCaller IMethodCaller;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -403,7 +408,7 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
             public void onClick(View v) {
 
 
-                Toast.makeText(getApplicationContext(), employe_sale_id, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), employe_sale_id, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(MerchantMenuSetting.this, Die_TakeOut.class);
                 intent.putExtra("employe_sale_name", employe_sale_name);

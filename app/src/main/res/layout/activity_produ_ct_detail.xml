@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="Product Name"
+                        android:text="@string/product_name"
                         android:textColor="@color/black"
                         android:textSize="@dimen/medium" />
 
@@ -88,7 +88,7 @@
                 android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_height="wrap_content"
-                android:text="Product Name"
+                android:text="@string/product_name"
                 android:textColor="@color/black"
                 android:textSize="@dimen/large" />
             <TextView

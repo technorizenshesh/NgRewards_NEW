@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.MyDividerItemDecoration;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.activity.PurchasedItemDetailAct;
@@ -76,8 +78,14 @@ public class TrasActivity extends BaseActivity {
     private String merchant;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_tras, contentFrameLayout);
         mySession = new MySession(this);

@@ -1,5 +1,7 @@
 package main.com.ngrewards.fragments;
 
+import static android.media.MediaFormat.KEY_LANGUAGE;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -38,6 +40,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.FragItemDetails;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
@@ -84,6 +88,9 @@ public class ItemsFrag extends Fragment {
         // Required empty public constructor
         this.result = result;
     }
+    protected void attachBaseContext(Context base) {
+        super.onAttach(LocaleHelper.onAttach(base));
+    }
 
 
     @Override
@@ -94,6 +101,7 @@ public class ItemsFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Tools.reupdateResources(requireActivity());
         v = inflater.inflate(R.layout.items_frag_lay, container, false);
         mySession = new MySession(getActivity());
         myapisession = new Myapisession(getActivity());
@@ -462,7 +470,9 @@ public class ItemsFrag extends Fragment {
                 categoryBeanListArrayList = new ArrayList<>();
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
-                categoryBeanList.setCategoryName("Select category");
+                categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
 
                 JSONObject object = new JSONObject(myapisession.getProductdata());
@@ -593,7 +603,13 @@ public class ItemsFrag extends Fragment {
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
             if (categoryBeanLists.get(i).getCategoryId().equals("982")) {
+                if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
                 names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
             } else {
                 names.setVisibility(View.GONE);
             }

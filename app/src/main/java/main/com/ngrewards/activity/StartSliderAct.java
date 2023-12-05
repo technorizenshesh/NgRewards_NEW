@@ -129,7 +129,8 @@ public class StartSliderAct extends AppCompatActivity {
                     if (!mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase(language_list.get(position).getSortname())) {
                         Tools.updateResources(StartSliderAct.this, language_list.get(position).getSortname());
                         mySession.setValueOf(KEY_LANGUAGE, language_list.get(position).getSortname());
-                        startActivity(new Intent(getApplicationContext(), StartSliderAct.class));
+                        startActivity(new Intent(getApplicationContext(), StartSliderAct.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     }
                 }

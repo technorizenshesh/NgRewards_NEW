@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="45dp"
                 android:layout_weight="1"
-                android:text="    Menu"
+                android:text="@string/menu"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:gravity="end"
-                android:text="Setting"
+                android:text="@string/setting"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
@@ -148,7 +148,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Delivery Fee"
+                                    android:text="@string/delivery_fee"
                                     android:textColor="#000"
                                     android:textSize="20sp" />
 
@@ -178,7 +178,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Tax"
+                                    android:text="@string/tax"
                                     android:textColor="#000"
                                     android:textSize="20sp" />
 

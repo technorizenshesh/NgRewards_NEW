@@ -228,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:gravity="center"
-                        android:text="Add a Credit or Debit Card"
+                        android:text="@string/add_a_credit_or_debit_card"
                         android:textColor="@color/red"
                         android:textSize="@dimen/medium" />
 

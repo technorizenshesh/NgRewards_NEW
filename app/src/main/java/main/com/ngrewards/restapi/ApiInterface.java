@@ -93,7 +93,8 @@ public interface ApiInterface {
     @GET("category_lists.php?")
     Call<ResponseBody> getCategory();
 
-    @GET("offer_category_lists.php?")
+   //  @GET("offer_category_lists.php?")
+     @GET("business_category_lists.php?")
     Call<ResponseBody> getOfferCategory();
 
     @GET("business_category_lists.php?")

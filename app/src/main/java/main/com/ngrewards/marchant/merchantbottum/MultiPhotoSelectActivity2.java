@@ -3,6 +3,7 @@ package main.com.ngrewards.marchant.merchantbottum;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.marchant.adapter.ImageAdpterGrid;
 
 public class MultiPhotoSelectActivity2 extends AppCompatActivity {
@@ -35,6 +37,9 @@ public class MultiPhotoSelectActivity2 extends AppCompatActivity {
     private static final int REQUEST_FOR_STORAGE_PERMISSION = 123;
 
     String language ="";
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

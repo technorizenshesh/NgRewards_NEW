@@ -45,6 +45,8 @@ import java.util.HashMap;
 import main.com.ngrewards.Adapter.AdapterDive;
 import main.com.ngrewards.Models.DiveInModal;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.MerchantMenuSetting;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -106,10 +108,14 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView merchant_num_auto;
     private AutoCompleteTextView employyee_id;
     private String employyee_id_string;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_die__take_out);
         progresbar = findViewById(R.id.progresbar);
         merchant_num_auto = (AutoCompleteTextView) findViewById(R.id.user_name);

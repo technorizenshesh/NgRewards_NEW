@@ -2,6 +2,7 @@ package main.com.ngrewards.marchant.merchantbottum;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -23,10 +24,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.marchant.adapter.ImageAdpterGrid;
 
 public class MultiPhotoSelectActivity extends AppCompatActivity {
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private RelativeLayout backrell;
     private TextView done_but;
     private ImageAdpterGrid imageAdpterGrid;

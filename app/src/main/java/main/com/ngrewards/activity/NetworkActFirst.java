@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 
 public class NetworkActFirst extends AppCompatActivity {
@@ -19,8 +21,13 @@ public class NetworkActFirst extends AppCompatActivity {
     private ExpandableHeightListView networklist;
     private CustomNetworkList customNetworkList;
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_network);
         idinti();
         clickevent();

@@ -18,6 +18,7 @@
                 android:gravity="center_vertical"
                 android:id="@+id/name_tv"
                 android:textSize="@dimen/medium"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

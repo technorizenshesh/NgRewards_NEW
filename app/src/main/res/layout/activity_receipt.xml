@@ -163,7 +163,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Address:- "
+                    android:text="@string/address"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -305,7 +305,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Name :-"
+                    android:text="@string/name"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -315,7 +315,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Username :- "
+                    android:text="@string/username"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -349,7 +349,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Order Info"
+                    android:text="@string/order_info"
                     android:textColor="@color/black"
                     android:textSize="@dimen/large" />
 
@@ -360,7 +360,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Date: "
+                    android:text="@string/date"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -371,7 +371,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Time: "
+                    android:text="@string/time"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -382,7 +382,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Guest User"
+                    android:text="@string/guest_user"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 
@@ -393,7 +393,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="Table No:"
+                    android:text="@string/table_no"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
                 </LinearLayout>
@@ -437,7 +437,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/red"
                     android:layout_margin="10dp"
-                    android:text="Stripe Receipt"
+                    android:text="@string/stripe_receipt"
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:textSize="18dp"/>
@@ -448,7 +448,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/red"
                     android:layout_margin="10dp"
-                    android:text="Order Cart"
+                    android:text="@string/order_cart"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textAllCaps="false"

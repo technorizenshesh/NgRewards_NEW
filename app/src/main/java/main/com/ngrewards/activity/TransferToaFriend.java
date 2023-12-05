@@ -51,6 +51,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
@@ -91,10 +93,14 @@ public class TransferToaFriend extends AppCompatActivity {
     private double ngcash_val = 0, total_amt_calculate = 0, apply_ng_cash = 0;
     private static final int REQUEST_CODE_QR_SCAN = 3;
     private ImageView qrcode;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_transfer_toa_friend);
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();

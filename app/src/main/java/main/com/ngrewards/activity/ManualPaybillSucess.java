@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import java.util.TimeZone;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
@@ -48,6 +50,10 @@ public class ManualPaybillSucess extends AppCompatActivity {
     private String merchant_name;
     private String myFormattedtime;
 MySession mySession ;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,8 @@ import java.util.HashMap;
 
 import main.com.ngrewards.Models.ModelMenuSetting;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.databinding.ActivityOrderBinding;
@@ -35,10 +38,14 @@ public class OrderActivity extends AppCompatActivity {
     private final ArrayList<ModelMenuSetting> arrayList = new ArrayList<>();
     private ActivityOrderBinding binding;
     private MerchantListBean data;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order);
         data = (MerchantListBean) getIntent().getExtras().getSerializable("data");
 

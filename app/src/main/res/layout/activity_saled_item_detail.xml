@@ -254,7 +254,7 @@
                                 android:layout_toLeftOf="@+id/order_id"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/medium"
-                                android:text="Order #"
+                                android:text="@string/order_id"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                             <TextView
@@ -446,7 +446,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:id="@+id/download_invoice"
-                        android:text="Download Invoice"
+                        android:text="@string/download_invoice"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
 
@@ -461,7 +461,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:id="@+id/strip_recipt"
-                        android:text="Stripe Receipt"
+                        android:text="@string/stripe_receipt"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
 
@@ -477,7 +477,7 @@
                         android:visibility="gone"
 
                         android:id="@+id/show_remaining_payments"
-                        android:text="Show Remaining Payments"
+                        android:text="@string/show_remaining_payments"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
                     <main.com.ngrewards.fonttypeclasses.NoramlTextView
@@ -491,7 +491,7 @@
                         android:layout_marginTop="10dp"
                         android:id="@+id/send_reminder"
                         android:visibility="gone"
-                        android:text="Send Reminder"
+                        android:text="@string/send_reminder"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
 

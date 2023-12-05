@@ -50,6 +50,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.beanclasses.MemberDetail;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CountryBean;
@@ -69,6 +70,10 @@ public class InternationalTransAct extends AppCompatActivity {
     int count =0;
     private MySession mySession;
     private Myapisession myapisession;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

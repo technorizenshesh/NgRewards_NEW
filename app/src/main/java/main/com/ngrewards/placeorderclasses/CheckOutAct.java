@@ -139,6 +139,7 @@ public class CheckOutAct extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_checkout);
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();

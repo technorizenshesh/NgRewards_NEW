@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
@@ -64,10 +66,14 @@ public class NewMemberMessageActivity extends AppCompatActivity {
     ArrayList<MerchantListBean> merchantListBeanArrayList;
     private ProgressBar progresbar;
     private ArrayList<MemberDetail> memberDetailArrayList;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_new_message);
         mySession = new MySession(this);
         myapisession = new Myapisession(this);

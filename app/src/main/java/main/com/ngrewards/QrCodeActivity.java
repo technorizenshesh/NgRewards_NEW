@@ -45,6 +45,7 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.activity.ManualActivity;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.qrcodes.CaptureActivityHandler;
@@ -115,6 +116,9 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
     public static void launch(Context context) {
         Intent i = createIntent(context);
         context.startActivity(i);
+    }
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override

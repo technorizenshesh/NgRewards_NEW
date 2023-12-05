@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CartBean;
 import main.com.ngrewards.beanclasses.CartListBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -55,10 +58,14 @@ public class MyCartDetail extends AppCompatActivity {
     private ProgressBar progresbar;
     private final boolean apickeck = false;
 
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_my_cart_detail);
         progresbar = (ProgressBar) findViewById(R.id.progresbar);
         mySession = new MySession(this);

@@ -38,6 +38,8 @@ import cz.msebera.android.httpclient.extras.Base64;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.Models.NotificationModel;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.EMIManualActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
@@ -56,10 +58,14 @@ public class MerchantNotificationActivity extends AppCompatActivity {
     private ArrayList<NotificationModel.Result> notificationModels;
     private TextView nonotiavb;
     private String type;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_notification);
 
         if (savedInstanceState == null) {

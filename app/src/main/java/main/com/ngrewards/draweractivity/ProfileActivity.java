@@ -76,6 +76,7 @@ import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.beanclasses.AddressBean;
@@ -128,7 +129,10 @@ public class ProfileActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,11 +171,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         genderlist = new ArrayList<>();
         agelist = new ArrayList<>();
-        genderlist.add("Select Gender");
-        genderlist.add("Male");
-        genderlist.add("Female");
-        genderlist.add("Prefer not to say");
-        agelist.add("Select Age");
+        genderlist.add(getString(R.string.select_gender));
+        genderlist.add(getString(R.string.male));
+        genderlist.add(getString(R.string.female));
+        genderlist.add(getString(R.string.prefer_not_to_say));
+        agelist.add(getString(R.string.select_age));
         agelist.add("18-24");
         agelist.add("25-34");
         agelist.add("35-44");
@@ -285,7 +289,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (genderlist.get(position) != null) {
-                    if (genderlist.get(position).equalsIgnoreCase("Select Gender")) {
+                    if (genderlist.get(position).equalsIgnoreCase(getString(R.string.select_gender))) {
                     } else {
                         gender_str = genderlist.get(position);
                     }
@@ -305,7 +309,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (agelist.get(position) != null) {
 
 
-                    if (agelist.get(position).equalsIgnoreCase("Select Age")) {
+                    if (agelist.get(position).equalsIgnoreCase(getString(R.string.select_age))) {
                     } else {
                         age_str = agelist.get(position);
                     }

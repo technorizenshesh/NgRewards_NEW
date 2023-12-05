@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.YouTubeBean;
 import main.com.ngrewards.beanclasses.YouTubeVideoList;
 import main.com.ngrewards.restapi.ApiClient;
@@ -45,9 +48,16 @@ public class TutorialAct extends YouTubeBaseActivity {
     private static final int RECOVERY_REQUEST = 1;
     private ProgressBar progressbar;
     YouTubePlayerView youtube1;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_tutorial);
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null){

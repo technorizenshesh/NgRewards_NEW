@@ -1,6 +1,7 @@
 package main.com.ngrewards.activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.marchant.MarchantLogin;
 
@@ -24,10 +27,14 @@ public class AccountTypeSelectionAct extends AppCompatActivity {
     private LinearLayout merchant_lay, member_lay;
     public String account_type = "";
     private Dialog dialogSts;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_account_type_selection);
 
         PreferenceConnector.writeString(AccountTypeSelectionAct.this, PreferenceConnector.Create_Profile, "create_profile");

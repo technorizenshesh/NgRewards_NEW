@@ -68,6 +68,8 @@ import java.util.TimeZone;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.DetailList;
 import main.com.ngrewards.beanclasses.ProductDetail;
 import main.com.ngrewards.beanclasses.ProductImage;
@@ -134,10 +136,14 @@ public class FragItemDetails extends AppCompatActivity {
     ExpandableHeightListView sizelistview;
     private boolean size_sts = false;
     private boolean color_sts = false;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_frag_item_details);
          try {
              buyon_emi_tv = findViewById(R.id.buyon_emi_tv);

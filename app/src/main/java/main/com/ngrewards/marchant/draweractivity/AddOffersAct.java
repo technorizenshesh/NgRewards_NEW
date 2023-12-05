@@ -1,6 +1,7 @@
 package main.com.ngrewards.marchant.draweractivity;
 
 import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -59,6 +60,7 @@ import java.util.Date;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CategoryBean;
 import main.com.ngrewards.beanclasses.CategoryBeanList;
@@ -96,6 +98,9 @@ public class AddOffersAct extends AppCompatActivity {
     private String extension;
     private String timeStamp;
     private byte[] imageBytes;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +129,9 @@ public class AddOffersAct extends AppCompatActivity {
 
         idinit();
         clickevent();
+        getOfferCategory();
 
-        if (myapisession.getKeyOffercate() == null || myapisession.getKeyOffercate().equalsIgnoreCase("")) {
+     /*   if (myapisession.getKeyOffercate() == null || myapisession.getKeyOffercate().equalsIgnoreCase("")) {
             getOfferCategory();
         } else {
             try {
@@ -158,7 +164,7 @@ public class AddOffersAct extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }
+        }*/
 
     }
 
@@ -658,14 +664,16 @@ public class AddOffersAct extends AppCompatActivity {
 
         return data;
     }
-    private void getCategoryType() {
+   /* private void getCategoryType() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         Log.e("loginCall >", " > FIRST");
         progresbar.setVisibility(View.VISIBLE);
         categoryBeanListArrayList = new ArrayList<>();
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName("Select category");
+        categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -690,11 +698,11 @@ public class AddOffersAct extends AppCompatActivity {
                         category_spinner.setAdapter(categoryAdpters);
                         if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
                             for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
-/*
+*//*
                                 if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
                                     category_spinner.setSelection(i);
                                 }
-*/
+*//*
                             }
                         }
 
@@ -715,7 +723,7 @@ public class AddOffersAct extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
-    }
+    }*/
 
     public class CategoryAdpters extends BaseAdapter {
         Context context;
@@ -749,7 +757,17 @@ public class AddOffersAct extends AppCompatActivity {
             TextView names = (TextView) view.findViewById(R.id.name_tv);
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            names.setText(categoryBeanLists.get(i).getCategoryName());
+
+
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+
+                Log.e("TAG", "getView:9090909090 "+categoryBeanLists.get(i).getCategory_name_hindi() );
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
+                names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
             return view;
         }
     }

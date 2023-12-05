@@ -368,7 +368,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/red"
                     android:layout_margin="10dp"
-                    android:text="Stripe Receipt"
+                    android:text="@string/stripe_receipt"
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:textSize="18dp"/>

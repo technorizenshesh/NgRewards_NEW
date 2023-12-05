@@ -38,6 +38,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.activity.memberstripe.MemberStripeExpressAcountAct;
 import main.com.ngrewards.activity.memberstripe.SeeMemberMyStripeDashBoardAct;
 import main.com.ngrewards.beanclasses.CommisionMain;
@@ -63,7 +64,10 @@ public class MemberRefListAct extends AppCompatActivity {
     ProgressBar progressbar;
     private TextView nocommission;
     SwipeRefreshLayout swipeToRefresh;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

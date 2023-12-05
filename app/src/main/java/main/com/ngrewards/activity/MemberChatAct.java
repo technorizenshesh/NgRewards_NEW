@@ -91,6 +91,7 @@ import cz.msebera.android.httpclient.extras.Base64;
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.gauriinfotech.commons.Commons;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
@@ -326,7 +327,10 @@ public class MemberChatAct extends AppCompatActivity {
 
         return path;
     }
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

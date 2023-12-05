@@ -1,5 +1,6 @@
 package main.com.ngrewards.settingclasses;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 
@@ -37,7 +39,9 @@ public class TouchIdAct extends AppCompatActivity {
     MySession mySession;
     private ProgressBar progresbar;
     private String user_id="",status_touchid="";
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

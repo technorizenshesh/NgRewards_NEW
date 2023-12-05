@@ -47,6 +47,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.constant.BaseUrl;
@@ -70,7 +72,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
     public static String add_merchant_in_member = "NO";
-    public static String ImagePath = "", bus_category_id = "", selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_fullname = "", mer_reward = "", mer_who_invite = "", mer_image = ""
+    public static String ImagePath = "", bus_category_id = "", selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_tnc_cheched = "", mer_fullname = "", mer_reward = "6", mer_who_invite = "", mer_image = ""
             , mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
     public static double mer_latitude = 0, mer_longitude = 0;
     private final boolean back_click_sts = false;
@@ -95,10 +97,14 @@ public class MerchantSignupSlider extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_merchant_signup_slider);
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();
@@ -206,7 +212,14 @@ public class MerchantSignupSlider extends AppCompatActivity {
                             }
                         } else if (viewPager.getCurrentItem() == 5) {
                             if (mer_reward != null && !mer_reward.equalsIgnoreCase("")) {
-                                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+
+
+                                if (!mer_tnc_cheched.equalsIgnoreCase("")){
+                                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                                }else {
+                                    Toast.makeText(MerchantSignupSlider.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
+
+                                }
                             } else {
                                 Toast.makeText(MerchantSignupSlider.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
                             }

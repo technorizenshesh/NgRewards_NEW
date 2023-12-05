@@ -1,5 +1,6 @@
 package main.com.ngrewards.placeorderclasses;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentWebView;
 
@@ -55,10 +58,14 @@ public class TransferRequestDetActivity extends AppCompatActivity {
     private Button btn_strip_receipt, btn_order;
     private String reciept_url;
     private String member_id;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_transfer_request_lay);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();

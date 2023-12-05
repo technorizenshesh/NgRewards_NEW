@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.beanclasses.MerchantTopReview;
 import main.com.ngrewards.beanclasses.MerchatReviewBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -51,7 +52,10 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
     private ArrayList<MerchantTopReview> merchantTopReviewArrayList;
     private int current_offer_pos;
     private MySession mySession;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
