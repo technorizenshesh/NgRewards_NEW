@@ -46,25 +46,26 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     app:srcCompat="@drawable/delete" />
+
                 <SeekBar
                     android:id="@+id/seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:max="100"
-                    android:min="6"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/add"
                     android:layout_toRightOf="@+id/minus"
+                    android:elevation="5dp"
+                    android:max="100"
 
                     android:maxHeight="7dip"
+                    android:min="6"
                     android:minHeight="7dip"
                     android:padding="5dp"
-                    android:elevation="5dp"
-                    android:thumbTint="@color/greyborder"
                     android:progress="6"
-                    android:splitTrack="false"
                     android:progressDrawable="@drawable/seekbar_progressbar"
+                    android:splitTrack="false"
                     android:thumb="@drawable/red_cir"
+                    android:thumbTint="@color/greyborder"
                     android:thumbTintMode="multiply" />
 
 
@@ -86,6 +87,51 @@
                 android:text="6%"
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium" />
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/termscheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:checked="false"
+                        android:gravity="center" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="1dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="1dp"
+                            android:gravity="center"
+                            android:scrollbars="vertical"
+                            android:text="@string/new_tnc"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/medium"
+                            android:visibility="visible" />
+                    </ScrollView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>

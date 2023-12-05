@@ -41,6 +41,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.stripepaymentclasses.CreditCardFormatTextWatcher;
@@ -66,10 +68,14 @@ public class AddCreditCardAct extends AppCompatActivity {
     private String email_str = "";
 
     CreditCardFormatTextWatcher tv;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_add_credit_card);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();

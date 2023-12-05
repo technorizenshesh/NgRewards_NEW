@@ -1,5 +1,6 @@
 package main.com.ngrewards.marchant.draweractivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 
 public class AddPaypalEmail extends AppCompatActivity {
 
@@ -22,6 +24,9 @@ public class AddPaypalEmail extends AppCompatActivity {
         setContentView(R.layout.activity_add_paypal_email);
         idinit();
         clickevent();
+    }
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     private void clickevent() {

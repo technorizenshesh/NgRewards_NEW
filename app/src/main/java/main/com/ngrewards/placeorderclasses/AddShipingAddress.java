@@ -51,6 +51,8 @@ import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CountryBean;
@@ -81,10 +83,14 @@ public class AddShipingAddress extends AppCompatActivity {
     private ProgressBar progresbar;
     private MySession mySession;
     private Myapisession myapisession;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_add_shiping_address);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

@@ -282,11 +282,11 @@ public class MerchantAboutFrag extends Fragment implements OnMapReadyCallback {
             }
 
             if (MerchantDetailAct.merchantListBeanArrayList.get(0).getBusinessCategoryName() != null && !MerchantDetailAct.merchantListBeanArrayList.get(0).getBusinessCategoryName().equalsIgnoreCase("")) {
-                businesscategory_name.setText("" + MerchantDetailAct.merchantListBeanArrayList.get(0).getBusinessCategoryName() + "  " + MerchantDetailAct.merchantListBeanArrayList.get(0).getDistance() + " mi");
+                businesscategory_name.setText("" + MerchantDetailAct.merchantListBeanArrayList.get(0).getBusinessCategoryName() + "  " + MerchantDetailAct.merchantListBeanArrayList.get(0).getDistance() + getString(R.string.mi));
 
             } else {
 
-                businesscategory_name.setText("" + MerchantDetailAct.merchantListBeanArrayList.get(0).getDistance() + " mi");
+                businesscategory_name.setText("" + MerchantDetailAct.merchantListBeanArrayList.get(0).getDistance() + getString(R.string.mi));
             }
 
             merchant_name.setText("" + MerchantDetailAct.merchantListBeanArrayList.get(0).getBusinessName());

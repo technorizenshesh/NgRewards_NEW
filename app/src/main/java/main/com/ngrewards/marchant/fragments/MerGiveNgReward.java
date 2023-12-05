@@ -1,15 +1,19 @@
 package main.com.ngrewards.marchant.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 
 /**
@@ -20,13 +24,17 @@ public class MerGiveNgReward extends Fragment {
 
     private SeekBar seekbar;
     private TextView percantae;
+    private CheckBox termscheck;
+
     private ImageView minus,add;
     private int cur_progress=6;
     View v;
     public MerGiveNgReward() {
         // Required empty public constructor
     }
-
+    protected void attachBaseContext(Context base) {
+        super.onAttach(LocaleHelper.onAttach(base));
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +87,16 @@ public class MerGiveNgReward extends Fragment {
         minus = v.findViewById(R.id.minus);
         percantae = v.findViewById(R.id.percantae);
         seekbar = v.findViewById(R.id.seekbar);
+        termscheck = v.findViewById(R.id.termscheck);
+        termscheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                MerchantSignupSlider.mer_tnc_cheched="checked";
+            }else {
+                MerchantSignupSlider.mer_tnc_cheched="";
+
+            }
+
+        });
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

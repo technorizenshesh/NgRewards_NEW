@@ -76,7 +76,7 @@ public class FragmentOrderSubmit extends Fragment {
 
         binding.tvName.setText(fullname);
         binding.tvNumber.setText(phone);
-        binding.tvMerchantContact.setText("Merchant Mobile - " + merchantData.getContactNumber());
+        binding.tvMerchantContact.setText(getString(R.string.merchant_mobile) + merchantData.getContactNumber());
 
         if (data.getName().equalsIgnoreCase("Take Out")) {
             binding.li2.setVisibility(View.GONE);
@@ -128,7 +128,7 @@ public class FragmentOrderSubmit extends Fragment {
                         //  binding.tvSelectTime.setText(new SimpleDateFormat("hh:mm aa").format(hour + minute + am_pm));
                     }
                 }, hour, minute, false);//Yes 24 hour time
-                mTimePicker.setTitle("Select Time");
+                mTimePicker.setTitle(getString(R.string.select_time));
                 mTimePicker.show();
             }
         });
@@ -174,7 +174,7 @@ public class FragmentOrderSubmit extends Fragment {
         super.onResume();
         if (data.getName().equalsIgnoreCase("Delivery")) {
             if (AllAddedAddressAct.address1_str != "") {
-                binding.tvAddAddress.setText("Edit");
+                binding.tvAddAddress.setText(getString(R.string.edit));
                 binding.liSelectedAddess.setVisibility(View.VISIBLE);
                 binding.tvAddressLine1.setText(AllAddedAddressAct.address1_str);
                 binding.tvAddressLine2.setText(AllAddedAddressAct.address2_str);
@@ -188,12 +188,12 @@ public class FragmentOrderSubmit extends Fragment {
     boolean Validation() {
 
         if (binding.tvSelectDate.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Select Date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getString(R.string.select_time), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (binding.tvSelectTime.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Select Time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.select_time), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -212,7 +212,7 @@ public class FragmentOrderSubmit extends Fragment {
 
         if (data.getName().equalsIgnoreCase("Delivery")) {
             if (AllAddedAddressAct.address1_str == "") {
-                Toast.makeText(getActivity(), "Add Address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.addaddress), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

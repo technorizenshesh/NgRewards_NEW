@@ -39,6 +39,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.OrderAct;
 import main.com.ngrewards.beanclasses.OrderBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -66,10 +68,14 @@ public class EmployeesalesActivity extends AppCompatActivity {
     private String username_str;
     private TextView employee_tv_sales;
     private String posision_name;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_employeesales);
 
         employee_tv_sales = findViewById(R.id.employee_tv_sales);
@@ -445,7 +451,7 @@ public class EmployeesalesActivity extends AppCompatActivity {
                 holder.merchant_member_name.setText("" + orderBeanArrayList.get(position).getMemberDetail().get(0).getFullname());*/
                 holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText("#" + orderBeanArrayList.get(position).getId());
-                holder.order_category.setText("Order");
+                holder.order_category.setText(getString(R.string.order));
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 String mytime = orderBeanArrayList.get(position).getOrderDate2() + " " + orderBeanArrayList.get(position).getOrder_Time();
                 holder.date_tv.setText("" + mytime);

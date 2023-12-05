@@ -1,5 +1,6 @@
 package main.com.ngrewards.placeorderclasses;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentOrder;
 import main.com.ngrewards.fragments.FragmentWebView;
@@ -57,10 +60,14 @@ public class MerchantReceiptActivity extends AppCompatActivity {
     private String order_date_str;
     private String order_date_;
     private String order_cart_id;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_merchant_receipt);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
@@ -155,7 +162,7 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         btn_strip_receipt = findViewById(R.id.btn_strip_receipt);
         btn_order = findViewById(R.id.btn_order);
         member_name.setText("" + business_name);
-        username_tv.setText("Username :- @" + username);
+        username_tv.setText(getString(R.string.username_at_the_rad) + username);
         tv_date = findViewById(R.id.tv_date);
         tv_time = findViewById(R.id.tv_time);
         tv_guest_user = findViewById(R.id.tv_guest_user);
@@ -163,12 +170,12 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         li_memberinfo = findViewById(R.id.li_memberinfo);
         li_order_info = findViewById(R.id.li_order_info);
         employee_tv = findViewById(R.id.employee_tv);
-        date_tv.setText("Date:- " + order_date_);
+        date_tv.setText(getString(R.string.date)  + order_date_);
 
         if (employee_name_str.equalsIgnoreCase("")) {
             employee_tv.setVisibility(View.GONE);
         } else {
-            employee_tv.setText("Employee :- " + " " + employee_name_str);
+            employee_tv.setText(getString(R.string.employee)  + " " + employee_name_str);
         }
 
         btn_strip_receipt.setOnClickListener(v -> {
@@ -181,7 +188,7 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         });
 
 
-        special_request.setText("Special Request :- " + "" + order_special_str);
+        special_request.setText(getString(R.string.special_request) + "" + order_special_str);
 
         order_id.setText("#" + order_id_str);
         //  merchant_name.setText("" + merchant_name_str);
@@ -190,7 +197,7 @@ public class MerchantReceiptActivity extends AppCompatActivity {
         } else {
             merchant_name.setText("" + merchant_name_str);
         }
-        merchant_number.setText("Merchant N0. :- " + merchant_number_str);
+        merchant_number.setText( getString(R.string.merchant_no) + merchant_number_str);
         //date_tv.setText("Date:- " + date_tv_str);
         try {
             String mytime = date_tv_str;
@@ -200,7 +207,7 @@ public class MerchantReceiptActivity extends AppCompatActivity {
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
             String finalDate = timeFormat.format(myDate);
-            date_tv.setText("Date:- " + finalDate);
+            date_tv.setText( getString(R.string.date) + finalDate);
             System.out.println(finalDate);
 
         } catch (Exception e) {
@@ -208,14 +215,14 @@ public class MerchantReceiptActivity extends AppCompatActivity {
             Log.e("EXC TRUE", " RRR");
         }
 
-        address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
-        total_amt_tv.setText("Total :- " + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
-        due_amount.setText("Amount Due :- " + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+        address_tv.setText(     getString(R.string.address) + address_tv_str + "\n" + shipaddress_2_str);
+        total_amt_tv.setText(     getString(R.string.total) + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText(     getString(R.string.amount_due) + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
         if (tip_str.equalsIgnoreCase("")){
-            tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) +"0.00");
+            tipamount_tv.setText(     getString(R.string.tip) + mySession.getValueOf(MySession.CurrencySign) +"0.00");
 
         }else {
-            tipamount_tv.setText("Tip :- " + mySession.getValueOf(MySession.CurrencySign) + tip_str);
+            tipamount_tv.setText( getString(R.string.tip) + mySession.getValueOf(MySession.CurrencySign) + tip_str);
 
         }
         if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
@@ -234,10 +241,10 @@ public class MerchantReceiptActivity extends AppCompatActivity {
             cardnumber_tv.setText("" + cardbrand_str + " " + stars + " " + cardnumber_tv_str);
         }
         if (mdate != null && !mdate.equals("null")) {
-            tv_date.setText("Date:- " + mdate);
-            tv_time.setText("Time:- " + time);
-            tv_guest_user.setText("Guest No:- " + Order_guset_No);
-            tv_table_no.setText("Table No:- " + Order_Table_No);
+            tv_date.setText(getString(R.string.date)+ mdate);
+            tv_time.setText( getString(R.string.time)+ time);
+            tv_guest_user.setText(     getString(R.string.guest_no)+ Order_guset_No);
+            tv_table_no.setText(getString(R.string.table_no)  + Order_Table_No);
         } else {
             li_order_info.setVisibility(View.GONE);
         }

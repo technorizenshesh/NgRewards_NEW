@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text=" Share my code"
+                    android:text="@string/share_my_code"
 
                     android:textColor="@color/black"
                     android:textSize="@dimen/large" />
@@ -173,7 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Save to gallery"
+                    android:text="@string/save_to_gallery"
                     android:textColor="@color/black"
                     android:textSize="@dimen/large" />
 

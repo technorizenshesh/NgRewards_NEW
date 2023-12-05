@@ -40,6 +40,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.Models.SplitList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.RecyclerViewClickListenerSplit;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentWebView;
@@ -97,9 +99,11 @@ public class SaledItemDetailAct extends
     private String split_amount = "";
     private BottomSheetBehavior<View> behavior;
     private Dialog dialogSts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_saled_item_detail);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
@@ -217,7 +221,9 @@ public class SaledItemDetailAct extends
         }
 
     }
-
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     private void idinit() {
         send_reminder = findViewById(R.id.send_reminder);
         show_remaining_payments = findViewById(R.id.show_remaining_payments);

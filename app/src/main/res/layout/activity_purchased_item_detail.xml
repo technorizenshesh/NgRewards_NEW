@@ -248,7 +248,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/order_id"
-                        android:text="Order #"
+                        android:text="@string/order_id"
                         android:textColor="@color/black"
                         android:textSize="@dimen/medium" />
 
@@ -555,7 +555,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/download_invoice"
-                android:text="Download Invoice"
+                android:text="@string/download_invoice"
                 android:textColor="@color/white"
                 android:textSize="@dimen/large" />
 
@@ -582,7 +582,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/red"
                 android:layout_margin="10dp"
-                android:text="Stripe Receipt"
+                android:text="@string/stripe_receipt"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="18dp"/>

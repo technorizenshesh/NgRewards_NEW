@@ -75,6 +75,8 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CartBean;
 import main.com.ngrewards.beanclasses.CartListBean;
 import main.com.ngrewards.constant.BaseUrl;
@@ -127,8 +129,14 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
     private Myapisession myapisession;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_place_order);
         myapisession = new Myapisession(this);
         gpsTracker = new GPSTracker(this);

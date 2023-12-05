@@ -1,6 +1,7 @@
 package main.com.ngrewards.marchant.draweractivity;
 
 import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -253,7 +254,9 @@ public class MerProfileActivity extends AppCompatActivity {
         categoryBeanListArrayList = new ArrayList<>();
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName("Select category");
+        categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -818,7 +821,13 @@ public class MerProfileActivity extends AppCompatActivity {
             TextView names = (TextView) view.findViewById(R.id.name_tv);
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            names.setText(categoryBeanLists.get(i).getCategoryName());
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
+                names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
             return view;
         }
     }
@@ -1455,7 +1464,9 @@ public class MerProfileActivity extends AppCompatActivity {
                                 categoryBeanListArrayList = new ArrayList<>();
                                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                                 categoryBeanList.setCategoryId("0");
-                                categoryBeanList.setCategoryName("Select category");
+                                categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                                 categoryBeanListArrayList.add(categoryBeanList);
                                 JSONObject object = new JSONObject(myapisession.getKeyMerchantcate());
                                 Log.e("loginCall >", " >" + myapisession.getKeyMerchantcate());

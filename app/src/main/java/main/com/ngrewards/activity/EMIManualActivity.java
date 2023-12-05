@@ -82,6 +82,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -190,8 +192,14 @@ public class EMIManualActivity extends AppCompatActivity {
     private String edit_text_string = "";
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_emi_manual);
         tenPer = findViewById(R.id.ten_per);
         fifteenPer = findViewById(R.id.fifteen_per);
@@ -201,7 +209,7 @@ public class EMIManualActivity extends AppCompatActivity {
         mySession = new MySession(getApplicationContext());
         myapisession = new Myapisession(getApplicationContext());
         distance_filter_list = new ArrayList<>();
-        distance_filter_list.add("Any Distance");
+        distance_filter_list.add(getString(R.string.any_distance));
         distance_filter_list.add("5.0");
         distance_filter_list.add("10.0");
         distance_filter_list.add("20.0");

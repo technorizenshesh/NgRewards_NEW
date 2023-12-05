@@ -59,7 +59,7 @@
                         android:id="@+id/tv_tex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tax(6.82%)"
+                        android:text="@string/tax_6_82"
                         android:textColor="@color/black"
                         android:textSize="18dp"
                         android:textStyle="bold" />

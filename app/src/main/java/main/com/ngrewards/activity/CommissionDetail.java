@@ -31,6 +31,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CommissionData;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
@@ -54,10 +56,14 @@ public class CommissionDetail extends AppCompatActivity {
     private String user_id = "", stripe_account_id = "", withdraw_status = "", withdaraw_accoutn_str = "0.00", remain_ng_cash_str = "0.00", affiliate_number = "";
     private MySession mySession;
     private ProgressBar progressabar;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_commission_detail);
         amountlist = new ArrayList<>();
         amountlist.add("25 %");

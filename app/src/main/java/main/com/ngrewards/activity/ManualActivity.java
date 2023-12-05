@@ -83,6 +83,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MarchantBean;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -209,14 +211,20 @@ public class ManualActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_manual);
         Log.e("TAG", "onCreate: activity_manualactivity_manualactivity_manual");
         mySession = new MySession(ManualActivity.this);
         myapisession = new Myapisession(ManualActivity.this);
         distance_filter_list = new ArrayList<>();
-        distance_filter_list.add("Any Distance");
+        distance_filter_list.add(getString(R.string.any_distance));
         distance_filter_list.add("5.0");
         distance_filter_list.add("10.0");
         distance_filter_list.add("20.0");
@@ -2196,7 +2204,7 @@ boolean customTip =false;
         mySession = new MySession(ManualActivity.this);
         myapisession = new Myapisession(ManualActivity.this);
         distance_filter_list = new ArrayList<>();
-        distance_filter_list.add("Any Distance");
+        distance_filter_list.add(getString(R.string.any_distance));
         distance_filter_list.add("5.0");
         distance_filter_list.add("10.0");
         distance_filter_list.add("20.0");

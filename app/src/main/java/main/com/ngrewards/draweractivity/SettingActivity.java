@@ -511,6 +511,7 @@ public class SettingActivity extends AppCompatActivity {
                     mySession.setValueOf(KEY_LANGUAGE, selected_lang);
                     dialogSts.dismiss();
                     Intent i = new Intent(SettingActivity.this, MainTabActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
 

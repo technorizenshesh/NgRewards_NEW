@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.memberstripe.MemberStripeExpressAcountAct;
 import main.com.ngrewards.activity.memberstripe.SeeMemberMyStripeDashBoardAct;
 import main.com.ngrewards.beanclasses.CommisionMain;
@@ -62,11 +64,15 @@ public class CommisionActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeToRefresh;
     public static List<CommissionData> commissionDataArrayList;
     private RelativeLayout seestripedashboard,genrateloginlinklay,addstripeact;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_commision);
         idinit();
         mySession = new MySession(this);
@@ -238,12 +244,12 @@ public class CommisionActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.weeknumber_tv.setText("Week " + firstDataArrayList.get(position).getWeek() + "/53");
+            holder.weeknumber_tv.setText(getString(R.string.week) + firstDataArrayList.get(position).getWeek() + "/53");
             holder.week_date_range.setText("" + firstDataArrayList.get(position).getData().get(0).getWeekStart() + "-" + firstDataArrayList.get(position).getData().get(0).getWeekEnd());
             holder.weekearning_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" " + firstDataArrayList.get(position).getWeekComission());
             if (firstDataArrayList.get(position).getWithdraw_status().equalsIgnoreCase("Confirm")) {
                 holder.payment_sts.setBackgroundResource(R.color.darkgreen);
-                holder.payment_sts.setText("Completed");
+                holder.payment_sts.setText(getString(R.string.completed));
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

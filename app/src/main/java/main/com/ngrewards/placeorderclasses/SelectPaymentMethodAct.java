@@ -33,6 +33,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AddMemberCard;
 import main.com.ngrewards.activity.UpdateMemberCard;
 import main.com.ngrewards.beanclasses.CardBean;
@@ -52,9 +54,16 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
     private CustomCardAdp customCardAdp;
     public static String card_id="",card_number="",card_brand="",customer_id="";
     private RelativeLayout addaddressdlay,backlay;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_select_payment_method);
         mySession = new MySession(this);
         mySavedCardInfo = new MySavedCardInfo(this);

@@ -1,5 +1,6 @@
 package main.com.ngrewards;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 
@@ -15,8 +18,13 @@ public class MerchantWelLogSig extends AppCompatActivity {
 private TextView login_tv,createaccount;
     private RelativeLayout backlay;
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_merchant_wel_log_sig);
         idinti();
         clickevent();

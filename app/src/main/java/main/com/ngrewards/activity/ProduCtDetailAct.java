@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.beanclasses.DetailList;
 import main.com.ngrewards.beanclasses.ProductDetail;
 import main.com.ngrewards.productfragment.ProAboutFrag;
@@ -46,7 +48,10 @@ public class ProduCtDetailAct extends AppCompatActivity {
     private TextView product_name_head, product_name, product_number;
     private ProgressBar progresbar;
     public static ArrayList<DetailList> productDetailArrayList;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

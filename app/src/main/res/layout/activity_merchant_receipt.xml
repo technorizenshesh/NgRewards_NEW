@@ -335,7 +335,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="10dp"
-                        android:text="Order Info"
+                        android:text="@string/order_info"
                         android:textColor="@color/black"
                         android:textSize="@dimen/large" />
 
@@ -420,7 +420,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@color/red"
-                    android:text="Stripe Receipt"
+                     android:text="@string/stripe_receipt"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
@@ -431,7 +431,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@color/red"
-                    android:text="Order Cart"
+                     android:text="@string/order_cart"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18dp"

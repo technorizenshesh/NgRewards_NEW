@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.MemberChatAct;
 import main.com.ngrewards.beanclasses.AllTopReview;
 import main.com.ngrewards.beanclasses.MerchantTopReview;
@@ -55,13 +57,16 @@ public class ReviewActivity extends AppCompatActivity {
     private MySession mySession;
     private String user_id = "";
     private CustomMyTopReviewAdp customMyTopReviewAdp;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         mySession = new MySession(this);
-
+        Tools.reupdateResources(this);
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
 

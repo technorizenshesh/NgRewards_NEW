@@ -45,6 +45,8 @@ import java.util.TimeZone;
 import cz.msebera.android.httpclient.extras.Base64;
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.NotificationBean;
 import main.com.ngrewards.beanclasses.NotificationBeanNew;
 import main.com.ngrewards.beanclasses.NotificationListBean;
@@ -66,10 +68,14 @@ public class NotificationActivity extends AppCompatActivity {
     private ArrayList<NotificationListBean> notificationListBeanArrayList;
     private ArrayList<NotificationBeanNew> notificationBeanNewArrayList;
     private TextView nonotiavb;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_notification);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();

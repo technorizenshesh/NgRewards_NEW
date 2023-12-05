@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text=" 212 (50% off)"
+                    android:text="@string/_212_50_off"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small" />
 

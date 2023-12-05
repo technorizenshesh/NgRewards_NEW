@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 
@@ -63,6 +64,9 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
     int month, year_int;
     private String token_id = "", email_str = "", accountid = "";
     CreditCardFormatTextWatcher tv;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

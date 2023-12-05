@@ -1,5 +1,7 @@
 package main.com.ngrewards.fragments;
 
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -57,6 +59,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.MerchantDetailAct;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.beanclasses.CategoryBean;
@@ -113,15 +117,19 @@ public class OffersFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    protected void attachBaseContext(Context base) {
+        super.onAttach(LocaleHelper.onAttach(base));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Tools.reupdateResources(requireActivity());
         v = inflater.inflate(R.layout.offers_frag_lay, container, false);
         mySession = new MySession(getActivity());
         myapisession = new Myapisession(getActivity());
         distance_filter_list = new ArrayList<>();
-        distance_filter_list.add("Any Distance");
+        distance_filter_list.add(getString(R.string.any_distance));
         distance_filter_list.add("5.0");
         distance_filter_list.add("10.0");
         distance_filter_list.add("20.0");
@@ -344,7 +352,7 @@ public class OffersFrag extends Fragment {
                 }
             }
             holder.merchant_name.setText("" + offerBeanLists.get(listPosition).getBusiness_name());
-            holder.distance_tv.setText("" + offerBeanLists.get(listPosition).getDistance() + " mi");
+            holder.distance_tv.setText("" + offerBeanLists.get(listPosition).getDistance() + getString(R.string.mi));
             holder.offername.setText("" + offerBeanLists.get(listPosition).getOfferName());
             holder.offer_desc.setText("" + offerBeanLists.get(listPosition).getOfferDescription());
             holder.likecount.setText("" + offerBeanLists.get(listPosition).getLikeCount());
@@ -708,7 +716,7 @@ public class OffersFrag extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (distance_filter_list != null && !distance_filter_list.isEmpty()) {
-                    if (distance_filter_list.get(position).equalsIgnoreCase("Any Distance")) {
+                    if (distance_filter_list.get(position).equalsIgnoreCase(getString(R.string.any_distance))) {
                         distance_filter_str = "";
                     } else {
                         distance_filter_str = distance_filter_list.get(position);
@@ -752,7 +760,9 @@ public class OffersFrag extends Fragment {
                 categoryBeanListArrayList = new ArrayList<>();
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
-                categoryBeanList.setCategoryName("Select category");
+                categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
                 JSONObject object = new JSONObject(myapisession.getKeyOffercate());
                 Log.e("Offer Category >", " >" + myapisession.getKeyOffercate());
@@ -874,9 +884,9 @@ public class OffersFrag extends Fragment {
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
             if (i == 0) {
-                names.setText(distancelist.get(i));
+                names.setText(getString(R.string.any_distance));
             } else {
-                names.setText("Within " + distancelist.get(i) + " mi");
+                names.setText(getString(R.string.within) + distancelist.get(i) + getString(R.string.mi));
             }
 
             return view;
@@ -915,7 +925,13 @@ public class OffersFrag extends Fragment {
             TextView names = (TextView) view.findViewById(R.id.name_tv);
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            names.setText(categoryBeanLists.get(i).getCategoryName());
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
+                names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
             return view;
         }
     }
@@ -951,7 +967,9 @@ public class OffersFrag extends Fragment {
         categoryBeanListArrayList = new ArrayList<>();
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName("Select category");
+        categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
         call.enqueue(new Callback<ResponseBody>() {

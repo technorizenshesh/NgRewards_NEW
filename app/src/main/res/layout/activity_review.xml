@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="Recent"
+                    android:text="@string/recent"
                     android:textColor="@color/red"
                     android:textSize="@dimen/extralarge"
                     android:textStyle="bold" />
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="Top"
+                    android:text="@string/top"
                     android:textColor="@color/darkgrey"
                     android:textSize="@dimen/extralarge"
                     android:textStyle="bold" />

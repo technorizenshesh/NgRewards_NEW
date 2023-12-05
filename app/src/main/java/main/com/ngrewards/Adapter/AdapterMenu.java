@@ -203,7 +203,7 @@ mySession = new MySession(activity);
         /*  Log.e("desage_name_string",desage_name_string);*/
         holder.name_menu.setText(desage_name_string);
         holder.dish_name.setText(dish_title_string);
-        holder.discription.setText("Discription : " + discription_title_string);
+        holder.discription.setText(activity.getString(R.string.description_colen) + discription_title_string);
         holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign)+" "  + Item_Price);
 
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,7 @@ package main.com.ngrewards.marchant.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
+import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -85,6 +86,7 @@ import main.com.ngrewards.beanclasses.CategoryBeanList;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
+import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.drawlocation.MyTask;
@@ -126,6 +128,7 @@ public class MerBusinessFrag extends Fragment {
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private ArrayList<CountryBeanList> categoryBeanListArrayList2;
     private Myapisession myapisession;
+    private MySession mySession;
     private String ImagePath;
     private String cameraPath;
     private CheckBox check_box;
@@ -153,6 +156,7 @@ public class MerBusinessFrag extends Fragment {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         myapisession = new Myapisession(getActivity());
+        mySession = new MySession(getActivity());
         checkGps();
         idint();
         autocompleteView();
@@ -639,14 +643,11 @@ public class MerBusinessFrag extends Fragment {
                 }
             });
 
-            camera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogSts.dismiss();
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, 2);
+            camera.setOnClickListener( v -> {
+                dialogSts.dismiss();
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 2);
 
-                }
             });
 
             cont_find.setOnClickListener(new View.OnClickListener() {
@@ -694,7 +695,9 @@ public class MerBusinessFrag extends Fragment {
         categoryBeanListArrayList = new ArrayList<>();
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName("Select category");
+        categoryBeanList.setCategoryName(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -709,12 +712,9 @@ public class MerBusinessFrag extends Fragment {
                         Log.e("loginCall >", " >" + responseData);
                         if (object.getString("status").equals("1")) {
                             myapisession.setMerchantcat(responseData);
-
                             CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
                             categoryBeanListArrayList.addAll(successData.getResult());
-
                         }
-
                         categoryAdpters = new CategoryAdpters(getActivity(), categoryBeanListArrayList);
                         category_spinner.setAdapter(categoryAdpters);
 
@@ -742,7 +742,7 @@ public class MerBusinessFrag extends Fragment {
         categoryBeanListArrayList2 = new ArrayList<>();
         CountryBeanList categoryBeanList = new CountryBeanList();
         categoryBeanList.setId("0");
-        categoryBeanList.setName("Select Country");
+        categoryBeanList.setName(getString(R.string.selectcountry));
         categoryBeanListArrayList2.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCountry();
         call.enqueue(new Callback<ResponseBody>() {
@@ -1320,7 +1320,13 @@ public class MerBusinessFrag extends Fragment {
             TextView names = (TextView) view.findViewById(R.id.name_tv);
             ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            names.setText(categoryBeanLists.get(i).getCategoryName());
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
+                names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
             return view;
         }
     }

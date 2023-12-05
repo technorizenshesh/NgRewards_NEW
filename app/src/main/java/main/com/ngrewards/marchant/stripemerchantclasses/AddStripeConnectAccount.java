@@ -47,6 +47,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.stripepaymentclasses.CreditCardFormatTextWatcher;
@@ -78,6 +79,9 @@ public class AddStripeConnectAccount extends AppCompatActivity {
     private TextView savedcardnumber, validdate, cardbrand, cardtype;
     private LinearLayout savecardlay;
     private ImageView delete_card;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

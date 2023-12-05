@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="@drawable/splash_back"
     tools:context=".marchant.activity.MerchantSignupSlider">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/backlay"
@@ -31,25 +29,30 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/continue_button"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-<LinearLayout
+<RelativeLayout
     android:id="@+id/indect"
     android:layout_below="@+id/backlay"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:foregroundGravity="center"
+
     >
+
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicatortwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:foregroundGravity="center"
         android:gravity="center"
         android:padding="10dip"
-        app:centered="false"
+        app:centered="true"
         app:fillColor="@color/pinkborder"
         app:pageColor="@color/greyborder"
         app:snap="false" />
 
-</LinearLayout>
+</RelativeLayout>
 
 
         <Button
@@ -73,6 +76,5 @@
     android:layout_centerInParent="true"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
-    </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

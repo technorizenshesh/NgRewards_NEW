@@ -51,6 +51,8 @@ import java.util.Map;
 import main.com.ngrewards.Models.SplitList;
 import main.com.ngrewards.R;
 import main.com.ngrewards.RecyclerViewClickListenerSplit;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.fragments.FragmentWebView;
@@ -106,9 +108,16 @@ public class PurchasedItemDetailAct extends
 
     private String payment_made_by_emi = "";
     private String split_amount = "";
+
+
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
+
         setContentView(R.layout.activity_purchased_item_detail);
         btn_strip_receipt = findViewById(R.id.btn_strip_receipt);
         mySession = new MySession(this);

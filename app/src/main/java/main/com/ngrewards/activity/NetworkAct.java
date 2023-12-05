@@ -52,6 +52,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
+import main.com.ngrewards.Utils.LocaleHelper;
+import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
 import main.com.ngrewards.beanclasses.NetworkBean;
@@ -88,16 +90,20 @@ public class NetworkAct extends AppCompatActivity {
     private ProgressBar progresbar;
     BarChart myspentbarchart, myearningchart;
     private float friend_count;
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Tools.reupdateResources(this);
         setContentView(R.layout.activity_network_two);
         dropdownlist = new ArrayList<>();
-        dropdownlist.add("Total Friends");
-        dropdownlist.add("Total Spent");
-        dropdownlist.add("Total Earnings");
+        dropdownlist.add(getString(R.string.total_friends));
+        dropdownlist.add(getString(R.string.total_spent));
+        dropdownlist.add(getString(R.string.total_earnings));
         networkBeanArrayList = new ArrayList<>();
 
         mySession = new MySession(this);
@@ -203,7 +209,7 @@ public class NetworkAct extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (dropdownlist != null) {
-                    if (dropdownlist.get(position).equalsIgnoreCase("Total Friends")) {
+                    if (dropdownlist.get(position).equalsIgnoreCase(getString(R.string.total_friends))) {
 
                         mynetworkchart.setVisibility(View.VISIBLE);
                         myspentbarchart.setVisibility(View.GONE);
@@ -220,7 +226,7 @@ public class NetworkAct extends AppCompatActivity {
 
                         } else {
 
-                            Toast.makeText(NetworkAct.this, "Loading data ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NetworkAct.this, getString(R.string.loading_data), Toast.LENGTH_SHORT).show();
                             List<ChartData> value = new ArrayList<>();
                             value.add(new ChartData(0f, "Me"));
                             value.add(new ChartData(0f, "Level 1"));
@@ -233,7 +239,7 @@ public class NetworkAct extends AppCompatActivity {
                         }
                     }
 
-                    if (dropdownlist.get(position).equalsIgnoreCase("Total Spent")) {
+                    if (dropdownlist.get(position).equalsIgnoreCase(getString(R.string.total_spent))) {
 
                         mynetworkchart.setVisibility(View.GONE);
                         myspentbarchart.setVisibility(View.VISIBLE);
@@ -249,7 +255,7 @@ public class NetworkAct extends AppCompatActivity {
                             myspentbarchart.invalidate();
 
                         } else {
-                            Toast.makeText(NetworkAct.this, "Loading data ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NetworkAct.this, getString(R.string.loading_data), Toast.LENGTH_SHORT).show();
                             List<ChartData> value_spent = new ArrayList<>();
                             value_spent.add(new ChartData(0f, "Me"));
                             value_spent.add(new ChartData(0f, "Level 1"));
@@ -261,7 +267,7 @@ public class NetworkAct extends AppCompatActivity {
                             myspentbarchart.setData(value_spent);
                         }
                     }
-                    if (dropdownlist.get(position).equalsIgnoreCase("Total Earnings")) {
+                    if (dropdownlist.get(position).equalsIgnoreCase(getString(R.string.total_earnings))) {
                         mynetworkchart.setVisibility(View.GONE);
                         myspentbarchart.setVisibility(View.GONE);
                         myearningchart.setVisibility(View.VISIBLE);
@@ -276,7 +282,7 @@ public class NetworkAct extends AppCompatActivity {
 
                         } else {
 
-                            Toast.makeText(NetworkAct.this, "Loading data ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NetworkAct.this, getString(R.string.loading_data), Toast.LENGTH_SHORT).show();
 
                             List<ChartData> value_earning = new ArrayList<>();
                             value_earning.add(new ChartData(0f, "Me"));
