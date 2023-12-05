@@ -21,6 +21,7 @@ public class PreferenceConnector {
     public static String FaceBook_Name = "FaceBook_Name";
     public static String facebook_image = "facebook_image";
     public static String FaceBook_Email = "FaceBook_Email";
+    public static String reult_intent_mem = "reult_intent_mem";
     public static String Phone = "Phone";
     public static String UserNAme = "UserNAme";
     public static String Invited = "Invited";

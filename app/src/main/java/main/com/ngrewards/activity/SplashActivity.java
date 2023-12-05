@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
@@ -62,11 +61,10 @@ import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.activity.app.NotificationUtils;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
-import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 public class SplashActivity extends AppCompatActivity implements
         //http://main.com.ngrewards/?productId=1
@@ -96,7 +94,7 @@ public class SplashActivity extends AppCompatActivity implements
     private String user_type = "";
     private Uri uri;
     private String hasData;
-    private String result = "";
+    private String reult_intent_mem = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +106,7 @@ public class SplashActivity extends AppCompatActivity implements
         gpsTracker = new GPSTracker(SplashActivity.this);
         mRequestingLocationUpdates = false;
         mySession = new MySession(this);
+        PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.reult_intent_mem, "");
         Tools.updateResources(this, mySession.getValueOf(MySession.KEY_LANGUAGE));
 
         String newMutableList = "Test";
@@ -123,28 +122,28 @@ public class SplashActivity extends AppCompatActivity implements
                     Log.d(TAG, "onSuccess:Deeplink " + deepLink);
                 }
                 Log.e("deepLink >>", " >" + deepLink);
-                result = deepLink + "";
+                reult_intent_mem = deepLink + "";
                 String param = deepLink + "";
                 if (param.contains("https://www.ngrewards.com/data/Ng?")) {
-                    result = param.replace("https://www.ngrewards.com/data/Ng?", "");
-                    result = "item" + result;
+                    reult_intent_mem = param.replace("https://www.ngrewards.com/data/Ng?", "");
+                    reult_intent_mem = "item" + reult_intent_mem;
                 } else if (param.contains("https://www.ngrewards.com/data/Merchent?")) {
-                    result = param.replace("https://www.ngrewards.com/data/Merchent?", "");
-                    result = "merchant" + result;
+                    reult_intent_mem = param.replace("https://www.ngrewards.com/data/Merchent?", "");
+                    reult_intent_mem = "merchant" + reult_intent_mem;
                 } else if (param.contains("https://www.ngrewards.com/data/Offer?")) {
-                    result = param.replace("https://www.ngrewards.com/data/Offer?", "");
-                    result = "offer" + result;
+                    reult_intent_mem = param.replace("https://www.ngrewards.com/data/Offer?", "");
+                    reult_intent_mem = "offer" + reult_intent_mem;
                 } else {
                     if (param.contains("https://www.ngrewards.com%2Fdata/Ng?")) {
-                        result = param.replace("https://www.ngrewards.com%2Fdata/Ng?", "");
-                        result = "item" + result;
-                        Log.d(TAG, "onSuccess: " + result);
+                        reult_intent_mem = param.replace("https://www.ngrewards.com%2Fdata/Ng?", "");
+                        reult_intent_mem = "item" + reult_intent_mem;
+                        Log.d(TAG, "onSuccess: " + reult_intent_mem);
                     } else if (param.contains("https://www.ngrewards.com%2Fdata/Merchent?")) {
-                        result = param.replace("https://www.ngrewards.com%2Fdata/Merchent?", "");
-                        result = "merchant" + result;
+                        reult_intent_mem = param.replace("https://www.ngrewards.com%2Fdata/Merchent?", "");
+                        reult_intent_mem = "merchant" + reult_intent_mem;
                     } else if (param.contains("https://www.ngrewards.com%2Fdata/Offer?")) {
-                        result = param.replace("https://www.ngrewards.com%2Fdata/Offer?", "");
-                        result = "offer" + result;
+                        reult_intent_mem = param.replace("https://www.ngrewards.com%2Fdata/Offer?", "");
+                        reult_intent_mem = "offer" + reult_intent_mem;
                     }
                 }
             }).addOnFailureListener(this, new OnFailureListener() {
@@ -171,7 +170,7 @@ public class SplashActivity extends AppCompatActivity implements
                 // on below line we are setting that string
                 // to our text view which we got as params.
 
-                result = param.replaceAll("product_id=", "");
+                reult_intent_mem = param.replaceAll("product_id=", "");
 
                 Log.d(TAG, "onCreate: " + param);
 
@@ -357,7 +356,8 @@ public class SplashActivity extends AppCompatActivity implements
                                         startActivity(i);
                                         finish();
                                     } else {
-                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                        Intent i = new Intent(SplashActivity.this,
+                                                MainTabActivity.class);
                                         startActivity(i);
                                         finish();
                                     }
@@ -398,7 +398,8 @@ public class SplashActivity extends AppCompatActivity implements
                                         startActivity(i);
                                         finish();
                                     } else {
-                                        Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                        Intent i = new Intent(SplashActivity.this,
+                                                MainTabActivity.class);
                                         startActivity(i);
                                         finish();
                                     }
@@ -557,7 +558,12 @@ public class SplashActivity extends AppCompatActivity implements
                                 finish();
 
                             } else {
-                                Intent i = new Intent(SplashActivity.this, MainTabActivity.class).putExtra("result", result);
+                                Intent i = new Intent(SplashActivity.this,
+                                        MainTabActivity.class)
+                                        .putExtra("result", reult_intent_mem);
+
+                                Log.e(TAG, "run:  "+reult_intent_mem );
+                                PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.reult_intent_mem, reult_intent_mem);
                                 startActivity(i);
                                 finish();
                                 PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.Status_Facebook, "");
@@ -661,7 +667,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 } else {
 
-                                    Intent i = new Intent(SplashActivity.this, MainTabActivity.class);
+                                    Intent i = new Intent(SplashActivity.this,
+                                            MainTabActivity.class);
                                     startActivity(i);
                                     finish();
                                     PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.Status_Facebook, "");

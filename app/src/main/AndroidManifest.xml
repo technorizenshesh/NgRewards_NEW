@@ -222,6 +222,12 @@
 
         </activity>
         <activity
+            android:name=".androidmigx.MainTabActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" >
+
+        </activity>
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">

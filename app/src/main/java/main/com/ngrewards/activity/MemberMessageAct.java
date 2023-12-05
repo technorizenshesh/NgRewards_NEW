@@ -1,10 +1,14 @@
 package main.com.ngrewards.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,7 +68,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MemberMessageAct extends BaseActivity {
+public class MemberMessageAct extends Fragment {
 
     MessageRecycladp messageRecycladp;
     RecyclerView mychat;
@@ -82,13 +86,12 @@ public class MemberMessageAct extends BaseActivity {
     private ArrayList<MemberDetail> memberDetailArrayList;
     private String craete_profile;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_member_message, contentFrameLayout);
-        myapisession = new Myapisession(this);
-        mySession = new MySession(this);
+    View root;
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_member_message, container, false);
+        myapisession = new Myapisession(requireActivity());
+        mySession = new MySession(requireActivity());
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
 
@@ -149,13 +152,16 @@ public class MemberMessageAct extends BaseActivity {
                 e.printStackTrace();
             }
         }
+
+        return  root;
     }
 
     private void idinitui1() {
 
-         craete_profile =  PreferenceConnector.readString(MemberMessageAct.this, PreferenceConnector.Create_Profile,"");
+         craete_profile =  PreferenceConnector.readString(requireActivity(),
+                 PreferenceConnector.Create_Profile,"");
          if(!craete_profile.equals("craete_profile")){
-             dialogSts.dismiss();
+          //   dialogSts.dismiss();
         }
     }
 
@@ -163,31 +169,31 @@ public class MemberMessageAct extends BaseActivity {
         write_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MemberMessageAct.this, NewMemberMessageActivity.class);
+                Intent i = new Intent(requireActivity(), NewMemberMessageActivity.class);
                 startActivity(i);
             }
         });
         backlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+               // finish();
             }
         });
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         new GetChatList().execute();
     }
 
     private void idinti() {
 
-        progresbar = findViewById(R.id.progresbar);
-        backlay = findViewById(R.id.backlay);
-        mychat = findViewById(R.id.mychat);
-        write_to = findViewById(R.id.write_to);
-        swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        progresbar=  root.findViewById(R.id.progresbar);
+        backlay =        root.findViewById(R.id.backlay);
+        mychat =         root.findViewById(R.id.mychat);
+        write_to =       root.findViewById(R.id.write_to);
+        swipeToRefresh = root.findViewById(R.id.swipeToRefresh);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -197,7 +203,7 @@ public class MemberMessageAct extends BaseActivity {
         });
 
         LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(MemberMessageAct.this, LinearLayoutManager.VERTICAL, false);
+                = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         mychat.setLayoutManager(horizontalLayoutManagaer);
 
     }
@@ -238,7 +244,7 @@ public class MemberMessageAct extends BaseActivity {
             }
         }
 
-        public MessageRecycladp(MemberMessageAct myContacts, ArrayList<ConverSession> converSessionArrayList) {
+        public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
             this.context = myContacts;
             this.converSessionArrayList = converSessionArrayList;
         }
@@ -278,7 +284,7 @@ public class MemberMessageAct extends BaseActivity {
             if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
             } else {
-                Glide.with(MemberMessageAct.this)
+                Glide.with(requireActivity())
                         .load(BaseUrl.image_baseurl + imagelist)
                         .thumbnail(0.5f)
                         .override(200, 200)
@@ -296,7 +302,7 @@ public class MemberMessageAct extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(MemberMessageAct.this, MemberChatAct.class);
+                    Intent i = new Intent(requireActivity(), MemberChatAct.class);
                     Log.e("TAG", "onClick:  getSenderid"+converSessionArrayList.get(position).getSenderid() );
                     Log.e("TAG", "onClick:  getReciverid "+converSessionArrayList.get(position).getReciverid() );
 
@@ -451,7 +457,7 @@ public class MemberMessageAct extends BaseActivity {
 
                         if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
                             converSessionArrayList.remove(del_item_pos);
-                            messageRecycladp = new MessageRecycladp(MemberMessageAct.this, converSessionArrayList);
+                            messageRecycladp = new MessageRecycladp(requireActivity(), converSessionArrayList);
                             mychat.setAdapter(messageRecycladp);
                             messageRecycladp.notifyDataSetChanged();
                         }
@@ -647,11 +653,11 @@ public class MemberMessageAct extends BaseActivity {
 
                     }
                     if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
-                        messageRecycladp = new MessageRecycladp(MemberMessageAct.this, converSessionArrayList);
+                        messageRecycladp = new MessageRecycladp(requireActivity(), converSessionArrayList);
                         mychat.setAdapter(messageRecycladp);
                         messageRecycladp.notifyDataSetChanged();
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

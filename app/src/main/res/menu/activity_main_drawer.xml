@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:iconTint="@color/black"
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_avatar"
+            android:title="@string/profile" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_transfer_img"
+            android:icon="@drawable/transfer_img"
+            android:title="@string/transfer" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_network"
+            android:icon="@drawable/review"
+            android:title="@string/network" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_commission_ic"
+            android:icon="@drawable/commission_ic"
+            android:title="@string/commision" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_employee_sales"
+            android:icon="@drawable/employee_sales"
+            android:title="@string/employee_sales" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_tutorilas"
+            android:icon="@drawable/tutorilas"
+            android:title="@string/tutorial" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/message"
+            android:title="@string/messages" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_ic_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+        <item
+            android:iconTint="@color/black"
+
+            android:id="@+id/nav_rate_us"
+            android:icon="@drawable/ic_star"
+            android:title="@string/rateus" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:iconTint="@color/red"
+            android:title="@string/logout" />
+    </group>
+
+
+</menu>

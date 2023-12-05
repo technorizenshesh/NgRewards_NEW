@@ -441,8 +441,8 @@ public class BaseActivity extends AppCompatActivity {
         messagelay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(BaseActivity.this, MemberMessageAct.class);
-                startActivity(i);
+        //        Intent i = new Intent(BaseActivity.this, MemberMessageAct.class);
+        //        startActivity(i);
             }
         });
 

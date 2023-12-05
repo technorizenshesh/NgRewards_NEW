@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="new_blue">#30B0C9</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#f70101</color>
+    <color name="colorPrimaryDark">#f70101</color>
+    <color name="colorAccent">#f70101</color>
     <color name="toobarcolor">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>

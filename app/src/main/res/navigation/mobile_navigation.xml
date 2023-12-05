@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/bottom_home">
+
+    <fragment
+        android:id="@+id/bottom_home"
+        android:name="main.com.ngrewards.bottumtab.HomeActivity"
+        android:label="@string/home"
+        tools:layout="@layout/activity_home" />
+
+    <fragment
+        android:id="@+id/bottom_paybill"
+        android:name="main.com.ngrewards.bottumtab.PayBillAct"
+        android:label="@string/paybill"
+        tools:layout="@layout/activity_pay_bill" />
+    <fragment
+        android:id="@+id/bottom_activity"
+        android:name="main.com.ngrewards.bottumtab.TrasActivity"
+        android:label="@string/paybill"
+        tools:layout="@layout/activity_tras" />
+    <fragment
+        android:id="@+id/bottom_message"
+        android:name="main.com.ngrewards.activity.MemberMessageAct"
+        android:label="@string/message"
+        tools:layout="@layout/activity_mer_message" />
+    <fragment
+        android:id="@+id/bottom_invite"
+        android:name="main.com.ngrewards.bottumtab.InviteActMain"
+        android:label="@string/invite"
+        tools:layout="@layout/activity_invite_contacts" />
+</navigation>

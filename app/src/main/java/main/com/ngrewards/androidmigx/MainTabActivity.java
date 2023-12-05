@@ -1,12 +1,10 @@
-package main.com.ngrewards.bottumtab;
+package main.com.ngrewards.androidmigx;
 
 import static android.content.ContentValues.TAG;
-import static main.com.ngrewards.marchant.draweractivity.MerchantBaseActivity.reqcounft;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TabActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,12 +16,24 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,9 +52,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.BuildConfig;
@@ -52,95 +60,96 @@ import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.EMIManualActivity;
-import main.com.ngrewards.activity.MemberMessageAct;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 
-
-public class MainTabActivity extends TabActivity {
-
+public class MainTabActivity extends AppCompatActivity {
+    private static final float END_SCALE = 0.85f;
+    public static String user_log_data = "", ngcash = "", user_id = "", currency_code = "", currency_sign = "", country_name = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
+    public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("MEMBER_HOMEMEMBER_HOME", "----------------------------dfdd");
+            if (intent.getStringExtra("object") != null) {
+                try {
+                    JSONObject data = new JSONObject(intent.getStringExtra("object"));
+                    Log.e("MEMBER_HOMEMEMBER_HOME", "----------------------------dfdd" + data);
+                    String member_id = data.getString("member_id");
+                    String cart_id = data.getString("cart_id");
+                    String split_amount_x = data.getString("split_amount_x");
+                    //  String  merchant_business_name=data.getString("merchant_business_name");
+                    String merchant_business_no = data.getString("merchant_business_no");
+                    String merchant_id = data.getString("merchant_id");
+                    String message = data.getString("message");
+                    String type = data.getString("type");
+                    String due_date = data.getString("due_date");
+                    String order_id = data.getString("order_id");
+                    int number_of_emi = Integer.parseInt(data.getString("number_of_emi"));
+                    String str = "th";
+                    if (number_of_emi == 0) str = "st";
+                    if (number_of_emi == 1) str = "nd";
+                    if (number_of_emi == 2) str = "rd";
+                    Log.e("MEMBER_HOMEMEMBER_HOME", "-----------------------------messagemessage----" + message);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                    alertDialog.setTitle(context.getString(R.string.payment));
+                    alertDialog.setMessage(getString(R.string.reminder_for) + number_of_emi + str + context.getString(R.string.payment) + split_amount_x + context.getString(R.string.due_on) + due_date);
+                    alertDialog.setPositiveButton(context.getString(R.string.pay_now), (dialog, which) -> {
+                        dialog.dismiss();
+                        Intent intentw = new Intent(getApplicationContext(), EMIManualActivity.class);
+                        intentw.putExtra("object", data.toString());
+                        context.startActivity(intentw);
+                    });
+                    alertDialog.setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.cancel());
+                    AlertDialog alert = alertDialog.create();
+                    alert.show();
+                } catch (Exception e) {
+                    Log.e(TAG, "onReceive: -----------------------------ddd" + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
     int WhichIndex = 0;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    String WhichLanguage = "";
-    private Boolean exit;
     String scrsts = "";
     MySession mySession;
-    public static String user_log_data = "", ngcash = "", user_id = "", currency_code = "",currency_sign="",
-    country_name="",  notification_data = "", notification_unseen_count, cart_unseen_count = "";
     TextView counter_wallet, counter_shedule, counter_order, counter_message;
     ScheduledExecutorService scheduleTaskExecutor;
     String currentVersion = "";
+    CircleImageView user_img;
+    private AppBarConfiguration mAppBarConfiguration;
+    private NavController navController;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private BottomNavigationView bottomNavView;
+    private CoordinatorLayout contentView;
+    private Boolean exit;
     private Dialog canceldialog;
     private String facebook_name;
     private String facebook_image;
     private String result = "";
 
- public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.e("MEMBER_HOMEMEMBER_HOME",
-                    "----------------------------dfdd");
-            if(intent.getStringExtra("object") != null) {
-                try {
-                    JSONObject data = new JSONObject(intent.getStringExtra("object"));
-                    Log.e("MEMBER_HOMEMEMBER_HOME",
-                            "----------------------------dfdd" + data);
-                String  member_id= data.getString("member_id");
-                String  cart_id=data.getString("cart_id");
-                String  split_amount_x=data.getString("split_amount_x");
-              //  String  merchant_business_name=data.getString("merchant_business_name");
-                String  merchant_business_no=data.getString("merchant_business_no");
-                String  merchant_id= data.getString("merchant_id");
-                String  message= data.getString("message");
-                String  type= data.getString("type");
-                String  due_date= data.getString("due_date");
-                String  order_id= data.getString("order_id");
-                int  number_of_emi= Integer.parseInt(data.getString("number_of_emi"));
-                    String str = "th";
-                    if (number_of_emi == 0) str = "st";
-                    if (number_of_emi == 1) str = "nd";
-                    if (number_of_emi == 2) str = "rd";
-                    Log.e("MEMBER_HOMEMEMBER_HOME",
-                            "-----------------------------messagemessage----"+message);
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
-                    alertDialog.setTitle(context.getString(R.string.payment));
-                    alertDialog.setMessage(
-                            getString(R.string.reminder_for)+number_of_emi+str+context.getString(R.string.payment)+split_amount_x+context.getString(R.string.due_on)+due_date);
-                    alertDialog.setPositiveButton(context.getString(R.string.pay_now), (dialog, which) -> {
-                         dialog.dismiss();
-                       Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
-                       intentw.putExtra("object",data.toString());
-                        context.startActivity(intentw);
-                    });
-                    alertDialog.setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> dialog.cancel());
-                    AlertDialog alert=alertDialog.create();
-                    alert.show();
-                } catch (Exception e) {
-                    Log.e(TAG, "onReceive: -----------------------------ddd"+e.getMessage() );
-                    e.printStackTrace();
-                }
-                }
-    }};
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_tab);
+        setContentView(R.layout.activity_main_tab_new);
         Tools.reupdateResources(this);
+        initToolbar();
 
-         if (getIntent().getExtras()!=null){
-             result = getIntent().getExtras().getString("result");
-             if(result==null)
-             {
-                 result = "";
-             }
-         }
+        initNavigation();
 
+        if (getIntent().getExtras() != null) {
+            result = getIntent().getExtras().getString("result");
+            if (result == null) {
+                result = "";
+            }
+        }
 
 
         notification_unseen_count = "";
@@ -157,7 +166,7 @@ public class MainTabActivity extends TabActivity {
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
-                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -219,7 +228,12 @@ public class MainTabActivity extends TabActivity {
             }
         }
 
-        TabHost tabHost = getTabHost();
+
+
+
+
+
+       /* TabHost tabHost = getTabHost();
         TabHost.TabSpec homespec = tabHost.newTabSpec("Home");
         View tabIndicator1 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
         ((ImageView) tabIndicator1.findViewById(R.id.icon)).setImageResource(R.drawable.homedrawable);
@@ -290,7 +304,102 @@ public class MainTabActivity extends TabActivity {
             e.printStackTrace();
         }
 
-        tabHost.setCurrentTab(WhichIndex);
+        tabHost.setCurrentTab(WhichIndex);*/
+    }
+
+    private void initToolbar() {
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        // setSupportActionBar(toolbar);
+
+
+    }
+
+    private void initNavigation() {
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        bottomNavView = findViewById(R.id.bottom_nav_view);
+        contentView = findViewById(R.id.content_view);
+        user_img = findViewById(R.id.user_img);
+        user_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.openDrawer(GravityCompat.START);
+                //  }
+            }
+        });
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_profile, R.id.nav_transfer_img, R.id.nav_network, R.id.nav_commission_ic, R.id.nav_employee_sales, R.id.nav_tutorilas, R.id.nav_messages, R.id.nav_ic_settings, R.id.nav_rate_us, R.id.nav_logout, R.id.bottom_home, R.id.bottom_paybill, R.id.bottom_activity, R.id.bottom_message, R.id.bottom_invite).setDrawerLayout(drawer).build();
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //  NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+
+        NavigationUI.setupWithNavController(navigationView, navController);
+        NavigationUI.setupWithNavController(bottomNavView, navController);
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+
+                Log.e(TAG, "onDestinationChanged: " + controller);
+                Log.e(TAG, "onDestinationChanged: " + destination);
+                Log.e(TAG, "onDestinationChanged: " + arguments);
+
+            }
+        });
+
+        //  animateNavigationDrawer();
+
+    }
+
+    private void animateNavigationDrawer() {
+//        drawerLayout.setScrimColor(getResources().getColor(R.color.text_brown));
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                contentView.setScaleX(offsetScale);
+                contentView.setScaleY(offsetScale);
+
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                contentView.setTranslationX(xTranslation);
+            }
+        });
+    }
+
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+       // getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }*/
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+
+            if (scheduleTaskExecutor == null) {
+
+            } else {
+                scheduleTaskExecutor.shutdown();
+            }
+            super.onBackPressed();
+        }
+
     }
 
     @Override
@@ -305,13 +414,77 @@ public class MainTabActivity extends TabActivity {
 
     }
 
-    @Override
+/*    @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (scheduleTaskExecutor == null) {
 
         } else {
             scheduleTaskExecutor.shutdown();
+        }
+    }*/
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadcastReceiver, new IntentFilter("MEMBER_HOME"));
+        Tools.reupdateResources(this);
+
+      /*  try {
+            scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+            scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    new MyCounterVal().execute();
+                }
+            }, 0, 8, TimeUnit.SECONDS);
+        }catch (Exception e){
+            Log.e(TAG, "onResume: "+e.getCause() );
+        }*/
+    }
+
+    private void appUpdate() {
+        canceldialog = new Dialog(MainTabActivity.this);
+        canceldialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        canceldialog.setCancelable(false);
+        canceldialog.setContentView(R.layout.appupdatelayout);
+        canceldialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        final TextView yes_tv = (TextView) canceldialog.findViewById(R.id.yes_tv);
+        final TextView no_tv = (TextView) canceldialog.findViewById(R.id.no_tv);
+        final TextView body_tv = (TextView) canceldialog.findViewById(R.id.body_tv);
+
+        body_tv.setText("" + getResources().getString(R.string.appupdateneed));
+        no_tv.setText("" + getResources().getString(R.string.remindlater));
+        yes_tv.setText("" + getResources().getString(R.string.ok));
+
+        yes_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canceldialog.dismiss();
+                final String appPackageName = BuildConfig.APPLICATION_ID; // package name of the app
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+
+        no_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mySession.setAppUpdate("later");
+                canceldialog.dismiss();
+            }
+        });
+
+        if (canceldialog == null) {
+            canceldialog.show();
+        } else if (canceldialog.isShowing()) {
+
+        } else {
+            canceldialog.show();
+
         }
     }
 
@@ -429,25 +602,6 @@ public class MainTabActivity extends TabActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(broadcastReceiver, new IntentFilter("MEMBER_HOME"));
-        Tools.reupdateResources(this);
-
-        try {
-            scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-            scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-                public void run() {
-                    new MyCounterVal().execute();
-                }
-            }, 0, 8, TimeUnit.SECONDS);
-        }catch (Exception e){
-            Log.e(TAG, "onResume: "+e.getCause() );
-        }
-    }
-
-
     class GetVersionCode extends AsyncTask<Void, String, String> {
         //implimemnmt by sagar panse //
         @Override
@@ -456,11 +610,8 @@ public class MainTabActivity extends TabActivity {
             String newVersion = null;
 
             try {
-                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=" + MainTabActivity.this.getPackageName() + "&hl=en")
-                        .timeout(30000)
-                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                        .referrer("http://www.google.com")
-                        .get();
+                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id="
+                        + MainTabActivity.this.getPackageName() + "&hl=en").timeout(30000).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com").get();
                 try {
                     if (document != null) {
                         Elements element = document.getElementsContainingOwnText("Current Version");
@@ -480,7 +631,7 @@ public class MainTabActivity extends TabActivity {
 
             } catch (Throwable t) {
                 Log.e("OSFP.News", t.getMessage(), t);
-               // finish();
+                // finish();
             }
             return newVersion;
         }
@@ -505,52 +656,6 @@ public class MainTabActivity extends TabActivity {
 
                 }
             }
-        }
-    }
-
-    private void appUpdate() {
-        canceldialog = new Dialog(MainTabActivity.this);
-        canceldialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        canceldialog.setCancelable(false);
-        canceldialog.setContentView(R.layout.appupdatelayout);
-        canceldialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        final TextView yes_tv = (TextView) canceldialog.findViewById(R.id.yes_tv);
-        final TextView no_tv = (TextView) canceldialog.findViewById(R.id.no_tv);
-        final TextView body_tv = (TextView) canceldialog.findViewById(R.id.body_tv);
-
-        body_tv.setText("" + getResources().getString(R.string.appupdateneed));
-        no_tv.setText("" + getResources().getString(R.string.remindlater));
-        yes_tv.setText("" + getResources().getString(R.string.ok));
-
-        yes_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canceldialog.dismiss();
-                final String appPackageName = BuildConfig.APPLICATION_ID; // package name of the app
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                }
-            }
-        });
-
-        no_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mySession.setAppUpdate("later");
-                canceldialog.dismiss();
-            }
-        });
-
-        if (canceldialog == null) {
-            canceldialog.show();
-        } else if (canceldialog.isShowing()) {
-
-        } else {
-            canceldialog.show();
-
         }
     }
 }

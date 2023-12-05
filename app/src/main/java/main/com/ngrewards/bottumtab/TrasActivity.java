@@ -5,14 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,12 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 
@@ -36,7 +35,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import main.com.ngrewards.R;
@@ -48,7 +46,6 @@ import main.com.ngrewards.activity.PurchasedItemDetailAct;
 import main.com.ngrewards.beanclasses.OrderAct;
 import main.com.ngrewards.beanclasses.OrderBean;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.placeorderclasses.ReceiptActivity;
 import main.com.ngrewards.placeorderclasses.TransferRequestDetActivity;
 import main.com.ngrewards.restapi.ApiClient;
@@ -57,40 +54,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TrasActivity extends BaseActivity {
-
-    FrameLayout contentFrameLayout;
+public class TrasActivity extends Fragment {
+    Context mContext;
     ActivityRecAdp activityRecAdp;
+    View root;
     private RecyclerView activity_list;
     private MySession mySession;
     private String user_id = "";
     private ArrayList<OrderBean> orderBeanArrayList;
     private SwipeRefreshLayout swipeToRefresh;
-    private String employee_name;
     private String order_cart_id;
-    private List<OrderBean> contactListFiltered;
-    private String OrderTime;
     private EditText search_et_home;
-    private Integer order_cart_idq;
-    private boolean erreg;
-    private String dfgfd;
     private String craete_profile;
-    private String member_id;
-    private String merchant;
 
-    @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
+        super.onAttach(LocaleHelper.onAttach(base));
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Tools.reupdateResources(this);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_tras, contentFrameLayout);
-        mySession = new MySession(this);
-
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_tras, container, false);
+        Tools.reupdateResources(requireActivity());
+        mySession = new MySession(requireActivity());
+        mContext = requireContext();
         String user_log_data = mySession.getKeyAlldata();
 
         if (user_log_data == null) {
@@ -103,7 +89,7 @@ public class TrasActivity extends BaseActivity {
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
-                    Toast.makeText(getApplicationContext(), user_id, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), user_id, Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -113,21 +99,22 @@ public class TrasActivity extends BaseActivity {
         idinits();
         clickevent();
         idinitui1();
+        return root;
     }
 
     private void idinitui1() {
 
-        craete_profile = PreferenceConnector.readString(TrasActivity.this, PreferenceConnector.Create_Profile, "");
+        craete_profile = PreferenceConnector.readString(requireActivity(), PreferenceConnector.Create_Profile, "");
 
         if (!craete_profile.equals("craete_profile")) {
-            dialogSts.dismiss();
+            // dialogSts.dismiss();
 
         }
 
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         getOrderActivity();
     }
@@ -138,10 +125,10 @@ public class TrasActivity extends BaseActivity {
 
     private void idinits() {
 
-        swipeToRefresh = findViewById(R.id.swipeToRefresh);
-        activity_list = findViewById(R.id.activity_list);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        search_et_home = findViewById(R.id.search_et_home);
+        swipeToRefresh = root.findViewById(R.id.swipeToRefresh);
+        activity_list = root.findViewById(R.id.activity_list);
+        SearchManager searchManager = (SearchManager) requireActivity().getSystemService(Context.SEARCH_SERVICE);
+        search_et_home = root.findViewById(R.id.search_et_home);
 
         search_et_home.addTextChangedListener(new TextWatcher() {
 
@@ -162,7 +149,7 @@ public class TrasActivity extends BaseActivity {
         });
 
         LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(TrasActivity.this, LinearLayoutManager.VERTICAL, false);
+                = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         activity_list.setLayoutManager(horizontalLayoutManagaer);
 
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -174,69 +161,72 @@ public class TrasActivity extends BaseActivity {
     }
 
     private void getOrderActivity() {
+        try {
 
-     //   Log.e("user_idd", user_id);
 
-        orderBeanArrayList = new ArrayList<>();
-        swipeToRefresh.setRefreshing(true);
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMemberOrder(user_id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            //   Log.e("user_idd", user_id);
 
-                if (response.isSuccessful()) {
+            orderBeanArrayList = new ArrayList<>();
+            swipeToRefresh.setRefreshing(true);
+            Call<ResponseBody> call = ApiClient.getApiInterface().getMemberOrder(user_id);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                    swipeToRefresh.setRefreshing(false);
+                    if (response.isSuccessful()) {
 
-                    try {
+                        swipeToRefresh.setRefreshing(false);
 
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
+                        try {
 
-                        if (object.getString("status").equals("1")) {
-                            OrderAct successData = new Gson().fromJson(responseData, OrderAct.class);
-                            orderBeanArrayList.clear();
-                            orderBeanArrayList.addAll(successData.getResult());
+                            String responseData = response.body().string();
+                            JSONObject object = new JSONObject(responseData);
+
+                            if (object.getString("status").equals("1")) {
+                                OrderAct successData = new Gson().fromJson(responseData, OrderAct.class);
+                                orderBeanArrayList.clear();
+                                orderBeanArrayList.addAll(successData.getResult());
+                            }
+
+                            Log.e("responseDataaaaa >> ", " >> " + responseData);
+
+                            activityRecAdp = new ActivityRecAdp(requireActivity(), orderBeanArrayList);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(requireActivity());
+                            activity_list.addItemDecoration(new MyDividerItemDecoration(requireActivity(),
+                                    DividerItemDecoration.VERTICAL, 36));
+                            activity_list.setLayoutManager(mLayoutManager);
+                            activity_list.setItemAnimator(new DefaultItemAnimator());
+                            activity_list.setAdapter(activityRecAdp);
+                            activityRecAdp.notifyDataSetChanged();
+
+                        } catch (Exception  e) {
+                            e.printStackTrace();
                         }
 
-                        Log.e("responseDataaaaa >> ", " >> " + responseData);
+                    } else {
 
-                        activityRecAdp = new ActivityRecAdp(TrasActivity.this, orderBeanArrayList);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        activity_list.addItemDecoration(new MyDividerItemDecoration(TrasActivity.this,
-                                DividerItemDecoration.VERTICAL, 36));
-                        activity_list.setLayoutManager(mLayoutManager);
-                        activity_list.setItemAnimator(new DefaultItemAnimator());
-                        activity_list.setAdapter(activityRecAdp);
-                        activityRecAdp.notifyDataSetChanged();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        swipeToRefresh.setRefreshing(false);
                     }
-
-                } else {
-
-                    swipeToRefresh.setRefreshing(false);
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                Log.e("TAG", t.toString());
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.e("TAG", t.toString());
+                }
+            });
+        } catch (Exception e) {
+        }
     }
 
     public class ActivityRecAdp extends RecyclerView.Adapter<ActivityRecAdp.MyViewHolder> {
-
+        String OrderTime;
         Context context;
         ArrayList<OrderBean> orderBeanArrayList;
         ArrayList<OrderBean> searchmerchantListBeanArrayList;
-MySession mySession;
-        public ActivityRecAdp(TrasActivity myContacts, ArrayList<OrderBean> orderBeanArrayList) {
+        MySession mySession;
+
+        public ActivityRecAdp(Context myContacts, ArrayList<OrderBean> orderBeanArrayList) {
             this.context = myContacts;
             this.orderBeanArrayList = orderBeanArrayList;
             this.searchmerchantListBeanArrayList = new ArrayList<>();
@@ -271,7 +261,7 @@ MySession mySession;
 
                             if (wp.getSearch_id().toLowerCase().startsWith(charText) ||
                                     wp.getB_name().toLowerCase().startsWith(charText) ||
-                                        wp.getTotal_amount().toLowerCase().startsWith(charText) ||
+                                    wp.getTotal_amount().toLowerCase().startsWith(charText) ||
                                     wp.getCreated_date().toLowerCase().startsWith(charText) || wp.getMemberDetail().get(0).getB_name().toLowerCase().startsWith(charText)) {
                                 orderBeanArrayList.add(wp);
 
@@ -292,16 +282,16 @@ MySession mySession;
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            Log.e("TAG", "onBindViewHolder:orderBeanArrayList.get(position).getType"+orderBeanArrayList.get(position).getType());
+            Log.e("TAG", "onBindViewHolder:orderBeanArrayList.get(position).getType" + orderBeanArrayList.get(position).getType());
             mySession = new MySession(context);
             if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
                 holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)
-                        +orderBeanArrayList.get(position).getTotal_amount());
+                        + orderBeanArrayList.get(position).getTotal_amount());
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
-                holder.date_tv.setText(  orderBeanArrayList.get(position).getCreated_date());
+                holder.date_tv.setText(orderBeanArrayList.get(position).getCreated_date());
            /*     try {
                     Log.e(TAG, "onBindViewHolder: ", );
                     String mytime = orderBeanArrayList.get(position).getCreated_date();
@@ -322,11 +312,11 @@ MySession mySession;
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }*/
 
-                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getPaid_by_card());
+                holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                 } else {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + orderBeanArrayList.get(position).getNgcash());
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
 
                 //String mername = orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName();
@@ -340,8 +330,7 @@ MySession mySession;
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            }
-            else if (orderBeanArrayList.get(position).getType() != null &&
+            } else if (orderBeanArrayList.get(position).getType() != null &&
                     orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
 
                 holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getAmount());
@@ -377,7 +366,7 @@ MySession mySession;
 
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") ||
                         orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
 
                 } else {
                     holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
@@ -391,12 +380,10 @@ MySession mySession;
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            }
-            else if (orderBeanArrayList.get(position).getType() != null &&
-                    orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order"))
-            {
+            } else if (orderBeanArrayList.get(position).getType() != null &&
+                    orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order")) {
                 //holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
-                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
@@ -421,7 +408,7 @@ MySession mySession;
                 holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
 
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0") || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                 } else {
                     holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
@@ -434,10 +421,9 @@ MySession mySession;
                     holder.merchant_member_name.setText("" + mername);
                 }
 
-            } else
-            {
+            } else {
 
-                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
+                holder.total_order_price.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
                 holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                 holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
 
@@ -450,13 +436,13 @@ MySession mySession;
 
                     SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy");
                     String finalDate = timeFormat.format(myDate);
-                    if (orderBeanArrayList.get(position).getOrder_Time()!=null){
+                    if (orderBeanArrayList.get(position).getOrder_Time() != null) {
                         holder.date_tv.setText("Date:- " + finalDate + " " + orderBeanArrayList.get(position).getOrder_Time());
 
-                    }else{
-                      //  holder.date_tv.setText("Date:- " + finalDate +  " " +position+":00"+":"+
-                          //      "00");
-                        holder.date_tv.setText("" +orderBeanArrayList.get(position).getOrderDate());
+                    } else {
+                        //  holder.date_tv.setText("Date:- " + finalDate +  " " +position+":00"+":"+
+                        //      "00");
+                        holder.date_tv.setText("" + orderBeanArrayList.get(position).getOrderDate());
                     }
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
 
@@ -464,12 +450,12 @@ MySession mySession;
 
                 } catch (Exception e) {
                     Log.e("EXC TRUE", " RRR");
-                 if (orderBeanArrayList.get(position).getOrder_Time()!=null){
-                     holder.date_tv.setText("Date:- " + orderBeanArrayList.get(position).getCreated_date() + " " + orderBeanArrayList.get(position).getOrder_Time());
+                    if (orderBeanArrayList.get(position).getOrder_Time() != null) {
+                        holder.date_tv.setText("Date:- " + orderBeanArrayList.get(position).getCreated_date() + " " + orderBeanArrayList.get(position).getOrder_Time());
 
-                 }else {
-                     holder.date_tv.setText("Date:- " + orderBeanArrayList.get(position).getCreated_date() + " " +position+":00"+":"+"00");
-                 }
+                    } else {
+                        holder.date_tv.setText("Date:- " + orderBeanArrayList.get(position).getCreated_date() + " " + position + ":00" + ":" + "00");
+                    }
                     holder.time_tv.setText("Time :- " + orderBeanArrayList.get(position).getOrder_Time());
                 }
 
@@ -478,7 +464,7 @@ MySession mySession;
                 holder.total_order_price.setTextColor(getResources().getColor(R.color.black));
                 holder.paidamount_bycard.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getPaid_by_card());
                 if (orderBeanArrayList.get(position).getNgcash() == null || orderBeanArrayList.get(position).getNgcash().equalsIgnoreCase("0")) {
-                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  +"0.00");
+                    holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                 } else {
                     holder.ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getNgcash());
                 }
@@ -517,9 +503,9 @@ MySession mySession;
                         order_cart_id = orderBeanArrayList.get(position).getOrder_cart_id();
                         OrderTime = orderBeanArrayList.get(position).getNgcash();
 
-                        Toast.makeText(getApplicationContext(), "empnme" + orderBeanArrayList.get(position).getEmployeeName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "empnme" + orderBeanArrayList.get(position).getEmployeeName(), Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent(TrasActivity.this, ReceiptActivity.class);
+                        Intent i = new Intent(requireActivity(), ReceiptActivity.class);
 
                         orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName();
 
@@ -551,10 +537,9 @@ MySession mySession;
                         i.putExtra("type123", orderBeanArrayList.get(position).getType());
                         startActivity(i);
 
-                    }
-                    else if (orderBeanArrayList.get(position).getType() != null &&
+                    } else if (orderBeanArrayList.get(position).getType() != null &&
                             orderBeanArrayList.get(position).getType().equalsIgnoreCase("Transfer")) {
-                        Intent i = new Intent(TrasActivity.this, TransferRequestDetActivity.class);
+                        Intent i = new Intent(requireActivity(), TransferRequestDetActivity.class);
                         i.putExtra("member_id", orderBeanArrayList.get(position).getMember_id());
                         i.putExtra("reciept_url", orderBeanArrayList.get(position).getReciept_url());
                         i.putExtra("amount_trans_by_card", orderBeanArrayList.get(position).getAmount_by_card());
@@ -567,10 +552,9 @@ MySession mySession;
                         i.putExtra("ngcash_str", "" + orderBeanArrayList.get(position).getNgcash());
                         startActivity(i);
 
-                    }
-                    else if (orderBeanArrayList.get(position).getType() != null &&
+                    } else if (orderBeanArrayList.get(position).getType() != null &&
                             orderBeanArrayList.get(position).getType().equalsIgnoreCase("Request")) {
-                        Intent i = new Intent(TrasActivity.this, TransferRequestDetActivity.class);
+                        Intent i = new Intent(requireActivity(), TransferRequestDetActivity.class);
                         i.putExtra("member_user_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getAffiliateName());
                         i.putExtra("member_id", orderBeanArrayList.get(position).getMerchantDetail().get(0).getId());
                         i.putExtra("member_fullname_number", orderBeanArrayList.get(position).getMerchantDetail().get(0).getFullname());
@@ -595,16 +579,15 @@ MySession mySession;
                         i.putExtra("employee_name", "" + orderBeanArrayList.get(position).getEmployeeName());
                         startActivity(i);
 
-                    }
-                    else if (orderBeanArrayList.get(position).getType() != null &&
+                    } else if (orderBeanArrayList.get(position).getType() != null &&
                             orderBeanArrayList.get(position).getType().equalsIgnoreCase("Order")) {
 
                         order_cart_id = orderBeanArrayList.get(position).getOrder_special_request();
 
                         Log.e("orderarraylist123", "" + orderBeanArrayList);
-                        Toast.makeText(getApplicationContext(), "" + order_cart_id, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "" + order_cart_id, Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent(TrasActivity.this, ReceiptActivity.class);
+                        Intent i = new Intent(requireActivity(), ReceiptActivity.class);
                         i.putExtra("merchant_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessName());
                         i.putExtra("merchant_id", orderBeanArrayList.get(position).getMerchantDetail().get(0).getId());
                         i.putExtra("member_name", orderBeanArrayList.get(position).getMerchantDetail().get(0).getBusinessNo());
@@ -632,10 +615,9 @@ MySession mySession;
                         i.putExtra("type123", orderBeanArrayList.get(position).getType());
                         startActivity(i);
 
-                    }
-                    else {
+                    } else {
 
-                        Intent i = new Intent(TrasActivity.this, PurchasedItemDetailAct.class);
+                        Intent i = new Intent(requireActivity(), PurchasedItemDetailAct.class);
                         i.putExtra("product_name", orderBeanArrayList.get(position).getProductName());
                         i.putExtra("size", orderBeanArrayList.get(position).getSize());
                         i.putExtra("color", orderBeanArrayList.get(position).getColor());

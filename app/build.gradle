@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
-        targetSdkVersion 34
+        targetSdkVersion 33
         versionCode 61
         versionName "11.03"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -61,17 +61,15 @@ android {
 
 }
 
-/*repositories {
-    mavenCentral()
-    jcenter()
-    jcenter {
-        url "http://jcenter.bintray.com/"
-        allowInsecureProtocol = true
-
-    }
-}*/
 
 dependencies {
+
+    //androx
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
@@ -122,246 +120,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links:17.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation 'com.google.firebase:firebase-core:16.0.8'
+
+
+
+
 }
 apply plugin: 'com.google.gms.google-services'
-
-/*
-Key Alis =  Ngrewards
-password == ngrewards123
-keystorepassword == ngrewards123
-
-keystore put in project folded name is ngrewardjks.jks
-
-//google account//
-user nname : ngrewardsllc@gmail.com
-pw : Join.Promote.Earn
-//google account//
-bas.......
-
-second pan lasst dblll
-
-bas.......
-//google account//
-
-
-fb pw console : ng123456789@
-
-place_or
-1.Card details Client
-5524 3338 5841 4627
-Valí thru: 11/23
- manualat 415 ???>>>psput"member_id", user_id
-577
-
-2.Card details Client
-4817 7401 7701 9292
-Valí thru: 09/22
-465
-MyListener >>> striplive
-*/
-
-
-/*Merchant:
-ed58126
-123456
-
-Member:
-ngrewardsllc
-gen.admin$12*/
-
-
-/*apply plugin: 'com.android.application'
-
-android {
-    signingConfigs {
-        /*debug {
-            storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
-            storePassword 'ngrewards123'
-            keyAlias 'Ngrewards'
-            keyPassword 'ngrewards123'
-        }*/
-
-/*
-compileSdkVersion 33
-useLibrary 'org.apache.http.legacy'
-buildToolsVersion "30.0.3"
-packagingOptions {
-    exclude 'META-INF/services/javax.annotation.processing.Processor'
-}
-defaultConfig {
-    applicationId "main.com.ngrewards"
-    minSdkVersion 24
-    targetSdkVersion 33
-    versionCode 61
-    versionName "11.03"
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    vectorDrawables.useSupportLibrary = true
-    multiDexEnabled true
-}
-
-buildTypes {
-    release {
-        minifyEnabled false
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-}
-
-configurations.all {
-    resolutionStrategy.force 'com.android.support:support-annotations:27.1.1'
-}
-
-packagingOptions {
-    exclude 'META-INF/DEPENDENCIES.txt'
-    exclude 'META-INF/LICENSE.txt'
-    exclude 'META-INF/NOTICE.txt'
-    exclude 'META-INF/NOTICE'
-    exclude 'META-INF/LICENSE'
-    exclude 'META-INF/DEPENDENCIES'
-    exclude 'META-INF/notice.txt'
-    exclude 'META-INF/license.txt'
-    exclude 'META-INF/dependencies.txt'
-    exclude 'META-INF/LGPL2.1'
-}
-
-lintOptions {
-    checkReleaseBuilds false
-    // Or, if you prefer, you can continue to check for errors in release builds,
-    // but continue the build even when errors are found:
-    abortOnError false
-}
-
-compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-}
-
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
-buildFeatures {
-    dataBinding = true
-}
-allprojects {
-    repositories {
-        maven {
-            url 'https://jitpack.io'
-        }
-    }
-}
-}
-*/
-
-/*repositories {
-    mavenCentral()
-    jcenter {
-        url "http://jcenter.bintray.com/"
-        allowInsecureProtocol = true
-
-    }
-}
-
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.squareup.picasso:picasso:2.5.0'
-    implementation 'de.hdodenhof:circleimageview:1.3.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
-    implementation 'com.android.support:multidex:1.0.1'
-    implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
-    implementation 'com.android.volley:volley:1.1.0'
-    implementation 'com.github.f0ris.sweetalert:library:1.5.6'
-    implementation 'com.google.code.gson:gson:2.6.2'
-    implementation 'com.amitshekhar.android:android-networking:1.0.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
-
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
-    implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
-    implementation 'br.com.moip:credit-card-validator:0.0.6'
-    implementation 'com.google.firebase:firebase-dynamic-links:12.0.1'
-    implementation 'com.google.android.gms:play-services-maps:12.0.1'
-    implementation 'co.dift.ui.swipetoaction:library:1.1'
-    implementation 'com.google.firebase:firebase-messaging:12.0.1'
-*//*
-    implementation 'com.google.firebase:firebase-crash:11.0.1'
-*//*
-    implementation 'com.google.firebase:firebase-core:12.0.1'
-    implementation 'com.google.android.gms:play-services-location:12.0.1'
-    implementation 'com.google.zxing:core:3.2.1'
-    implementation 'com.jjoe64:graphview:4.2.1'
-    implementation 'com.loopj.android:android-async-http:1.4.9'
-    implementation 'com.numetriclabz.numandroidcharts:numandroidcharts:1.0.20'
-    implementation 'in.gauriinfotech:commons:1.0.8'
-    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    implementation files('libs/YouTubeAndroidPlayerApi.jar')
-    implementation 'com.google.apis:google-api-services-youtube:v3-rev212-1.25.0'
-    implementation 'com.github.shadowalker77:wp7progressbar:1.0.5'
-    implementation 'com.stripe:stripe-android:8.0.0'
-    implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
-    implementation 'org.jsoup:jsoup:1.8.3'
-    testImplementation 'junit:junit:4.12'
-    //noinspection GradleCompatible
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.github.developeramit3:ApiCall:d8a713a9c4'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
-//    implementation 'androidx.activity:activity:1.6.0'
-
-    //MyListener
-}
-apply plugin: 'com.google.gms.google-services'*/
-
-/*
-Key Alis =  Ngrewards
-password == ngrewards123
-keystorepassword == ngrewards123
-
-keystore put in project folded name is ngrewardjks.jks
-
-//google account//
-user nname : ngrewardsllc@gmail.com
-pw : Join.Promote.Earn
-//google account//
-bas.......
-
-second pan lasst dblll
-
-bas.......
-//google account//
-
-
-fb pw console : ng123456789@
-
-place_or
-1.Card details Client
-5524 3338 5841 4627
-Valí thru: 11/23
- manualat 415 ???>>>psput"member_id", user_id
-577
-
-2.Card details Client
-4817 7401 7701 9292
-Valí thru: 09/22
-465
-MyListener >>> striplive
-*/
-
-
-/*Merchant:
-ed58126
-123456
-
-Member:
-ngrewardsllc
-gen.admin$12*/

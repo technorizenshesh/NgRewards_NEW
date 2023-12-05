@@ -77,10 +77,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by technorizen on 14/6/18.
- */
-
 public class NearbyFrag extends Fragment {
     View v;
     private ListView near_marchant;
@@ -115,7 +111,7 @@ public class NearbyFrag extends Fragment {
     @SuppressLint("ValidFragment")
     public NearbyFrag(String result) {
         this.result = result;
-        // Required empty public constructor
+onResume();
     }
 
     @Override
@@ -158,6 +154,11 @@ public class NearbyFrag extends Fragment {
         getCategoryType();
         clickevent();
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void clickevent() {
@@ -404,7 +405,7 @@ public class NearbyFrag extends Fragment {
 
         @SuppressLint("ResourceAsColor")
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
 
             if (merchantListBeanArrayList.get(listPosition).getBusinessName() == null || merchantListBeanArrayList.get(listPosition).getBusinessName().equalsIgnoreCase("")) {
                 holder.mer_name_tv.setText(getResources().getString(R.string.staticmerchantname));

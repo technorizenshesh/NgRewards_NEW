@@ -5,11 +5,16 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -36,7 +41,7 @@ import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.draweractivity.BaseActivity;
 
-public class InviteActMain extends BaseActivity {
+public class InviteActMain extends Fragment {
 
     FrameLayout contentFrameLayout;
     private TextView invitefriendsbusiness,invitefriends, usernametv;
@@ -54,15 +59,14 @@ public class InviteActMain extends BaseActivity {
     private String invite_str,invite_str2;
     private String id;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_invite_act_main, contentFrameLayout);
-        mySession = new MySession(this);
-        myqrview = findViewById(R.id.myqrview);
+    View root;
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_invite_act_main, container, false);
+        mySession = new MySession(requireActivity());
+        myqrview = root.findViewById(R.id.myqrview);
 
-        progresbar = (ProgressBar) findViewById(R.id.progresbar);
+        progresbar = (ProgressBar) root.findViewById(R.id.progresbar);
 
         new GetProfile().execute();
 
@@ -121,6 +125,7 @@ public class InviteActMain extends BaseActivity {
 
         idinits();
         idinitui1();
+        return  root;
     }
 
     private class GetProfile extends AsyncTask<String, String, String> {
@@ -170,10 +175,7 @@ public class InviteActMain extends BaseActivity {
                 reader.close();
                 Log.e("GetProfile test!!!", ">>>>>>>>>>>>" + response);
                 return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
 
                 e1.printStackTrace();
             }
@@ -199,7 +201,7 @@ public class InviteActMain extends BaseActivity {
                        /* affiliate_number1 = jsonObject1.getString("affiliate_number");*/
 
 
-                        usernametv = findViewById(R.id.usernametv);
+                        usernametv = root.findViewById(R.id.usernametv);
                         usernametv.setText("@" + username);
                         invite_str = "https://myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
                         invite_str2 = "https://myngrewards.com/signup-merchant.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
@@ -209,8 +211,8 @@ public class InviteActMain extends BaseActivity {
 
                         Log.e("invite_str>>", invite_str);
 
-                        invitefriends = findViewById(R.id.invitefriends);
-                        invitefriendsbusiness = findViewById(R.id.invitefriendsbusiness);
+                        invitefriends = root.findViewById(R.id.invitefriends);
+                        invitefriendsbusiness = root.findViewById(R.id.invitefriendsbusiness);
 
                         invitefriends.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -235,7 +237,7 @@ public class InviteActMain extends BaseActivity {
                         });
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -245,9 +247,9 @@ public class InviteActMain extends BaseActivity {
     }
 
     private void idinitui1() {
-        craete_profile = PreferenceConnector.readString(InviteActMain.this, PreferenceConnector.Create_Profile, "");
+        craete_profile = PreferenceConnector.readString(requireActivity(), PreferenceConnector.Create_Profile, "");
         if (!craete_profile.equals("craete_profile")) {
-            dialogSts.dismiss();
+            //dialogSts.dismiss();
         }
     }
 
@@ -261,7 +263,7 @@ public class InviteActMain extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
     }
 

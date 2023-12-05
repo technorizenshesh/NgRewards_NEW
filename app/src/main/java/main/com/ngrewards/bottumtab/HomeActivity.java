@@ -2,13 +2,19 @@ package main.com.ngrewards.bottumtab;
 
 import android.content.Context;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import android.util.Log;
-import android.widget.FrameLayout;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,12 +22,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
+import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.fragments.ItemsFrag;
 import main.com.ngrewards.fragments.NearbyFrag;
 import main.com.ngrewards.fragments.OffersFrag;
@@ -31,44 +38,80 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends Fragment {
 
     FrameLayout contentFrameLayout;
+    Myapisession myapisession;
+    int selectedPosition = -1;
+    View root;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    Myapisession myapisession;
     private String facebook_name;
     private String facebook_image;
     private String notification_data;
+    private String result, itemResult = "", merchantItem = "", offerItem = "";
 
-    private String result,itemResult="",merchantItem="",offerItem="";
-
-    int selectedPosition=-1;
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_home, container, false);
+        return root;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        contentFrameLayout =  findViewById(R.id.contentFrame); //Remember this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
-        myapisession = new Myapisession(this);
-        result = getIntent().getExtras().getString("result");
-        if (result.contains("item"))
-        {
+    public void onPause() {
+        super.onPause();
+    }
+
+
+    private void setupviewpager() {
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void clickevent() {
+    }
+
+    private void idinita() {
+        tabLayout = root.findViewById(R.id.tabs);
+        viewPager = root.findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(4);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        // adapter.addFragment(new FeaturedFrag(), getResources().getString(R.string.featured));
+        adapter.addFragment(new NearbyFrag(merchantItem), getResources().getString(R.string.nearby));
+        adapter.addFragment(new OffersFrag(offerItem), getResources().getString(R.string.offers));
+        adapter.addFragment(new ItemsFrag(itemResult), getResources().getString(R.string.items));
+        viewPager.setAdapter(adapter);
+        if (selectedPosition != -1) {
+            viewPager.setCurrentItem(selectedPosition);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Tools.reupdateResources(requireActivity());
+        super.onResume();
+
+        myapisession = new Myapisession(requireActivity());
+        result = PreferenceConnector.readString(requireActivity(),
+                PreferenceConnector.reult_intent_mem, "");
+        if (result.contains("item")) {
             selectedPosition = 2;
-            itemResult = result.replace("item","");
-        } else if (result.contains("merchant"))
-        {
+            itemResult = result.replace("item", "");
+        } else if (result.contains("merchant")) {
             selectedPosition = -1;
-            merchantItem = result.replace("merchant","");
-        }else if (result.contains("offer"))
-        {
+            merchantItem = result.replace("merchant", "");
+        } else if (result.contains("offer")) {
             selectedPosition = 1;
-            offerItem = result.replace("offer","");
+            offerItem = result.replace("offer", "");
         }
         idinita();
         clickevent();
         setupviewpager();
-        if (myapisession.getKeyMerchantcate() == null || myapisession.getKeyMerchantcate().equalsIgnoreCase("")) {
+        if (myapisession.getKeyMerchantcate() == null ||
+                myapisession.getKeyMerchantcate().equalsIgnoreCase("")) {
             // getCategoryType();
             getBusinesscategory();
         }
@@ -78,10 +121,11 @@ public class HomeActivity extends BaseActivity {
             getCategoryType();
         }
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getArguments();
         if (bundle == null) {
             Log.e("Get Notification >>", "NULL");
-        } else {
+        } else
+        {
             String message = bundle.getString("message");
             facebook_name = bundle.getString("facebook_name");
             facebook_image = bundle.getString("facebook_image");
@@ -94,79 +138,19 @@ public class HomeActivity extends BaseActivity {
                     String keys = jsonObject.getString("key").trim();
                     notification_data = message;
                 } catch (JSONException e) {
-                    Log.e("TAG", "Notification: "+e.getLocalizedMessage());
-                    Log.e("TAG", "Notification: "+e.getMessage());
-                    Log.e("TAG", "Notification: "+e.getCause());
+                    Log.e("TAG", "Notification: " + e.getLocalizedMessage());
+                    Log.e("TAG", "Notification: " + e.getMessage());
+                    Log.e("TAG", "Notification: " + e.getCause());
 
                 }
             }
         }
+
     }
 
-    private void setupviewpager() {
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    private void clickevent() {
-    }
-
-    private void idinita() {
-        tabLayout = findViewById(R.id.tabs);
-        viewPager = findViewById(R.id.viewpager);
-        viewPager.setOffscreenPageLimit(4);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        // adapter.addFragment(new FeaturedFrag(), getResources().getString(R.string.featured));
-        adapter.addFragment(new NearbyFrag(merchantItem), getResources().getString(R.string.nearby));
-        adapter.addFragment(new OffersFrag(offerItem), getResources().getString(R.string.offers));
-        adapter.addFragment(new ItemsFrag(itemResult), getResources().getString(R.string.items));
-        viewPager.setAdapter(adapter);
-        if(selectedPosition!=-1) {
-            viewPager.setCurrentItem(selectedPosition);
-        }
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        Tools.reupdateResources(this);
-        super.onResume();
-    }
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
+        super.onAttach(LocaleHelper.onAttach(base));
     }
-
 
     private void getCategoryType() {
 
@@ -184,10 +168,10 @@ public class HomeActivity extends BaseActivity {
                             myapisession.setProductdata(responseData);
                         }
 
-                    } catch (IOException | JSONException e) {
-                        Log.e("TAG", "loginCall: "+e.getLocalizedMessage());
-                        Log.e("TAG", "loginCall: "+e.getMessage());
-                        Log.e("TAG", "loginCall: "+e.getCause());
+                    } catch (Exception e) {
+                        Log.e("TAG", "loginCall: " + e.getLocalizedMessage());
+                        Log.e("TAG", "loginCall: " + e.getMessage());
+                        Log.e("TAG", "loginCall: " + e.getCause());
 
                     }
                 }
@@ -217,10 +201,10 @@ public class HomeActivity extends BaseActivity {
                             myapisession.setMerchantcat(responseData);
                         }
 
-                    } catch (IOException | JSONException e) {
-                        Log.e("TAG", "getBusinesscategory: "+e.getLocalizedMessage());
-                        Log.e("TAG", "getBusinesscategory: "+e.getMessage());
-                        Log.e("TAG", "getBusinesscategory: "+e.getCause());
+                    } catch (Exception e) {
+                        Log.e("TAG", "getBusinesscategory: " + e.getLocalizedMessage());
+                        Log.e("TAG", "getBusinesscategory: " + e.getMessage());
+                        Log.e("TAG", "getBusinesscategory: " + e.getCause());
 
                     }
                 }
@@ -233,6 +217,37 @@ public class HomeActivity extends BaseActivity {
                 Log.e("TAG", t.toString());
             }
         });
+
+    }
+
+    static class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
 }
