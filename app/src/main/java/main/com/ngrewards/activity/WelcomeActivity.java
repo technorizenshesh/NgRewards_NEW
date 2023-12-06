@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.app.Config;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;

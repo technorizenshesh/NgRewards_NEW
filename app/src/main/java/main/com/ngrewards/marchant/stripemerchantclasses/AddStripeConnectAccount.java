@@ -179,7 +179,7 @@ public class AddStripeConnectAccount extends AppCompatActivity {
                                 public void onSuccess(@NonNull Token token) {
                                     // Send token to your server
                                     prgressbar.setVisibility(View.GONE);
-                                    Log.e("Token", ">>" + token.getId());
+                                    Log.e("Token", ">>" + token);
 
                                     token_id = token.getId();
                                     paymentwithcard();
@@ -191,7 +191,7 @@ public class AddStripeConnectAccount extends AppCompatActivity {
                                     prgressbar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + e.toString());
                                     // Show localized error message
-                                    Toast.makeText(AddStripeConnectAccount.this, "\n" + e,
+                                    Toast.makeText(AddStripeConnectAccount.this, "\n" + e.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
                                 }

@@ -62,4 +62,14 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="Widget.App.BottomNavigationView">
+        <item name="colorPrimary">@color/trans</item>
+        <item name="android:padding">@dimen/_10sdp</item>
+        <item name="colorOnPrimary">@color/red</item>
+    </style>
 </resources>

@@ -106,7 +106,7 @@
                 android:text="indore 0.2 mi"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small" />
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
 
                 android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                 app:tabGravity="fill"
                 />
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

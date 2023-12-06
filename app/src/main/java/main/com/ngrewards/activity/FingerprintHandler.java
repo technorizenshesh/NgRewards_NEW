@@ -18,7 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 

@@ -140,7 +140,7 @@ public class TransferRequestDetActivity extends AppCompatActivity {
         }
         else {
             reqest_type.setText(""+type);
-            type_head.setText(""+merchant_contact_name_str+" send request for "+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str);
+            type_head.setText(""+merchant_contact_name_str+getString(R.string.send_request_for)+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str);
         }
 
         member_message = findViewById(R.id.member_message);
@@ -161,12 +161,12 @@ public class TransferRequestDetActivity extends AppCompatActivity {
         btn_strip_receipt = findViewById(R.id.btn_strip_receipt);
 
         btn_strip_receipt.setOnClickListener(v -> {
-            new FragmentWebView().setData("Receipt", reciept_url).show(getSupportFragmentManager(), "");
+            new FragmentWebView().setData(getString(R.string.receipt), reciept_url).show(getSupportFragmentManager(), "");
         });
 
-        member_name.setText("Name :- " +merchant_contact_name_str);
-        member_message.setText("Message :- " +comment);
-        username_tv.setText("Username :- @" + merchant_name_str);
+        member_name.setText(getString(R.string.name_colan) +merchant_contact_name_str);
+        member_message.setText(getString(R.string.message) +comment);
+        username_tv.setText(getString(R.string.username_at_the_rad) + merchant_name_str);
 
         order_id.setText("#" + order_id_str);
         if (amount_trans_by_card==null||amount_trans_by_card.equalsIgnoreCase("")||amount_trans_by_card.equalsIgnoreCase("0")||amount_trans_by_card.equalsIgnoreCase("0.00")){
@@ -184,7 +184,7 @@ public class TransferRequestDetActivity extends AppCompatActivity {
         else {
             merchant_name.setText("" + merchant_name_str);
         }
-        merchant_number.setText("Merchant No. :- " + merchant_number_str);
+        merchant_number.setText(getString(R.string.merchant_no)+ merchant_number_str);
         try {
             String mytime=date_tv_str;
             SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -194,18 +194,18 @@ public class TransferRequestDetActivity extends AppCompatActivity {
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
             String finalDate = timeFormat.format(myDate);
-            date_tv.setText("Date:- "+finalDate);
+            date_tv.setText(getString(R.string.date)+finalDate);
 
             System.out.println(finalDate);
         }catch (Exception e){
             Log.e("EXC TRUE"," RRR");
-            date_tv.setText("Date:- "+date_tv_str);
+            date_tv.setText(getString(R.string.date)+date_tv_str);
 
         }
-        address_tv.setText("Address:- " + address_tv_str + "\n" + shipaddress_2_str);
-           total_amt_tv.setText("Total :- "+mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
-        due_amount.setText("Amount Due :- "+mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
-             tipamount_tv.setText("Tip :- "+mySession.getValueOf(MySession.CurrencySign) + tip_str);
+        address_tv.setText(getString(R.string.address) + address_tv_str + "\n" + shipaddress_2_str);
+           total_amt_tv.setText(getString(R.string.total)+mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText(getString(R.string.amountdue)+mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+             tipamount_tv.setText(getString(R.string.tip)+mySession.getValueOf(MySession.CurrencySign) + tip_str);
         if (ngcash_str==null||ngcash_str.equalsIgnoreCase("")||ngcash_str.equalsIgnoreCase("0")){
             ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
 

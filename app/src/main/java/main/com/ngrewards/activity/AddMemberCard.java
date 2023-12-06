@@ -180,7 +180,7 @@ public class AddMemberCard extends AppCompatActivity {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
 
-                                    Log.e("Token", ">>" + token.getId());
+                                    Log.e("Token", ">>" + token);
 
                                     token_id = token.getId();
                                     paymentwithcard();
@@ -189,8 +189,11 @@ public class AddMemberCard extends AppCompatActivity {
                                 public void onError(Exception error) {
                                     prgressbar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
+                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.getLocalizedMessage());
+                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.getMessage());
+                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.getCause());
                                     // Show localized error message
-                                    Toast.makeText(AddMemberCard.this, "\n" + error,
+                                    Toast.makeText(AddMemberCard.this,  error.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
 

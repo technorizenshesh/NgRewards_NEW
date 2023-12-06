@@ -1,5 +1,6 @@
 package main.com.ngrewards.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ import retrofit2.Response;
 
 public class MyCartDetail extends AppCompatActivity {
 
-    private RecyclerView mycartlist;
+    private RecyclerView mycartlistRecycleview;
     SwipeRefreshLayout swipeToRefresh;
     private String user_id = "";
     MySession mySession;
@@ -113,10 +114,10 @@ public class MyCartDetail extends AppCompatActivity {
         swipeToRefresh = findViewById(R.id.swipeToRefresh);
         nocartitem = findViewById(R.id.nocartitem);
         total_amount = findViewById(R.id.total_amount);
-        mycartlist = findViewById(R.id.mycartlist);
+        mycartlistRecycleview = findViewById(R.id.mycartlist);
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(MyCartDetail.this, LinearLayoutManager.VERTICAL, false);
 
-        mycartlist.setLayoutManager(horizontalLayoutManagaer);
+        mycartlistRecycleview.setLayoutManager(horizontalLayoutManagaer);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -154,12 +155,12 @@ public class MyCartDetail extends AppCompatActivity {
                     nocartitem.setVisibility(View.VISIBLE);
                     total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                     mycartAdapter = new MycartAdapter(cartListBeanArrayList);
-                    mycartlist.setAdapter(mycartAdapter);
+                    mycartlistRecycleview.setAdapter(mycartAdapter);
                     mycartAdapter.notifyDataSetChanged();
                 } else {
                     nocartitem.setVisibility(View.GONE);
                     mycartAdapter = new MycartAdapter(cartListBeanArrayList);
-                    mycartlist.setAdapter(mycartAdapter);
+                    mycartlistRecycleview.setAdapter(mycartAdapter);
                     mycartAdapter.notifyDataSetChanged();
                 }
 
@@ -171,7 +172,7 @@ public class MyCartDetail extends AppCompatActivity {
     }
 
     class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
-        ArrayList<CartListBean> mycartlist;
+        ArrayList<CartListBean> mycartlistxx;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
@@ -195,7 +196,7 @@ public class MyCartDetail extends AppCompatActivity {
         }
 
         public MycartAdapter(ArrayList<CartListBean> mycartlist) {
-            this.mycartlist = mycartlist;
+            this.mycartlistxx = mycartlist;
         }
 
         @Override
@@ -208,18 +209,19 @@ public class MyCartDetail extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, final int listPosition) {
-            if (mycartlist.get(listPosition).getProductDetail()!=null){
-                holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
-                holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
+            if (mycartlistxx.get(listPosition).getProductDetail()!=null){
+                Log.e("TAG", "onBindViewHolder: "+mycartlistxx.get(listPosition).getProductDetail());
+                holder.product_desc.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductDescription());
+                holder.product_name.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductName());
 
-            }
 
-             holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
-            holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
-            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
 
-            String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
+            // holder.merchant_name.setText("" + mycartlistxx.get(listPosition).getUserDetails().get(0).getBusinessName());
+            holder.quant_tv.setText("" + mycartlistxx.get(listPosition).getQuantity());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlistxx.get(listPosition).getProductDetail().getProduct_cart_price());
+
+            String image_url = mycartlistxx.get(listPosition).getProductDetail().getThumbnailImage();
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
                 Glide.with(MyCartDetail.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
             }
@@ -228,17 +230,17 @@ public class MyCartDetail extends AppCompatActivity {
             holder.plusq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                    if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
                         int total_stock_count=0;
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
-                        if (mycartlist.get(listPosition).getProductDetail().getStock()!=null&&!mycartlist.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")){
-                            total_stock_count = Integer.parseInt(mycartlist.get(listPosition).getProductDetail().getStock());
+                        int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
+                        if (mycartlistxx.get(listPosition).getProductDetail().getStock()!=null&&!mycartlistxx.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")){
+                            total_stock_count = Integer.parseInt(mycartlistxx.get(listPosition).getProductDetail().getStock());
 
                         }
                         if (total_count<total_stock_count){
                             int new_count = ++total_count;
 
-                            updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
+                            updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(),""+new_count );
                         }
                     }
                 }
@@ -247,11 +249,11 @@ public class MyCartDetail extends AppCompatActivity {
             holder.minusq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
+                    if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                        int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
                         if (total_count>1){
                             int new_count = --total_count;
-                            updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
+                            updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(),""+new_count );
                         }
 
                     }
@@ -262,15 +264,15 @@ public class MyCartDetail extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                        addUpdateQty(mycartlist.get(listPosition).getId());
+                        addUpdateQty(mycartlistxx.get(listPosition).getId());
                 }
             });
         }
-
+        }
         @Override
         public int getItemCount() {
             //return 4;
-            return mycartlist == null ? 0 : mycartlist.size();
+            return mycartlistxx == null ? 0 : mycartlistxx.size();
         }
     }
 
@@ -351,19 +353,17 @@ public class MyCartDetail extends AppCompatActivity {
                             nocartitem.setVisibility(View.VISIBLE);
                             total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
                             mycartAdapter = new MycartAdapter(cartListBeanArrayList);
-                            mycartlist.setAdapter(mycartAdapter);
+                            mycartlistRecycleview.setAdapter(mycartAdapter);
                             mycartAdapter.notifyDataSetChanged();
                         } else {
                             nocartitem.setVisibility(View.GONE);
                             mycartAdapter = new MycartAdapter(cartListBeanArrayList);
-                            mycartlist.setAdapter(mycartAdapter);
+                            mycartlistRecycleview.setAdapter(mycartAdapter);
                             mycartAdapter.notifyDataSetChanged();
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception  e) {
                         e.printStackTrace();
                     }
                 }
@@ -407,9 +407,7 @@ public class MyCartDetail extends AppCompatActivity {
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

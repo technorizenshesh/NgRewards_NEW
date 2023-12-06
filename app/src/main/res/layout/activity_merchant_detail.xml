@@ -174,7 +174,7 @@
                 android:textColor="@color/red"
                 android:textSize="@dimen/small" />
 
-             <android.support.design.widget.TabLayout
+             <com.google.android.material.tabs.TabLayout
                  android:id="@+id/tabs"
                  android:layout_width="match_parent"
                  android:layout_height="50dp"
@@ -186,7 +186,7 @@
                  app:tabSelectedTextColor="@color/black"
                  app:tabGravity="fill" />
 
-               <android.support.v4.view.ViewPager
+               <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

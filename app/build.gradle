@@ -3,22 +3,22 @@ apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 android {
     signingConfigs {
-        /*debug {
+        debug {
             storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
             storePassword 'ngrewards123'
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
-        }*/
+        }
     }
-    /*  packagingOptions {
+     packagingOptions {
           exclude 'META-INF/services/javax.annotation.processing.Processor'
-      }*/
+      }
     defaultConfig {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 61
-        versionName "11.03"
+        versionCode 67
+        versionName "11.08"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         //multiDexEnabled true
@@ -69,10 +69,10 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     //images

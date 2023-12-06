@@ -46,7 +46,7 @@ import java.util.TimeZone;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.app.Config;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.GPSTracker;

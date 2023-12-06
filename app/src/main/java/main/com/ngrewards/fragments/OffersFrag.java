@@ -6,19 +6,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -41,6 +32,12 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -48,14 +45,9 @@ import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import main.com.ngrewards.R;
@@ -83,9 +75,12 @@ import retrofit2.Response;
 
 public class OffersFrag extends Fragment {
     View v;
-    private ListView item_product;
     ArrayList<Boolean> selecteded;
     OffersAdpter offersAdpter;
+    SwipeRefreshLayout swipeToRefresh;
+    ArrayList<CategoryBeanList> categoryBeanListArrayList;
+    GPSTracker gpsTracker;
+    private ListView item_product;
     private RecyclerView offers_product_rec;
     private ProgressBar progresbar;
     private ArrayList<OfferBeanList> offerBeanListArrayList;
@@ -93,15 +88,11 @@ public class OffersFrag extends Fragment {
     private Myapisession myapisession;
     private String user_id = "", fill_category_id = "", rating_filter_str = "", distance_filter_str = "", fill_category_id_loc = "", like_filter_str = "";
     private TextView filter_tv, nooffertv;
-    SwipeRefreshLayout swipeToRefresh;
     private int current_offer_pos;
-    ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private EditText search_et_home;
     private DistanceAdapter distanceAdapter;
     private ArrayList<String> distance_filter_list;
     private double latitude = 0, longitude = 0;
-    GPSTracker gpsTracker;
-
     private String result;
 
     @SuppressLint("ValidFragment")
@@ -117,6 +108,7 @@ public class OffersFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     protected void attachBaseContext(Context base) {
         super.onAttach(LocaleHelper.onAttach(base));
     }
@@ -145,7 +137,7 @@ public class OffersFrag extends Fragment {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -270,250 +262,7 @@ public class OffersFrag extends Fragment {
         }
     }
 
-    class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
-        ArrayList<OfferBeanList> offerBeanLists;
-        ArrayList<OfferBeanList> searchofferBeanLists;
-        MySession  mySession = new MySession(getActivity());
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView liketv, distance_tv, offername, merchant_name, offer_desc, pricediscount, likecount, discounts, real_price;
-            ImageView likeimg, offerimage;
-            LinearLayout sharelay, likebut;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
-                this.offerimage = itemView.findViewById(R.id.offerimage);
-                this.likecount = itemView.findViewById(R.id.likecount);
-                this.pricediscount = itemView.findViewById(R.id.pricediscount);
-                this.discounts = itemView.findViewById(R.id.discounts);
-                this.offername = itemView.findViewById(R.id.offername);
-                this.offer_desc = itemView.findViewById(R.id.offer_desc);
-                this.sharelay = itemView.findViewById(R.id.sharelay);
-                this.likebut = itemView.findViewById(R.id.likebut);
-                this.likeimg = itemView.findViewById(R.id.likeimg);
-                this.liketv = itemView.findViewById(R.id.liketv);
-                this.real_price = itemView.findViewById(R.id.real_price);
-                this.merchant_name = itemView.findViewById(R.id.merchant_name);
-                this.distance_tv = itemView.findViewById(R.id.distance_tv);
-            }
-        }
-
-        public void filter(String charText) {
-            if (charText == null) {
-            } else {
-                charText = charText.toLowerCase();
-                offerBeanLists.clear();
-                if (charText.length() == 0) {
-                    offerBeanLists.addAll(searchofferBeanLists);
-                } else {
-                    for (OfferBeanList wp : searchofferBeanLists) {
-                        if (wp.getOfferName().toLowerCase().startsWith(charText))//.toLowerCase(Locale.getDefault())
-                        {
-                            offerBeanLists.add(wp);
-                        }
-                    }
-                }
-                notifyDataSetChanged();
-            }
-        }
-        public OffersAdpter(ArrayList<OfferBeanList> offerBeanLists) {
-            this.offerBeanLists = offerBeanLists;
-            this.searchofferBeanLists = new ArrayList<>();
-            searchofferBeanLists.addAll(offerBeanLists);
-        }
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_pro_offers_lay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
-
-            Log.e("TAG", "onBindViewHolder:  mySession.getValueOf(MySession.CurrencySign) "+mySession.getValueOf(MySession.CurrencySign) );
-            if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
-                holder.discounts.setVisibility(View.GONE);
-            } else {
-                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition)
-                        .getOffer_discount_price().equalsIgnoreCase("")
-                        && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.discounts.setVisibility(View.VISIBLE);
-                    holder.pricediscount.setText(String.format("%s%s", mySession.getValueOf(MySession.CurrencySign), offerBeanLists.get(listPosition).getOffer_discount_price().trim()));
-                    double offresp = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
-                    int ddd = (int) offresp;
-                    holder.discounts.setText("" + ddd + "% OFF");
-                    // holder.discounts.setText("(" + offerBeanLists.get(listPosition).getOfferDiscount() + "% OFF)");
-                } else {
-                    holder.discounts.setVisibility(View.GONE);
-                }
-            }
-            holder.merchant_name.setText("" + offerBeanLists.get(listPosition).getBusiness_name());
-            holder.distance_tv.setText("" + offerBeanLists.get(listPosition).getDistance() + getString(R.string.mi));
-            holder.offername.setText("" + offerBeanLists.get(listPosition).getOfferName());
-            holder.offer_desc.setText("" + offerBeanLists.get(listPosition).getOfferDescription());
-            holder.likecount.setText("" + offerBeanLists.get(listPosition).getLikeCount());
-            if (offerBeanLists.get(listPosition).getOfferPrice() == null) {
-            } else {
-                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOfferPrice().trim());
-                    holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
-                    holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOfferPrice().trim());
-                }
-            }
-            String product_img = offerBeanLists.get(listPosition).getOfferImage();
-            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-            } else {
-                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
-            }
-            if (offerBeanLists.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
-                holder.likeimg.setImageResource(R.drawable.filled_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
-            } else {
-                holder.likeimg.setImageResource(R.drawable.ic_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-            }
-
-            holder.sharelay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Get access to the URI for the bitmap
-                    try {
-                        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                                .setLink(Uri.parse("https://www.ngrewards.com/data/Offer?"+offerBeanLists.get(listPosition).getMerchant_id()))
-                                // Open links with this a
-                                .setDynamicLinkDomain("ngtechn.page.link")
-                                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                                // Open links with com.example.ios on iOS
-                                .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
-                                .buildDynamicLink();
-                        Uri dynamicLinkUri = dynamicLink.getUri();
-                        Log.d("TAG", "onCreate: "+dynamicLinkUri);
-
-                        shortenLongLink(dynamicLinkUri.toString());
-
-                    } catch (Exception e) {
-                        Log.e("EXC", " > " + e.getMessage());
-                        e.printStackTrace();
-                    }
-
-//                    Uri bmpUri = getLocalBitmapUri(holder.offerimage);
-//
-//                    Intent sendIntent = new Intent();
-//                    sendIntent.setAction(Intent.ACTION_SEND);
-//                    sendIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :$" + offerBeanLists.get(listPosition).getOfferPrice() +
-//                            "\n" + offerBeanLists.get(listPosition).getShareLink()+ BuildConfig.APPLICATION_ID);
-//                    sendIntent.setType("text/plain");
-//                   // sendIntent.setType("image/*");
-//                    startActivity(sendIntent);
-
-
-
-
-                 /*   Uri bmpUri = getLocalBitmapUri(holder.offerimage);
-
-                   // Log.e("bmpuri", String.valueOf(bmpUri));
-
-                    // Get access to the URI for the bitmap
-                    try {
-
-                        if (bmpUri != null) {
-                            // Construct a ShareIntent with link to image
-                            Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND);
-                            shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :$" + offerBeanLists.get(listPosition).getOfferPrice() +
-                                    "\n" + offerBeanLists.get(listPosition).getShareLink());
-                            shareIntent.setType("image/*");
-                            // Launch sharing dialog for image
-                            startActivity(shareIntent);
-                        } else {
-
-
-                            // ...sharing failed, handle error
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("EXC", " > " + e.getMessage());
-                        e.printStackTrace();
-                    }
-*/
-                }
-            });
-
-      /*      holder.sharelay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    Toast.makeText(getContext(),"sharesuccess!!",Toast.LENGTH_SHORT).show();
-
-                    try {
-
-                        Uri bmpUri = getLocalBitmapUri(holder.offerimage);
-
-                        if (bmpUri != null) {
-                            // Construct a ShareIntent with link to image
-                            Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND);
-                            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :$" + offerBeanLists.get(listPosition).getOfferPrice() + "\n" + offerBeanLists.get(listPosition).getShareLink());
-
-                            shareIntent.setType("image/*");
-                            // Launch sharing dialog for image
-                            startActivity(Intent.createChooser(shareIntent, "Share Image"));
-                        } else {
-                            Log.e("EXC", " > " + bmpUri);
-                            // ...sharing failed, handle error
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("EXC", " > " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }
-            });*/
-
-            holder.likebut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    current_offer_pos = listPosition;
-                    likedislikeoffer_fun(offerBeanLists.get(listPosition).getId());
-                }
-
-            });
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getActivity(), MerchantDetailAct.class);
-                    i.putExtra("user_id", user_id);
-                    i.putExtra("merchant_contact_name", offerBeanLists.get(listPosition).getContact_name());
-                    i.putExtra("merchant_id", offerBeanLists.get(listPosition).getMerchant_id());
-                    i.putExtra("merchant_name", offerBeanLists.get(listPosition).getBusiness_name());
-                    i.putExtra("merchant_number", offerBeanLists.get(listPosition).getBusiness_no());
-                    i.putExtra("merchant_img", offerBeanLists.get(listPosition).getMerchant_image());
-                    startActivity(i);
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            //return 2;
-            return offerBeanLists == null ? 0 : offerBeanLists.size();
-        }
-    }
-
-    public void shortenLongLink(String link)
-    {
+    public void shortenLongLink(String link) {
 
         Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLongLink(Uri.parse(link))
@@ -525,27 +274,26 @@ public class OffersFrag extends Fragment {
                             // Short link created
                             Uri shortLink = task.getResult().getShortLink();
 
-                            Log.d("TAG", "onComplete: "+shortLink);
+                            Log.d("TAG", "onComplete: " + shortLink);
 
                             Uri flowchartLink = task.getResult().getPreviewLink();
 
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
 
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink+"");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink + "");
                             shareIntent.setType("text/plain");
                             // Launch sharing dialog for image
                             startActivity(shareIntent);
 
                         } else {
 
-                            Log.d("TAG", "onComplete: Error"+task.getException());
+                            Log.d("TAG", "onComplete: Error" + task.getException());
                             // Error
                             // ...
                         }
                     }
                 });
-
 
 
     }
@@ -587,16 +335,14 @@ public class OffersFrag extends Fragment {
                                 offerBeanListArrayList.get(current_offer_pos).setLikeCount(likett + "");
 
                             }
-                            offersAdpter = new OffersAdpter(offerBeanListArrayList);
+                            offersAdpter = new OffersAdpter(offerBeanListArrayList, requireActivity());
                             offers_product_rec.setAdapter(offersAdpter);
                             offersAdpter.notifyDataSetChanged();
                             offers_product_rec.scrollToPosition(current_offer_pos);
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -640,19 +386,16 @@ public class OffersFrag extends Fragment {
                             nooffertv.setVisibility(View.GONE);
                         }
 
-                        offersAdpter = new OffersAdpter(offerBeanListArrayList);
+                        offersAdpter = new OffersAdpter(offerBeanListArrayList, requireActivity());
                         offers_product_rec.setAdapter(offersAdpter);
 
-                        if(!result.equalsIgnoreCase(""))
-                        {
+                        if (!result.equalsIgnoreCase("")) {
                             gotoOffer();
                         }
 
                         offersAdpter.notifyDataSetChanged();
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -669,21 +412,17 @@ public class OffersFrag extends Fragment {
         });
     }
 
-    public void gotoOffer()
-    {
+    public void gotoOffer() {
         OfferBeanList offerItem = null;
-        for(OfferBeanList offerMyItem:offerBeanListArrayList)
-        {
-            if(result.equalsIgnoreCase(offerMyItem.getMerchant_id()))
-            {
+        for (OfferBeanList offerMyItem : offerBeanListArrayList) {
+            if (result.equalsIgnoreCase(offerMyItem.getMerchant_id())) {
                 offerItem = offerMyItem;
             }
         }
 
-        if(offerItem!=null)
-        {
+        if (offerItem != null) {
             Intent i = new Intent(getActivity(), MerchantDetailAct.class);
-            i.putExtra("user_id", user_id+"demo");
+            i.putExtra("user_id", user_id + "demo");
             i.putExtra("merchant_contact_name", offerItem.getContact_name());
             i.putExtra("merchant_id", offerItem.getMerchant_id());
             i.putExtra("merchant_name", offerItem.getBusiness_name());
@@ -761,8 +500,8 @@ public class OffersFrag extends Fragment {
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
                 categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
                 JSONObject object = new JSONObject(myapisession.getKeyOffercate());
                 Log.e("Offer Category >", " >" + myapisession.getKeyOffercate());
@@ -851,10 +590,56 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         dialogSts.show();
     }
 
+    private void getOfferCategory() {
+//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
+        categoryBeanListArrayList = new ArrayList<>();
+        CategoryBeanList categoryBeanList = new CategoryBeanList();
+        categoryBeanList.setCategoryId("0");
+        categoryBeanList.setCategoryName(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanListArrayList.add(categoryBeanList);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyOffercate(responseData);
+
+                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
+                            categoryBeanListArrayList.addAll(successData.getResult());
+
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+
+
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+    }
+
+
     public class DistanceAdapter extends BaseAdapter {
+        private final ArrayList<String> distancelist;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<String> distancelist;
 
         public DistanceAdapter(Context applicationContext, ArrayList<String> distancelist) {
             this.context = applicationContext;
@@ -894,9 +679,9 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
     }
 
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -936,77 +721,179 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         }
     }
 
-    public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
-        Drawable drawable = imageView.getDrawable();
-        Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable) {
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        } else {
-            return null;
+
+    public class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
+        ArrayList<OfferBeanList> offerBeanLists;
+        ArrayList<OfferBeanList> searchofferBeanLists;
+        MySession mySession;
+        Context context;
+
+        public OffersAdpter(ArrayList<OfferBeanList> offerBeanLists, Context context) {
+            this.context = context;
+            this.offerBeanLists = offerBeanLists;
+            this.searchofferBeanLists = new ArrayList<>();
+            searchofferBeanLists.addAll(offerBeanLists);
         }
-        // Store image to default external storage directory
-        Uri bmpUri = null;
-        try {
 
-            File file = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-            // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
-            bmpUri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmpUri;
-
-    }
-
-    private void getOfferCategory() {
-//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        categoryBeanListArrayList = new ArrayList<>();
-        CategoryBeanList categoryBeanList = new CategoryBeanList();
-        categoryBeanList.setCategoryId("0");
-        categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
-        categoryBeanListArrayList.add(categoryBeanList);
-        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyOffercate(responseData);
-
-                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
-                            categoryBeanListArrayList.addAll(successData.getResult());
-
+        public void filter(String charText) {
+            if (charText == null) {
+            } else {
+                charText = charText.toLowerCase();
+                offerBeanLists.clear();
+                if (charText.length() == 0) {
+                    offerBeanLists.addAll(searchofferBeanLists);
+                } else {
+                    for (OfferBeanList wp : searchofferBeanLists) {
+                        if (wp.getOfferName().toLowerCase().startsWith(charText))//.toLowerCase(Locale.getDefault())
+                        {
+                            offerBeanLists.add(wp);
                         }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 }
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_pro_offers_lay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+            mySession = new MySession(context);
+            Log.e("TAG", "onBindViewHolder:  mySession.getValueOf(MySession.CurrencySign) " + mySession.getValueOf(MySession.CurrencySign));
+            if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
+                holder.discounts.setVisibility(View.GONE);
+            } else {
+                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition)
+                        .getOffer_discount_price().equalsIgnoreCase("")
+                        && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
+                    holder.discounts.setVisibility(View.VISIBLE);
+                    holder.pricediscount.setText(String.format("%s%s", mySession.getValueOf(MySession.CurrencySign), offerBeanLists.get(listPosition).getOffer_discount_price().trim()));
+                    double offresp = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
+                    int ddd = (int) offresp;
+                    holder.discounts.setText("" + ddd + "% OFF");
+                    // holder.discounts.setText("(" + offerBeanLists.get(listPosition).getOfferDiscount() + "% OFF)");
+                } else {
+                    holder.discounts.setVisibility(View.GONE);
+                }
+            }
+            holder.merchant_name.setText("" + offerBeanLists.get(listPosition).getBusiness_name());
+            holder.distance_tv.setText("" + offerBeanLists.get(listPosition).getDistance() + getString(R.string.mi));
+            holder.offername.setText("" + offerBeanLists.get(listPosition).getOfferName());
+            holder.offer_desc.setText("" + offerBeanLists.get(listPosition).getOfferDescription());
+            holder.likecount.setText("" + offerBeanLists.get(listPosition).getLikeCount());
+            if (offerBeanLists.get(listPosition).getOfferPrice() == null) {
+            } else {
+                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
+                    holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                }
+            }
+            String product_img = offerBeanLists.get(listPosition).getOfferImage();
+            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+            } else {
+                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
+            }
+            if (offerBeanLists.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
+                holder.likeimg.setImageResource(R.drawable.filled_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
+                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
+            } else {
+                holder.likeimg.setImageResource(R.drawable.ic_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
             }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
+            holder.sharelay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get access to the URI for the bitmap
+                    try {
+                        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                                .setLink(Uri.parse("https://www.ngrewards.com/data/Offer?" + offerBeanLists.get(listPosition).getMerchant_id()))
+                                // Open links with this a
+                                .setDynamicLinkDomain("ngtechn.page.link")
+                                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                                // Open links with com.example.ios on iOS
+                                .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
+                                .buildDynamicLink();
+                        Uri dynamicLinkUri = dynamicLink.getUri();
+                        Log.d("TAG", "onCreate: " + dynamicLinkUri);
+
+                        shortenLongLink(dynamicLinkUri.toString());
+
+                    } catch (Exception e) {
+                        Log.e("EXC", " > " + e.getMessage());
+                        e.printStackTrace();
+                    }
 
 
-                Log.e("TAG", t.toString());
+                }
+            });
+
+
+            holder.likebut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    current_offer_pos = listPosition;
+                    likedislikeoffer_fun(offerBeanLists.get(listPosition).getId());
+                }
+
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, MerchantDetailAct.class);
+                    i.putExtra("user_id", user_id);
+                    i.putExtra("merchant_contact_name", offerBeanLists.get(listPosition).getContact_name());
+                    i.putExtra("merchant_id", offerBeanLists.get(listPosition).getMerchant_id());
+                    i.putExtra("merchant_name", offerBeanLists.get(listPosition).getBusiness_name());
+                    i.putExtra("merchant_number", offerBeanLists.get(listPosition).getBusiness_no());
+                    i.putExtra("merchant_img", offerBeanLists.get(listPosition).getMerchant_image());
+                    startActivity(i);
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 2;
+            return offerBeanLists == null ? 0 : offerBeanLists.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView liketv, distance_tv, offername, merchant_name, offer_desc, pricediscount, likecount, discounts, real_price;
+            ImageView likeimg, offerimage;
+            LinearLayout sharelay, likebut;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
+                this.offerimage = itemView.findViewById(R.id.offerimage);
+                this.likecount = itemView.findViewById(R.id.likecount);
+                this.pricediscount = itemView.findViewById(R.id.pricediscount);
+                this.discounts = itemView.findViewById(R.id.discounts);
+                this.offername = itemView.findViewById(R.id.offername);
+                this.offer_desc = itemView.findViewById(R.id.offer_desc);
+                this.sharelay = itemView.findViewById(R.id.sharelay);
+                this.likebut = itemView.findViewById(R.id.likebut);
+                this.likeimg = itemView.findViewById(R.id.likeimg);
+                this.liketv = itemView.findViewById(R.id.liketv);
+                this.real_price = itemView.findViewById(R.id.real_price);
+                this.merchant_name = itemView.findViewById(R.id.merchant_name);
+                this.distance_tv = itemView.findViewById(R.id.distance_tv);
             }
-        });
-
-
+        }
     }
 
 

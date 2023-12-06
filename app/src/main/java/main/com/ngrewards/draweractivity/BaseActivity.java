@@ -66,7 +66,7 @@ import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.activity.TransferToaFriend;
 import main.com.ngrewards.activity.TutorialAct;
 import main.com.ngrewards.activity.app.Config;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
@@ -105,7 +105,8 @@ public class BaseActivity extends AppCompatActivity {
     private String gender_str;
     private String age_str;
     private String user_log_data;
-    public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    public final BroadcastReceiver broadcastReceiver =
+            new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 

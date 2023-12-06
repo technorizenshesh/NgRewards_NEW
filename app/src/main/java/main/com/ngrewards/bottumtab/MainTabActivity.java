@@ -1,3 +1,4 @@
+/*
 package main.com.ngrewards.bottumtab;
 
 import static android.content.ContentValues.TAG;
@@ -58,7 +59,6 @@ import main.com.ngrewards.constant.MySession;
 
 
 public class MainTabActivity extends TabActivity {
-
     int WhichIndex = 0;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -382,7 +382,8 @@ public class MainTabActivity extends TabActivity {
 
                         //impliment by sagar panse //
 
-                      /*  String delete_status = jsonObject.getString("delete_status");
+                      */
+/*  String delete_status = jsonObject.getString("delete_status");
 
                         if (delete_status.equalsIgnoreCase("Deactive")) {
                             mySession.signinusers(false);
@@ -392,7 +393,8 @@ public class MainTabActivity extends TabActivity {
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(i);
-                        }*/
+                        }*//*
+
 
                         //impliment by sagar panse //
 
@@ -553,4 +555,4 @@ public class MainTabActivity extends TabActivity {
 
         }
     }
-}
+}*/

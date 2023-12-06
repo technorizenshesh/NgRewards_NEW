@@ -56,7 +56,7 @@ import main.com.ngrewards.activity.AddMemberCard;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.UpdateMemberCard;
 import main.com.ngrewards.beanclasses.CardBean;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySavedCardInfo;

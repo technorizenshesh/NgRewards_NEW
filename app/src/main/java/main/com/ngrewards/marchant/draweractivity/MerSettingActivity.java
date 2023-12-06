@@ -48,7 +48,7 @@ import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.SeeMyStripeDashBoardAct;
 import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.StripeExpressAcountAct;
-import main.com.ngrewards.bottumtab.MainTabActivity;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;

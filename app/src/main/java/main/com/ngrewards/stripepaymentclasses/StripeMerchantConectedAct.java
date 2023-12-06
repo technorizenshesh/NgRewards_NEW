@@ -170,7 +170,7 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
                                     progressBar.setVisibility(View.GONE);
-                                    Log.e("Token", ">>" + token.getId());
+                                    Log.e("Token", ">>" + token);
 
                                     token_id = token.getId();
                                     paymentwithcard();
@@ -181,7 +181,7 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
                                     // Show localized error message
-                                    Toast.makeText(StripeMerchantConectedAct.this, "\n" + error,
+                                    Toast.makeText(StripeMerchantConectedAct.this,  error.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
 

@@ -15,14 +15,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,6 +40,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -52,20 +61,39 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.BuildConfig;
+import main.com.ngrewards.QrCodeActivity;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
+import main.com.ngrewards.activity.AccountTypeSelectionAct;
+import main.com.ngrewards.activity.CommisionActivity;
 import main.com.ngrewards.activity.EMIManualActivity;
+import main.com.ngrewards.activity.EmployeesalesActivity;
+import main.com.ngrewards.activity.MyCartDetail;
+import main.com.ngrewards.activity.NetworkAct;
+import main.com.ngrewards.activity.PreferenceConnector;
+import main.com.ngrewards.activity.TransferToaFriend;
+import main.com.ngrewards.activity.TutorialAct;
+import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.constant.BaseUrl;
+import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
+import main.com.ngrewards.constant.Myapisession;
+import main.com.ngrewards.draweractivity.ProfileActivity;
+import main.com.ngrewards.draweractivity.SettingActivity;
+import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 
 public class MainTabActivity extends AppCompatActivity {
     private static final float END_SCALE = 0.85f;
-    public static String user_log_data = "", ngcash = "", user_id = "", currency_code = "", currency_sign = "", country_name = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
+    public static String user_log_data = "",username_str, ngcash = "", user_id = "", currency_code = "",
+            currency_sign = "", country_name = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
+    TextView ngcash_txt ;
     public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -109,6 +137,37 @@ public class MainTabActivity extends AppCompatActivity {
             }
         }
     };
+
+    public final BroadcastReceiver broadcastReceiver2 =
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (intent != null) {
+                        String str = intent.getStringExtra("key");
+                        Log.e("message>>>>>>>", str);
+                        mySession = new MySession(getApplicationContext());
+                        user_log_data = mySession.getKeyAlldata();
+                        if (user_log_data == null) {
+
+                        } else {
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(user_log_data);
+                                String message = jsonObject.getString("status");
+                                if (message.equalsIgnoreCase("1")) {
+                                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                                    user_id = jsonObject1.getString("id");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        reqcount.setVisibility(View.GONE);
+                        new GetProfile().execute();
+                    }
+                }
+            };
     int WhichIndex = 0;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -129,11 +188,35 @@ public class MainTabActivity extends AppCompatActivity {
     private String facebook_name;
     private String facebook_image;
     private String result = "";
+///////////234567890-
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
+
+    public static String member_ngcash = "0";
+    private final boolean isVisible = false;
+    public Dialog dialogSts;
+
+    boolean mSlideState = false;
+    CircleImageView  drwr_user_img;
+    MySavedCardInfo mySavedCardInfo;
+    private DrawerLayout drawer_layout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationview;
+    private LinearLayout messagelay, rate_lay, profile_lay, employeesaleslay, setting_lay, logout, networklay, tutoriallay, transferlay;
+    private TextView user_name, name, reqcount, cartcount;
+    private ImageView notification, cartimg, qrcode;
+    private LinearLayout commissionlay;
+    private Myapisession myapisession;
+    private String newcreate_user_name;
+    private String craete_profile;
+    private String createUserName;
+    private String user_name1;
+    private String dfgfd;
+    private String dfgfd1;
+    private ProgressBar progresbar;
+    private String gender_str;
+    private String age_str;
+  
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,23 +224,18 @@ public class MainTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_tab_new);
         Tools.reupdateResources(this);
         initToolbar();
-
         initNavigation();
-
         if (getIntent().getExtras() != null) {
             result = getIntent().getExtras().getString("result");
             if (result == null) {
                 result = "";
             }
         }
-
-
         notification_unseen_count = "";
         cart_unseen_count = "";
         mySession = new MySession(this);
         user_log_data = mySession.getKeyAlldata();
         if (user_log_data == null) {
-
         } else {
 
             try {
@@ -171,7 +249,6 @@ public class MainTabActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
         if (mySession.getAppUpdate().equalsIgnoreCase("cancel")) {
             try {
                 currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -184,11 +261,11 @@ public class MainTabActivity extends AppCompatActivity {
             }
             Log.e("OnCreate OUT", "Current version " + currentVersion);
         }
-
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             Log.e("Get Notification >>", "NULL");
-        } else {
+        } else
+        {
 
             String message = bundle.getString("message");
             facebook_name = bundle.getString("facebook_name");
@@ -206,7 +283,6 @@ public class MainTabActivity extends AppCompatActivity {
                 }
             }
         }
-
         Bundle extra = getIntent().getExtras();
         exit = false;
         if (extra == null) {
@@ -228,83 +304,78 @@ public class MainTabActivity extends AppCompatActivity {
             }
         }
 
+        onCreate2();
+        
+    }
 
+    private void onCreate2() {
 
+        mySession = new MySession(this);
+        Tools.reupdateResources(this);
 
+        idinit();
+        user_log_data = mySession.getKeyAlldata();
+        dialogSts = new Dialog(MainTabActivity.this, R.style.DialogSlideAnim);
 
+        if (user_log_data == null) {
 
-       /* TabHost tabHost = getTabHost();
-        TabHost.TabSpec homespec = tabHost.newTabSpec("Home");
-        View tabIndicator1 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
-        ((ImageView) tabIndicator1.findViewById(R.id.icon)).setImageResource(R.drawable.homedrawable);
-        ((TextView) tabIndicator1.findViewById(R.id.tabtext)).setText(getResources().getString(R.string.home));
-        TextView counter = ((TextView) tabIndicator1.findViewById(R.id.reqcount));
-        homespec.setIndicator(tabIndicator1);
+        } else {
 
-        Intent Intent1 = new Intent(this, HomeActivity.class).putExtra("result",result);
-        homespec.setContent(Intent1);
-
-
-        // Tab for OnSale
-        TabHost.TabSpec onsalespec = tabHost.newTabSpec("Search");
-
-        View tabIndicator2 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
-        ((ImageView) tabIndicator2.findViewById(R.id.icon)).setImageResource(R.drawable.paybilldrawable);
-        ((TextView) tabIndicator2.findViewById(R.id.tabtext)).setText(getResources().getString(R.string.paybill));
-
-
-        counter_wallet = ((TextView) tabIndicator2.findViewById(R.id.reqcount));
-        onsalespec.setIndicator(tabIndicator2);
-
-        Intent intent2 = new Intent(this, PayBillAct.class);
-        onsalespec.setContent(intent2);
-
-        // Tab for Deals
-        TabHost.TabSpec dealsspec = tabHost.newTabSpec("Chat");
-
-        View tabIndicator3 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
-        ((ImageView) tabIndicator3.findViewById(R.id.icon)).setImageResource(R.drawable.activitydrawable);
-        ((TextView) tabIndicator3.findViewById(R.id.tabtext)).setText(getResources().getString(R.string.activity));
-        counter_shedule = ((TextView) tabIndicator3.findViewById(R.id.reqcount));
-        dealsspec.setIndicator(tabIndicator3);
-
-        Intent intent3 = new Intent(this, TrasActivity.class);
-        dealsspec.setContent(intent3);
-
-        TabHost.TabSpec message = tabHost.newTabSpec("Chat");
-
-        View tabIndicator6 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
-        ((ImageView) tabIndicator6.findViewById(R.id.icon)).setImageResource(R.drawable.messagedrawable);
-        ((TextView) tabIndicator6.findViewById(R.id.tabtext)).setText(getResources().getString(R.string.messages));
-        counter_message = ((TextView) tabIndicator6.findViewById(R.id.reqcount));
-        message.setIndicator(tabIndicator6);
-
-        Intent intent6 = new Intent(this, MemberMessageAct.class);
-        message.setContent(intent6);
-        // Tab for Profile
-        TabHost.TabSpec profilespec = tabHost.newTabSpec("Profile");
-
-        View tabIndicator5 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
-        ((ImageView) tabIndicator5.findViewById(R.id.icon)).setImageResource(R.drawable.invitedrawable);
-        ((TextView) tabIndicator5.findViewById(R.id.tabtext)).setText(getResources().getString(R.string.invite));
-        counter = ((TextView) tabIndicator5.findViewById(R.id.reqcount));
-        profilespec.setIndicator(tabIndicator5);
-
-        Intent Intent5 = new Intent(this, InviteActMain.class);
-        profilespec.setContent(Intent5);
-
-        try {
-            tabHost.addTab(homespec);
-            tabHost.addTab(onsalespec);
-            tabHost.addTab(dealsspec);
-            tabHost.addTab(message);
-            tabHost.addTab(profilespec);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    user_id = jsonObject1.getString("id");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        tabHost.setCurrentTab(WhichIndex);*/
+        myapisession = new Myapisession(this);
+        mySavedCardInfo = new MySavedCardInfo(this);
+        drawer_layout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        mySession = new MySession(this);
+
+        craete_profile = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Create_Profile, "");
+       // logout_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Logout_Status, "");
+      //  fb_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Status_Facebook, "");
+      //  fb_status111 = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Profile_com, "");
+      //  Toast.makeText(this, "status : " + logout_status, Toast.LENGTH_SHORT).show();
+
+        new MainTabActivity.GetProfile().execute();
+        user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+
+        } else {
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    if (jsonObject1.has("member_ngcash")) {
+                        member_ngcash = jsonObject1.getString("member_ngcash");
+
+                        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
+                            //ngcash.setText("$0.00");
+                        } else {
+                            // ngcash.setText("$" + member_ngcash);
+                        }
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        adddrawer();
+        clcickev();
     }
 
     private void initToolbar() {
@@ -316,8 +387,10 @@ public class MainTabActivity extends AppCompatActivity {
 
     private void initNavigation() {
         drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.navigationview);
         bottomNavView = findViewById(R.id.bottom_nav_view);
+        bottomNavView.clearAnimation();
+        BottomNavigationViewHelper.disableShiftMode(bottomNavView);
         contentView = findViewById(R.id.content_view);
         user_img = findViewById(R.id.user_img);
         user_img.setOnClickListener(new View.OnClickListener() {
@@ -328,9 +401,8 @@ public class MainTabActivity extends AppCompatActivity {
                 //  }
             }
         });
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_profile, R.id.nav_transfer_img, R.id.nav_network, R.id.nav_commission_ic, R.id.nav_employee_sales, R.id.nav_tutorilas, R.id.nav_messages, R.id.nav_ic_settings, R.id.nav_rate_us, R.id.nav_logout, R.id.bottom_home, R.id.bottom_paybill, R.id.bottom_activity, R.id.bottom_message, R.id.bottom_invite).setDrawerLayout(drawer).build();
+          /*R.id.nav_profile, R.id.nav_transfer_img, R.id.nav_network, R.id.nav_commission_ic, R.id.nav_employee_sales, R.id.nav_tutorilas, R.id.nav_messages, R.id.nav_ic_settings, R.id.nav_rate_us, R.id.nav_logout,*/
+        mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.bottom_home, R.id.bottom_paybill, R.id.bottom_activity, R.id.bottom_message, R.id.bottom_invite).setDrawerLayout(drawer).build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //  NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -387,7 +459,18 @@ public class MainTabActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        if (exit) {
+            finish();
+        } else {
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+        }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -406,6 +489,8 @@ public class MainTabActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver2);
+
         if (scheduleTaskExecutor == null) {
 
         } else {
@@ -429,8 +514,53 @@ public class MainTabActivity extends AppCompatActivity {
         super.onResume();
         registerReceiver(broadcastReceiver, new IntentFilter("MEMBER_HOME"));
         Tools.reupdateResources(this);
+        new MainTabActivity.GetProfile().execute();
+        Tools.reupdateResources(this);
+        registerReceiver(broadcastReceiver2, new IntentFilter(Config.PUSH_NOTIFICATION));
+try {
+    mySession = new MySession(this);
 
-      /*  try {
+    String user_log_data = mySession.getKeyAlldata();
+
+    if (user_log_data == null) {
+
+    } else {
+
+        try {
+
+            JSONObject jsonObject = new JSONObject(user_log_data);
+            String message = jsonObject.getString("status");
+
+            if (message.equalsIgnoreCase("1")) {
+
+                Log.e("jsonObject12345", "" + jsonObject);
+
+                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                String business_name = jsonObject1.getString("fullname");
+                String username = jsonObject1.getString("affiliate_name");
+
+                String image_url = jsonObject1.getString("member_image");
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
+                    Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                }
+
+                if (username == null || username.equalsIgnoreCase("") || username.equalsIgnoreCase("null")) {
+
+                }
+
+            }
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+
+        }
+    }
+}catch (Exception e){
+    e.printStackTrace();
+}
+        try {
             scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
             scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
                 public void run() {
@@ -439,7 +569,7 @@ public class MainTabActivity extends AppCompatActivity {
             }, 0, 8, TimeUnit.SECONDS);
         }catch (Exception e){
             Log.e(TAG, "onResume: "+e.getCause() );
-        }*/
+        }
     }
 
     private void appUpdate() {
@@ -532,9 +662,7 @@ public class MainTabActivity extends AppCompatActivity {
                 reader.close();
                 Log.e("MainTabCounter Hire", ">>>>>>>>>>>>" + response);
                 return response;
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 e1.printStackTrace();
             }
             return null;
@@ -595,7 +723,7 @@ public class MainTabActivity extends AppCompatActivity {
                         }
 
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -658,4 +786,394 @@ public class MainTabActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+
+    /////234567890-
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new GetProfile().execute();
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+    private void clcickev() {
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //  Toast.makeText(MainTabActivity.this, "Successs!!!!!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainTabActivity.this,
+                        MerchantNotificationActivity.class)
+                        .putExtra("type", "member");
+                startActivity(i);
+            }
+        });
+
+        qrcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, QrCodeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        profile_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, ProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
+        employeesaleslay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, EmployeesalesActivity.class);
+                startActivity(i);
+            }
+        });
+
+        setting_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, SettingActivity.class);
+                startActivity(i);
+            }
+        });
+
+        networklay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, NetworkAct.class);
+                startActivity(i);
+            }
+        });
+
+
+        tutoriallay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, TutorialAct.class);
+                i.putExtra("type", "member");
+                startActivity(i);
+            }
+        });
+
+
+        transferlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, TransferToaFriend.class);
+                startActivity(i);
+            }
+        });
+
+
+        messagelay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //        Intent i = new Intent(MainTabActivity.this, MemberMessageAct.class);
+                //        startActivity(i);
+            }
+        });
+
+
+        commissionlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, CommisionActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+        cartimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, MyCartDetail.class);
+                startActivity(i);
+            }
+        });
+
+
+        rate_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=main.com.ngrewards"));
+                    startActivity(intent);
+
+                } catch (Exception e) {
+
+                }
+            }
+        });
+
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, "");
+                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, "");
+/*
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut();
+                }*/
+
+                mySession.signinusers(false);
+                mySavedCardInfo.clearCardData();
+                myapisession.setKeyAddressdata("");
+                myapisession.setKeyCartitem("");
+                myapisession.setProductdata("");
+                myapisession.setKeyOffercate("");
+
+                Intent i = new Intent(MainTabActivity.this, AccountTypeSelectionAct.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                i.putExtra("logout_status", "false");
+                startActivity(i);
+                finish();
+
+            }
+        });
+
+        user_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSlideState) {
+                    drawer_layout.openDrawer(GravityCompat.END);
+                } else {
+                    drawer_layout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+    }
+
+    private void idinit() {
+
+        ngcash_txt = findViewById(R.id.ngcash_txt);
+        progresbar = findViewById(R.id.progresbar);
+        cartcount = findViewById(R.id.cartcount);
+        reqcount = findViewById(R.id.reqcount);
+
+        if (MainTabActivity.notification_unseen_count == null ||  MainTabActivity.notification_unseen_count.equalsIgnoreCase("") ||  MainTabActivity.notification_unseen_count.equalsIgnoreCase("0")) {
+            reqcount.setVisibility(View.GONE);
+        } else {
+            reqcount.setVisibility(View.VISIBLE);
+            reqcount.setText("" +  MainTabActivity.notification_unseen_count);
+        }
+
+        if ( MainTabActivity.cart_unseen_count == null ||  MainTabActivity.cart_unseen_count.equalsIgnoreCase("") ||  MainTabActivity.cart_unseen_count.equalsIgnoreCase("0")) {
+            cartcount.setVisibility(View.GONE);
+        } else {
+            cartcount.setVisibility(View.VISIBLE);
+            cartcount.setText("" +  MainTabActivity.cart_unseen_count);
+        }
+
+        cartimg = findViewById(R.id.cartimg);
+        commissionlay = findViewById(R.id.commissionlay);
+        messagelay = findViewById(R.id.messagelay);
+        notification = findViewById(R.id.notification);
+        qrcode = findViewById(R.id.qrcode);
+        name = findViewById(R.id.name);
+        // reqcount =  findViewById(R.id.reqcount);
+        rate_lay = findViewById(R.id.rate_lay);
+        transferlay = findViewById(R.id.transferlay);
+        tutoriallay = findViewById(R.id.tutoriallay);
+        networklay = findViewById(R.id.networklay);
+        drwr_user_img = findViewById(R.id.drwr_user_img);
+        user_name = findViewById(R.id.user_name);
+        logout = findViewById(R.id.logout);
+        profile_lay = findViewById(R.id.profile_lay);
+        employeesaleslay = findViewById(R.id.employeesaleslay);
+        user_img = findViewById(R.id.user_img);
+        setting_lay = findViewById(R.id.setting_lay);
+
+    }
+
+    private void adddrawer() {
+
+      //  setSupportActionBar(toolbar);
+        navigationview = findViewById(R.id.navigationview);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+        drawer_layout.setDrawerListener(new ActionBarDrawerToggle(this,
+                drawer_layout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mSlideState = false;
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mSlideState = true;
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+
+
+    private class GetProfile extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
+
+                URL url = new URL(postReceiverUrl);
+
+                Map<String, Object> params = new LinkedHashMap<>();
+
+                Log.e("member_id", user_id);
+                params.put("member_id", user_id);
+
+                StringBuilder postData = new StringBuilder();
+
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+
+                writer.close();
+                reader.close();
+
+                Log.e("BASE ACT VGetProfile Response", ">>>>>>>>>>>>" + response);
+
+                return response;
+
+            } catch (Exception e1) {
+
+                e1.printStackTrace();
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+
+            if (result == null) {
+
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String message = jsonObject.getString("status");
+
+                    if (message.equalsIgnoreCase("1")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+
+                        String unseen_count = jsonObject1.getString("unseen_count");
+                        String country_id = jsonObject1.getString("country_id");
+                        currency_code = jsonObject1.getString("currency_code");
+                        currency_sign = jsonObject1.getString("currency_sign");
+                        country_name = jsonObject1.getString("country_name");
+                        mySession = new MySession(MainTabActivity.this);
+                        mySession.setValueOf(MySession.CountryId, country_id);
+                        mySession.setValueOf(MySession.CurrencyCode, currency_code);
+                        mySession.setValueOf(MySession.CurrencySign, currency_sign);
+                        mySession.setValueOf(MySession.CountryName, country_name);
+                        Log.e(TAG, "onCreate:  country_id   ----  " + mySession.getValueOf(MySession.CountryId));
+                        Log.e(TAG, "onCreate:  currency_code   ----  " + mySession.getValueOf(MySession.CurrencyCode));
+                        Log.e(TAG, "onCreate:  currency_sign   ----  " + mySession.getValueOf(MySession.CurrencySign));
+                        Log.e(TAG, "onCreate:  country_name    ----  " + mySession.getValueOf(MySession.CountryName));
+
+                        if (unseen_count.equals("0")) {
+                            reqcount.setVisibility(View.GONE);
+
+                        } else {
+                            reqcount.setVisibility(View.VISIBLE);
+                            reqcount.setText("" + unseen_count);
+                        }
+
+
+                        if (jsonObject1.getString("gender") != null) {
+                            gender_str = jsonObject1.getString("gender").trim();
+                        }
+
+                        if (jsonObject1.getString("age") != null) {
+                            age_str = jsonObject1.getString("age").trim();
+                        }
+
+                        name.setText("" + jsonObject1.getString("fullname"));
+                        username_str = jsonObject1.getString("affiliate_name");
+
+                        user_name.setText("" + jsonObject1.getString("username"));
+                        ngcash_txt.setText(mySession.getValueOf(MySession.CurrencySign)  + jsonObject1.getString("member_ngcash"));
+
+                        if (username_str == null || username_str.equalsIgnoreCase("")) {
+                            user_name.setEnabled(true);
+                            user_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                        }
+
+                        String image_url = jsonObject1.getString("member_image");
+
+                        if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                            Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+    }
+
 }

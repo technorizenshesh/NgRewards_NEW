@@ -201,25 +201,31 @@ onResume();
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                if (s == null) {
+                try {
 
-                } else {
 
-                    if (s.toString().length() > 0) {
-
-                        if (customMarchantAdp == null) {
-
-                        } else {
-                            customMarchantAdp.filter(s.toString());
-                        }
+                    if (s == null) {
 
                     } else {
-                        if (customMarchantAdp == null) {
+
+                        if (s.toString().length() > 0) {
+
+                            if (customMarchantAdp == null) {
+
+                            } else {
+                                customMarchantAdp.filter(s.toString());
+                            }
 
                         } else {
-                            customMarchantAdp.filter("");
+                            if (customMarchantAdp == null) {
+
+                            } else {
+                                customMarchantAdp.filter("");
+                            }
                         }
                     }
+                }catch (Exception e){
+                 e.printStackTrace();
                 }
             }
 
@@ -291,9 +297,7 @@ onResume();
 
                         customMarchantAdp.notifyDataSetChanged();
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception  e) {
                         e.printStackTrace();
                     }
                 }
