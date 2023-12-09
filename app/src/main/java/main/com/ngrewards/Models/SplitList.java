@@ -2,8 +2,8 @@ package main.com.ngrewards.Models;
 
 import java.io.Serializable;
 
-public class SplitList  implements Serializable {
-    String Id, Date,IsPaid, Amount,Invoice;
+public class SplitList implements Serializable {
+    String Id, Date, IsPaid, Amount, Invoice;
 
     public SplitList(String id, String date, String isPaid, String amount, String invoice) {
         Id = id;

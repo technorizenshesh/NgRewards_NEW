@@ -19,10 +19,8 @@ import com.google.android.material.tabs.TabLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
@@ -124,8 +122,7 @@ public class HomeActivity extends Fragment {
         Bundle bundle = getArguments();
         if (bundle == null) {
             Log.e("Get Notification >>", "NULL");
-        } else
-        {
+        } else {
             String message = bundle.getString("message");
             facebook_name = bundle.getString("facebook_name");
             facebook_image = bundle.getString("facebook_image");

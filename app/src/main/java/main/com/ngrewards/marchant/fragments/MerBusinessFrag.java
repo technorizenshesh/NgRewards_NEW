@@ -26,8 +26,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -48,6 +46,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -88,7 +89,6 @@ import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
@@ -195,12 +195,12 @@ public class MerBusinessFrag extends Fragment {
                             assert selectedImage != null;
                             try (final InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage)) {
                                 final Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                               // user_img.setImageBitmap(bitmap);
+                                // user_img.setImageBitmap(bitmap);
                                 merchant_img.setImageBitmap(bitmap);
                                 File tempfile = Tools.persistImage(bitmap, getActivity());
                                 ImagePath = tempfile.getAbsolutePath();
                                 Log.e("ImagePath", "onActivityResult: " + ImagePath);
-                                MerchantSignupSlider.ImagePath=ImagePath;
+                                MerchantSignupSlider.ImagePath = ImagePath;
                             }
                         } catch (IOException e) {
                             ToolsShowDialog(getActivity(), e.getLocalizedMessage());
@@ -643,7 +643,7 @@ public class MerBusinessFrag extends Fragment {
                 }
             });
 
-            camera.setOnClickListener( v -> {
+            camera.setOnClickListener(v -> {
                 dialogSts.dismiss();
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, 2);
@@ -696,8 +696,8 @@ public class MerBusinessFrag extends Fragment {
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
         categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -1124,7 +1124,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
-                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
+                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key="+getString(R.string.googlekey)+"&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
                         String result = null;
                         try {
                             result = new MyTask(wo, 3).execute().get();
@@ -1209,7 +1209,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         protected String doInBackground(String... strings) {
             String address = MerchantSignupSlider.mer_address.trim().replaceAll(" ", "+");
             Log.e("Murchant Location >>>", "" + MerchantSignupSlider.mer_address);
-            String postReceiverUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs";
+            String postReceiverUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key="+getString(R.string.googlekey);
 
             try {
                 //  String postReceiverUrl = "https://api.ctlf.co.uk/";

@@ -3,20 +3,11 @@ package main.com.ngrewards.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +24,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,15 +36,12 @@ import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -67,7 +60,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import main.com.ngrewards.BuildConfig;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
@@ -89,6 +81,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragItemDetails extends AppCompatActivity {
+    public static ArrayList<DetailList> productDetailArrayList;
+    private final String like_count = "0";
+    CirclePageIndicator fullscreen_indecator;
+    ExpandableHeightListView sizelistview;
     private RelativeLayout backlay;
     private ExpandableHeightListView review_list;
     private ExpandableHeightGridView similar_item_list;
@@ -96,14 +92,12 @@ public class FragItemDetails extends AppCompatActivity {
     private CustomSimilarItem customSimilarItem;
     private ProgressBar progresbar;
     private TextView colors_tv, description_tv, sizes_tv, merchant_name_sec, real_price, item_name, item_description, merchant_name, feedback_type, shipping_info, discountprice;
-    public static ArrayList<DetailList> productDetailArrayList;
     private String product_id = "", product_name = "", product_description = "";
     private ViewPager productimage_pager;
     private CustomProductImgAdp customProductImgAdp;
     private CircleImageView user_img;
     private ImageView like_buton, shareproduct, description_arrow, itemarrow, shipingarrow, proimg;
     private MySession mySession;
-    private final String like_count = "0";
     private String EMI = "";
     private String stockcount = "";
     private String time_zone = "";
@@ -126,7 +120,6 @@ public class FragItemDetails extends AppCompatActivity {
             rating_count, color_tv_head, sizes_tv_head, price_tv, quant_tv, instock_tv;
     private float rating_val;
     private LinearLayout done_review_lay, post_review_lay;
-    CirclePageIndicator fullscreen_indecator;
     private int count = 0, sumcount;
     private Button plusq, minusq;
     private boolean click_sts = false;
@@ -134,136 +127,136 @@ public class FragItemDetails extends AppCompatActivity {
     private List<String> sizelist, colorlist;
     private List<String> sizelist_sel, colorlist_sel;
     private CustomSizeColAdapter customSizeColAdapter;
-    ExpandableHeightListView sizelistview;
     private boolean size_sts = false;
     private boolean color_sts = false;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Tools.reupdateResources(this);
         setContentView(R.layout.activity_frag_item_details);
-         try {
-             buyon_emi_tv = findViewById(R.id.buyon_emi_tv);
-             shipping_price = findViewById(R.id.shipping_price);
-             sizelay = findViewById(R.id.sizelay);
-             colorlay = findViewById(R.id.colorlay);
-             buynow_tv = findViewById(R.id.buynow_tv);
-             addtocart_tv = findViewById(R.id.addtocart_tv);
-             instock_tv = findViewById(R.id.instock_tv);
-             quant_tv = findViewById(R.id.quant_tv);
-             minusq = findViewById(R.id.minusq);
-             plusq = findViewById(R.id.plusq);
-             color_tv_head = findViewById(R.id.color_tv_head);
-             price_tv = findViewById(R.id.price_tv);
-             sizes_tv_head = findViewById(R.id.sizes_tv_head);
-             rating_count = findViewById(R.id.rating_count);
-             averagerating = findViewById(R.id.averagerating);
-             fullscreen_indecator = findViewById(R.id.fullscreen_indecator);
-             donereview_tv = findViewById(R.id.donereview_tv);
-             rating_done = findViewById(R.id.rating_done);
-             post_review_lay = findViewById(R.id.post_review_lay);
-             done_review_lay = findViewById(R.id.done_review_lay);
-             rating = findViewById(R.id.rating);
-             submit_review = findViewById(R.id.submit_review);
-             comment_et = findViewById(R.id.comment_et);
-             proimg = findViewById(R.id.proimg);
-             colors_tv = findViewById(R.id.colors_tv);
-             item_info = findViewById(R.id.item_info);
-             shipinfo_but = findViewById(R.id.shipinfo_but);
-             description_info = findViewById(R.id.description_info);
-             itemarrow = findViewById(R.id.itemarrow);
-             itemspeclay = findViewById(R.id.itemspeclay);
-             shipingarrow = findViewById(R.id.shipingarrow);
-             shipping_lay = findViewById(R.id.shipping_lay);
-             description_lay = findViewById(R.id.description_lay);
-             description_arrow = findViewById(R.id.description_arrow);
-             description_tv = findViewById(R.id.description_tv);
-             sizes_tv = findViewById(R.id.sizes_tv);
-             shareproduct = findViewById(R.id.shareproduct);
-             like_buton = findViewById(R.id.like_buton);
-             user_img = findViewById(R.id.user_img);
-             progresbar = findViewById(R.id.progresbar);
-             productimage_pager = findViewById(R.id.productimage_pager);
-             merchant_name_sec = findViewById(R.id.merchant_name_sec);
-             discountprice = findViewById(R.id.discountprice);
-             real_price = findViewById(R.id.real_price);
-             shipping_info = findViewById(R.id.shipping_info);
-             feedback_type = findViewById(R.id.feedback_type);
-             merchant_name = findViewById(R.id.merchant_name);
-             item_description = findViewById(R.id.item_description);
-             item_name = findViewById(R.id.item_name);
-             backlay = findViewById(R.id.backlay);
-             review_list = findViewById(R.id.review_list);
-             similar_item_list = findViewById(R.id.similar_item_list);
-             sizelist = new ArrayList<>();
-             colorlist = new ArrayList<>();
-             sizelist_sel = new ArrayList<>();
-             colorlist_sel = new ArrayList<>();
-             Calendar c = Calendar.getInstance();
-             TimeZone tz = c.getTimeZone();
-             time_zone = tz.getID();
-             mySession = new MySession(this);
-             myapisession = new Myapisession(this);
-             String user_log_data = mySession.getKeyAlldata();
+        try {
+            buyon_emi_tv = findViewById(R.id.buyon_emi_tv);
+            shipping_price = findViewById(R.id.shipping_price);
+            sizelay = findViewById(R.id.sizelay);
+            colorlay = findViewById(R.id.colorlay);
+            buynow_tv = findViewById(R.id.buynow_tv);
+            addtocart_tv = findViewById(R.id.addtocart_tv);
+            instock_tv = findViewById(R.id.instock_tv);
+            quant_tv = findViewById(R.id.quant_tv);
+            minusq = findViewById(R.id.minusq);
+            plusq = findViewById(R.id.plusq);
+            color_tv_head = findViewById(R.id.color_tv_head);
+            price_tv = findViewById(R.id.price_tv);
+            sizes_tv_head = findViewById(R.id.sizes_tv_head);
+            rating_count = findViewById(R.id.rating_count);
+            averagerating = findViewById(R.id.averagerating);
+            fullscreen_indecator = findViewById(R.id.fullscreen_indecator);
+            donereview_tv = findViewById(R.id.donereview_tv);
+            rating_done = findViewById(R.id.rating_done);
+            post_review_lay = findViewById(R.id.post_review_lay);
+            done_review_lay = findViewById(R.id.done_review_lay);
+            rating = findViewById(R.id.rating);
+            submit_review = findViewById(R.id.submit_review);
+            comment_et = findViewById(R.id.comment_et);
+            proimg = findViewById(R.id.proimg);
+            colors_tv = findViewById(R.id.colors_tv);
+            item_info = findViewById(R.id.item_info);
+            shipinfo_but = findViewById(R.id.shipinfo_but);
+            description_info = findViewById(R.id.description_info);
+            itemarrow = findViewById(R.id.itemarrow);
+            itemspeclay = findViewById(R.id.itemspeclay);
+            shipingarrow = findViewById(R.id.shipingarrow);
+            shipping_lay = findViewById(R.id.shipping_lay);
+            description_lay = findViewById(R.id.description_lay);
+            description_arrow = findViewById(R.id.description_arrow);
+            description_tv = findViewById(R.id.description_tv);
+            sizes_tv = findViewById(R.id.sizes_tv);
+            shareproduct = findViewById(R.id.shareproduct);
+            like_buton = findViewById(R.id.like_buton);
+            user_img = findViewById(R.id.user_img);
+            progresbar = findViewById(R.id.progresbar);
+            productimage_pager = findViewById(R.id.productimage_pager);
+            merchant_name_sec = findViewById(R.id.merchant_name_sec);
+            discountprice = findViewById(R.id.discountprice);
+            real_price = findViewById(R.id.real_price);
+            shipping_info = findViewById(R.id.shipping_info);
+            feedback_type = findViewById(R.id.feedback_type);
+            merchant_name = findViewById(R.id.merchant_name);
+            item_description = findViewById(R.id.item_description);
+            item_name = findViewById(R.id.item_name);
+            backlay = findViewById(R.id.backlay);
+            review_list = findViewById(R.id.review_list);
+            similar_item_list = findViewById(R.id.similar_item_list);
+            sizelist = new ArrayList<>();
+            colorlist = new ArrayList<>();
+            sizelist_sel = new ArrayList<>();
+            colorlist_sel = new ArrayList<>();
+            Calendar c = Calendar.getInstance();
+            TimeZone tz = c.getTimeZone();
+            time_zone = tz.getID();
+            mySession = new MySession(this);
+            myapisession = new Myapisession(this);
+            String user_log_data = mySession.getKeyAlldata();
 
-             idinit();
-             clickevent();
-             Bundle bundle = getIntent().getExtras();
-             if (bundle != null) {
-                 Log.e("PRO BUNDLE DATA", " >> " + product_id + " >" + product_name + " <>" + product_description);
+            idinit();
+            clickevent();
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                Log.e("PRO BUNDLE DATA", " >> " + product_id + " >" + product_name + " <>" + product_description);
 
-                 EMI = bundle.getString("EMI");
-                 product_id = bundle.getString("product_id");
-                 product_name = bundle.getString("product_name");
-                 product_thumbimg = bundle.getString("product_thumbimg");
-                 product_description = bundle.getString("product_description");
-                 product_price = bundle.getString("product_price");
-                 share_url_str = bundle.getString("share_link");
-                 merchant_name_str = bundle.getString("merchant_name_str");
-                 Log.e("share_url_str >>", "dd" + share_url_str);
-                 item_name.setText("" + product_name);
-                 item_description.setText("" + product_description);
-                 description_tv.setText("" + product_description);
-                 if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("")) {
-                     merchant_name.setText(getResources().getString(R.string.staticmerchantname));
-                     merchant_name_sec.setText(getResources().getString(R.string.staticmerchantname));
+                EMI = bundle.getString("EMI");
+                product_id = bundle.getString("product_id");
+                product_name = bundle.getString("product_name");
+                product_thumbimg = bundle.getString("product_thumbimg");
+                product_description = bundle.getString("product_description");
+                product_price = bundle.getString("product_price");
+                share_url_str = bundle.getString("share_link");
+                merchant_name_str = bundle.getString("merchant_name_str");
+                Log.e("share_url_str >>", "dd" + share_url_str);
+                item_name.setText("" + product_name);
+                item_description.setText("" + product_description);
+                description_tv.setText("" + product_description);
+                if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("")) {
+                    merchant_name.setText(getResources().getString(R.string.staticmerchantname));
+                    merchant_name_sec.setText(getResources().getString(R.string.staticmerchantname));
 
-                 } else {
-                     merchant_name.setText("" + merchant_name_str);
-                     merchant_name_sec.setText("" + merchant_name_str);
+                } else {
+                    merchant_name.setText("" + merchant_name_str);
+                    merchant_name_sec.setText("" + merchant_name_str);
 
-                 }
+                }
 
-                 if (user_log_data == null) {
-                 } else {
-                     try {
-                         Log.e("TAG", "onCreate: user_log_datauser_log_data  "+user_log_data );
-                         JSONObject jsonObject = new JSONObject(user_log_data);
-                         String message = jsonObject.getString("status");
-                         if (message.equalsIgnoreCase("1")) {
-                             JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                             user_id = jsonObject1.getString("id");
-                         }
-                     } catch (JSONException e) {
-                         e.printStackTrace();
-                     }
-                 }
+                if (user_log_data == null) {
+                } else {
+                    try {
+                        Log.e("TAG", "onCreate: user_log_datauser_log_data  " + user_log_data);
+                        JSONObject jsonObject = new JSONObject(user_log_data);
+                        String message = jsonObject.getString("status");
+                        if (message.equalsIgnoreCase("1")) {
+                            JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                            user_id = jsonObject1.getString("id");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                 getFeaturedProductsDetail(product_id);
-                 Glide.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
+                getFeaturedProductsDetail(product_id);
+                Glide.with(FragItemDetails.this).load(product_thumbimg).placeholder(R.drawable.placeholder).into(proimg);
 
-             }
-
-
+            }
 
 
-         }catch (Exception e
-         ){e.printStackTrace();
-         }
+        } catch (Exception e
+        ) {
+            e.printStackTrace();
+        }
     }
 
     private void getFeaturedProductsDetail(String product_id) {
@@ -294,7 +287,7 @@ public class FragItemDetails extends AppCompatActivity {
                             } else {
                                 addtocart_tv.setText("" + getResources().getString(R.string.addtocart));
                             }
-                            discountprice.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
+                            discountprice.setText(mySession.getValueOf(MySession.CurrencySign) + productDetailArrayList.get(0).getPrice());
                             price_str = productDetailArrayList.get(0).getPrice();
                             if (productDetailArrayList.get(0).getStock() != null && !productDetailArrayList.get(0).getStock().equalsIgnoreCase("")) {
                                 stockcount = productDetailArrayList.get(0).getStock();
@@ -305,9 +298,9 @@ public class FragItemDetails extends AppCompatActivity {
                                 averagerating.setRating(Float.parseFloat(rat_str));
                                 rating_count.setText("(" + productDetailArrayList.get(0).getReviewCount() + ")");
                             }
-                            price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
-                            real_price.setText(mySession.getValueOf(MySession.CurrencySign)  + productDetailArrayList.get(0).getPrice());
-                            shipping_price.setText("" + getResources().getString(R.string.shippriceing) + " "+mySession.getValueOf(MySession.CurrencySign) +  productDetailArrayList.get(0).getShipping_price());
+                            price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + productDetailArrayList.get(0).getPrice());
+                            real_price.setText(mySession.getValueOf(MySession.CurrencySign) + productDetailArrayList.get(0).getPrice());
+                            shipping_price.setText("" + getResources().getString(R.string.shippriceing) + " " + mySession.getValueOf(MySession.CurrencySign) + productDetailArrayList.get(0).getShipping_price());
                             shipping_info.setText("" + productDetailArrayList.get(0).getShippingTime());
                             sizes_tv.setText("" + productDetailArrayList.get(0).getSize());
                             sizes_tv_head.setText("" + productDetailArrayList.get(0).getSize());
@@ -491,141 +484,6 @@ public class FragItemDetails extends AppCompatActivity {
         dialogSts.show();
     }
 
-    public class CustomSizeColAdapter extends BaseAdapter {
-        Context context;
-        private final String type;
-        private LayoutInflater inflater = null;
-        List<String> strlist;
-
-        public CustomSizeColAdapter(Context contexts, List<String> strlist, String type) {
-            this.type = type;
-            this.context = contexts;
-            this.strlist = strlist;
-            inflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            // return 3;
-            return strlist == null ? 0 : strlist.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public class Holder {
-
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            final Holder holder;
-            holder = new Holder();
-            View rowView;
-
-            rowView = inflater.inflate(R.layout.custom_size_col_selectlay, null);
-            ImageView selimg = rowView.findViewById(R.id.selimg);
-            if (type.equalsIgnoreCase("size")) {
-                if (sizelist_sel != null && !sizelist_sel.isEmpty()) {
-                    if (sizelist_sel.get(position).equalsIgnoreCase("true")) {
-                        selimg.setImageResource(R.drawable.ic_checked_circle);
-                        size_select_str = sizelist.get(position);
-                    } else {
-                        selimg.setImageResource(R.drawable.ic_circle_border);
-                    }
-                }
-
-            } else {
-                if (colorlist_sel != null && !colorlist_sel.isEmpty()) {
-                    if (colorlist_sel.get(position).equalsIgnoreCase("true")) {
-                        selimg.setImageResource(R.drawable.ic_checked_circle);
-                        color_select_str = colorlist.get(position);
-                    } else {
-                        selimg.setImageResource(R.drawable.ic_circle_border);
-                    }
-                }
-
-            }
-            TextView name_tv = rowView.findViewById(R.id.name_tv);
-            name_tv.setText(strlist.get(position));
-
-            selimg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = position;
-                    if (type.equalsIgnoreCase("size")) {
-
-                        if (sizelist_sel != null && !sizelist_sel.isEmpty()) {
-                            for (int k = 0; k < sizelist_sel.size(); k++) {
-                                if (pos == k) {
-                                    Log.e("CLICK TRUE", "SIZE");
-                                    if (sizelist_sel.get(k).equalsIgnoreCase("true")) {
-                                        sizelist_sel.set(k, "false");
-                                        size_select_str = "";
-
-                                    } else {
-                                        size_select_str = sizelist.get(k);
-                                        sizelist_sel.set(k, "true");
-
-                                    }
-                                } else {
-                                    sizelist_sel.set(k, "false");
-                                }
-                            }
-
-
-                            customSizeColAdapter = new CustomSizeColAdapter(FragItemDetails.this, sizelist, "size");
-                            sizelistview.setAdapter(customSizeColAdapter);
-                            customSizeColAdapter.notifyDataSetChanged();
-                        }
-
-                    } else {
-                        if (colorlist_sel != null && !colorlist_sel.isEmpty()) {
-
-                            for (int k = 0; k < colorlist_sel.size(); k++) {
-                                if (pos == k) {
-                                    if (colorlist_sel.get(k).equalsIgnoreCase("true")) {
-                                        colorlist_sel.set(k, "false");
-                                        color_select_str = "";
-
-                                    } else {
-                                        color_select_str = colorlist.get(k);
-                                        colorlist_sel.set(k, "true");
-
-                                    }
-                                } else {
-
-                                    colorlist_sel.set(k, "false");
-                                }
-                            }
-
-                            customSizeColAdapter = new CustomSizeColAdapter(FragItemDetails.this, colorlist, "color");
-                            sizelistview.setAdapter(customSizeColAdapter);
-                            customSizeColAdapter.notifyDataSetChanged();
-                        }
-
-                    }
-
-                }
-            });
-
-            return rowView;
-        }
-
-    }
-
     private void clickevent() {
         plusq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -785,20 +643,20 @@ public class FragItemDetails extends AppCompatActivity {
                 // Get access to the URI for the bitmap
                 try {
 
-                        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                                .setLink(Uri.parse("https://www.ngrewards.com/data/Ng?"+productDetailArrayList.get(0).getId()))
-                                .setDynamicLinkDomain("ngtechn.page.link")
-                                // Open links with this app on Android
-                                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                                // Open links with com.example.ios on iOS
-                                .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
-                                .buildDynamicLink();
+                    DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                            .setLink(Uri.parse("https://www.ngrewards.com/data/Ng?" + productDetailArrayList.get(0).getId()))
+                            .setDynamicLinkDomain("ngtechn.page.link")
+                            // Open links with this app on Android
+                            .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                            // Open links with com.example.ios on iOS
+                            .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
+                            .buildDynamicLink();
 
-                        Uri dynamicLinkUri = dynamicLink.getUri();
+                    Uri dynamicLinkUri = dynamicLink.getUri();
 
-                        Log.d("TAG", "onCreate: "+dynamicLinkUri);
+                    Log.d("TAG", "onCreate: " + dynamicLinkUri);
 
-                        shortenLongLink(dynamicLinkUri.toString());
+                    shortenLongLink(dynamicLinkUri.toString());
 
                 } catch (Exception e) {
                     Log.e("EXC", " > " + e.getMessage());
@@ -845,8 +703,7 @@ public class FragItemDetails extends AppCompatActivity {
         });
     }
 
-    public void shortenLongLink(String link)
-    {
+    public void shortenLongLink(String link) {
 
         Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLongLink(Uri.parse(link))
@@ -858,20 +715,20 @@ public class FragItemDetails extends AppCompatActivity {
                             // Short link created
                             Uri shortLink = task.getResult().getShortLink();
 
-                            Log.d("TAG", "onComplete: "+shortLink);
+                            Log.d("TAG", "onComplete: " + shortLink);
 
                             Uri flowchartLink = task.getResult().getPreviewLink();
 
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink+"");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink + "");
                             shareIntent.setType("text/plain");
                             // Launch sharing dialog for image
                             startActivity(shareIntent);
 
                         } else {
 
-                            Log.d("TAG", "onComplete: Error"+task.getException());
+                            Log.d("TAG", "onComplete: Error" + task.getException());
                             // Error
                             // ...
                         }
@@ -934,6 +791,231 @@ public class FragItemDetails extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void idinit() {
+
+        review_list.setExpanded(true);
+        similar_item_list.setExpanded(true);
+        sizelay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSizeDrop();
+            }
+        });
+        colorlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectColor();
+            }
+        });
+        Log.e("TAG", "EMIEMIEMIEMI: " + EMI);
+        if (EMI.equalsIgnoreCase("YES")) {
+            buyon_emi_tv.setVisibility(View.VISIBLE);
+        }
+
+        buyon_emi_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                click_sts = true;
+                if (stockcount != null && !stockcount.equalsIgnoreCase("")) {
+                    if (sumcount != 0) {
+                        if (productDetailArrayList != null && !productDetailArrayList.isEmpty()) {
+                            if (productDetailArrayList.get(0).getCart_status() != null && productDetailArrayList.get(0).getCart_status().equalsIgnoreCase("In Cart")) {
+                                Intent i = new Intent(FragItemDetails.this, MyCartDetail.class);
+                                startActivity(i);
+                            } else {
+                                if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
+                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
+                                } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
+                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    new AddTocartAsc().execute();
+                                }
+                                // new AddTocartAsc().execute();
+                            }
+                        } else {
+                            if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
+                                Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
+                            } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
+                                Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
+
+                            } else {
+                                new AddTocartAsc().execute();
+                            }
+
+                            //new AddTocartAsc().execute();
+                        }
+                        //  new AddTocartAsc().execute();
+
+                    } else {
+                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.selproductquant), Toast.LENGTH_LONG).show();
+
+                    }
+                } else {
+                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.outstk), Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+
+        });
+        merchant_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (productDetailArrayList != null && !productDetailArrayList.isEmpty()) {
+                    Intent i = new Intent(FragItemDetails.this, MerchantDetailAct.class);
+                    i.putExtra("user_id", user_id);
+                    i.putExtra("merchant_contact_name", merchant_name_str);
+
+                    i.putExtra("merchant_id", productDetailArrayList.get(0).getUserDetails().get(0).getId());
+                    i.putExtra("merchant_name", productDetailArrayList.get(0).getUserDetails().get(0).getBusinessName());
+                    i.putExtra("merchant_number", productDetailArrayList.get(0).getUserDetails().get(0).getBusinessNo());
+                    i.putExtra("merchant_img", productDetailArrayList.get(0).getUserDetails().get(0).getMerchantImage());
+                    startActivity(i);
+                } else {
+                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.plswaititemdetailisfatching), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+    }
+
+    public class CustomSizeColAdapter extends BaseAdapter {
+        private final String type;
+        Context context;
+        List<String> strlist;
+        private LayoutInflater inflater = null;
+
+        public CustomSizeColAdapter(Context contexts, List<String> strlist, String type) {
+            this.type = type;
+            this.context = contexts;
+            this.strlist = strlist;
+            inflater = (LayoutInflater) context.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            // return 3;
+            return strlist == null ? 0 : strlist.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            final Holder holder;
+            holder = new Holder();
+            View rowView;
+
+            rowView = inflater.inflate(R.layout.custom_size_col_selectlay, null);
+            ImageView selimg = rowView.findViewById(R.id.selimg);
+            if (type.equalsIgnoreCase("size")) {
+                if (sizelist_sel != null && !sizelist_sel.isEmpty()) {
+                    if (sizelist_sel.get(position).equalsIgnoreCase("true")) {
+                        selimg.setImageResource(R.drawable.ic_checked_circle);
+                        size_select_str = sizelist.get(position);
+                    } else {
+                        selimg.setImageResource(R.drawable.ic_circle_border);
+                    }
+                }
+
+            } else {
+                if (colorlist_sel != null && !colorlist_sel.isEmpty()) {
+                    if (colorlist_sel.get(position).equalsIgnoreCase("true")) {
+                        selimg.setImageResource(R.drawable.ic_checked_circle);
+                        color_select_str = colorlist.get(position);
+                    } else {
+                        selimg.setImageResource(R.drawable.ic_circle_border);
+                    }
+                }
+
+            }
+            TextView name_tv = rowView.findViewById(R.id.name_tv);
+            name_tv.setText(strlist.get(position));
+
+            selimg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = position;
+                    if (type.equalsIgnoreCase("size")) {
+
+                        if (sizelist_sel != null && !sizelist_sel.isEmpty()) {
+                            for (int k = 0; k < sizelist_sel.size(); k++) {
+                                if (pos == k) {
+                                    Log.e("CLICK TRUE", "SIZE");
+                                    if (sizelist_sel.get(k).equalsIgnoreCase("true")) {
+                                        sizelist_sel.set(k, "false");
+                                        size_select_str = "";
+
+                                    } else {
+                                        size_select_str = sizelist.get(k);
+                                        sizelist_sel.set(k, "true");
+
+                                    }
+                                } else {
+                                    sizelist_sel.set(k, "false");
+                                }
+                            }
+
+
+                            customSizeColAdapter = new CustomSizeColAdapter(FragItemDetails.this, sizelist, "size");
+                            sizelistview.setAdapter(customSizeColAdapter);
+                            customSizeColAdapter.notifyDataSetChanged();
+                        }
+
+                    } else {
+                        if (colorlist_sel != null && !colorlist_sel.isEmpty()) {
+
+                            for (int k = 0; k < colorlist_sel.size(); k++) {
+                                if (pos == k) {
+                                    if (colorlist_sel.get(k).equalsIgnoreCase("true")) {
+                                        colorlist_sel.set(k, "false");
+                                        color_select_str = "";
+
+                                    } else {
+                                        color_select_str = colorlist.get(k);
+                                        colorlist_sel.set(k, "true");
+
+                                    }
+                                } else {
+
+                                    colorlist_sel.set(k, "false");
+                                }
+                            }
+
+                            customSizeColAdapter = new CustomSizeColAdapter(FragItemDetails.this, colorlist, "color");
+                            sizelistview.setAdapter(customSizeColAdapter);
+                            customSizeColAdapter.notifyDataSetChanged();
+                        }
+
+                    }
+
+                }
+            });
+
+            return rowView;
+        }
+
+        public class Holder {
+
+        }
 
     }
 
@@ -1027,99 +1109,6 @@ public class FragItemDetails extends AppCompatActivity {
         }
     }
 
-    private void idinit() {
-
-        review_list.setExpanded(true);
-        similar_item_list.setExpanded(true);
-        sizelay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectSizeDrop();
-            }
-        });
-        colorlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectColor();
-            }
-        });
-        Log.e("TAG", "EMIEMIEMIEMI: "+EMI );
-        if(EMI.equalsIgnoreCase("YES")){
-            buyon_emi_tv.setVisibility(View.VISIBLE);
-        }
-
-        buyon_emi_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-                {
-                    click_sts = true;
-                    if (stockcount != null && !stockcount.equalsIgnoreCase("")) {
-                        if (sumcount != 0) {
-                            if (productDetailArrayList != null && !productDetailArrayList.isEmpty()) {
-                                if (productDetailArrayList.get(0).getCart_status() != null && productDetailArrayList.get(0).getCart_status().equalsIgnoreCase("In Cart")) {
-                                    Intent i = new Intent(FragItemDetails.this, MyCartDetail.class);
-                                    startActivity(i);
-                                } else {
-                                    if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
-                                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
-                                    } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
-                                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
-
-                                    } else {
-                                        new AddTocartAsc().execute();
-                                    }
-                                    // new AddTocartAsc().execute();
-                                }
-                            } else {
-                                if (size_sts && (size_select_str == null || size_select_str.equalsIgnoreCase(""))) {
-                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctsize), Toast.LENGTH_LONG).show();
-                                } else if (color_sts && (color_select_str == null || color_select_str.equalsIgnoreCase(""))) {
-                                    Toast.makeText(FragItemDetails.this, getResources().getString(R.string.pleaseselctcolor), Toast.LENGTH_LONG).show();
-
-                                } else {
-                                    new AddTocartAsc().execute();
-                                }
-
-                                //new AddTocartAsc().execute();
-                            }
-                            //  new AddTocartAsc().execute();
-
-                        } else {
-                            Toast.makeText(FragItemDetails.this, getResources().getString(R.string.selproductquant), Toast.LENGTH_LONG).show();
-
-                        }
-                    } else {
-                        Toast.makeText(FragItemDetails.this, getResources().getString(R.string.outstk), Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-
-        });
-        merchant_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (productDetailArrayList!=null&&!productDetailArrayList.isEmpty())
-                {
-                    Intent i = new Intent(FragItemDetails.this, MerchantDetailAct.class);
-                    i.putExtra("user_id", user_id);
-                    i.putExtra("merchant_contact_name",merchant_name_str);
-
-                    i.putExtra("merchant_id", productDetailArrayList.get(0).getUserDetails().get(0).getId());
-                    i.putExtra("merchant_name", productDetailArrayList.get(0).getUserDetails().get(0).getBusinessName());
-                    i.putExtra("merchant_number", productDetailArrayList.get(0).getUserDetails().get(0).getBusinessNo());
-                    i.putExtra("merchant_img", productDetailArrayList.get(0).getUserDetails().get(0).getMerchantImage());
-                    startActivity(i);
-                }
-                else {
-                    Toast.makeText(FragItemDetails.this,getResources().getString(R.string.plswaititemdetailisfatching),Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-
-    }
-
     private class AddTocartAsc extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -1139,7 +1128,7 @@ public class FragItemDetails extends AppCompatActivity {
             try {
                 String postReceiverUrl = BaseUrl.baseurl + "add_to_cart.php?";
                 Log.e("ADD CART URL", " >> " + postReceiverUrl + "user_id=" + user_id +
-                        "&product_id=" + product_id + "&quantity=" + sumcount + "&size=" + size_select_str + "&color=" + color_select_str+"&pay_by_emi="+EMI);
+                        "&product_id=" + product_id + "&quantity=" + sumcount + "&size=" + size_select_str + "&color=" + color_select_str + "&pay_by_emi=" + EMI);
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("user_id", user_id);
@@ -1227,8 +1216,8 @@ public class FragItemDetails extends AppCompatActivity {
 
     public class CustomReviewAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         List<ProductTopReview> productTopReview;
+        private LayoutInflater inflater = null;
 
         public CustomReviewAdp(Context contexts, List<ProductTopReview> productTopReview) {
             this.context = contexts;
@@ -1255,10 +1244,6 @@ public class FragItemDetails extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -1275,7 +1260,7 @@ public class FragItemDetails extends AppCompatActivity {
             membername.setText("" + productTopReview.get(position).getFullname());
 
             try {
-                String mytime=productTopReview.get(position).getCreatedDate();
+                String mytime = productTopReview.get(position).getCreatedDate();
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         "MM-dd-yyyy hh:mm:ss");
                 Date myDate = null;
@@ -1283,12 +1268,12 @@ public class FragItemDetails extends AppCompatActivity {
 
                 SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy");
                 String finalDate = timeFormat.format(myDate);
-                created_date.setText(""+finalDate);
+                created_date.setText("" + finalDate);
 
 
-            }catch (Exception e){
-                Log.e("EXC TRUE"," RRR");
-                created_date.setText(""+productTopReview.get(position).getCreatedDate());
+            } catch (Exception e) {
+                Log.e("EXC TRUE", " RRR");
+                created_date.setText("" + productTopReview.get(position).getCreatedDate());
 
             }
 
@@ -1306,12 +1291,16 @@ public class FragItemDetails extends AppCompatActivity {
             return rowView;
         }
 
+        public class Holder {
+
+        }
+
     }
 
     public class CustomSimilarItem extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         List<SimilarProduct> similarProducts;
+        private LayoutInflater inflater = null;
 
         public CustomSimilarItem(Context contexts, List<SimilarProduct> similarProducts) {
             this.context = contexts;
@@ -1338,10 +1327,6 @@ public class FragItemDetails extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -1356,8 +1341,12 @@ public class FragItemDetails extends AppCompatActivity {
             if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
                 Glide.with(FragItemDetails.this).load(image_url).placeholder(R.drawable.placeholder).into(similar_pro_image);
             }
-            price.setText(mySession.getValueOf(MySession.CurrencySign)  + similarProducts.get(position).getPrice());
+            price.setText(mySession.getValueOf(MySession.CurrencySign) + similarProducts.get(position).getPrice());
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }

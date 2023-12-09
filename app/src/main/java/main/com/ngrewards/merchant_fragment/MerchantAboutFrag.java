@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,14 +37,14 @@ import main.com.ngrewards.constant.GPSTracker;
 
 public class MerchantAboutFrag extends Fragment implements OnMapReadyCallback {
     MapView mapview;
+    GoogleMap map;
+    GPSTracker gpsTracker;
+    Marker drivermarker;
     private TextView open_close_status, description_tv, phone_number, openinghours, address, merchant_name, businesscategory_name;
     private TextView sundayopen, mondayopen, tuesdayopen, wednesdayopen, thursdayopen, fridayopen, saturdayopen;
     private View v;
-    GoogleMap map;
-    GPSTracker gpsTracker;
     private double latitude = 0, longitude = 0;
     private ImageView google_link, facebook_link, twitter_link, youtube_link, website_link, linkedin_link, insta_link;
-    Marker drivermarker;
     private SwipeRefreshLayout swipeToRefresh;
     private RatingBar rating;
     private Boolean sunday_sts = false, monday_sts = false, tuesday_sts = false, wednes_sts = false, thursday_sts = false, friday_sts = false, saturday_sts = false;

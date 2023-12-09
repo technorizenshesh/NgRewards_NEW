@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +13,13 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,10 +68,18 @@ public class NotificationActivity extends AppCompatActivity {
     private ArrayList<NotificationListBean> notificationListBeanArrayList;
     private ArrayList<NotificationBeanNew> notificationBeanNewArrayList;
     private TextView nonotiavb;
+
+    public static String fromBase64(String message) {
+        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        return new String(data, StandardCharsets.UTF_8);
+
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +88,7 @@ public class NotificationActivity extends AppCompatActivity {
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
 
-        Log.d("TAG", "testing: "+" Notification me gaya");
+        Log.d("TAG", "testing: " + " Notification me gaya");
 
         if (user_log_data == null) {
         } else {
@@ -137,132 +145,6 @@ public class NotificationActivity extends AppCompatActivity {
         new MyNotification().execute();
     }
 
-    public class NotificationAdpter extends RecyclerView.Adapter<NotificationAdpter.MyViewHolder> {
-        Context context;
-        ArrayList<NotificationListBean> notificationListBeanArrayList;
-        ArrayList<NotificationBeanNew> notificationBeanNewArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public RelativeLayout backlay;
-            CircleImageView user_img;
-            TextView user_name_tv, message_tv, time_tv, reqcount;
-
-            public MyViewHolder(View view) {
-                super(view);
-                reqcount = itemView.findViewById(R.id.reqcount);
-                user_img = itemView.findViewById(R.id.user_img);
-                user_name_tv = itemView.findViewById(R.id.user_name_tv);
-                message_tv = itemView.findViewById(R.id.message_tv);
-                time_tv = itemView.findViewById(R.id.time_tv);
-            }
-        }
-
-        public NotificationAdpter(Activity myContacts, ArrayList<NotificationBeanNew> notificationBeanNewArrayList) {
-            this.context = myContacts;
-            this.notificationBeanNewArrayList = notificationBeanNewArrayList;
-        }
-/*
-        public NotificationAdpter(Activity myContacts, ArrayList<NotificationListBean> notificationListBeanArrayList) {
-            this.context = myContacts;
-            this.notificationListBeanArrayList = notificationListBeanArrayList;
-        }
-*/
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_notilay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-            return holder;
-            // return new MyViewHolder(itemView);
-        }
-
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
-            if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Chat")) {
-                if (notificationBeanNewArrayList.get(position).getUnseen_count() != null && !notificationBeanNewArrayList.get(position).getUnseen_count().equalsIgnoreCase("") && !notificationBeanNewArrayList.get(position).getUnseen_count().equalsIgnoreCase("0")) {
-                    holder.reqcount.setVisibility(View.VISIBLE);
-                    holder.reqcount.setText("" + notificationBeanNewArrayList.get(position).getUnseen_count());
-                } else {
-                    holder.reqcount.setVisibility(View.GONE);
-                }
-
-                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
-                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getMessage_key());
-                String image_url = notificationBeanNewArrayList.get(position).getImage();
-                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
-                }
-            } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Transfer")) {
-                holder.reqcount.setVisibility(View.GONE);
-                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
-                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
-                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
-                String text = notificationBeanNewArrayList.get(position).getFullname() + " transferred <font color=green>"+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + "</font> to you" + " " + notificationBeanNewArrayList.get(position).getTimeago();
-                holder.message_tv.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-
-                //holder.message_tv.setText("" + text);
-                // holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " transfer you $"+notificationBeanNewArrayList.get(position).getAmount()+" " + notificationBeanNewArrayList.get(position).getTimeago());
-
-                String image_url = notificationBeanNewArrayList.get(position).getImage();
-                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
-                }
-            } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Request")) {
-                holder.reqcount.setVisibility(View.GONE);
-                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
-                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
-                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
-
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.request_for)+mySession.getValueOf(MySession.CurrencySign)  + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
-
-                String image_url = notificationBeanNewArrayList.get(position).getImage();
-                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
-                }
-            } else {
-                holder.reqcount.setVisibility(View.GONE);
-                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
-                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
-                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
-
-                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.just_signed_up_using_your_username) + notificationBeanNewArrayList.get(position).getTimeago());
-
-                String image_url = notificationBeanNewArrayList.get(position).getImage();
-                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
-                }
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Chat")) {
-
-                        Intent i = new Intent(NotificationActivity.this, MemberChatAct.class);
-                        i.putExtra("receiver_id", notificationBeanNewArrayList.get(position).getSenderid());
-                        i.putExtra("type", "Member");
-                        i.putExtra("type", "Member");
-                        i.putExtra("receiver_fullname", notificationBeanNewArrayList.get(position).getFullname());
-                        i.putExtra("receiver_img", "" + notificationBeanNewArrayList.get(position).getSenderimg());
-                        i.putExtra("receiver_name", notificationBeanNewArrayList.get(position).getSendername());
-                        startActivity(i);
-                    }
-
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            // return 6;
-            return notificationBeanNewArrayList == null ? 0 : notificationBeanNewArrayList.size();
-        }
-    }
-
     private void getMyNotification() {
         swipeToRefresh.setRefreshing(true);
         notificationListBeanArrayList = new ArrayList<>();
@@ -315,6 +197,130 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
+    public class NotificationAdpter extends RecyclerView.Adapter<NotificationAdpter.MyViewHolder> {
+        Context context;
+        ArrayList<NotificationListBean> notificationListBeanArrayList;
+        ArrayList<NotificationBeanNew> notificationBeanNewArrayList;
+
+        public NotificationAdpter(Activity myContacts, ArrayList<NotificationBeanNew> notificationBeanNewArrayList) {
+            this.context = myContacts;
+            this.notificationBeanNewArrayList = notificationBeanNewArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_notilay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+/*
+        public NotificationAdpter(Activity myContacts, ArrayList<NotificationListBean> notificationListBeanArrayList) {
+            this.context = myContacts;
+            this.notificationListBeanArrayList = notificationListBeanArrayList;
+        }
+*/
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+            if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Chat")) {
+                if (notificationBeanNewArrayList.get(position).getUnseen_count() != null && !notificationBeanNewArrayList.get(position).getUnseen_count().equalsIgnoreCase("") && !notificationBeanNewArrayList.get(position).getUnseen_count().equalsIgnoreCase("0")) {
+                    holder.reqcount.setVisibility(View.VISIBLE);
+                    holder.reqcount.setText("" + notificationBeanNewArrayList.get(position).getUnseen_count());
+                } else {
+                    holder.reqcount.setVisibility(View.GONE);
+                }
+
+                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
+                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getMessage_key());
+                String image_url = notificationBeanNewArrayList.get(position).getImage();
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                }
+            } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Transfer")) {
+                holder.reqcount.setVisibility(View.GONE);
+                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
+                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
+                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
+                String text = notificationBeanNewArrayList.get(position).getFullname() + " transferred <font color=green>" + mySession.getValueOf(MySession.CurrencySign) + notificationBeanNewArrayList.get(position).getAmount() + "</font> to you" + " " + notificationBeanNewArrayList.get(position).getTimeago();
+                holder.message_tv.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+
+                //holder.message_tv.setText("" + text);
+                // holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + " transfer you $"+notificationBeanNewArrayList.get(position).getAmount()+" " + notificationBeanNewArrayList.get(position).getTimeago());
+
+                String image_url = notificationBeanNewArrayList.get(position).getImage();
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                }
+            } else if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Request")) {
+                holder.reqcount.setVisibility(View.GONE);
+                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
+                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
+                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
+
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.request_for) + mySession.getValueOf(MySession.CurrencySign) + notificationBeanNewArrayList.get(position).getAmount() + " " + notificationBeanNewArrayList.get(position).getTimeago());
+
+                String image_url = notificationBeanNewArrayList.get(position).getImage();
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                }
+            } else {
+                holder.reqcount.setVisibility(View.GONE);
+                holder.time_tv.setText("" + notificationBeanNewArrayList.get(position).getCreated_date());
+                holder.user_name_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname());
+                // holder.message_tv.setText(""+notificationBeanNewArrayList.get(position).getMessage_key());
+
+                holder.message_tv.setText("" + notificationBeanNewArrayList.get(position).getFullname() + getString(R.string.just_signed_up_using_your_username) + notificationBeanNewArrayList.get(position).getTimeago());
+
+                String image_url = notificationBeanNewArrayList.get(position).getImage();
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(NotificationActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+                }
+            }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (notificationBeanNewArrayList.get(position).getNotification_type().equalsIgnoreCase("Chat")) {
+
+                        Intent i = new Intent(NotificationActivity.this, MemberChatAct.class);
+                        i.putExtra("receiver_id", notificationBeanNewArrayList.get(position).getSenderid());
+                        i.putExtra("type", "Member");
+                        i.putExtra("type", "Member");
+                        i.putExtra("receiver_fullname", notificationBeanNewArrayList.get(position).getFullname());
+                        i.putExtra("receiver_img", "" + notificationBeanNewArrayList.get(position).getSenderimg());
+                        i.putExtra("receiver_name", notificationBeanNewArrayList.get(position).getSendername());
+                        startActivity(i);
+                    }
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 6;
+            return notificationBeanNewArrayList == null ? 0 : notificationBeanNewArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public RelativeLayout backlay;
+            CircleImageView user_img;
+            TextView user_name_tv, message_tv, time_tv, reqcount;
+
+            public MyViewHolder(View view) {
+                super(view);
+                reqcount = itemView.findViewById(R.id.reqcount);
+                user_img = itemView.findViewById(R.id.user_img);
+                user_name_tv = itemView.findViewById(R.id.user_name_tv);
+                message_tv = itemView.findViewById(R.id.message_tv);
+                time_tv = itemView.findViewById(R.id.time_tv);
+            }
+        }
+    }
 
     private class MyNotification extends AsyncTask<String, String, String> {
         @Override
@@ -563,12 +569,6 @@ public class NotificationActivity extends AppCompatActivity {
 
             }
         }
-    }
-
-    public static String fromBase64(String message) {
-        byte[] data = Base64.decode(message, Base64.DEFAULT);
-        return new String(data, StandardCharsets.UTF_8);
-
     }
 
 }

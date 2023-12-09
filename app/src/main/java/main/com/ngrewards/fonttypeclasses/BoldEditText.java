@@ -3,7 +3,6 @@ package main.com.ngrewards.fonttypeclasses;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 /**
  * Created by technorizen on 14/6/18.

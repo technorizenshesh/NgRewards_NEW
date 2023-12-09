@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -15,10 +16,12 @@ public class AlertDailoge extends AppCompatActivity {
 
     private SweetAlertDialog pDialog;
     private String reciept_url;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +48,8 @@ public class AlertDailoge extends AppCompatActivity {
         pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                Intent intent  = new Intent(AlertDailoge.this,WebViewCalled.class);
-                intent.putExtra("reciept_url",reciept_url);
+                Intent intent = new Intent(AlertDailoge.this, WebViewCalled.class);
+                intent.putExtra("reciept_url", reciept_url);
                 startActivity(intent);
                 finish();
                 pDialog.dismissWithAnimation();

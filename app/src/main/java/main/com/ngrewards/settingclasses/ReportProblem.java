@@ -2,9 +2,10 @@ package main.com.ngrewards.settingclasses;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;

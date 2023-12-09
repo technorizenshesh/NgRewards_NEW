@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +39,7 @@ import main.com.ngrewards.placeorderclasses.SelectPaymentMethodAct;
 
 public class ItemOrderPaySuccessFully extends AppCompatActivity {
 
+    MySession mySession;
     private String payment_made_by_emi, user_id, product_id, quantity, merchant_id, email, first_name, last_name, company, phone, address_1, address_2, city, state, postcode, payment_method, ngcash, country, card_id, customer_id,
             card_number, card_brand, shipping_price, timezone;
     private String reciept_url;
@@ -46,12 +48,13 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
     private Myapisession myapisession;
     private SweetAlertDialog pDialog;
     private String status;
-    private String   dateToStr ="";
-    MySession mySession;
+    private String dateToStr = "";
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,9 +101,9 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
         if (!(customer_id == "" && customer_id == "" && card_number == "" && card_brand == "")) {
             Date today = new Date();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss ");
-             dateToStr = format.format(today);
+            dateToStr = format.format(today);
 
-            Log.e("TAG", "dateToStrdateToStrdateToStrdateToStrdateToStr"+dateToStr);
+            Log.e("TAG", "dateToStrdateToStrdateToStrdateToStrdateToStr" + dateToStr);
             new PlaceOrderAsc1().execute();
 
         } else {
@@ -138,32 +141,31 @@ public class ItemOrderPaySuccessFully extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-         String   postReceiverUrl= "";
+            String postReceiverUrl = "";
 
             try {
 
-                if (payment_made_by_emi.equalsIgnoreCase("Yes"))
-                {
-                    postReceiverUrl= BaseUrl.baseurl +  "place_order_emi.php?";
-                }else {
-                    postReceiverUrl=    BaseUrl.baseurl + "place_order.php?";
+                if (payment_made_by_emi.equalsIgnoreCase("Yes")) {
+                    postReceiverUrl = BaseUrl.baseurl + "place_order_emi.php?";
+                } else {
+                    postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
                 }
 
-              //  String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
-                Log.e("PlaceOrderURL4"," URL TRUE "+postReceiverUrl+"user_id="+user_id+"&merchant_id="+merchant_id
-                        +"&product_id="+product_id+"&quantity="+quantity+"&email="+email+"&first_name="+
-                        AllAddedAddressAct.fullname_str+"&last_name=&company=&phone="+
-                        AllAddedAddressAct.phonetv_str+"&address_1="+AllAddedAddressAct.address1_str+
-                        "&address_2="+AllAddedAddressAct.address2_str+"&city="
-                        +AllAddedAddressAct.city_str+"&state="+AllAddedAddressAct.state_str+
-                        "&postcode="+AllAddedAddressAct.zippcode_str+"&timezone="+timezone+
-                        "&payment_method=Card&ngcash="+ngcash+"&card_id="+SelectPaymentMethodAct.card_id+
-                        "&card_number="+SelectPaymentMethodAct.card_number+"&card_brand="+
-                        SelectPaymentMethodAct.card_brand+"&shipping_price="+
-                        shipping_price+"&customer_id="+
+                //  String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
+                Log.e("PlaceOrderURL4", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&merchant_id=" + merchant_id
+                        + "&product_id=" + product_id + "&quantity=" + quantity + "&email=" + email + "&first_name=" +
+                        AllAddedAddressAct.fullname_str + "&last_name=&company=&phone=" +
+                        AllAddedAddressAct.phonetv_str + "&address_1=" + AllAddedAddressAct.address1_str +
+                        "&address_2=" + AllAddedAddressAct.address2_str + "&city="
+                        + AllAddedAddressAct.city_str + "&state=" + AllAddedAddressAct.state_str +
+                        "&postcode=" + AllAddedAddressAct.zippcode_str + "&timezone=" + timezone +
+                        "&payment_method=Card&ngcash=" + ngcash + "&card_id=" + SelectPaymentMethodAct.card_id +
+                        "&card_number=" + SelectPaymentMethodAct.card_number + "&card_brand=" +
+                        SelectPaymentMethodAct.card_brand + "&shipping_price=" +
+                        shipping_price + "&customer_id=" +
                         SelectPaymentMethodAct.customer_id
-                        +"&payment_made_by_emi="+payment_made_by_emi
-                        +"&country=" + AllAddedAddressAct.countrytv_str+"&currency="+mySession.getValueOf(MySession.CurrencyCode));
+                        + "&payment_made_by_emi=" + payment_made_by_emi
+                        + "&country=" + AllAddedAddressAct.countrytv_str + "&currency=" + mySession.getValueOf(MySession.CurrencyCode));
 
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();

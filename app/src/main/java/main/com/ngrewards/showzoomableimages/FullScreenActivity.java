@@ -5,11 +5,6 @@ import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import androidx.viewpager.widget.PagerAdapter;
-
-import androidx.viewpager.widget.ViewPager;
-import android.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.lang.reflect.Field;
@@ -31,76 +29,47 @@ import main.com.ngrewards.beanclasses.GalleryBean;
 
 public class FullScreenActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
-    private ImageView finish_page;
-    private ZoomableImageView zoom;
-    private static final String TAG = "Touch";
-    private RelativeLayout backlay;
-    @SuppressWarnings("unused")
-    private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
-
-    // These matrices will be used to scale points of the image
-    Matrix matrix = new Matrix();
-    Matrix savedMatrix = new Matrix();
-
     // The 3 states (events) which the user is trying to perform
     static final int NONE = 0;
     static final int DRAG = 1;
     static final int ZOOM = 2;
+    private static final String TAG = "Touch";
+    @SuppressWarnings("unused")
+    private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
+    ViewPager viewPager;
+    // These matrices will be used to scale points of the image
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
     int mode = NONE;
-
     // these PointF objects are used to record the point(s) the user is touching
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
     String mstatus = "1";
-  private CirclePageIndicator indicator;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private ImageView finish_page;
+    private ZoomableImageView zoom;
+    private RelativeLayout backlay;
+    private CirclePageIndicator indicator;
 
-
-
-        setContentView(R.layout.activity_full_screen);
-
-       //  viewPager = (ExtendedViewPager) findViewById(R.id.pager);
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        finish_page = (ImageView) findViewById(R.id.finish_page);
-        backlay = (RelativeLayout) findViewById(R.id.backlay);
-      //  zoom = (ZoomableImageView) findViewById(R.id.zoom);
-        backlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    //popup method
+    public static void setForceShowIcon(PopupMenu popupMenu) {
+        try {
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
+                            .getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod(
+                            "setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
             }
-        });
-
-
-        Bundle extra = getIntent().getExtras();
-        List<GalleryBean> imagePaths = MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages();
-        int position = extra.getInt("position");
-        String status = extra.getString("status");
-
-
-        TouchImageAdapter adapter = new TouchImageAdapter(this, imagePaths);
-
-
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(position);
-
-        indicator = (CirclePageIndicator) findViewById(R.id.fullscreen_indecator);
-
-        indicator.setViewPager(viewPager);
-        final float density = getResources().getDisplayMetrics().density;
-        indicator.setRadius(5 * density);
-
-     /*   InputStream is = this.getResources().openRawResource(imagePaths.get(position));
-        Bitmap originalBitmap = BitmapFactory.decodeStream(is);
-        zoom.setImageBitmap(originalBitmap);
-*/
-
-      //  zoom.setBackgroundResource(imagePaths.get(position));
-      // zoom.setOnTouchListener(this);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -151,6 +120,53 @@ public class FullScreenActivity extends AppCompatActivity {
 */
     // demo adapter
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        setContentView(R.layout.activity_full_screen);
+
+        //  viewPager = (ExtendedViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        finish_page = (ImageView) findViewById(R.id.finish_page);
+        backlay = (RelativeLayout) findViewById(R.id.backlay);
+        //  zoom = (ZoomableImageView) findViewById(R.id.zoom);
+        backlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+        Bundle extra = getIntent().getExtras();
+        List<GalleryBean> imagePaths = MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages();
+        int position = extra.getInt("position");
+        String status = extra.getString("status");
+
+
+        TouchImageAdapter adapter = new TouchImageAdapter(this, imagePaths);
+
+
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(position);
+
+        indicator = (CirclePageIndicator) findViewById(R.id.fullscreen_indecator);
+
+        indicator.setViewPager(viewPager);
+        final float density = getResources().getDisplayMetrics().density;
+        indicator.setRadius(5 * density);
+
+     /*   InputStream is = this.getResources().openRawResource(imagePaths.get(position));
+        Bitmap originalBitmap = BitmapFactory.decodeStream(is);
+        zoom.setImageBitmap(originalBitmap);
+*/
+
+        //  zoom.setBackgroundResource(imagePaths.get(position));
+        // zoom.setOnTouchListener(this);
+    }
+
     static class TouchImageAdapter extends PagerAdapter {
         private final Activity _activity;
         private final List<GalleryBean> _imagePaths;
@@ -177,10 +193,9 @@ public class FullScreenActivity extends AppCompatActivity {
             TouchImageView img = new TouchImageView(container.getContext());
             //img.setImageResource(_imagePaths.get(position));
 
-            if (_imagePaths.get(position).getGallery_image()==null||_imagePaths.get(position).getGallery_image().equalsIgnoreCase("")){
+            if (_imagePaths.get(position).getGallery_image() == null || _imagePaths.get(position).getGallery_image().equalsIgnoreCase("")) {
 
-            }
-            else {
+            } else {
                 Glide.with(_activity).load(_imagePaths.get(position).getGallery_image()).into(img);
             }
 
@@ -200,28 +215,6 @@ public class FullScreenActivity extends AppCompatActivity {
         }
 
     }
-
-    //popup method
-    public static void setForceShowIcon(PopupMenu popupMenu) {
-        try {
-            Field[] fields = popupMenu.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if ("mPopup".equals(field.getName())) {
-                    field.setAccessible(true);
-                    Object menuPopupHelper = field.get(popupMenu);
-                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
-                            .getClass().getName());
-                    Method setForceIcons = classPopupHelper.getMethod(
-                            "setForceShowIcon", boolean.class);
-                    setForceIcons.invoke(menuPopupHelper, true);
-                    break;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
 }

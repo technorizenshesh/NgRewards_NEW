@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -40,6 +39,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -68,7 +69,6 @@ import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.ProfileActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -77,6 +77,8 @@ import retrofit2.Response;
 
 public class AddOffersAct extends AppCompatActivity {
 
+    private final int GALLERY = 1;
+    CategoryAdpters categoryAdpters;
     private EditText tital_name_et, offer_desc, offer_price;
     private ImageView uploadimg;
     private Spinner category_spinner;
@@ -89,15 +91,14 @@ public class AddOffersAct extends AppCompatActivity {
     private MySession mySession;
     private Button publish_product;
     private String category_id = "", stripe_account_id = "", after_discount_str = "", user_id = "", tital_name_str = "", offer_desc_str = "", offer_price_str = "", ImagePath = "";
-    CategoryAdpters categoryAdpters;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private Myapisession myapisession;
     private TextView offer_discount_price_tv;
-    private final int GALLERY = 1;
     private File file;
     private String extension;
     private String timeStamp;
     private byte[] imageBytes;
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -361,79 +362,6 @@ public class AddOffersAct extends AppCompatActivity {
 
     }
 
-
-    public class AddOfferProdAsc extends AsyncTask<String, String, String> {
-        String Jsondata;
-
-        protected void onPreExecute() {
-            try {
-                super.onPreExecute();
-                progresbar.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String charset = "UTF-8";
-            String requestURL = BaseUrl.baseurl + "add_offer.php?";
-            try {
-                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-                multipart.addFormField("user_id", user_id);
-                multipart.addFormField("offer_name", tital_name_str);
-                multipart.addFormField("offer_description", offer_desc_str);
-                multipart.addFormField("offer_price", offer_price_str);
-                multipart.addFormField("category_id", category_id);
-                multipart.addFormField("offer_discount", "" + cur_progress);
-                multipart.addFormField("offer_discount_price", "" + after_discount_str.trim());
-                if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
-
-                } else {
-                    File ImageFile = new File(ImagePath);
-                    multipart.addFilePart("offer_image", ImageFile);
-                }
-                List<String> response = multipart.finish();
-                for (String line : response) {
-                    Jsondata = line;
-                }
-                JSONObject object = new JSONObject(Jsondata);
-                return Jsondata;
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progresbar.setVisibility(View.GONE);
-            Log.e("Add Product ", " >> " + result);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-
-                        Toast.makeText(AddOffersAct.this, getResources().getString(R.string.offeradded), Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-
-    }
-
     private void selectImage() {
         try {
             final Dialog dialogSts = new Dialog(AddOffersAct.this, R.style.DialogSlideAnim);
@@ -514,9 +442,8 @@ public class AddOffersAct extends AppCompatActivity {
         return mypath.getAbsolutePath();
     }
 
-
     public void decodeFile(String filePath) {
-        try{
+        try {
             // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
@@ -542,7 +469,7 @@ public class AddOffersAct extends AppCompatActivity {
             ImagePath = saveToInternalStorage(bitmap);
             Log.e("DECODE PATH", "ff " + ImagePath);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
    /*     try{
@@ -591,44 +518,43 @@ public class AddOffersAct extends AppCompatActivity {
                             try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
                                 final Bitmap bitmap = BitmapFactory.decodeStream(stream);
                                 uploadimg.setImageBitmap(bitmap);
-                                File tempfile =   Tools.persistImage(bitmap, getApplicationContext());
-                                ImagePath= tempfile.getAbsolutePath();
-                                Log.e("ImagePath", "onActivityResult: "+ImagePath );
+                                File tempfile = Tools.persistImage(bitmap, getApplicationContext());
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
                             }
                         } catch (IOException e) {
-                            ToolsShowDialog(getApplicationContext(),e.getLocalizedMessage());
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
                         }
+                    } else {
+                        Uri selectedImage = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                        Cursor cursor = getContentResolver().query(selectedImage,
+                                filePathColumn, null, null, null);
+                        cursor.moveToFirst();
+
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+
+                        uploadimg.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                        Log.e("picturePath", picturePath);
+
+                        file = new File(picturePath);
+                        String fileName = file.getName();
+                        Log.e("file", fileName);
+
+                        Log.e("file", fileName);
+                        String[] filenameArray = fileName.split("\\.");
+                        extension = filenameArray[filenameArray.length - 1];
+                        Log.e("fileName", extension);
+                        Long tsLong = System.currentTimeMillis() / 1000;
+                        timeStamp = tsLong.toString();
+                        imageBytes = convertImageToByte(selectedImage, extension);
+                        Log.e("fileName", "" + imageBytes.length);
+                        decodeFile(picturePath);
                     }
-                    else {
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    Cursor cursor = getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    uploadimg.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                    Log.e("picturePath", picturePath);
-
-                    file = new File(picturePath);
-                    String fileName = file.getName();
-                    Log.e("file", fileName);
-
-                    Log.e("file", fileName);
-                    String[] filenameArray = fileName.split("\\.");
-                    extension = filenameArray[filenameArray.length - 1];
-                    Log.e("fileName", extension);
-                    Long tsLong = System.currentTimeMillis() / 1000;
-                    timeStamp = tsLong.toString();
-                    imageBytes = convertImageToByte(selectedImage, extension);
-                    Log.e("fileName", "" + imageBytes.length);
-                    decodeFile(picturePath);
-            }
                     break;
 
                 case 2:
@@ -643,7 +569,6 @@ public class AddOffersAct extends AppCompatActivity {
         }
 
     }
-
 
     public byte[] convertImageToByte(Uri uri, String extension) {
         byte[] data = null;
@@ -663,6 +588,58 @@ public class AddOffersAct extends AppCompatActivity {
         }
 
         return data;
+    }
+
+    private void getOfferCategory() {
+//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
+        categoryBeanListArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyOffercate(responseData);
+
+                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
+                            categoryBeanListArrayList.addAll(successData.getResult());
+
+                        }
+
+                        categoryAdpters = new CategoryAdpters(AddOffersAct.this, categoryBeanListArrayList);
+                        category_spinner.setAdapter(categoryAdpters);
+                        if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
+                            for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
+/*
+                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
+                                    category_spinner.setSelection(i);
+                                }
+*/
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+
+
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
     }
    /* private void getCategoryType() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
@@ -725,10 +702,82 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         });
     }*/
 
+    public class AddOfferProdAsc extends AsyncTask<String, String, String> {
+        String Jsondata;
+
+        protected void onPreExecute() {
+            try {
+                super.onPreExecute();
+                progresbar.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String charset = "UTF-8";
+            String requestURL = BaseUrl.baseurl + "add_offer.php?";
+            try {
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
+                multipart.addFormField("user_id", user_id);
+                multipart.addFormField("offer_name", tital_name_str);
+                multipart.addFormField("offer_description", offer_desc_str);
+                multipart.addFormField("offer_price", offer_price_str);
+                multipart.addFormField("category_id", category_id);
+                multipart.addFormField("offer_discount", "" + cur_progress);
+                multipart.addFormField("offer_discount_price", "" + after_discount_str.trim());
+                if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
+
+                } else {
+                    File ImageFile = new File(ImagePath);
+                    multipart.addFilePart("offer_image", ImageFile);
+                }
+                List<String> response = multipart.finish();
+                for (String line : response) {
+                    Jsondata = line;
+                }
+                JSONObject object = new JSONObject(Jsondata);
+                return Jsondata;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progresbar.setVisibility(View.GONE);
+            Log.e("Add Product ", " >> " + result);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+
+                        Toast.makeText(AddOffersAct.this, getResources().getString(R.string.offeradded), Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+    }
+
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -763,65 +812,13 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
             } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
 
-                Log.e("TAG", "getView:9090909090 "+categoryBeanLists.get(i).getCategory_name_hindi() );
+                Log.e("TAG", "getView:9090909090 " + categoryBeanLists.get(i).getCategory_name_hindi());
                 names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
             } else {
                 names.setText(categoryBeanLists.get(i).getCategoryName());
             }
             return view;
         }
-    }
-
-    private void getOfferCategory() {
-//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        categoryBeanListArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyOffercate(responseData);
-
-                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
-                            categoryBeanListArrayList.addAll(successData.getResult());
-
-                        }
-
-                        categoryAdpters = new CategoryAdpters(AddOffersAct.this, categoryBeanListArrayList);
-                        category_spinner.setAdapter(categoryAdpters);
-                        if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
-                            for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
-/*
-                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
-                                    category_spinner.setSelection(i);
-                                }
-*/
-                            }
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-
-
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
     }
 
 }

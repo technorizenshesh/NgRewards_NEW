@@ -39,23 +39,6 @@ public class MerOrderBean {
     @SerializedName("employee_name")
     @Expose
     private String employee_name;
-
-    public String getReciept_url() {
-        return reciept_url;
-    }
-
-    public void setReciept_url(String reciept_url) {
-        this.reciept_url = reciept_url;
-    }
-
-    public String getCart_id() {
-        return cart_id;
-    }
-
-    public void setCart_id(String cart_id) {
-        this.cart_id = cart_id;
-    }
-
     @SerializedName("product_name")
     @Expose
     private String productName;
@@ -92,6 +75,168 @@ public class MerOrderBean {
     @SerializedName("shipping_email")
     @Expose
     private String shippingEmail;
+    @SerializedName("order_cart_id")
+    @Expose
+    private String order_cart_id;
+    @SerializedName("order_special_request")
+    @Expose
+    private String order_special_request;
+    @Expose
+    private String shippingPhone;
+    @SerializedName("shipping_address_1")
+    @Expose
+    private String shippingAddress1;
+    @SerializedName("shipping_address_2")
+    @Expose
+    private String shippingAddress2;
+    @SerializedName("shipping_country")
+    @Expose
+    private String shippingCountry;
+    @SerializedName("search_id")
+    @Expose
+    private String search_id;
+    @SerializedName("b_name")
+    @Expose
+    private String b_name;
+    @SerializedName("symbol_amount")
+    @Expose
+    private String symbol_amount;
+    @SerializedName("shipping_state")
+    @Expose
+    private String shippingState;
+    @SerializedName("shipping_postcode")
+    @Expose
+    private String shippingPostcode;
+    @SerializedName("billing_first_name")
+    @Expose
+    private String billingFirstName;
+    @SerializedName("billing_last_name")
+    @Expose
+    private String billingLastName;
+    @SerializedName("billing_company")
+    @Expose
+    private String billingCompany;
+    @SerializedName("billing_email")
+    @Expose
+    private String billingEmail;
+    @SerializedName("billing_phone")
+    @Expose
+    private String billingPhone;
+    @SerializedName("billing_address_1")
+    @Expose
+    private String billingAddress1;
+    @SerializedName("billing_address_2")
+    @Expose
+    private String billingAddress2;
+    @SerializedName("billing_country")
+    @Expose
+    private String billingCountry;
+    @SerializedName("billing_state")
+    @Expose
+    private String billingState;
+    @SerializedName("billing_postcode")
+    @Expose
+    private String billingPostcode;
+    @SerializedName("ngcash")
+    @Expose
+    private String ngcash;
+    @SerializedName("card_id")
+    @Expose
+    private String cardId;
+    @SerializedName("card_number")
+    @Expose
+    private String cardNumber;
+    @SerializedName("card_brand")
+    @Expose
+    private String cardBrand;
+    @SerializedName("order_date")
+    @Expose
+    private String orderDate;
+    @SerializedName("delivery_date")
+    @Expose
+    private String deliveryDate;
+    @SerializedName("order_id")
+    @Expose
+    private Integer orderId;
+    @SerializedName("total_cost")
+    @Expose
+    private String totalCost;
+    @SerializedName("size")
+    @Expose
+    private String size;
+    @SerializedName("color")
+    @Expose
+    private String color;
+    @SerializedName("merchant_id")
+    @Expose
+    private String merchant_id;
+
+
+    //impliment by sagar //
+    @SerializedName("merchant_no")
+    @Expose
+    private String merchant_no;
+    @SerializedName("member_id")
+    @Expose
+    private String member_id;
+    @SerializedName("amount")
+    @Expose
+    private String amount;
+
+
+    // implimnet by sagar pansse //
+    @SerializedName("total_amount")
+    @Expose
+    private String total_amount;
+    @SerializedName("tip_amount")
+    @Expose
+    private String tip_amount;
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("created_date")
+    @Expose
+    private String created_date;
+    @SerializedName("paid_by_card")
+    @Expose
+    private String paid_by_card;
+    @SerializedName("shipping_price")
+    @Expose
+    private String shipping_price;
+    @SerializedName("total_price_with_shipping")
+    @Expose
+    private String total_price_with_shipping;
+    @SerializedName("order_Date")
+    @Expose
+    private String orderDate2;
+    @SerializedName("order_Time")
+    @Expose
+    private String order_Time;
+    @SerializedName("merchant_detail")
+    @Expose
+    private List<MerchantBean> merchantDetail = null;
+    @SerializedName("order_guset_No")
+    @Expose
+    private String order_guset_No;
+    @SerializedName("order_Table_No")
+    @Expose
+    private String order_Table_No;
+
+    public String getReciept_url() {
+        return reciept_url;
+    }
+
+    public void setReciept_url(String reciept_url) {
+        this.reciept_url = reciept_url;
+    }
+
+    public String getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(String cart_id) {
+        this.cart_id = cart_id;
+    }
 
     public String getSplit_invoice() {
         return split_invoice;
@@ -160,17 +305,6 @@ public class MerOrderBean {
         this.order_cart_id = order_cart_id;
     }
 
-    @SerializedName("order_cart_id")
-    @Expose
-    private String order_cart_id;
-
-    @SerializedName("order_special_request")
-    @Expose
-    private String order_special_request;
-
-    @Expose
-    private String shippingPhone;
-
     public String getSearch_id() {
         return search_id;
     }
@@ -194,173 +328,6 @@ public class MerOrderBean {
     public void setSymbol_amount(String symbol_amount) {
         this.symbol_amount = symbol_amount;
     }
-
-    @SerializedName("shipping_address_1")
-    @Expose
-    private String shippingAddress1;
-    @SerializedName("shipping_address_2")
-    @Expose
-    private String shippingAddress2;
-    @SerializedName("shipping_country")
-    @Expose
-    private String shippingCountry;
-
-
-    //impliment by sagar //
-
-    @SerializedName("search_id")
-    @Expose
-    private String search_id;
-
-    @SerializedName("b_name")
-    @Expose
-    private String b_name;
-
-    @SerializedName("symbol_amount")
-    @Expose
-    private String symbol_amount;
-
-
-
-
-
-
-    // implimnet by sagar pansse //
-
-
-
-
-
-    @SerializedName("shipping_state")
-    @Expose
-    private String shippingState;
-    @SerializedName("shipping_postcode")
-    @Expose
-    private String shippingPostcode;
-    @SerializedName("billing_first_name")
-    @Expose
-    private String billingFirstName;
-    @SerializedName("billing_last_name")
-    @Expose
-    private String billingLastName;
-    @SerializedName("billing_company")
-    @Expose
-    private String billingCompany;
-    @SerializedName("billing_email")
-    @Expose
-    private String billingEmail;
-    @SerializedName("billing_phone")
-    @Expose
-    private String billingPhone;
-    @SerializedName("billing_address_1")
-    @Expose
-    private String billingAddress1;
-    @SerializedName("billing_address_2")
-    @Expose
-    private String billingAddress2;
-    @SerializedName("billing_country")
-    @Expose
-    private String billingCountry;
-    @SerializedName("billing_state")
-    @Expose
-    private String billingState;
-    @SerializedName("billing_postcode")
-    @Expose
-    private String billingPostcode;
-    @SerializedName("ngcash")
-    @Expose
-    private String ngcash;
-    @SerializedName("card_id")
-    @Expose
-    private String cardId;
-    @SerializedName("card_number")
-    @Expose
-    private String cardNumber;
-    @SerializedName("card_brand")
-    @Expose
-    private String cardBrand;
-
-    @SerializedName("order_date")
-    @Expose
-    private String orderDate;
-
-    @SerializedName("delivery_date")
-    @Expose
-    private String deliveryDate;
-    @SerializedName("order_id")
-    @Expose
-    private Integer orderId;
-    @SerializedName("total_cost")
-    @Expose
-    private String totalCost;
-    @SerializedName("size")
-    @Expose
-    private String size;
-
-    @SerializedName("color")
-    @Expose
-    private String color;
-
-    @SerializedName("merchant_id")
-    @Expose
-    private String merchant_id;
-
-    @SerializedName("merchant_no")
-    @Expose
-    private String merchant_no;
-
-    @SerializedName("member_id")
-    @Expose
-    private String member_id;
-
-    @SerializedName("amount")
-    @Expose
-    private String amount;
-
-    @SerializedName("total_amount")
-    @Expose
-    private String total_amount;
-
-    @SerializedName("tip_amount")
-    @Expose
-    private String tip_amount;
-
-    @SerializedName("type")
-    @Expose
-    private String type;
-
-    @SerializedName("created_date")
-    @Expose
-    private String created_date;
-
-    @SerializedName("paid_by_card")
-    @Expose
-    private String paid_by_card;
-
-    @SerializedName("shipping_price")
-    @Expose
-    private String shipping_price;
-    @SerializedName("total_price_with_shipping")
-    @Expose
-    private String total_price_with_shipping;
-
-    @SerializedName("order_Date")
-    @Expose
-    private String orderDate2;
-
-    @SerializedName("order_Time")
-    @Expose
-    private String order_Time;
-
-    @SerializedName("merchant_detail")
-    @Expose
-    private List<MerchantBean> merchantDetail = null;
-    @SerializedName("order_guset_No")
-    @Expose
-    private String order_guset_No;
-    @SerializedName("order_Table_No")
-    @Expose
-    private String order_Table_No;
 
     public String getTotal_price_with_shipping() {
         return total_price_with_shipping;
@@ -400,10 +367,6 @@ public class MerOrderBean {
 
     public void setPaid_by_card(String paid_by_card) {
         this.paid_by_card = paid_by_card;
-    }
-
-    public void setTotalProductPrice(double totalProductPrice) {
-        this.totalProductPrice = totalProductPrice;
     }
 
     public String getMerchant_id() {
@@ -512,6 +475,10 @@ public class MerOrderBean {
 
     public double getTotalProductPrice() {
         return totalProductPrice;
+    }
+
+    public void setTotalProductPrice(double totalProductPrice) {
+        this.totalProductPrice = totalProductPrice;
     }
 
     public void setTotalProductPrice(Integer totalProductPrice) {

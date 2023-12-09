@@ -9,12 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +16,13 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -56,7 +57,6 @@ import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MultipartUtility;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.marchant.fragments.MerBusinessFrag;
 import main.com.ngrewards.marchant.fragments.MerEnterEmailFrag;
 import main.com.ngrewards.marchant.fragments.MerEnterPassFrag;
@@ -72,8 +72,7 @@ public class MerchantSignupSlider extends AppCompatActivity {
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
     public static String add_merchant_in_member = "NO";
-    public static String ImagePath = "", bus_category_id = "", selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_tnc_cheched = "", mer_fullname = "", mer_reward = "6", mer_who_invite = "", mer_image = ""
-            , mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
+    public static String ImagePath = "", bus_category_id = "", selected_country = "", selected_country_name = "", mer_address_two = "", country_str = "", mer_email = "", mer_pass = "", mer_tnc_cheched = "", mer_fullname = "", mer_reward = "6", mer_who_invite = "", mer_image = "", mer_businessname = "", mer_phone_number = "", mer_address = "", mer_city = "", mer_state = "", mer_zipcode = "";
     public static double mer_latitude = 0, mer_longitude = 0;
     private final boolean back_click_sts = false;
     String selectedItem;
@@ -97,10 +96,12 @@ public class MerchantSignupSlider extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,21 +203,21 @@ public class MerchantSignupSlider extends AppCompatActivity {
                                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
 
                             } else {
-                                Log.e("TAG", "onClick: mer_businessname  ---   "+mer_businessname );
-                                Log.e("TAG", "onClick: mer_phone_number  ---   "+mer_phone_number );
-                                Log.e("TAG", "onClick: bus_category_id   ---   "+bus_category_id  );
-                                Log.e("TAG", "onClick: selected_country  ---   "+selected_country );
-                                Log.e("TAG", "onClick: mer_address       ---   "+mer_address      );
-                                Log.e("TAG", "onClick: mer_zipcode       ---   "+mer_zipcode      );
+                                Log.e("TAG", "onClick: mer_businessname  ---   " + mer_businessname);
+                                Log.e("TAG", "onClick: mer_phone_number  ---   " + mer_phone_number);
+                                Log.e("TAG", "onClick: bus_category_id   ---   " + bus_category_id);
+                                Log.e("TAG", "onClick: selected_country  ---   " + selected_country);
+                                Log.e("TAG", "onClick: mer_address       ---   " + mer_address);
+                                Log.e("TAG", "onClick: mer_zipcode       ---   " + mer_zipcode);
                                 Toast.makeText(MerchantSignupSlider.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
                             }
                         } else if (viewPager.getCurrentItem() == 5) {
                             if (mer_reward != null && !mer_reward.equalsIgnoreCase("")) {
 
 
-                                if (!mer_tnc_cheched.equalsIgnoreCase("")){
+                                if (!mer_tnc_cheched.equalsIgnoreCase("")) {
                                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                                }else {
+                                } else {
                                     Toast.makeText(MerchantSignupSlider.this, getResources().getString(R.string.filldetail), Toast.LENGTH_LONG).show();
 
                                 }

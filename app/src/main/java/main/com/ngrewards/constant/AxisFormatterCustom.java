@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 public class AxisFormatterCustom {
+    private final List<String> colorList = new ArrayList<>();
     public List<Float> horizontal_width_list = new ArrayList<>();
     float hor_ratio, horstart, graphheight, width, border, horizontal_width, graphwidth, height;
     float colwidth;
@@ -24,7 +25,6 @@ public class AxisFormatterCustom {
     List<ChartDataCustom> values;
     List<String> hori_labels;
     String description;
-    private final List<String> colorList = new ArrayList<>();
     private int legendTop, legendLeft, legendRight, legendBottom;
     private RectF legends;
 

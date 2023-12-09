@@ -3,9 +3,6 @@ package main.com.ngrewards.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -33,12 +34,12 @@ import main.com.ngrewards.draweractivity.AddMenuPublish;
 /**
  * Created by admin4 on 11/5/2016.
  */
-public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_adapter.MyViewHolder>  {
+public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_adapter.MyViewHolder> {
 
     private final ArrayList<MenuModal> all_category_subcategory;
+    private final Context activity;
     private View itemView;
     private char first_char;
-    private final Context activity;
     private String dish_title_string;
     private String discription_title_string;
     private String Item_Price;
@@ -54,7 +55,8 @@ public class Menu_ListItem_adapter extends RecyclerView.Adapter<Menu_ListItem_ad
     private String h;
     private String name_item;
     private String image_menu;
-private  MySession mySession ;
+    private MySession mySession;
+
     public Menu_ListItem_adapter(Context a, ArrayList<MenuModal> all_category_subcategory) {
         this.activity = a;
         this.all_category_subcategory = all_category_subcategory;
@@ -70,7 +72,7 @@ private  MySession mySession ;
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") final int i) {
-mySession = new MySession(activity);
+        mySession = new MySession(activity);
         dish_title_string = all_category_subcategory.get(i).getTitle();
         discription_title_string = all_category_subcategory.get(i).getTitleDiscription();
         Item_Price = all_category_subcategory.get(i).getPrice();
@@ -98,9 +100,9 @@ mySession = new MySession(activity);
                             case R.id.nav_home:
                                 fghu = all_category_subcategory.get(i).getId();
 
-                                Intent intent = new Intent(activity,AddMenuPublish.class);
-                                intent.putExtra("id",id_item);
-                                intent.putExtra("update","update");
+                                Intent intent = new Intent(activity, AddMenuPublish.class);
+                                intent.putExtra("id", id_item);
+                                intent.putExtra("update", "update");
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 activity.startActivity(intent);
 
@@ -123,8 +125,8 @@ mySession = new MySession(activity);
 
         /*  Log.e("desage_name_string",desage_name_string);*/
         holder.dish_name.setText(dish_title_string);
-        holder.discription.setText(activity.getString(R.string.description_colen)  + discription_title_string);
-        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + Item_Price);
+        holder.discription.setText(activity.getString(R.string.description_colen) + discription_title_string);
+        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + Item_Price);
 
         list = all_category_subcategory.get(i).getTitle();
 
@@ -135,7 +137,7 @@ mySession = new MySession(activity);
             Toast.makeText(activity, list, Toast.LENGTH_SHORT).show();
         }
 
-          Glide.with(activity).load(BaseUrl.image_baseurl+image_menu).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE)
+        Glide.with(activity).load(BaseUrl.image_baseurl + image_menu).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE)
                 .dontTransform()
                 .dontAnimate().into(holder.image_menu_item);
 
@@ -174,6 +176,13 @@ mySession = new MySession(activity);
 
     }
 
+    @Override
+    public int getItemCount() {
+
+        return all_category_subcategory.size();
+
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView dish_name;
@@ -194,14 +203,6 @@ mySession = new MySession(activity);
             image_menu_item = itemView.findViewById(R.id.image_menu_item);
 
         }
-    }
-
-
-    @Override
-    public int getItemCount() {
-
-        return all_category_subcategory.size();
-
     }
 
 }

@@ -10,8 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,6 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,6 +84,7 @@ public class AddShipingAddress extends AppCompatActivity {
     private ProgressBar progresbar;
     private MySession mySession;
     private Myapisession myapisession;
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -588,7 +590,7 @@ public class AddShipingAddress extends AppCompatActivity {
                     postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                 }
                 String urlParameters = postData.toString();
-                Log.e("TAG", "doInBackground: urlParametersurlParameters "+urlParameters );
+                Log.e("TAG", "doInBackground: urlParametersurlParameters " + urlParameters);
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
@@ -681,10 +683,10 @@ public class AddShipingAddress extends AppCompatActivity {
                     postData.append('=');
                     postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                 }
-                Log.e("TAG", "doInBackground: urlParametersurlParameters "+postData );
+                Log.e("TAG", "doInBackground: urlParametersurlParameters " + postData);
 
                 String urlParameters = postData.toString();
-                Log.e("TAG", "doInBackground: urlParametersurlParameters "+urlParameters );
+                Log.e("TAG", "doInBackground: urlParametersurlParameters " + urlParameters);
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -890,7 +892,7 @@ public class AddShipingAddress extends AppCompatActivity {
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
-                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
+                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key="+getString(R.string.googlekey)+"&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
                         String result = null;
                         try {
                             result = new MyTask(wo, 3).execute().get();

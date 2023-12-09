@@ -1,13 +1,10 @@
 package main.com.ngrewards.showzoomableimages;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import android.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.lang.reflect.Field;
@@ -28,30 +28,48 @@ import main.com.ngrewards.activity.FragItemDetails;
 import main.com.ngrewards.beanclasses.ProductImage;
 
 public class FullScreenImagesActivity extends AppCompatActivity {
-    ViewPager viewPager;
-    private ImageView finish_page;
-    private ZoomableImageView zoom;
-    private static final String TAG = "Touch";
-    private RelativeLayout backlay;
-    @SuppressWarnings("unused")
-    private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
-
-    // These matrices will be used to scale points of the image
-    Matrix matrix = new Matrix();
-    Matrix savedMatrix = new Matrix();
-
     // The 3 states (events) which the user is trying to perform
     static final int NONE = 0;
     static final int DRAG = 1;
     static final int ZOOM = 2;
+    private static final String TAG = "Touch";
+    @SuppressWarnings("unused")
+    private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
+    ViewPager viewPager;
+    // These matrices will be used to scale points of the image
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
     int mode = NONE;
-
     // these PointF objects are used to record the point(s) the user is touching
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
     String mstatus = "1";
+    private ImageView finish_page;
+    private ZoomableImageView zoom;
+    private RelativeLayout backlay;
     private CirclePageIndicator indicator;
+
+    //popup method
+    public static void setForceShowIcon(PopupMenu popupMenu) {
+        try {
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
+                            .getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod(
+                            "setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +90,8 @@ public class FullScreenImagesActivity extends AppCompatActivity {
 
         List<ProductImage> imagePaths = null;
         Bundle extra = getIntent().getExtras();
-        if (FragItemDetails.productDetailArrayList!=null){
-             imagePaths = FragItemDetails.productDetailArrayList.get(0).getProductImages();
+        if (FragItemDetails.productDetailArrayList != null) {
+            imagePaths = FragItemDetails.productDetailArrayList.get(0).getProductImages();
 
         }
         int position = extra.getInt("position");
@@ -143,28 +161,6 @@ public class FullScreenImagesActivity extends AppCompatActivity {
         }
 
     }
-
-    //popup method
-    public static void setForceShowIcon(PopupMenu popupMenu) {
-        try {
-            Field[] fields = popupMenu.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if ("mPopup".equals(field.getName())) {
-                    field.setAccessible(true);
-                    Object menuPopupHelper = field.get(popupMenu);
-                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
-                            .getClass().getName());
-                    Method setForceIcons = classPopupHelper.getMethod(
-                            "setForceShowIcon", boolean.class);
-                    setForceIcons.invoke(menuPopupHelper, true);
-                    break;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
 }

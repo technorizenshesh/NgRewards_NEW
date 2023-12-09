@@ -7,13 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +17,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,18 +53,17 @@ import retrofit2.Response;
 public class SaledItemDetailAct extends
         AppCompatActivity implements
         RecyclerViewClickListenerSplit {
-    private MySession mySession;
-
-    private RelativeLayout backlay;
-    private ImageView product_img;
-    private TextView size_tv, color_tv, product_name, quantity, merchant_name, mainprice, order_id, purchasedate, upspackage, shipaddress;
-    private TextView shipprice, estdeliver, contactseller;
     private final String review_str = "";
     private final String average_rating = "";
     private final String comment_str = "";
     private final String rating_str = "";
     private final String member_img_str = "";
     private final String upspackage_str = "";
+    private MySession mySession;
+    private RelativeLayout backlay;
+    private ImageView product_img;
+    private TextView size_tv, color_tv, product_name, quantity, merchant_name, mainprice, order_id, purchasedate, upspackage, shipaddress;
+    private TextView shipprice, estdeliver, contactseller;
     private String color_str = "";
     private String size_str = "";
     private String shipping_price = "";
@@ -123,7 +121,7 @@ public class SaledItemDetailAct extends
 
                     user_id = jsonObject1.getString("id");
                     business_name = jsonObject1.getString("business_name");
-                    business_no  = jsonObject1.getString("business_no");
+                    business_no = jsonObject1.getString("business_no");
                 }
             } catch (JSONException ee) {
                 ee.printStackTrace();
@@ -152,11 +150,11 @@ public class SaledItemDetailAct extends
             shipping_price = bundle.getString("shipping_price");
             mainprice_str = bundle.getString("mainprice");
             member_name_str = bundle.getString("member_name");
-            created_date    = bundle.getString("created_date");
+            created_date = bundle.getString("created_date");
             product_name_str = bundle.getString("product_name");
             product_img_str = bundle.getString("product_img_str");
             member_contact_name = bundle.getString("member_contact_name");
-            quantity_str      = bundle.getString("quantity");
+            quantity_str = bundle.getString("quantity");
             order_date = bundle.getString("order_date");
             reciept_url = bundle.getString("reciept_url");
             post_code = bundle.getString("post_code");
@@ -193,8 +191,8 @@ public class SaledItemDetailAct extends
         try {
 
             FinalPuzzelAdapter finalPuzzelAdapter = new FinalPuzzelAdapter(splitLists,
-                    SaledItemDetailAct.this, type,this::onClick1);
-             dialogSts = new Dialog(SaledItemDetailAct.this, R.style.DialogSlideAnim);
+                    SaledItemDetailAct.this, type, this::onClick1);
+            dialogSts = new Dialog(SaledItemDetailAct.this, R.style.DialogSlideAnim);
             dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSts.setCancelable(false);
             dialogSts.setContentView(R.layout.bottem_split__list_item);
@@ -221,9 +219,11 @@ public class SaledItemDetailAct extends
         }
 
     }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     private void idinit() {
         send_reminder = findViewById(R.id.send_reminder);
         show_remaining_payments = findViewById(R.id.show_remaining_payments);
@@ -260,8 +260,8 @@ public class SaledItemDetailAct extends
 
         product_name.setText("" + product_name_str);
         merchant_name.setText("" + member_contact_name);
-        mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mainprice_str);
-        shipprice.setText(mySession.getValueOf(MySession.CurrencySign)  + shipping_price);
+        mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mainprice_str);
+        shipprice.setText(mySession.getValueOf(MySession.CurrencySign) + shipping_price);
         order_id.setText("" + order_id_str);
         estdeliver.setText("Est. Delivery " + delivery_date_str);
         purchasedate.setText("" + order_date);
@@ -355,34 +355,34 @@ public class SaledItemDetailAct extends
     }
 
 
-
     @Override
     public void onClick1(SplitList id_item) {
 
         dialogSts.dismiss();
         getMerOrderActivity(id_item);
-     // cart_id=157&=7446&=4.8&=3&=ed58126&=REACH&=247&=2012-01-22&number_of_emi=1&json=on
+        // cart_id=157&=7446&=4.8&=3&=ed58126&=REACH&=247&=2012-01-22&number_of_emi=1&json=on
 
     }
+
     private void getMerOrderActivity(SplitList id_item) {
-       String dfgfd = PreferenceConnector.readString(SaledItemDetailAct.this,
-               PreferenceConnector.UserNAme, "");
-        String   dfgfd1 = PreferenceConnector.readString(SaledItemDetailAct.this, PreferenceConnector.UserNAme1, "");
+        String dfgfd = PreferenceConnector.readString(SaledItemDetailAct.this,
+                PreferenceConnector.UserNAme, "");
+        String dfgfd1 = PreferenceConnector.readString(SaledItemDetailAct.this, PreferenceConnector.UserNAme1, "");
 
         Log.e("user_idd", user_id);
         Log.e("user_idd", dfgfd);
         Log.e("user_idd", dfgfd1);
-        Map<String, String >map = new HashMap<>();
-        map.put("cart_id",cart_id);
-        map.put("order_id",order_id_str);
-        map.put("split_amount_x",id_item.getAmount());
-        map.put("merchant_id",user_id);
-        map.put("merchant_business_no",business_no);
-        map.put("merchant_business_name",business_name);
-        map.put("due_date",id_item.getDate());
-        map.put("member_id",member_id);
-        map.put("number_of_emi",id_item.getId());
-        map.put("json","on");
+        Map<String, String> map = new HashMap<>();
+        map.put("cart_id", cart_id);
+        map.put("order_id", order_id_str);
+        map.put("split_amount_x", id_item.getAmount());
+        map.put("merchant_id", user_id);
+        map.put("merchant_business_no", business_no);
+        map.put("merchant_business_name", business_name);
+        map.put("due_date", id_item.getDate());
+        map.put("member_id", member_id);
+        map.put("number_of_emi", id_item.getId());
+        map.put("json", "on");
         Call<ResponseBody> call = ApiClient.getApiInterface().notification_emi(map);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -404,9 +404,9 @@ public class SaledItemDetailAct extends
                                 .show();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e("TAG", "onResponse: "+e.getLocalizedMessage());
-                        Log.e("TAG", "onResponse: "+e.getMessage());
-                        Log.e("TAG", "onResponse: "+e.getCause());
+                        Log.e("TAG", "onResponse: " + e.getLocalizedMessage());
+                        Log.e("TAG", "onResponse: " + e.getMessage());
+                        Log.e("TAG", "onResponse: " + e.getCause());
                     }
                 } else {
                 }
@@ -419,6 +419,7 @@ public class SaledItemDetailAct extends
             }
         });
     }
+
     public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
         private final ArrayList<SplitList> peopleList;
         Context context;
@@ -457,11 +458,11 @@ public class SaledItemDetailAct extends
 
 
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Paid");
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Paid");
 
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
-                    ivFinalImage.setText(splitList.getId() + str + " Payment "+ " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Due - " + splitList.getDate());
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Due - " + splitList.getDate());
                 }
             } else {
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
@@ -470,7 +471,7 @@ public class SaledItemDetailAct extends
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
                     ivFinalImage.setTextSize(10);
-                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Due On - " + splitList.getDate());
                     ivFinalImage.setOnClickListener(v -> {
                         recyclerViewClickListener1.onClick1(splitList);
                     });

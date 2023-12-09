@@ -1,13 +1,6 @@
 package main.com.ngrewards.activity;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,6 +98,14 @@ public class OrderActivity extends AppCompatActivity {
                 });
     }
 
+    public void FragTrans(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_up_dialog, R.anim.slide_out_down);
+        transaction.replace(R.id.content_frame, fragment);
+        transaction.addToBackStack("fragments");
+        transaction.commit();
+    }
+
     class orderAdapter extends RecyclerView.Adapter<orderAdapter.MyViewHolder> {
 
         @NonNull
@@ -137,14 +144,5 @@ public class OrderActivity extends AppCompatActivity {
                 super(itemView);
             }
         }
-    }
-
-
-    public void FragTrans(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_up_dialog, R.anim.slide_out_down);
-        transaction.replace(R.id.content_frame, fragment);
-        transaction.addToBackStack("fragments");
-        transaction.commit();
     }
 }

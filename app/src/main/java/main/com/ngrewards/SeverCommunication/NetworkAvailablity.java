@@ -6,25 +6,25 @@ import android.net.ConnectivityManager;
 
 public class NetworkAvailablity {
 
-@SuppressLint("MissingPermission")
-public static boolean chkStatus(Context context) {
-	// TODO Auto-generated method stub
-	try {
-        final ConnectivityManager connMgr = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+    public NetworkAvailablity() {
+        // TODO Auto-generated constructor stub
+        super();
+    }
 
-        return connMgr.getActiveNetworkInfo() != null
-                && connMgr.getActiveNetworkInfo().isAvailable()
-                && connMgr.getActiveNetworkInfo().isConnected();
-    } catch (Exception e) {
+    @SuppressLint("MissingPermission")
+    public static boolean chkStatus(Context context) {
+        // TODO Auto-generated method stub
+        try {
+            final ConnectivityManager connMgr = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		e.printStackTrace();
-	}
-	return false;
-}
+            return connMgr.getActiveNetworkInfo() != null
+                    && connMgr.getActiveNetworkInfo().isAvailable()
+                    && connMgr.getActiveNetworkInfo().isConnected();
+        } catch (Exception e) {
 
-	public NetworkAvailablity() {
-		// TODO Auto-generated constructor stub
-		super();
-	}
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

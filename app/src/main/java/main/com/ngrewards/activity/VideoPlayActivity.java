@@ -1,11 +1,12 @@
 package main.com.ngrewards.activity;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
@@ -14,7 +15,8 @@ public class VideoPlayActivity extends AppCompatActivity {
 
     private VideoView videoplayer;
     private RelativeLayout backlay;
-    private String video_url="";
+    private String video_url = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,13 +25,12 @@ public class VideoPlayActivity extends AppCompatActivity {
         idinit();
         clickevent();
         Bundle bundle = getIntent().getExtras();
-        if (bundle==null||bundle.isEmpty()){
+        if (bundle == null || bundle.isEmpty()) {
 
-        }
-        else {
+        } else {
             video_url = bundle.getString("video_url");
-            Log.e("TAG", "onCreate: -------------"+video_url );
-            if (video_url!=null&&!video_url.equalsIgnoreCase("")&&!video_url.equalsIgnoreCase(BaseUrl.video_baseurl)){
+            Log.e("TAG", "onCreate: -------------" + video_url);
+            if (video_url != null && !video_url.equalsIgnoreCase("") && !video_url.equalsIgnoreCase(BaseUrl.video_baseurl)) {
                 videoplayer.setVideoPath(video_url);
                 videoplayer.start();
             }

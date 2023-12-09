@@ -7,12 +7,13 @@ import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,8 +33,8 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
     private final Context context;
     private final TextView textView;
-    private MySession mySession;
     private final String logintype;
+    private MySession mySession;
 
 
     // Constructor
@@ -86,15 +87,15 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-        Log.e("Finger result ",">"+result.getCryptoObject().getSignature());
-        Log.e("Finger result ",">"+result.getCryptoObject().getCipher());
+        Log.e("Finger result ", ">" + result.getCryptoObject().getSignature());
+        Log.e("Finger result ", ">" + result.getCryptoObject().getCipher());
         Toast.makeText(context, context.getString(R.string.identified), Toast.LENGTH_LONG).show();
-        String user_type="",status_touchid="";
+        String user_type = "", status_touchid = "";
         mySession = new MySession(context);
         String user_log_data = mySession.getKeyAlldata();
-        Log.e("USER DATA",">> "+user_log_data);
+        Log.e("USER DATA", ">> " + user_log_data);
         if (user_log_data == null) {
-            Toast.makeText(context,context.getResources().getString(R.string.firsttimeneed),Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getResources().getString(R.string.firsttimeneed), Toast.LENGTH_LONG).show();
 
         } else {
             try {
@@ -104,8 +105,8 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_type = jsonObject1.getString("user_type");
                     status_touchid = jsonObject1.getString("touch_status");
-                    if (logintype.equalsIgnoreCase(user_type)){
-                        if (status_touchid.equalsIgnoreCase("Yes")){
+                    if (logintype.equalsIgnoreCase(user_type)) {
+                        if (status_touchid.equalsIgnoreCase("Yes")) {
                             mySession.signinusers(true);
                             if (user_type.equalsIgnoreCase("Merchant")) {
                                 Intent i = new Intent(context, MerchantBottumAct.class);
@@ -115,25 +116,23 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
                                 context.startActivity(i);
                             }
 
-                        }        else {
-                            Toast.makeText(context,context.getResources().getString(R.string.touchiddisabled),Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context, context.getResources().getString(R.string.touchiddisabled), Toast.LENGTH_LONG).show();
                         }
-                    }
-                    else if (logintype.equalsIgnoreCase("Payment")){
+                    } else if (logintype.equalsIgnoreCase("Payment")) {
                         if (status_touchid.equalsIgnoreCase("Yes")) {
                             Intent i = new Intent(context, ManualActivity.class);
                             context.startActivity(i);
                         }
 
-                    }
-                    else {
-                        Toast.makeText(context,context.getResources().getString(R.string.touchiddisabled),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, context.getResources().getString(R.string.touchiddisabled), Toast.LENGTH_LONG).show();
                     }
 
                 }
             } catch (JSONException ee) {
                 ee.printStackTrace();
-                Toast.makeText(context,context.getResources().getString(R.string.touchiddisabled),Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getResources().getString(R.string.touchiddisabled), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -142,13 +141,12 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     }
 
 
-    public void update(String e, Boolean success){
+    public void update(String e, Boolean success) {
 
         //TextView textView = (TextView) ((Activity)context).findViewById(R.id.errorText);
         textView.setText(e);
-        if(success){
-            textView.setTextColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
-
+        if (success) {
+            textView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
 
 
         }

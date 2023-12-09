@@ -1,17 +1,17 @@
 package main.com.ngrewards.Adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 
 import java.util.ArrayList;
 
@@ -25,9 +25,9 @@ import main.com.ngrewards.constant.BaseUrl;
 public class AdapterDive extends RecyclerView.Adapter<AdapterDive.MyViewHolder> {
 
     private final ArrayList<DiveInModal> all_category_subcategory;
+    private final Context activity;
     private View itemView;
     private String desage_name_string;
-    private final Context activity;
     private String name_string;
     private String id_string;
     private String Image_string;
@@ -55,7 +55,7 @@ public class AdapterDive extends RecyclerView.Adapter<AdapterDive.MyViewHolder> 
         Image_string = all_category_subcategory.get(i).getImage();
 
         Glide.with(activity)
-                .load(BaseUrl.image_baseurl+Image_string)
+                .load(BaseUrl.image_baseurl + Image_string)
                 .thumbnail(0.5f)
                 .override(400, 150)
                 .centerCrop()
@@ -66,6 +66,12 @@ public class AdapterDive extends RecyclerView.Adapter<AdapterDive.MyViewHolder> 
 
     }
 
+    @Override
+    public int getItemCount() {
+
+        return all_category_subcategory.size();
+
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -80,14 +86,6 @@ public class AdapterDive extends RecyclerView.Adapter<AdapterDive.MyViewHolder> 
             menu_image = itemView.findViewById(R.id.menu_image);
 
         }
-    }
-
-
-    @Override
-    public int getItemCount() {
-
-        return all_category_subcategory.size();
-
     }
 
 }

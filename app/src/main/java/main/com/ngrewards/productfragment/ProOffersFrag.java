@@ -2,15 +2,16 @@ package main.com.ngrewards.productfragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -23,11 +24,12 @@ import main.com.ngrewards.constant.ExpandableHeightListView;
 
 public class ProOffersFrag extends Fragment {
 
+    ArrayList<Boolean> selecteded;
+    View v;
     private ExpandableHeightListView product_offer;
     private OffersAdpter offersAdpter;
     private RecyclerView offers_product_rec;
-    ArrayList<Boolean> selecteded;
-    View v;
+
     public ProOffersFrag() {
         // Required empty public constructor
     }
@@ -41,12 +43,12 @@ public class ProOffersFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.pro_offerfrag_lay, container, false);
+        v = inflater.inflate(R.layout.pro_offerfrag_lay, container, false);
         selecteded = new ArrayList<>();
         selecteded.add(false);
         selecteded.add(false);
-          idnit();
-        return  v;
+        idnit();
+        return v;
     }
 
     private void idnit() {
@@ -69,30 +71,14 @@ public class ProOffersFrag extends Fragment {
 
     class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
         ArrayList<Boolean> selected;
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView liketv;
-            ImageView likeimg;
-            LinearLayout sharelay,likebut;
-
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
-                this.sharelay = itemView.findViewById(R.id.sharelay);
-                this.likebut = itemView.findViewById(R.id.likebut);
-                this.likeimg = itemView.findViewById(R.id.likeimg);
-                this.liketv = itemView.findViewById(R.id.liketv);
-
-            }
-        }
 
         public OffersAdpter(ArrayList<Boolean> selected) {
-            this.selected =selected;
+            this.selected = selected;
         }
 
         @Override
         public OffersAdpter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                       int viewType) {
+                                                            int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.custom_pro_offers_lay, parent, false);
             MyViewHolder myViewHolder = new OffersAdpter.MyViewHolder(view);
@@ -101,13 +87,12 @@ public class ProOffersFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(final OffersAdpter.MyViewHolder holder, final int listPosition) {
-            if (selected.get(listPosition)){
+            if (selected.get(listPosition)) {
                 holder.likeimg.setImageResource(R.drawable.filled_like);
-                holder.liketv.setText(""+getResources().getString(R.string.dislike));
-            }
-            else {
+                holder.liketv.setText("" + getResources().getString(R.string.dislike));
+            } else {
                 holder.likeimg.setImageResource(R.drawable.ic_like);
-                holder.liketv.setText(""+getResources().getString(R.string.like));
+                holder.liketv.setText("" + getResources().getString(R.string.like));
             }
             holder.sharelay.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,14 +107,13 @@ public class ProOffersFrag extends Fragment {
             holder.likebut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (selected.get(listPosition)){
-                        selecteded.set(listPosition,false);
+                    if (selected.get(listPosition)) {
+                        selecteded.set(listPosition, false);
                         offersAdpter = new OffersAdpter(selecteded);
                         offers_product_rec.setAdapter(offersAdpter);
                         offersAdpter.notifyDataSetChanged();
-                    }
-                    else {
-                        selecteded.set(listPosition,true);
+                    } else {
+                        selecteded.set(listPosition, true);
                         offersAdpter = new OffersAdpter(selecteded);
                         offers_product_rec.setAdapter(offersAdpter);
                         offersAdpter.notifyDataSetChanged();
@@ -143,6 +127,23 @@ public class ProOffersFrag extends Fragment {
         public int getItemCount() {
             return 2;
             // return myCarBeanArrayList == null ? 0 : myCarBeanArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView liketv;
+            ImageView likeimg;
+            LinearLayout sharelay, likebut;
+
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
+                this.sharelay = itemView.findViewById(R.id.sharelay);
+                this.likebut = itemView.findViewById(R.id.likebut);
+                this.likeimg = itemView.findViewById(R.id.likeimg);
+                this.liketv = itemView.findViewById(R.id.liketv);
+
+            }
         }
     }
 

@@ -20,47 +20,6 @@ import java.util.List;
                 }*/
 
 public class OrderBean {
-    public String getSplit_invoice() {
-        return split_invoice;
-    }
-
-    public void setSplit_invoice(String split_invoice) {
-        this.split_invoice = split_invoice;
-    }
-
-    public String getSplit_date() {
-        return split_date;
-    }
-
-    public void setSplit_date(String split_date) {
-        this.split_date = split_date;
-    }
-
-    public String getPayment_made_by_emi() {
-        return payment_made_by_emi;
-    }
-
-    public void setPayment_made_by_emi(String payment_made_by_emi) {
-        this.payment_made_by_emi = payment_made_by_emi;
-    }
-
-    public String getSplit_payment() {
-        return split_payment;
-    }
-
-    public void setSplit_payment(String split_payment) {
-        this.split_payment = split_payment;
-    }
-
-    public String getSplit_amount() {
-        return split_amount;
-    }
-
-    public void setSplit_amount(String split_amount) {
-        this.split_amount = split_amount;
-    }
-
-
     @SerializedName("split_invoice")
     @Expose
     private String split_invoice;
@@ -79,14 +38,12 @@ public class OrderBean {
     @SerializedName("transfer_request_user_id")
     @Expose
     private String transferRequestUserId;
-
     @SerializedName("comment")
     @Expose
     private String comment;
     @SerializedName("amount_by_card")
     @Expose
     private String amount_by_card;
-
     @Expose
     private String customerId;
     @SerializedName("timezone")
@@ -95,14 +52,12 @@ public class OrderBean {
     @SerializedName("status")
     @Expose
     private String status;
-
     @SerializedName("my_request")
     @Expose
     private String myRequest;
     @SerializedName("member_detail")
     @Expose
     private List<MemberDetail> memberDetail = null;
-
     @SerializedName("id")
     @Expose
     private String id;
@@ -112,42 +67,27 @@ public class OrderBean {
     @SerializedName("product_description")
     @Expose
     private String productDescription;
-
-    public String getOreder_meber_Name() {
-        return oreder_meber_Name;
-    }
-
-    public void setOreder_meber_Name(String oreder_meber_Name) {
-        this.oreder_meber_Name = oreder_meber_Name;
-    }
-
     @SerializedName("oreder_meber_Name")
     @Expose
     private String oreder_meber_Name;
-
-   //
+    //
     @SerializedName("price")
     @Expose
     private String price;
-
     @SerializedName("size")
 
     @Expose
     private String size;
-
     @SerializedName("order_special_request")
 
     @Expose
     private String order_special_request;
-
     @SerializedName("color")
     @Expose
     private String color;
-
     @SerializedName("merchant_detail")
     @Expose
     private List<MerchantBean> merchantDetail = null;
-
     @SerializedName("shipping_first_name")
     @Expose
     private String shippingFirstName;
@@ -208,7 +148,6 @@ public class OrderBean {
     @SerializedName("billing_postcode")
     @Expose
     private String billingPostcode;
-
     @SerializedName("ngcash")
     @Expose
     private String ngcash;
@@ -221,15 +160,6 @@ public class OrderBean {
     @SerializedName("cart_id")
     @Expose
     private String cart_id;
-
-    public String getCart_id() {
-        return cart_id;
-    }
-
-    public void setCart_id(String cart_id) {
-        this.cart_id = cart_id;
-    }
-
     @SerializedName("card_number")
     @Expose
     private String cardNumber;
@@ -251,7 +181,6 @@ public class OrderBean {
     @SerializedName("order_id")
     @Expose
     private Integer orderId;
-
     @SerializedName("total_cost")
     @Expose
     private String totalCost;
@@ -276,19 +205,15 @@ public class OrderBean {
     @SerializedName("product_image")
     @Expose
     private List<ProductImage> productImage = null;
-
     @SerializedName("merchant_id")
     @Expose
     private String merchant_id;
-
     @SerializedName("merchant_no")
     @Expose
     private String merchant_no;
-
     @SerializedName("member_id")
     @Expose
     private String member_id;
-
     @SerializedName("amount")
     @Expose
     private String amount;
@@ -298,25 +223,105 @@ public class OrderBean {
     @SerializedName("tip_amount")
     @Expose
     private String tip_amount;
-
     @SerializedName("type")
     @Expose
     private String type;
-
     @SerializedName("created_date")
     @Expose
     private String created_date;
-
     @SerializedName("shipping_price")
     @Expose
     private String shipping_price;
     @SerializedName("total_price_with_shipping")
     @Expose
     private String total_price_with_shipping;
-
     @SerializedName("employee_name")
     @Expose
     private String employeeName;
+    @SerializedName("search_id")
+    @Expose
+    private String search_id;
+    @SerializedName("order_cart_id")
+    @Expose
+    private String order_cart_id;
+    @SerializedName("b_name")
+    @Expose
+    private String b_name;
+    @SerializedName("symbol_amount")
+    @Expose
+    private String symbol_amount;
+    @SerializedName("employee_id")
+    @Expose
+    private String employeeId;
+    @SerializedName("order_guset_No")
+    @Expose
+    private String order_guset_No;
+    @SerializedName("order_Table_No")
+
+    @Expose
+    private String order_Table_No;
+    @SerializedName("reciept_url")
+    @Expose
+    private String reciept_url;
+
+    public String getSplit_invoice() {
+        return split_invoice;
+    }
+
+    public void setSplit_invoice(String split_invoice) {
+        this.split_invoice = split_invoice;
+    }
+
+    public String getSplit_date() {
+        return split_date;
+    }
+
+    public void setSplit_date(String split_date) {
+        this.split_date = split_date;
+    }
+
+    public String getPayment_made_by_emi() {
+        return payment_made_by_emi;
+    }
+
+    public void setPayment_made_by_emi(String payment_made_by_emi) {
+        this.payment_made_by_emi = payment_made_by_emi;
+    }
+
+    public String getSplit_payment() {
+        return split_payment;
+    }
+
+    public void setSplit_payment(String split_payment) {
+        this.split_payment = split_payment;
+    }
+
+    public String getSplit_amount() {
+        return split_amount;
+    }
+
+    public void setSplit_amount(String split_amount) {
+        this.split_amount = split_amount;
+    }
+
+    public String getOreder_meber_Name() {
+        return oreder_meber_Name;
+    }
+
+    public void setOreder_meber_Name(String oreder_meber_Name) {
+        this.oreder_meber_Name = oreder_meber_Name;
+    }
+
+
+    //implimnet by sagar panse //
+
+    public String getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(String cart_id) {
+        this.cart_id = cart_id;
+    }
 
     public String getSearch_id() {
         return search_id;
@@ -326,10 +331,6 @@ public class OrderBean {
         this.search_id = search_id;
     }
 
-    @SerializedName("search_id")
-    @Expose
-    private String search_id;
-
     public String getOrder_cart_id() {
         return order_cart_id;
     }
@@ -338,13 +339,8 @@ public class OrderBean {
         this.order_cart_id = order_cart_id;
     }
 
-    @SerializedName("order_cart_id")
-    @Expose
-    private String order_cart_id;
 
-
-
-    //implimnet by sagar panse //
+    // impliment by sagar panse //
 
     public String getB_name() {
         return b_name;
@@ -361,36 +357,6 @@ public class OrderBean {
     public void setSymbol_amount(String symbol_amount) {
         this.symbol_amount = symbol_amount;
     }
-
-    @SerializedName("b_name")
-    @Expose
-    private String b_name;
-
-    @SerializedName("symbol_amount")
-    @Expose
-    private String symbol_amount;
-
-
-
-
-    // impliment by sagar panse //
-
-
-
-
-    @SerializedName("employee_id")
-    @Expose
-    private String employeeId;
-    @SerializedName("order_guset_No")
-    @Expose
-    private String order_guset_No;
-    @SerializedName("order_Table_No")
-
-    @Expose
-    private String order_Table_No;
-    @SerializedName("reciept_url")
-    @Expose
-    private String reciept_url;
 
     public String getOrder_special_request() {
         return order_special_request;
@@ -423,6 +389,7 @@ public class OrderBean {
     public void setTotal_price_with_shipping(String total_price_with_shipping) {
         this.total_price_with_shipping = total_price_with_shipping;
     }
+
     public String getShipping_price() {
         return shipping_price;
     }
@@ -478,7 +445,6 @@ public class OrderBean {
     public void setStatus(String status) {
         this.status = status;
     }
-
 
 
     public String getMyRequest() {
@@ -586,6 +552,7 @@ public class OrderBean {
     public void setProductImage(List<ProductImage> productImage) {
         this.productImage = productImage;
     }
+
     public String getTotal_amount() {
         return total_amount;
     }
@@ -646,6 +613,10 @@ public class OrderBean {
         return totalproductprice;
     }
 
+    public void setTotalproductprice(String totalproductprice) {
+        this.totalproductprice = totalproductprice;
+    }
+
     public String getReview() {
         return review;
     }
@@ -660,10 +631,6 @@ public class OrderBean {
 
     public void setAverage_rating(String rating) {
         this.rating = rating;
-    }
-
-    public void setTotalproductprice(String totalproductprice) {
-        this.totalproductprice = totalproductprice;
     }
 
     public String getQuantity() {

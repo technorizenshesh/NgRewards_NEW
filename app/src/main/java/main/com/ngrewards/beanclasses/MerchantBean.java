@@ -20,23 +20,12 @@ public class MerchantBean {
     @SerializedName("password")
     @Expose
     private String password;
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
     @SerializedName("business_name")
     @Expose
     private String businessName;
-
     @SerializedName("fullname")
     @Expose
     private String fullname;
-
     @SerializedName("contact_name")
     @Expose
     private String contactName;
@@ -61,7 +50,6 @@ public class MerchantBean {
     @SerializedName("address")
     @Expose
     private String address;
-
     @SerializedName("address_two")
     @Expose
     private String addressTwo;
@@ -107,12 +95,6 @@ public class MerchantBean {
     @SerializedName("business_category")
     @Expose
     private String businessCategory;
-    public String getOrder_id() {
-        return order_id;
-    }
-    public void setOrder_id(String order_id) {
-        this.order_id = order_id;
-    }
     @SerializedName("keyword")
     @Expose
     private String keyword;
@@ -125,8 +107,6 @@ public class MerchantBean {
     @SerializedName("created_date")
     @Expose
     private String createdDate;
-
-
     @SerializedName("merchant_image")
     @Expose
     private String merchantImage;
@@ -139,6 +119,28 @@ public class MerchantBean {
     @SerializedName("share_link")
     @Expose
     private String shareLink;
+    @SerializedName("product_name")
+    @Expose
+    private String product_name;
+    @SerializedName("device_token")
+    @Expose
+    private String deviceToken;
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
 
     public String getProduct_name() {
         return product_name;
@@ -148,17 +150,10 @@ public class MerchantBean {
         this.product_name = product_name;
     }
 
-    @SerializedName("product_name")
-    @Expose
-    private String product_name;
-
-    @SerializedName("device_token")
-    @Expose
-    private String deviceToken;
-
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }

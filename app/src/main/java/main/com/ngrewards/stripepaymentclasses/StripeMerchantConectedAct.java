@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.model.Card;
 import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
@@ -48,22 +46,35 @@ import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 
 public class StripeMerchantConectedAct extends AppCompatActivity {
+    private final boolean status_match = false;
+    ArrayList<String> listOfPattern;
+    ArrayList<String> modellist;
+    ArrayList<String> datelist;
+    int month, year_int;
+    CreditCardFormatTextWatcher tv;
     private EditText cardname, cardnumber, security_code;
     private String cardname_str = "", cardnumber_str = "", security_code_str = "";
     private TextView addcardbut;
     private RelativeLayout backlay;
-    ArrayList<String> listOfPattern;
-    ArrayList<String> modellist;
-    ArrayList<String> datelist;
     private Spinner yearspinner, datespinner;
     private String expiryyear_str = "", date_str = "", user_id = "";
     private BasicCustomAdp basicCustomAdp;
     private ProgressBar progressBar;
     private MySession mySession;
-    private final boolean status_match = false;
-    int month, year_int;
     private String token_id = "", email_str = "", accountid = "";
-    CreditCardFormatTextWatcher tv;
+
+    private static int getLastModelYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -10);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private static int getThisYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, 0);
+        return prevYear.get(Calendar.YEAR);
+    }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -181,7 +192,7 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
                                     // Show localized error message
-                                    Toast.makeText(StripeMerchantConectedAct.this,  error.getMessage(),
+                                    Toast.makeText(StripeMerchantConectedAct.this, error.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
 
@@ -238,33 +249,26 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
         datespinner.setAdapter(basicCustomAdp);
     }
 
-    private static int getLastModelYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, -10);
-        return prevYear.get(Calendar.YEAR);
-    }
+    private void paymentwithcard() {
+        // Tag used to cancel the request
+        if (Utils.isConnected(getApplicationContext())) {
+            //new CreateCardCustomer().execute();
+            new CreateTestPayment().execute();
 
-    private static int getThisYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, 0);
-        return prevYear.get(Calendar.YEAR);
+        } else {
+            Toast.makeText(getApplicationContext(), "Please Cheeck network conection..", Toast.LENGTH_SHORT).show();
+        }
     }
-
 
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -315,6 +319,11 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
 
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
         }
     }
 
@@ -402,18 +411,6 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
         }
     }
 
-
-    private void paymentwithcard() {
-        // Tag used to cancel the request
-        if (Utils.isConnected(getApplicationContext())) {
-            //new CreateCardCustomer().execute();
-            new CreateTestPayment().execute();
-
-        } else {
-            Toast.makeText(getApplicationContext(), "Please Cheeck network conection..", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private class CreateTestPayment extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -438,11 +435,11 @@ public class StripeMerchantConectedAct extends AppCompatActivity {
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("total_amount", "1");
 
-               // params.put("currency", "USD");
+                // params.put("currency", "USD");
                 params.put("currency", mySession.getValueOf(MySession.CurrencyCode));
                 params.put("token", token_id);
                 params.put("cart_id", "1");
-                Log.e("TAG", "doInBackground: currencycurrencycurrencycurrencycurrency"+mySession.getValueOf(MySession.CurrencyCode));
+                Log.e("TAG", "doInBackground: currencycurrencycurrencycurrencycurrency" + mySession.getValueOf(MySession.CurrencyCode));
                 StringBuilder postData = new StringBuilder();
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');

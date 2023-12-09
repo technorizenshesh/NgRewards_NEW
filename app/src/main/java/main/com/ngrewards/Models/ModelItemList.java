@@ -1,7 +1,7 @@
 package main.com.ngrewards.Models;
 
 public class ModelItemList {
-    String id,name,item_list;
+    String id, name, item_list;
 
     public String getId() {
         return id;

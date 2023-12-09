@@ -108,7 +108,7 @@ public class Settings {
 
     public static String[] getAndroidPayAllowedCountriesForShipping(Context context) {
         String[] countries = getPreferences(context).getString("android_pay_allowed_countries_for_shipping", "US").split(",");
-        for(int i = 0; i < countries.length; i++) {
+        for (int i = 0; i < countries.length; i++) {
             countries[i] = countries[i].trim();
         }
 
@@ -143,7 +143,7 @@ public class Settings {
         String[] preference = getPreferences(context).getString("google_payment_allowed_countries_for_shipping", "US")
                 .split(",");
         List<String> countries = new ArrayList<>();
-        for(String country : preference) {
+        for (String country : preference) {
             countries.add(country.trim());
         }
 

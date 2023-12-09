@@ -3,7 +3,7 @@ package main.com.ngrewards.Models;
 import java.util.ArrayList;
 
 public class ModelItem {
-    String id,title,description,menu_image,price,menu_id,merchant_id,p_quantity,newquantity,other_notes;
+    String id, title, description, menu_image, price, menu_id, merchant_id, p_quantity, newquantity, other_notes;
     private String special;
     private ArrayList<String> newquantity123;
     private String p_NewQuanitity;
@@ -91,22 +91,25 @@ public class ModelItem {
         this.other_notes = other_notes;
     }
 
+    public String getSpecial() {
+        return special;
+    }
 
     public void setSpecial(String special) {
 
         this.special = special;
     }
 
-    public String getSpecial() {
-        return special;
+    public ArrayList<String> getNewquantity123() {
+        return newquantity123;
     }
 
     public void setNewquantity123(ArrayList<String> newquantity123) {
         this.newquantity123 = newquantity123;
     }
 
-    public ArrayList<String> getNewquantity123() {
-        return newquantity123;
+    public String getP_NewQuanitity() {
+        return p_NewQuanitity;
     }
 
     public void setP_NewQuanitity(String p_newQuanitity) {
@@ -115,34 +118,28 @@ public class ModelItem {
         this.p_NewQuanitity = p_newQuanitity;
     }
 
-    public String getP_NewQuanitity() {
-        return p_NewQuanitity;
+    public ArrayList<String> getP_quantitynew() {
+        return p_quantitynew;
     }
 
     public void setP_quantitynew(ArrayList<String> p_quantitynew) {
         this.p_quantitynew = p_quantitynew;
     }
 
-    public ArrayList<String> getP_quantitynew() {
-        return p_quantitynew;
+    public String getaNew() {
+        return id;
     }
-
-
 
     public void setaNew(String aNew) {
         this.id = aNew;
     }
 
-    public String getaNew() {
-        return id;
+    public String getNewquantity1234() {
+        return newquantity1234;
     }
 
     public void setNewquantity1234(String newquantity1234) {
 
         this.newquantity1234 = newquantity1234;
-    }
-
-    public String getNewquantity1234() {
-        return newquantity1234;
     }
 }

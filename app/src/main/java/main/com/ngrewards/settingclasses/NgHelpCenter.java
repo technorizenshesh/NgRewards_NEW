@@ -2,13 +2,14 @@ package main.com.ngrewards.settingclasses;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.BaseUrl;
@@ -18,7 +19,8 @@ public class NgHelpCenter extends AppCompatActivity {
     private RelativeLayout backlay;
     private WebView helpwebview;
     private ProgressBar progressbar;
-    private boolean sts=true;
+    private boolean sts = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,23 +32,23 @@ public class NgHelpCenter extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String urlNewString) {
                 progressbar.setVisibility(View.VISIBLE);
-                Log.e("DDDD","lll "+urlNewString);
+                Log.e("DDDD", "lll " + urlNewString);
                 return true;
             }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap facIcon) {
                 progressbar.setVisibility(View.VISIBLE);
-                Log.e("DDDD","ssss "+url);
+                Log.e("DDDD", "ssss " + url);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressbar.setVisibility(View.GONE);
-                Log.e("DDDD","eee "+url);
-                if (sts){
+                Log.e("DDDD", "eee " + url);
+                if (sts) {
                     helpwebview.loadUrl(url);
-                    sts=false;
+                    sts = false;
                 }
 
             }
@@ -70,28 +72,30 @@ public class NgHelpCenter extends AppCompatActivity {
        /* helpwebview.getSettings().setJavaScriptEnabled(true);
         helpwebview.getSettings().setPluginState(WebSettings.PluginState.ON);
         helpwebview.setWebViewClient(new Callback());*/
-try {  helpwebview.setWebViewClient(new Callback());
-    helpwebview.getSettings().setDomStorageEnabled(true);
-    helpwebview.getSettings().setLoadsImagesAutomatically(true);
-    helpwebview.getSettings().setJavaScriptEnabled(true);
-    helpwebview.getSettings().setDomStorageEnabled(true);
-    helpwebview.getSettings().setUseWideViewPort(true);
-    helpwebview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-    helpwebview.loadUrl(BaseUrl.helpurl);
+        try {
+            helpwebview.setWebViewClient(new Callback());
+            helpwebview.getSettings().setDomStorageEnabled(true);
+            helpwebview.getSettings().setLoadsImagesAutomatically(true);
+            helpwebview.getSettings().setJavaScriptEnabled(true);
+            helpwebview.getSettings().setDomStorageEnabled(true);
+            helpwebview.getSettings().setUseWideViewPort(true);
+            helpwebview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+            helpwebview.loadUrl(BaseUrl.helpurl);
 
-}catch (Exception e){
-    e.printStackTrace();
-}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
        /* String pdfURL = BaseUrl.helpurl;
         helpwebview.loadUrl(pdfURL);*/
     }
+
     private class Callback extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(
                 WebView view, String url) {
-            return(true);
+            return (true);
         }
     }
 

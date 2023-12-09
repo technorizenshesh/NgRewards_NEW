@@ -1,7 +1,6 @@
 package main.com.ngrewards.marchant.fragments;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
@@ -21,6 +22,7 @@ public class MerEnterPassFrag extends Fragment {
 
     View v;
     private EditText password_et;
+
     public MerEnterPassFrag() {
         // Required empty public constructor
     }
@@ -34,7 +36,7 @@ public class MerEnterPassFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.frag_mer_enterpass, container, false);
+        v = inflater.inflate(R.layout.frag_mer_enterpass, container, false);
         iditn();
         return v;
     }
@@ -46,7 +48,7 @@ public class MerEnterPassFrag extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s == null || s.length() == 0) {
-                    MerchantSignupSlider.mer_pass="";
+                    MerchantSignupSlider.mer_pass = "";
                 } else {
                     MerchantSignupSlider.mer_pass = s.toString();
                     Log.e("sa >.", "> " + MerchantSignupSlider.mer_pass);

@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -17,6 +15,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,17 +35,17 @@ import main.com.ngrewards.constant.MySession;
 public class MemberStripeExpressAcountAct extends AppCompatActivity {
 
     ScheduledExecutorService scheduleTaskExecutor;
+    boolean loadingFinished = true;
+    boolean redirect = false;
+    BroadcastReceiver mRegistrationBroadcastReceiver;
     private RelativeLayout backlay;
     private WebView stripewebview;
     private MySession mySession;
     private String user_id = "";
-    boolean loadingFinished = true;
-    boolean redirect = false;
     private ProgressBar progressabar;
-    BroadcastReceiver mRegistrationBroadcastReceiver;
 
-     @Override
-     protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stripe_express_acount);
 
@@ -100,7 +101,7 @@ public class MemberStripeExpressAcountAct extends AppCompatActivity {
 
     @Override
     public void onResume() {
-         super.onResume();
+        super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
@@ -136,7 +137,7 @@ public class MemberStripeExpressAcountAct extends AppCompatActivity {
         stripewebview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         stripewebview.setWebViewClient(new HelloWebViewClient());
         stripewebview.getSettings().setDomStorageEnabled(true);
-      //  stripewebview.getSettings().setAppCacheEnabled(false);
+        //  stripewebview.getSettings().setAppCacheEnabled(false);
         stripewebview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         stripewebview.getSettings().setLoadsImagesAutomatically(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -184,6 +185,12 @@ public class MemberStripeExpressAcountAct extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        scheduleTaskExecutor.shutdown();
+    }
+
     private class HelloWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -191,13 +198,6 @@ public class MemberStripeExpressAcountAct extends AppCompatActivity {
             return true;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        scheduleTaskExecutor.shutdown();
-    }
-
 
     private class Callback extends WebViewClient {
         @Override

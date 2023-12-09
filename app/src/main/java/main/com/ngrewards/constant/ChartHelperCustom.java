@@ -10,8 +10,8 @@ import java.util.List;
  */
 
 public class ChartHelperCustom {
-    public void createBar(List<ChartDataCustom> list_cordinate, Canvas canvas, Paint paint){
-        for(int i=0;i<list_cordinate.size();i++){
+    public void createBar(List<ChartDataCustom> list_cordinate, Canvas canvas, Paint paint) {
+        for (int i = 0; i < list_cordinate.size(); i++) {
 
             canvas.drawRect(list_cordinate.get(i).getLeft(), list_cordinate.get(i).getTop(),
                     list_cordinate.get(i).getRight(), list_cordinate.get(i).getBottom(), paint);

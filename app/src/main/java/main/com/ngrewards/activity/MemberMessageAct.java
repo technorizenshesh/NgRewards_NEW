@@ -6,12 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -61,7 +58,6 @@ import main.com.ngrewards.beanclasses.MerchantListBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -72,6 +68,9 @@ public class MemberMessageAct extends Fragment {
 
     MessageRecycladp messageRecycladp;
     RecyclerView mychat;
+    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    FrameLayout contentFrameLayout;
+    View root;
     private ImageView write_to;
     private SwipeRefreshLayout swipeToRefresh;
     private RelativeLayout backlay, writelay;
@@ -79,14 +78,21 @@ public class MemberMessageAct extends Fragment {
     private MySession mySession;
     private String user_id = "";
     private ProgressBar progresbar;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
     private Myapisession myapisession;
     private int del_item_pos;
-    FrameLayout contentFrameLayout;
     private ArrayList<MemberDetail> memberDetailArrayList;
     private String craete_profile;
 
-    View root;
+    public static String fromBase64(String message) {
+        try {
+            byte[] data = Base64.decode(message, Base64.DEFAULT);
+            return new String(data, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return message;
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.activity_member_message, container, false);
@@ -134,7 +140,7 @@ public class MemberMessageAct extends Fragment {
 
         }
 
-        if(myapisession.getKeyMemberusername() == null || myapisession.getKeyMemberusername().equalsIgnoreCase("")) {
+        if (myapisession.getKeyMemberusername() == null || myapisession.getKeyMemberusername().equalsIgnoreCase("")) {
             getUsername();
         } else {
             try {
@@ -153,15 +159,15 @@ public class MemberMessageAct extends Fragment {
             }
         }
 
-        return  root;
+        return root;
     }
 
     private void idinitui1() {
 
-         craete_profile =  PreferenceConnector.readString(requireActivity(),
-                 PreferenceConnector.Create_Profile,"");
-         if(!craete_profile.equals("craete_profile")){
-          //   dialogSts.dismiss();
+        craete_profile = PreferenceConnector.readString(requireActivity(),
+                PreferenceConnector.Create_Profile, "");
+        if (!craete_profile.equals("craete_profile")) {
+            //   dialogSts.dismiss();
         }
     }
 
@@ -176,7 +182,7 @@ public class MemberMessageAct extends Fragment {
         backlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // finish();
+                // finish();
             }
         });
     }
@@ -189,10 +195,10 @@ public class MemberMessageAct extends Fragment {
 
     private void idinti() {
 
-        progresbar=  root.findViewById(R.id.progresbar);
-        backlay =        root.findViewById(R.id.backlay);
-        mychat =         root.findViewById(R.id.mychat);
-        write_to =       root.findViewById(R.id.write_to);
+        progresbar = root.findViewById(R.id.progresbar);
+        backlay = root.findViewById(R.id.backlay);
+        mychat = root.findViewById(R.id.mychat);
+        write_to = root.findViewById(R.id.write_to);
         swipeToRefresh = root.findViewById(R.id.swipeToRefresh);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -208,142 +214,11 @@ public class MemberMessageAct extends Fragment {
 
     }
 
-    public static String fromBase64(String message) {
-        try {
-            byte[] data = Base64.decode(message, Base64.DEFAULT);
-            return new String(data, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return message;
-        }
-    }
-
-    public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
-        Context context;
-        ArrayList<ConverSession> converSessionArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public RelativeLayout backlay;
-            private final TextView name;
-            private final TextView fullname;
-            private final TextView lastmaessage_tv;
-            private final TextView datetiem;
-            private final TextView reqcount;
-            private final CircleImageView propic;
-            private final ImageView deletecon;
-
-            public MyViewHolder(View view) {
-                super(view);
-                propic = itemView.findViewById(R.id.propic);
-                reqcount = itemView.findViewById(R.id.reqcount);
-                name = itemView.findViewById(R.id.name);
-                fullname = itemView.findViewById(R.id.fullname);
-                lastmaessage_tv = itemView.findViewById(R.id.lastmaessage_tv);
-                datetiem = itemView.findViewById(R.id.datetiem);
-                deletecon = itemView.findViewById(R.id.deletecon);
-            }
-        }
-
-        public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
-            this.context = myContacts;
-            this.converSessionArrayList = converSessionArrayList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.messagelistlay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-
-
-            return holder;
-        }
-
-
-        @Override
-        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            if (converSessionArrayList.get(position).getFullname()==null||converSessionArrayList.get(position).getFullname().equalsIgnoreCase("")){
-                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
-            }
-            else {
-                holder.fullname.setText("" + converSessionArrayList.get(position).getFullname());
-                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
-
-            }
-
-            holder.lastmaessage_tv.setText("" + converSessionArrayList.get(position).getMessage());
-            holder.datetiem.setText("" + converSessionArrayList.get(position).getDatetime());
-            if (converSessionArrayList.get(position).getNo_of_message()!=null&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("")&&!converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("0")){
-                holder.reqcount.setVisibility(View.VISIBLE);
-                holder.reqcount.setText(""+converSessionArrayList.get(position).getNo_of_message());
-            }
-            else {
-                holder.reqcount.setVisibility(View.GONE);
-            }
-            String imagelist = converSessionArrayList.get(position).getSenderimg();
-            if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-            } else {
-                Glide.with(requireActivity())
-                        .load(BaseUrl.image_baseurl + imagelist)
-                        .thumbnail(0.5f)
-                        .override(200, 200)
-                        .centerCrop()
-                        //  .placeholder(R.drawable.profile_ic)
-                         
-                        //.dontAnimate()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            
-                        .into(holder.propic);
-
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(requireActivity(), MemberChatAct.class);
-                    Log.e("TAG", "onClick:  getSenderid"+converSessionArrayList.get(position).getSenderid() );
-                    Log.e("TAG", "onClick:  getReciverid "+converSessionArrayList.get(position).getReciverid() );
-
-                    i.putExtra("receiver_id", converSessionArrayList.get(position).getSenderid());
-                    i.putExtra("type", "Member");
-                    i.putExtra("receiver_type", converSessionArrayList.get(position).getReceiver_type());
-                     if (converSessionArrayList.get(position).getReceiver_type().equalsIgnoreCase("Merchant")){
-                         i.putExtra("receiver_name", converSessionArrayList.get(position).getSendername());
-                         i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-
-                     }
-                     else {
-                         i.putExtra("receiver_name", converSessionArrayList.get(position).getSendername());
-                         i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
-
-                     }
-                  i.putExtra("receiver_img", BaseUrl.image_baseurl + converSessionArrayList.get(position).getSenderimg());
-                    startActivity(i);
-                }
-            });
-            holder.deletecon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    del_item_pos = position;
-                    new DeleteChat().execute(converSessionArrayList.get(position).getSenderid());
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            //return 6;
-            return converSessionArrayList == null ? 0 : converSessionArrayList.size();
-        }
-    }
-
     private void getBusnessNumber() {
         Log.e("loginCall >", " > FIRST");
         progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum( mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum(mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -377,6 +252,160 @@ public class MemberMessageAct extends Fragment {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    private void getUsername() {
+        progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User name list>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
+        Context context;
+        ArrayList<ConverSession> converSessionArrayList;
+
+        public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
+            this.context = myContacts;
+            this.converSessionArrayList = converSessionArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.messagelistlay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+
+
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            if (converSessionArrayList.get(position).getFullname() == null || converSessionArrayList.get(position).getFullname().equalsIgnoreCase("")) {
+                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
+            } else {
+                holder.fullname.setText("" + converSessionArrayList.get(position).getFullname());
+                holder.name.setText("@" + converSessionArrayList.get(position).getSendername());
+
+            }
+
+            holder.lastmaessage_tv.setText("" + converSessionArrayList.get(position).getMessage());
+            holder.datetiem.setText("" + converSessionArrayList.get(position).getDatetime());
+            if (converSessionArrayList.get(position).getNo_of_message() != null && !converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("") && !converSessionArrayList.get(position).getNo_of_message().equalsIgnoreCase("0")) {
+                holder.reqcount.setVisibility(View.VISIBLE);
+                holder.reqcount.setText("" + converSessionArrayList.get(position).getNo_of_message());
+            } else {
+                holder.reqcount.setVisibility(View.GONE);
+            }
+            String imagelist = converSessionArrayList.get(position).getSenderimg();
+            if (imagelist.equalsIgnoreCase("") || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl) || imagelist.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+            } else {
+                Glide.with(requireActivity())
+                        .load(BaseUrl.image_baseurl + imagelist)
+                        .thumbnail(0.5f)
+                        .override(200, 200)
+                        .centerCrop()
+                        //  .placeholder(R.drawable.profile_ic)
+
+                        //.dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+                        .into(holder.propic);
+
+            }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(requireActivity(), MemberChatAct.class);
+                    Log.e("TAG", "onClick:  getSenderid" + converSessionArrayList.get(position).getSenderid());
+                    Log.e("TAG", "onClick:  getReciverid " + converSessionArrayList.get(position).getReciverid());
+
+                    i.putExtra("receiver_id", converSessionArrayList.get(position).getSenderid());
+                    i.putExtra("type", "Member");
+                    i.putExtra("receiver_type", converSessionArrayList.get(position).getReceiver_type());
+                    if (converSessionArrayList.get(position).getReceiver_type().equalsIgnoreCase("Merchant")) {
+                        i.putExtra("receiver_name", converSessionArrayList.get(position).getSendername());
+                        i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+
+                    } else {
+                        i.putExtra("receiver_name", converSessionArrayList.get(position).getSendername());
+                        i.putExtra("receiver_fullname", converSessionArrayList.get(position).getFullname());
+
+                    }
+                    i.putExtra("receiver_img", BaseUrl.image_baseurl + converSessionArrayList.get(position).getSenderimg());
+                    startActivity(i);
+                }
+            });
+            holder.deletecon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    del_item_pos = position;
+                    new DeleteChat().execute(converSessionArrayList.get(position).getSenderid());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 6;
+            return converSessionArrayList == null ? 0 : converSessionArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            private final TextView name;
+            private final TextView fullname;
+            private final TextView lastmaessage_tv;
+            private final TextView datetiem;
+            private final TextView reqcount;
+            private final CircleImageView propic;
+            private final ImageView deletecon;
+            public RelativeLayout backlay;
+
+            public MyViewHolder(View view) {
+                super(view);
+                propic = itemView.findViewById(R.id.propic);
+                reqcount = itemView.findViewById(R.id.reqcount);
+                name = itemView.findViewById(R.id.name);
+                fullname = itemView.findViewById(R.id.fullname);
+                lastmaessage_tv = itemView.findViewById(R.id.lastmaessage_tv);
+                datetiem = itemView.findViewById(R.id.datetiem);
+                deletecon = itemView.findViewById(R.id.deletecon);
+            }
+        }
     }
 
     private class DeleteChat extends AsyncTask<String, String, String> {
@@ -469,43 +498,6 @@ public class MemberMessageAct extends Fragment {
 
             }
         }
-    }
-
-    private void getUsername() {
-        progresbar.setVisibility(View.VISIBLE);
-        memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("User name list>", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyMemberusername(responseData);
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-                            memberDetailArrayList.addAll(successData.getResult());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
     }
 
     private class GetChatList extends AsyncTask<String, String, String> {

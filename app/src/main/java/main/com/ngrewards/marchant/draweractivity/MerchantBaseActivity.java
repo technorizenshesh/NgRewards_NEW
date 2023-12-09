@@ -6,26 +6,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;*/
-import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,20 +50,21 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 import main.com.ngrewards.marchant.activity.MyQrCodeActivity;
 
 public class MerchantBaseActivity extends AppCompatActivity {
+    public static TextView reqcounft;
+    boolean exit = false;
+    MySession mySession;
+    boolean mSlideState = false;
+    CircleImageView user_img, drwr_user_img;
     private DrawerLayout drawer_layout_mer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private androidx.appcompat.widget.Toolbar toolbar_mer;
     private NavigationView navigationview_mer;
-    boolean exit = false;
-    MySession mySession;
-    boolean mSlideState = false;
     private LinearLayout rate_lay, reviewlay, offeres_lay, tutoriallay, profile_lay, setting_lay, menu_lay, logout;
-    CircleImageView user_img, drwr_user_img;
     private TextView user_name, merchant_number;
     private ImageView myqr_but, notification;
     private Myapisession myapisession;
-    public static TextView reqcounft;
     private String user_id;
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -198,7 +194,7 @@ public class MerchantBaseActivity extends AppCompatActivity {
 
                 //  UpdateStatus();
                 Intent i = new Intent(MerchantBaseActivity.this, MerchantNotificationActivity.class)
-                        .putExtra("type","merchant");
+                        .putExtra("type", "merchant");
                 startActivity(i);
             }
 
@@ -220,6 +216,115 @@ public class MerchantBaseActivity extends AppCompatActivity {
     private void UpdateStatus() {
         new UpdateStatus().execute();
         // Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+    }
+
+    private void idinit() {
+        notification = findViewById(R.id.notification);
+        reqcounft = findViewById(R.id.reqcounft);
+        myqr_but = findViewById(R.id.myqr_but);
+        rate_lay = findViewById(R.id.rate_lay);
+        offeres_lay = findViewById(R.id.offeres_lay);
+        reviewlay = findViewById(R.id.reviewlay);
+        tutoriallay = findViewById(R.id.tutoriallay);
+        user_name = findViewById(R.id.user_name);
+        merchant_number = findViewById(R.id.merchant_number);
+        logout = findViewById(R.id.logout);
+        drwr_user_img = findViewById(R.id.drwr_user_img);
+        profile_lay = findViewById(R.id.profile_lay);
+        user_img = findViewById(R.id.user_img);
+        menu_lay = findViewById(R.id.menu_lay);
+        setting_lay = findViewById(R.id.setting_lay);
+
+    }
+
+    private void adddrawer() {
+        setSupportActionBar(toolbar_mer);
+        navigationview_mer = (NavigationView) findViewById(R.id.navigationview_mer);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout_mer, toolbar_mer, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+
+        drawer_layout_mer.setDrawerListener(new ActionBarDrawerToggle(this,
+                drawer_layout_mer,
+                toolbar_mer,
+                R.string.drawer_open,
+                R.string.drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mSlideState = false;//is Closed
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mSlideState = true;//is Opened
+            }
+        });
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit),
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Tools.reupdateResources(this);
+
+        mySession = new MySession(this);
+
+        String user_log_data = mySession.getKeyAlldata();
+        if (user_log_data == null) {
+
+        } else {
+            try {
+                JSONObject jsonObject = new JSONObject(user_log_data);
+                String message = jsonObject.getString("status");
+                if (message.equalsIgnoreCase("1")) {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                    String business_name = jsonObject1.getString("business_name");
+                    String contact_name = jsonObject1.getString("contact_name");
+                    String business_no = jsonObject1.getString("business_no");
+                    merchant_number.setText("" + business_no);
+                    if (business_name == null || business_name.equalsIgnoreCase("")) {
+                        user_name.setText("" + contact_name);
+                    } else {
+                        user_name.setText("" + business_name);
+
+                    }
+
+                    String image_url = jsonObject1.getString("merchant_image");
+                    if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
+                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private class UpdateStatus extends AsyncTask<String, String, String> {
@@ -296,117 +401,6 @@ public class MerchantBaseActivity extends AppCompatActivity {
                 } catch (Exception e) {
 
                 }
-            }
-        }
-    }
-
-    private void idinit() {
-        notification = findViewById(R.id.notification);
-        reqcounft = findViewById(R.id.reqcounft);
-        myqr_but = findViewById(R.id.myqr_but);
-        rate_lay = findViewById(R.id.rate_lay);
-        offeres_lay = findViewById(R.id.offeres_lay);
-        reviewlay = findViewById(R.id.reviewlay);
-        tutoriallay = findViewById(R.id.tutoriallay);
-        user_name = findViewById(R.id.user_name);
-        merchant_number = findViewById(R.id.merchant_number);
-        logout = findViewById(R.id.logout);
-        drwr_user_img = findViewById(R.id.drwr_user_img);
-        profile_lay = findViewById(R.id.profile_lay);
-        user_img = findViewById(R.id.user_img);
-        menu_lay = findViewById(R.id.menu_lay);
-        setting_lay = findViewById(R.id.setting_lay);
-
-    }
-
-
-    private void adddrawer() {
-        setSupportActionBar(toolbar_mer);
-        navigationview_mer = (NavigationView) findViewById(R.id.navigationview_mer);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout_mer, toolbar_mer, R.string.drawer_open, R.string.drawer_close);
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-
-        drawer_layout_mer.setDrawerListener(new ActionBarDrawerToggle(this,
-                drawer_layout_mer,
-                toolbar_mer,
-                R.string.drawer_open,
-                R.string.drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                mSlideState = false;//is Closed
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                mSlideState = true;//is Opened
-            }
-        });
-
-    }
-
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (exit) {
-            finish(); // finish activity
-        } else {
-            Toast.makeText(this, getString(R.string.press_back_again_to_exit),
-                    Toast.LENGTH_SHORT).show();
-            exit = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    exit = false;
-                }
-            }, 3 * 1000);
-
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Tools.reupdateResources(this);
-
-        mySession = new MySession(this);
-
-        String user_log_data = mySession.getKeyAlldata();
-        if (user_log_data == null) {
-
-        } else {
-            try {
-                JSONObject jsonObject = new JSONObject(user_log_data);
-                String message = jsonObject.getString("status");
-                if (message.equalsIgnoreCase("1")) {
-                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    String business_name = jsonObject1.getString("business_name");
-                    String contact_name = jsonObject1.getString("contact_name");
-                    String business_no = jsonObject1.getString("business_no");
-                    merchant_number.setText("" + business_no);
-                    if (business_name == null || business_name.equalsIgnoreCase("")) {
-                        user_name.setText("" + contact_name);
-                    } else {
-                        user_name.setText("" + business_name);
-
-                    }
-
-                    String image_url = jsonObject1.getString("merchant_image");
-                    if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
-                        Glide.with(MerchantBaseActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
     }

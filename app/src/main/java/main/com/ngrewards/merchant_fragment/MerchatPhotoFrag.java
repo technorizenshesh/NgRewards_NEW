@@ -3,10 +3,6 @@ package main.com.ngrewards.merchant_fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,17 +45,18 @@ import retrofit2.Response;
 
 public class MerchatPhotoFrag extends Fragment {
     View v;
+    RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ExpandableHeightGridView product_photo;
     private RecyclerView product_photo_rec;
     private ProductPhotoAdp productPhotoAdp;
     private int current_offer_pos;
     private ProgressBar progresbar;
-    RecyclerView.LayoutManager recyclerViewLayoutManager;
     private MySession mySession;
     private String user_id = "";
     private TextView nophototv;
 
     private SwipeRefreshLayout swipeToRefresh;
+
     public MerchatPhotoFrag() {
         // Required empty public constructor
     }
@@ -114,111 +114,27 @@ public class MerchatPhotoFrag extends Fragment {
         super.onResume();
        /* customPhotoAdp = new CustomPhotoAdp(getActivity());
         product_photo.setAdapter(customPhotoAdp);*/
-        if (MerchantDetailAct.merchantListBeanArrayList != null && !MerchantDetailAct.merchantListBeanArrayList.isEmpty()&&MerchantDetailAct.merchantListBeanArrayList.size()>0) {
-            if (MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages() != null && !MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages().isEmpty()&&MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages().size()>0) {
+        if (MerchantDetailAct.merchantListBeanArrayList != null && !MerchantDetailAct.merchantListBeanArrayList.isEmpty() && MerchantDetailAct.merchantListBeanArrayList.size() > 0) {
+            if (MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages() != null && !MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages().isEmpty() && MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages().size() > 0) {
 
 
                 nophototv.setVisibility(View.GONE);
                 productPhotoAdp = new ProductPhotoAdp(MerchantDetailAct.merchantListBeanArrayList.get(0).getGalleryImages());
                 product_photo_rec.setAdapter(productPhotoAdp);
                 productPhotoAdp.notifyDataSetChanged();
-            }
-            else {
+            } else {
                 nophototv.setVisibility(View.VISIBLE);
             }
-            }
-        else {
+        } else {
             nophototv.setVisibility(View.VISIBLE);
         }
 
     }
 
-    class ProductPhotoAdp extends RecyclerView.Adapter<ProductPhotoAdp.MyViewHolder> {
-        List<GalleryBean> productImages;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView product_photos, likeimg;
-            LinearLayout likelay;
-            TextView likecount;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.product_photos = itemView.findViewById(R.id.product_photos);
-                this.likelay = itemView.findViewById(R.id.likelay);
-                this.likecount = itemView.findViewById(R.id.likecount);
-                this.likeimg = itemView.findViewById(R.id.likeimg);
-            }
-        }
-
-        public ProductPhotoAdp(List<GalleryBean> productImages) {
-            this.productImages = productImages;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_photo_lay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
-            if (productImages.get(listPosition).getLike_status().equalsIgnoreCase("like")) {
-                holder.likeimg.setImageResource(R.drawable.filled_like);
-
-                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
-            } else {
-                holder.likeimg.setImageResource(R.drawable.ic_like);
-
-            }
-            holder.likecount.setText("" + productImages.get(listPosition).getLike_count());
-            String product_img = productImages.get(listPosition).getGallery_image();
-            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-            } else {
-                Glide.with(getActivity())
-                        .load(product_img)
-                        .thumbnail(0.5f)
-                        .override(400, 150)
-                        .centerCrop()
-                        .placeholder(R.drawable.placeholder)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(holder.product_photos);
-
-            }
-            holder.likelay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    current_offer_pos = listPosition;
-                    likedislikemerchant_fun(productImages.get(listPosition).getMerchant_id(),productImages.get(listPosition).getId());
-
-                }
-            });
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getActivity(), FullScreenActivity.class);
-
-                    i.putExtra("position", listPosition);
-                    i.putExtra("status", "");
-                    startActivity(i);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            // return 4;
-            return productImages == null ? 0 : productImages.size();
-        }
-    }
-
     public void likedislikemerchant_fun(String merchant_id, String id) {
         progresbar.setVisibility(View.VISIBLE);
-        Log.e("Merc Photo >", " >" + merchant_id+" >> "+ id);
-        Call<ResponseBody> call = ApiClient.getApiInterface().likedislikemerchantphoto(merchant_id,id, user_id);
+        Log.e("Merc Photo >", " >" + merchant_id + " >> " + id);
+        Call<ResponseBody> call = ApiClient.getApiInterface().likedislikemerchantphoto(merchant_id, id, user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -278,6 +194,88 @@ public class MerchatPhotoFrag extends Fragment {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    class ProductPhotoAdp extends RecyclerView.Adapter<ProductPhotoAdp.MyViewHolder> {
+        List<GalleryBean> productImages;
+
+        public ProductPhotoAdp(List<GalleryBean> productImages) {
+            this.productImages = productImages;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_photo_lay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
+            if (productImages.get(listPosition).getLike_status().equalsIgnoreCase("like")) {
+                holder.likeimg.setImageResource(R.drawable.filled_like);
+
+                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
+            } else {
+                holder.likeimg.setImageResource(R.drawable.ic_like);
+
+            }
+            holder.likecount.setText("" + productImages.get(listPosition).getLike_count());
+            String product_img = productImages.get(listPosition).getGallery_image();
+            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+            } else {
+                Glide.with(getActivity())
+                        .load(product_img)
+                        .thumbnail(0.5f)
+                        .override(400, 150)
+                        .centerCrop()
+                        .placeholder(R.drawable.placeholder)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(holder.product_photos);
+
+            }
+            holder.likelay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    current_offer_pos = listPosition;
+                    likedislikemerchant_fun(productImages.get(listPosition).getMerchant_id(), productImages.get(listPosition).getId());
+
+                }
+            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getActivity(), FullScreenActivity.class);
+
+                    i.putExtra("position", listPosition);
+                    i.putExtra("status", "");
+                    startActivity(i);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 4;
+            return productImages == null ? 0 : productImages.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView product_photos, likeimg;
+            LinearLayout likelay;
+            TextView likecount;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.product_photos = itemView.findViewById(R.id.product_photos);
+                this.likelay = itemView.findViewById(R.id.likelay);
+                this.likecount = itemView.findViewById(R.id.likecount);
+                this.likeimg = itemView.findViewById(R.id.likeimg);
+            }
+        }
     }
 
 }

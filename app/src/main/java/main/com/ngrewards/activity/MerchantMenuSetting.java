@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +13,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -50,6 +51,7 @@ import main.com.ngrewards.draweractivity.Die_TakeOut;
 
 public class MerchantMenuSetting extends AppCompatActivity implements IMethodCaller {
 
+    MySession mySession;
     private RecyclerView menu_item;
     private JSONArray result;
     private ArrayList<ModalMenuList> all_category_menu;
@@ -61,7 +63,6 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
     private String tax_amount;
     private TextView taxamount;
     private TextView dilevery_fee;
-    MySession mySession;
     private String user_id;
     private LayoutInflater li;
     private View promptsView;
@@ -80,10 +81,12 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
     private String employe_sale_name;
     private String employe_sale_id;
     private IMethodCaller IMethodCaller;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,7 +232,7 @@ public class MerchantMenuSetting extends AppCompatActivity implements IMethodCal
 
                                     all_category_menu.add(modelItem);
                                     menu_item.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                    adapterMenu = new AdapterMenu(getApplicationContext(), all_category_menu, listener ,IMethodCaller);
+                                    adapterMenu = new AdapterMenu(getApplicationContext(), all_category_menu, listener, IMethodCaller);
                                     menu_item.setAdapter(adapterMenu);
 
                                 }

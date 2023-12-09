@@ -5,17 +5,17 @@ package main.com.ngrewards.beanclasses;
  */
 
 public class AddressBean {
-String id;
-String user_id;
-String fullname;
-String phone_number;
-String country;
-String state;
-String city;
-String address_1;
-String address_2;
-String zipcode;
-String created_date;
+    String id;
+    String user_id;
+    String fullname;
+    String phone_number;
+    String country;
+    String state;
+    String city;
+    String address_1;
+    String address_2;
+    String zipcode;
+    String created_date;
 
 
     public String getId() {

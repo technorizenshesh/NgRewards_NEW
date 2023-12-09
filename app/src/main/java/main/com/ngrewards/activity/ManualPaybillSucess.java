@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,11 +30,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ManualPaybillSucess extends AppCompatActivity {
+    MySession mySession;
     private String user_id, merchant_id, merchant_no, amount, tip_amount, employee_name,
             employee_id, order_guset_No, order_Table_No, oreder_meber_Name, order_Address_Id,
-            order_special_request, ngcash, order_Date, order_Time, card_id, card_number, timezone
-    , card_brand, customer_id, type,cart_id="";
-
+            order_special_request, ngcash, order_Date, order_Time, card_id, card_number, timezone, card_brand, customer_id, type, cart_id = "";
     private String reciept_url;
     private String order_cart_id;
     private ProgressBar progresbar;
@@ -49,11 +49,12 @@ public class ManualPaybillSucess extends AppCompatActivity {
     private String tip_amt_str;
     private String merchant_name;
     private String myFormattedtime;
-MySession mySession ;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,24 +88,24 @@ MySession mySession ;
             employee_name = bundle.getString("employee_name");
             employee_id = bundle.getString("employee_id");
         }
-if (type.equalsIgnoreCase("payemi")){
-    cart_id = bundle.getString("order_cart_id");
-    Log.e("TAG", "onCreate:cart_idcart_idcart_id "+cart_id );
-    payEmiMerchant(user_id, member_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
+        if (type.equalsIgnoreCase("payemi")) {
+            cart_id = bundle.getString("order_cart_id");
+            Log.e("TAG", "onCreate:cart_idcart_idcart_id " + cart_id);
+            payEmiMerchant(user_id, member_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
 
-}else {
-    payBiilMerchant(user_id, member_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
-    //Log.e("user_idd", "em" + employee_id + "em" + member_id + merchant_name + due_amount_str + tip_amt_str + apply_ngcassh + card_id + card_number + card_number + card_brand);
-}
+        } else {
+            payBiilMerchant(user_id, member_id, merchant_number, due_amount_str, tip_amt_str, apply_ngcassh, card_id, card_number, card_brand, customer_id);
+            //Log.e("user_idd", "em" + employee_id + "em" + member_id + merchant_name + due_amount_str + tip_amt_str + apply_ngcassh + card_id + card_number + card_number + card_brand);
+        }
     }
 
     private void payBiilMerchant(String user_id, String merchant_id, String merchant_number, String due_amount_str, String tip_amt_str, String ngcash_app_str,
                                  String card_id, String card_number, String card_brand, String customer_id) {
 
-        Toast.makeText(this, "employee_idd"+employee_name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "employee_idd" + employee_name, Toast.LENGTH_SHORT).show();
 
-        Log.e("employee_idd",employee_id);
-        Log.e("employee_name",employee_name);
+        Log.e("employee_idd", employee_id);
+        Log.e("employee_name", employee_name);
 
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(mySession.getValueOf(MySession.CurrencyCode),
@@ -180,25 +181,26 @@ if (type.equalsIgnoreCase("payemi")){
             }
         });
     }
-    private void payEmiMerchant(String user_id, String merchant_id, String merchant_number,
-                              String due_amount_str, String tip_amt_str, String ngcash_app_str,
-                                 String card_id, String card_number, String card_brand, String customer_id) {
 
-        Toast.makeText(this, "employee_idd"+employee_name, Toast.LENGTH_SHORT).show();
+    private void payEmiMerchant(String user_id, String merchant_id, String merchant_number,
+                                String due_amount_str, String tip_amt_str, String ngcash_app_str,
+                                String card_id, String card_number, String card_brand, String customer_id) {
+
+        Toast.makeText(this, "employee_idd" + employee_name, Toast.LENGTH_SHORT).show();
 /*pay_bill_emi.php?member_id=\(USER_DEFAULT.value(forKey: MemberID)!)&merchant_id=\(self.strMerchntId!)
 &merchant_no=\(text_Search.text!)&amount=\(text_AmountDue.text!)&tip_amount=\(strAmountTip!)&ngcash=\
 (strNgCash!)&card_id=\(dic_SelectCard["id"] ?? "")&card_number=\(dic_SelectCard["last4"] ?? "")
 &card_brand=\(dic_SelectCard["brand"] ?? "")&customer_id=\(dic_SelectCard["customer"] ?? "")
 &type=Paybill&timezone=\(Calendar.current.timeZone.identifier)&employee_name=\(lbl_Employee.text ??
 "")&employee_id=\(strEmployeeinviteId ?? "")&cart_id=\(strOrderCartId!)*/
-        Log.e("employee_idd",employee_id);
-        Log.e("employee_name",employee_name);
+        Log.e("employee_idd", employee_id);
+        Log.e("employee_name", employee_name);
 
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().payBillEmiToMerchant
-                (mySession.getValueOf(MySession.CurrencyCode),user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str,
+                (mySession.getValueOf(MySession.CurrencyCode), user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str,
                         ngcash_app_str, card_id, card_number, card_brand, customer_id,
-                        "Paybill", time_zone, employee_id, employee_name,cart_id);
+                        "Paybill", time_zone, employee_id, employee_name, cart_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -229,7 +231,7 @@ if (type.equalsIgnoreCase("payemi")){
                                     Intent intent = new Intent(ManualPaybillSucess.this, WebViewCalled.class);
                                     intent.putExtra("reciept_url", reciept_url);
                                     intent.putExtra("scrsts", "activity")
-                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
                                 }

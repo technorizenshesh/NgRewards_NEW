@@ -2,22 +2,7 @@ package main.com.ngrewards.fragments;
 
 
 import android.app.Dialog;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,9 +41,9 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentOrder extends BottomSheetDialogFragment {
-    private FragmentOrderBinding binding;
     private final ArrayList<ModelItem> arrayList = new ArrayList<>();
     private final ArrayList<ModelItem> arrayList1 = new ArrayList<>();
+    private FragmentOrderBinding binding;
     private String user_id;
     private String total_quantity;
     private String total_price, tax, tax_amount, amount_due;
@@ -68,7 +60,8 @@ public class FragmentOrder extends BottomSheetDialogFragment {
     private String stringnew;
     private ArrayList<String> listOfString1;
     private String stringnew1;
-private  MySession mySession;
+    private MySession mySession;
+
     public FragmentOrder() {
         // Required empty public constructor
     }
@@ -85,7 +78,7 @@ private  MySession mySession;
         dialog.setContentView(binding.getRoot());
         behavior = BottomSheetBehavior.from((View) binding.getRoot().getParent());
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-         mySession = new MySession(getActivity());
+        mySession = new MySession(getActivity());
         String user_log_data = mySession.getKeyAlldata();
         if (user_log_data != null) {
             try {
@@ -98,8 +91,8 @@ private  MySession mySession;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e("TAG", "onCreateDialog: "+e.getMessage() );
-                Log.e("TAG", "onCreateDialog: "+e.getLocalizedMessage() );
+                Log.e("TAG", "onCreateDialog: " + e.getMessage());
+                Log.e("TAG", "onCreateDialog: " + e.getLocalizedMessage());
             }
         }
 
@@ -112,7 +105,7 @@ private  MySession mySession;
     private void getMenuList() {
         HashMap<String, String> param = new HashMap<>();
         param.put("order_cart_id", CartID);
-        Log.e("CartID",CartID);
+        Log.e("CartID", CartID);
 
         new ApiCallBuilder().build(getActivity())
                 .isShowProgressBar(true)
@@ -143,11 +136,11 @@ private  MySession mySession;
                                 new_quanitity = total_quantity.split(",");
                                 other_notes1 = other_notes.split(",");
 
-                                 binding.tvItemCount.setText("Items(" + total_quantity + ")");
-                                 binding.tvTex.setText("Tax(" + tax + "%)");
-                                 binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign)  + tax_amount);
-                                 binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign)  + amount_due);
-                                 binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign)  + sub_total_price);
+                                binding.tvItemCount.setText("Items(" + total_quantity + ")");
+                                binding.tvTex.setText("Tax(" + tax + "%)");
+                                binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign) + tax_amount);
+                                binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign) + amount_due);
+                                binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign) + sub_total_price);
 
                                 JSONArray array = object.getJSONArray("item_list");
 
@@ -160,7 +153,7 @@ private  MySession mySession;
 
                                 Log.e("listOfString", String.valueOf(listOfString));
 
-                                for (int j = 0; j<listOfString.size();j++){
+                                for (int j = 0; j < listOfString.size(); j++) {
 
                                     stringnew = listOfString.get(j);
 
@@ -168,14 +161,14 @@ private  MySession mySession;
 
                                 Log.e("listOfString1", String.valueOf(listOfString1));
 
-                                for (int k = 0; k<listOfString1.size();k++){
+                                for (int k = 0; k < listOfString1.size(); k++) {
 
                                     stringnew1 = listOfString1.get(k);
 
                                 }
 
 
-                                for(int i = 0; i < array.length(); i++) {
+                                for (int i = 0; i < array.length(); i++) {
 
                                     item = new ModelItem();
 
@@ -195,7 +188,7 @@ private  MySession mySession;
                                     arrayList.add(item);
                                 }
 
-                                binding.recyList.setAdapter(new SubMenuAdapter(arrayList,listOfString,listOfString1));
+                                binding.recyList.setAdapter(new SubMenuAdapter(arrayList, listOfString, listOfString1));
                             }
 
                         } catch (JSONException e) {
@@ -208,7 +201,7 @@ private  MySession mySession;
 
                     }
                 });
-           }
+    }
 
     class SubMenuAdapter extends RecyclerView.Adapter<SubMenuAdapter.MyViewHolder> {
         private final ArrayList items1;
@@ -250,15 +243,15 @@ private  MySession mySession;
             TextView tv_other_note = holder.itemView.findViewById(R.id.tv_other_note);
             tv_name.setText(items.get(possion).getTitle());
             tv_descri.setText(items.get(possion).getDescription());
-            tv_price.setText(mySession.getValueOf(MySession.CurrencySign)  + items.get(possion).getPrice());
+            tv_price.setText(mySession.getValueOf(MySession.CurrencySign) + items.get(possion).getPrice());
 
-            Log.e("items12311231234",items.get(possion).getPrice());
+            Log.e("items12311231234", items.get(possion).getPrice());
 
-        //    tv_qty.setText("(" + items.get(possion).getNewquantity1234() + ")");
+            //    tv_qty.setText("(" + items.get(possion).getNewquantity1234() + ")");
 
-            tv_qty.setText("(" +items1.get(possion).toString()+ ")");
+            tv_qty.setText("(" + items1.get(possion).toString() + ")");
 
-            tv_other_note.setText("" +items2.get(possion).toString());
+            tv_other_note.setText("" + items2.get(possion).toString());
 
             tv_count.setText(items.get(possion).getNewquantity());
             //tv_qty.setVisibility(items.get(possion).getNewquantity().equals("0") ? View.GONE : View.VISIBLE);

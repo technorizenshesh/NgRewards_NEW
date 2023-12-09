@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public  class EMIdataModel implements Serializable {
+public class EMIdataModel implements Serializable {
 
     @Expose
     @SerializedName("key")

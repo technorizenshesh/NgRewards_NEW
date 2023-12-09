@@ -24,9 +24,6 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -47,20 +44,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-/*import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,35 +96,35 @@ import main.com.ngrewards.marchant.MarchantLogin;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private RelativeLayout backlay;
-    private TextView bytaping, dontaccount, login_tv, businesslogin;
-    private EditText mobilenum, password_et;
-    private String mobilenum_str = "", password_str = "", firebase_regid = "";
-    public static String country_str = "", country_id = "";
-    private TextView next_tv, forgot_tv, login_with_touch;
-    MySession mySession;
-    Myapisession myapisession;
-    private ProgressBar progresbar;
- //   private LoginButton loginButton;
-    private LinearLayout facebook_button;
-    String facebook_name, facebook_email, facebook_id, facebook_image,
-            face_gender, face_locale, facebook_lastname = "", face_username;
-   // private CallbackManager callbackManager;
-    private Spinner country_spn;
-    CountryListAdapter countryListAdapter;
-    private ArrayList<CountryBean> countryBeanArrayList;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1;
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0;
+    public static String country_str = "", country_id = "";
+    MySession mySession;
+    Myapisession myapisession;
+    String facebook_name, facebook_email, facebook_id, facebook_image,
+            face_gender, face_locale, facebook_lastname = "", face_username;
+    CountryListAdapter countryListAdapter;
     LocationManager locationManager;
     Location location;
-    private double latitude = 0, longitude = 0;
     GPSTracker gpsTracker;
-    private TextView sss;
     KeyStore keyStore;
     String KEY_NAME = "NgRewards";
     Cipher cipher;
     TextView textView;
-   // private AccessToken accessToken;
+    private RelativeLayout backlay;
+    private TextView bytaping, dontaccount, login_tv, businesslogin;
+    private EditText mobilenum, password_et;
+    private String mobilenum_str = "", password_str = "", firebase_regid = "";
+    private TextView next_tv, forgot_tv, login_with_touch;
+    private ProgressBar progresbar;
+    //   private LoginButton loginButton;
+    private LinearLayout facebook_button;
+    // private CallbackManager callbackManager;
+    private Spinner country_spn;
+    private ArrayList<CountryBean> countryBeanArrayList;
+    private double latitude = 0, longitude = 0;
+    private TextView sss;
+    // private AccessToken accessToken;
     private String result;
     private String phone;
     private String invited_user_name;
@@ -144,15 +133,17 @@ public class LoginActivity extends AppCompatActivity {
     private String fullname;
     private String newLogoutStatus;
     private TextView privacy_policy;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  FacebookSdk.sdkInitialize(LoginActivity.this);
+        //  FacebookSdk.sdkInitialize(LoginActivity.this);
 
         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "true");
 
@@ -168,11 +159,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-     //   FacebookSdk.sdkInitialize(getApplicationContext());
-      //  Log.e("applog", FacebookSdk.getApplicationSignature(LoginActivity.this));
+        //   FacebookSdk.sdkInitialize(getApplicationContext());
+        //  Log.e("applog", FacebookSdk.getApplicationSignature(LoginActivity.this));
         myapisession = new Myapisession(this);
         mySession = new MySession(this);
-      //  callbackManager = CallbackManager.Factory.create();
+        //  callbackManager = CallbackManager.Factory.create();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
@@ -221,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         clickevet();
 
 
-            new GetCountryList().execute();
+        new GetCountryList().execute();
     }
 
     private void clickevet() {
@@ -244,7 +235,7 @@ public class LoginActivity extends AppCompatActivity {
         login_tv.setOnClickListener(v -> {
 
             SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-            firebase_regid = pref.getString("regId", null);
+            firebase_regid = pref.getString("regId", "");
 
             Log.e("firebase_regid >> ", " > " + firebase_regid);
             mobilenum_str = mobilenum.getText().toString();
@@ -311,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Status_Facebook, "true");
                 PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "true");
-              //  loginButton.performClick();
+                //  loginButton.performClick();
             }
         });
 
@@ -340,16 +331,6 @@ public class LoginActivity extends AppCompatActivity {
                 fingerPrintLay();
             }
         });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
     }
 
     private void fingerPrintLay() {
@@ -420,7 +401,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    //    callbackManager.onActivityResult(requestCode, resultCode, data);
+        //    callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -450,7 +431,7 @@ public class LoginActivity extends AppCompatActivity {
         String sourceString = "<b>" + www + "</b> ";
         String ssss = "<b>" + wwww + "</b> ";
 
-        sss.setText(Html.fromHtml("" + txt + "" + sourceString +getString(R.string.or)+ ssss + "" + txtfor));
+        sss.setText(Html.fromHtml("" + txt + "" + sourceString + getString(R.string.or) + ssss + "" + txtfor));
         String first_hh = getResources().getString(R.string.donthavemar);
         String first = getResources().getString(R.string.bytap);
         String first_am = getResources().getString(R.string.amper);
@@ -488,121 +469,64 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private class LoginAsc extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
+    private void checkGps() {
+        gpsTracker = new GPSTracker(LoginActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
 
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
+        } else {
 
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-
-                String postReceiverUrl = BaseUrl.baseurl + "member_login.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("username", mobilenum_str);
-                params.put("phone", mobilenum_str);
-                params.put("password", password_str);
-                params.put("latitude", latitude);
-                params.put("longitude", longitude);
-                params.put("country_name", country_str);
-                params.put("country_id", country_id);
-                params.put("device_token", firebase_regid);
-
-                Log.e("url>>>", url + " Device Token : " + firebase_regid);
-
-                StringBuilder postData = new StringBuilder();
-
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-
-                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
-                return response;
-
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progresbar.setVisibility(View.GONE);
-            if (result == null) {
-
-            } else if (result.isEmpty()) {
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
 
             } else {
-
-                JSONObject jsonObject = null;
-
-                try {
-
-                    jsonObject = new JSONObject(result);
-                    String result_chk = jsonObject.getString("status");
-
-                    if (result_chk.equalsIgnoreCase("1")) {
-
-                        mySession.setlogindata(result);
-                        mySession.signinusers(true);
-
-                        if (newLogoutStatus.equals("false")) {
-
-                            PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Status_Facebook, "");
-                        }
-
-                        PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "false");
-                        Intent i = new Intent(LoginActivity.this, MainTabActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        i.putExtra("logout_status", newLogoutStatus);
-                        startActivity(i);
-
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Invalid Credential", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
 
             }
+        }
+    }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void generateKey() {
+        try {
+            keyStore = KeyStore.getInstance("AndroidKeyStore");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        KeyGenerator keyGenerator;
+        try {
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException("Failed to get KeyGenerator instance", e);
+        }
+
+
+        try {
+
+            keyStore.load(null);
+            keyGenerator.init(new
+                    KeyGenParameterSpec.Builder(KEY_NAME,
+                    KeyProperties.PURPOSE_ENCRYPT |
+                            KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build());
+            keyGenerator.generateKey();
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | CertificateException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -724,6 +648,154 @@ public class LoginActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
     }*/
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean cipherInit() {
+        try {
+            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Failed to get Cipher", e);
+        }
+
+
+        try {
+            keyStore.load(null);
+            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME,
+                    null);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+
+    private class MyBrowser extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
+
+    private class LoginAsc extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                String postReceiverUrl = BaseUrl.baseurl + "member_login.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("username", mobilenum_str);
+                params.put("phone", mobilenum_str);
+                params.put("password", password_str);
+                params.put("latitude", latitude);
+                params.put("longitude", longitude);
+                params.put("country_name", country_str);
+                params.put("country_id", country_id);
+                params.put("device_token", firebase_regid);
+
+                Log.e("url>>>", url + " Device Token : " + firebase_regid);
+
+                StringBuilder postData = new StringBuilder();
+
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+
+                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
+                return response;
+
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+            if (result == null) {
+
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                JSONObject jsonObject = null;
+
+                try {
+
+                    jsonObject = new JSONObject(result);
+                    String result_chk = jsonObject.getString("status");
+
+                    if (result_chk.equalsIgnoreCase("1")) {
+
+                        mySession.setlogindata(result);
+                        mySession.signinusers(true);
+
+                        if (newLogoutStatus.equals("false")) {
+
+                            PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Status_Facebook, "");
+                        }
+
+                        PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Logout_Status, "false");
+                        Intent i = new Intent(LoginActivity.this, MainTabActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        i.putExtra("logout_status", newLogoutStatus);
+                        startActivity(i);
+
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Invalid Credential", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+    }
 
     private class SocialLogin extends AsyncTask<String, String, String> {
 
@@ -893,10 +965,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -935,9 +1006,9 @@ public class LoginActivity extends AppCompatActivity {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                         
+
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                         
+
                         .into(country_flag);
             }
             names.setText(values.get(i).getName());
@@ -1044,32 +1115,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void checkGps() {
-        gpsTracker = new GPSTracker(LoginActivity.this);
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-
-            }
-        }
-    }
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -1090,63 +1135,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onProviderDisabled(String provider) {
 
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    protected void generateKey() {
-        try {
-            keyStore = KeyStore.getInstance("AndroidKeyStore");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        KeyGenerator keyGenerator;
-        try {
-            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException("Failed to get KeyGenerator instance", e);
-        }
-
-
-        try {
-
-            keyStore.load(null);
-            keyGenerator.init(new
-                    KeyGenParameterSpec.Builder(KEY_NAME,
-                    KeyProperties.PURPOSE_ENCRYPT |
-                            KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(
-                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build());
-            keyGenerator.generateKey();
-        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | CertificateException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public boolean cipherInit() {
-        try {
-            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException("Failed to get Cipher", e);
-        }
-
-
-        try {
-            keyStore.load(null);
-            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME,
-                    null);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
-            return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 }

@@ -2,12 +2,6 @@ package main.com.ngrewards.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -15,6 +9,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -40,6 +41,7 @@ import retrofit2.Response;
 
 public class ProduCtDetailAct extends AppCompatActivity {
 
+    public static ArrayList<DetailList> productDetailArrayList;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ScrollView scrollView;
@@ -47,11 +49,12 @@ public class ProduCtDetailAct extends AppCompatActivity {
     private String product_id = "", user_id = "", product_name_str = "";
     private TextView product_name_head, product_name, product_number;
     private ProgressBar progresbar;
-    public static ArrayList<DetailList> productDetailArrayList;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

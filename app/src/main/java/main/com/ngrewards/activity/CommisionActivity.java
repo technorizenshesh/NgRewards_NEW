@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 
@@ -53,17 +54,18 @@ import retrofit2.Response;
 
 public class CommisionActivity extends AppCompatActivity {
 
-    private RecyclerView commision_list;
-    private RelativeLayout   menulay,backlay;
-    private CommisionAdpter commisionAdpter;
-    MySession mySession;
-    private String user_id = "", affiliate_number = "",stripe_account_id="",stripe_account_login_link="";
-    private ArrayList<FirstData> firstDataArrayList;
-    ProgressBar progressbar;
-    private TextView nocommission;
-    SwipeRefreshLayout swipeToRefresh;
     public static List<CommissionData> commissionDataArrayList;
-    private RelativeLayout seestripedashboard,genrateloginlinklay,addstripeact;
+    MySession mySession;
+    ProgressBar progressbar;
+    SwipeRefreshLayout swipeToRefresh;
+    private RecyclerView commision_list;
+    private RelativeLayout menulay, backlay;
+    private CommisionAdpter commisionAdpter;
+    private String user_id = "", affiliate_number = "", stripe_account_id = "", stripe_account_login_link = "";
+    private ArrayList<FirstData> firstDataArrayList;
+    private TextView nocommission;
+    private RelativeLayout seestripedashboard, genrateloginlinklay, addstripeact;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
@@ -94,13 +96,12 @@ public class CommisionActivity extends AppCompatActivity {
                     stripe_account_id = jsonObject1.getString("member_stripe_account_id");
                     stripe_account_login_link = jsonObject1.getString("stripe_account_login_link");
 
-                    if (stripe_account_id!=null&&!stripe_account_id.equalsIgnoreCase("")){
+                    if (stripe_account_id != null && !stripe_account_id.equalsIgnoreCase("")) {
                         addstripeact.setVisibility(View.GONE);
-                        if (stripe_account_login_link!=null&&!stripe_account_login_link.equalsIgnoreCase("")){
+                        if (stripe_account_login_link != null && !stripe_account_login_link.equalsIgnoreCase("")) {
                             genrateloginlinklay.setVisibility(View.GONE);
                             seestripedashboard.setVisibility(View.VISIBLE);
-                        }
-                        else {
+                        } else {
                             genrateloginlinklay.setVisibility(View.VISIBLE);
                         }
 
@@ -135,7 +136,7 @@ public class CommisionActivity extends AppCompatActivity {
         addstripeact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (progressbar.getVisibility()!=View.VISIBLE){
+                if (progressbar.getVisibility() != View.VISIBLE) {
                     Intent i = new Intent(CommisionActivity.this, MemberStripeExpressAcountAct.class);
                     startActivity(i);
                 }
@@ -147,8 +148,8 @@ public class CommisionActivity extends AppCompatActivity {
         genrateloginlinklay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (stripe_account_id!=null&&!stripe_account_id.equalsIgnoreCase("")){
-                    if (progressbar.getVisibility()!=View.VISIBLE) {
+                if (stripe_account_id != null && !stripe_account_id.equalsIgnoreCase("")) {
+                    if (progressbar.getVisibility() != View.VISIBLE) {
 
                         new GenrateLoginLink().execute();
                     }
@@ -160,9 +161,9 @@ public class CommisionActivity extends AppCompatActivity {
         seestripedashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (progressbar.getVisibility()!=View.VISIBLE){
+                if (progressbar.getVisibility() != View.VISIBLE) {
                     Intent i = new Intent(CommisionActivity.this, SeeMemberMyStripeDashBoardAct.class);
-                    i.putExtra("stripe_login_url",stripe_account_login_link);
+                    i.putExtra("stripe_login_url", stripe_account_login_link);
                     startActivity(i);
                 }
 
@@ -175,8 +176,7 @@ public class CommisionActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getMyCommission();
-        if (stripe_account_id==null||stripe_account_id.equalsIgnoreCase("")||stripe_account_login_link==null||stripe_account_login_link.equalsIgnoreCase(""))
-        {
+        if (stripe_account_id == null || stripe_account_id.equalsIgnoreCase("") || stripe_account_login_link == null || stripe_account_login_link.equalsIgnoreCase("")) {
             new GetProfile().execute();
         }
 
@@ -210,74 +210,6 @@ public class CommisionActivity extends AppCompatActivity {
         });
     }
 
-     public class CommisionAdpter extends RecyclerView.Adapter<CommisionAdpter.MyViewHolder> {
-        Context context;
-        ArrayList<FirstData> firstDataArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView payment_sts, weeknumber_tv, week_date_range, weekearning_amount;
-
-            public MyViewHolder(View view) {
-                super(view);
-                payment_sts = itemView.findViewById(R.id.payment_sts);
-                weeknumber_tv = itemView.findViewById(R.id.weeknumber_tv);
-                week_date_range = itemView.findViewById(R.id.week_date_range);
-                weekearning_amount = itemView.findViewById(R.id.weekearning_amount);
-            }
-        }
-
-
-        public CommisionAdpter(Activity myContacts, ArrayList<FirstData> firstDataArrayList) {
-            this.context = myContacts;
-            this.firstDataArrayList = firstDataArrayList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_commission_lay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-
-            return holder;
-            // return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.weeknumber_tv.setText(getString(R.string.week) + firstDataArrayList.get(position).getWeek() + "/53");
-            holder.week_date_range.setText("" + firstDataArrayList.get(position).getData().get(0).getWeekStart() + "-" + firstDataArrayList.get(position).getData().get(0).getWeekEnd());
-            holder.weekearning_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" " + firstDataArrayList.get(position).getWeekComission());
-            if (firstDataArrayList.get(position).getWithdraw_status().equalsIgnoreCase("Confirm")) {
-                holder.payment_sts.setBackgroundResource(R.color.darkgreen);
-                holder.payment_sts.setText(getString(R.string.completed));
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    commissionDataArrayList =   firstDataArrayList.get(position).getData();
-                    Intent i = new Intent(CommisionActivity.this, CommissionDetail.class);
-                    i.putExtra("week_str",firstDataArrayList.get(position).getWeek());
-                    i.putExtra("stripe_account_id",stripe_account_id);
-                    i.putExtra("week_year_str",firstDataArrayList.get(position).getYear());
-                    i.putExtra("week_start_month_str",firstDataArrayList.get(position).getData().get(0).getWeekStart());
-                    i.putExtra("week_end_month_str",firstDataArrayList.get(position).getData().get(0).getWeekEnd());
-                    i.putExtra("total_week_count","53");
-                    i.putExtra("total_week_commision_str",""+firstDataArrayList.get(position).getWeekComission());
-                    i.putExtra("availabel_week_withdraw_status",""+firstDataArrayList.get(position).getAvailabel_week_withdraw_status());
-                    i.putExtra("withdraw_status",""+firstDataArrayList.get(position).getWithdraw_status());
-                    startActivity(i);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            // return 6;
-            return firstDataArrayList == null ? 0 : firstDataArrayList.size();
-        }
-    }
-
     private void getMyCommission() {
 
         swipeToRefresh.setRefreshing(true);
@@ -296,21 +228,21 @@ public class CommisionActivity extends AppCompatActivity {
 
                         String responseData = response.body().string();
 
-                        Log.e("affiliate_number!",affiliate_number);
-                        Log.e("responseData!!!s",responseData);
+                        Log.e("affiliate_number!", affiliate_number);
+                        Log.e("responseData!!!s", responseData);
 
                         Log.e("Get Commision Data>", " >" + responseData);
                         JSONObject object = new JSONObject(responseData);
 
                         if (object.getString("status").equals("1")) {
                             CommisionMain successData = new Gson().fromJson(responseData, CommisionMain.class);
-                            if (successData.getResult()!=null){
+                            if (successData.getResult() != null) {
 
                                 firstDataArrayList.addAll(successData.getResult());
                             }
                         }
 
-                        if(firstDataArrayList == null || firstDataArrayList.isEmpty()) {
+                        if (firstDataArrayList == null || firstDataArrayList.isEmpty()) {
                             nocommission.setVisibility(View.VISIBLE);
                         } else {
                             nocommission.setVisibility(View.GONE);
@@ -340,6 +272,73 @@ public class CommisionActivity extends AppCompatActivity {
         });
     }
 
+    public class CommisionAdpter extends RecyclerView.Adapter<CommisionAdpter.MyViewHolder> {
+        Context context;
+        ArrayList<FirstData> firstDataArrayList;
+
+        public CommisionAdpter(Activity myContacts, ArrayList<FirstData> firstDataArrayList) {
+            this.context = myContacts;
+            this.firstDataArrayList = firstDataArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_commission_lay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            holder.weeknumber_tv.setText(getString(R.string.week) + firstDataArrayList.get(position).getWeek() + "/53");
+            holder.week_date_range.setText("" + firstDataArrayList.get(position).getData().get(0).getWeekStart() + "-" + firstDataArrayList.get(position).getData().get(0).getWeekEnd());
+            holder.weekearning_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " " + firstDataArrayList.get(position).getWeekComission());
+            if (firstDataArrayList.get(position).getWithdraw_status().equalsIgnoreCase("Confirm")) {
+                holder.payment_sts.setBackgroundResource(R.color.darkgreen);
+                holder.payment_sts.setText(getString(R.string.completed));
+            }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commissionDataArrayList = firstDataArrayList.get(position).getData();
+                    Intent i = new Intent(CommisionActivity.this, CommissionDetail.class);
+                    i.putExtra("week_str", firstDataArrayList.get(position).getWeek());
+                    i.putExtra("stripe_account_id", stripe_account_id);
+                    i.putExtra("week_year_str", firstDataArrayList.get(position).getYear());
+                    i.putExtra("week_start_month_str", firstDataArrayList.get(position).getData().get(0).getWeekStart());
+                    i.putExtra("week_end_month_str", firstDataArrayList.get(position).getData().get(0).getWeekEnd());
+                    i.putExtra("total_week_count", "53");
+                    i.putExtra("total_week_commision_str", "" + firstDataArrayList.get(position).getWeekComission());
+                    i.putExtra("availabel_week_withdraw_status", "" + firstDataArrayList.get(position).getAvailabel_week_withdraw_status());
+                    i.putExtra("withdraw_status", "" + firstDataArrayList.get(position).getWithdraw_status());
+                    startActivity(i);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 6;
+            return firstDataArrayList == null ? 0 : firstDataArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView payment_sts, weeknumber_tv, week_date_range, weekearning_amount;
+
+            public MyViewHolder(View view) {
+                super(view);
+                payment_sts = itemView.findViewById(R.id.payment_sts);
+                weeknumber_tv = itemView.findViewById(R.id.weeknumber_tv);
+                week_date_range = itemView.findViewById(R.id.week_date_range);
+                weekearning_amount = itemView.findViewById(R.id.weekearning_amount);
+            }
+        }
+    }
+
     private class GenrateLoginLink extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -355,7 +354,7 @@ public class CommisionActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-      try {
+            try {
                 String postReceiverUrl = BaseUrl.baseurl + "create_stripe_login_link_member.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
@@ -487,13 +486,12 @@ public class CommisionActivity extends AppCompatActivity {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                         stripe_account_id = jsonObject1.getString("member_stripe_account_id");
                         stripe_account_login_link = jsonObject1.getString("stripe_account_login_link");
-                        if (stripe_account_id!=null&&!stripe_account_id.equalsIgnoreCase("")){
+                        if (stripe_account_id != null && !stripe_account_id.equalsIgnoreCase("")) {
                             addstripeact.setVisibility(View.GONE);
-                            if (stripe_account_login_link!=null&&!stripe_account_login_link.equalsIgnoreCase("")){
+                            if (stripe_account_login_link != null && !stripe_account_login_link.equalsIgnoreCase("")) {
                                 genrateloginlinklay.setVisibility(View.GONE);
                                 seestripedashboard.setVisibility(View.VISIBLE);
-                            }
-                            else {
+                            } else {
                                 genrateloginlinklay.setVisibility(View.VISIBLE);
                             }
 

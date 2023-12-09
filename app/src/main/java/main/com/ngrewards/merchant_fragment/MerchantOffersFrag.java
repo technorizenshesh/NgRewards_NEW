@@ -9,10 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,18 +53,18 @@ import retrofit2.Response;
 
 public class MerchantOffersFrag extends Fragment {
 
+    ArrayList<Boolean> selecteded;
+    View v;
     private ExpandableHeightListView product_offer;
     private OffersAdpter offersAdpter;
     private RecyclerView offers_product_rec;
     private SwipeRefreshLayout swipeToRefresh;
     private ArrayList<OfferBeanList> offerBeanListArrayList;
-    ArrayList<Boolean> selecteded;
     private int current_offer_pos;
     private ProgressBar progresbar;
     private MySession mySession;
     private String user_id = "";
     private TextView noofferstv;
-    View v;
 
     public MerchantOffersFrag() {
 
@@ -180,149 +180,6 @@ public class MerchantOffersFrag extends Fragment {
 
     }
 
-    class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
-        ArrayList<OfferBeanList> offerBeanLists;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView real_price, liketv, discounts, offername, offer_desc, pricediscount, likecount;
-            ImageView likeimg, offerimage;
-            LinearLayout sharelay, likebut;
-
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
-                this.offerimage = itemView.findViewById(R.id.offerimage);
-                this.likecount = itemView.findViewById(R.id.likecount);
-                this.discounts = itemView.findViewById(R.id.discounts);
-                this.pricediscount = itemView.findViewById(R.id.pricediscount);
-                this.offername = itemView.findViewById(R.id.offername);
-                this.offer_desc = itemView.findViewById(R.id.offer_desc);
-                this.sharelay = itemView.findViewById(R.id.sharelay);
-                this.likebut = itemView.findViewById(R.id.likebut);
-                this.likeimg = itemView.findViewById(R.id.likeimg);
-                this.liketv = itemView.findViewById(R.id.liketv);
-                this.real_price = itemView.findViewById(R.id.real_price);
-            }
-        }
-
-        public OffersAdpter(ArrayList<OfferBeanList> offerBeanLists) {
-            this.offerBeanLists = offerBeanLists;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_pro_offers_lay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
-            if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
-                holder.discounts.setVisibility(View.GONE);
-            } else {
-                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.discounts.setVisibility(View.VISIBLE);
-                    holder.pricediscount.setText(mySession.getValueOf(MySession.CurrencySign)  + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
-                    // holder.discounts.setText("(" + offerBeanLists.get(listPosition).getOfferDiscount() + "%)");
-                    double discountss = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
-                    int newdis = (int) discountss;
-                    holder.discounts.setText("" + newdis + "% OFF");
-
-                } else {
-                    holder.discounts.setVisibility(View.GONE);
-                }
-
-            }
-
-            //holder.pricediscount.setText("$" + offerBeanLists.get(listPosition).getOfferPrice() + "(" + offerBeanLists.get(listPosition).getOfferDiscount() + "%)");
-            holder.offername.setText("" + offerBeanLists.get(listPosition).getOfferName());
-            holder.offer_desc.setText("" + offerBeanLists.get(listPosition).getOfferDescription());
-            holder.likecount.setText("" + offerBeanLists.get(listPosition).getLikeCount());
-
-
-            if (offerBeanLists.get(listPosition).getOfferPrice() == null) {
-
-            } else {
-
-                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
-                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
-                    holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
-                    holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-                } else {
-                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
-
-                }
-            }
-
-            String product_img = offerBeanLists.get(listPosition).getOfferImage();
-            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-            } else {
-                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
-
-            }
-
-            if (offerBeanLists.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
-                holder.likeimg.setImageResource(R.drawable.filled_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-            } else {
-                holder.likeimg.setImageResource(R.drawable.ic_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-            }
-
-            holder.sharelay.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Uri bmpUri = getLocalBitmapUri(holder.offerimage);
-
-                    try {
-
-                        if (bmpUri != null) {
-                            Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND);
-                            shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :"+mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice() + "\n" + offerBeanLists.get(listPosition).getShareLink());
-                            shareIntent.setType("image/*");
-                            startActivity(shareIntent);
-                        } else {
-
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("EXC", " > " + e.getMessage());
-                        e.printStackTrace();
-                    }
-
-
-                }
-            });
-
-            holder.likebut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    current_offer_pos = listPosition;
-                    likedislikeoffer_fun(offerBeanLists.get(listPosition).getId());
-
-                }
-
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            //return 2;
-            return offerBeanLists == null ? 0 : offerBeanLists.size();
-        }
-    }
-
     public void likedislikeoffer_fun(String id) {
 
         progresbar.setVisibility(View.VISIBLE);
@@ -412,6 +269,149 @@ public class MerchantOffersFrag extends Fragment {
         }
         return bmpUri;
 
+    }
+
+    class OffersAdpter extends RecyclerView.Adapter<OffersAdpter.MyViewHolder> {
+        ArrayList<OfferBeanList> offerBeanLists;
+
+        public OffersAdpter(ArrayList<OfferBeanList> offerBeanLists) {
+            this.offerBeanLists = offerBeanLists;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_pro_offers_lay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
+            if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
+                holder.discounts.setVisibility(View.GONE);
+            } else {
+                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
+                    holder.discounts.setVisibility(View.VISIBLE);
+                    holder.pricediscount.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOffer_discount_price().trim());
+                    // holder.discounts.setText("(" + offerBeanLists.get(listPosition).getOfferDiscount() + "%)");
+                    double discountss = Double.parseDouble(offerBeanLists.get(listPosition).getOfferDiscount());
+                    int newdis = (int) discountss;
+                    holder.discounts.setText("" + newdis + "% OFF");
+
+                } else {
+                    holder.discounts.setVisibility(View.GONE);
+                }
+
+            }
+
+            //holder.pricediscount.setText("$" + offerBeanLists.get(listPosition).getOfferPrice() + "(" + offerBeanLists.get(listPosition).getOfferDiscount() + "%)");
+            holder.offername.setText("" + offerBeanLists.get(listPosition).getOfferName());
+            holder.offer_desc.setText("" + offerBeanLists.get(listPosition).getOfferDescription());
+            holder.likecount.setText("" + offerBeanLists.get(listPosition).getLikeCount());
+
+
+            if (offerBeanLists.get(listPosition).getOfferPrice() == null) {
+
+            } else {
+
+                if (offerBeanLists.get(listPosition).getOffer_discount_price() != null && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("") && !offerBeanLists.get(listPosition).getOffer_discount_price().equalsIgnoreCase("0")) {
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
+                    holder.real_price.setTextColor(getResources().getColor(R.color.back_pop_col));
+                    holder.real_price.setPaintFlags(holder.real_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                } else {
+                    holder.real_price.setText(mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice().trim());
+
+                }
+            }
+
+            String product_img = offerBeanLists.get(listPosition).getOfferImage();
+            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+            } else {
+                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.offerimage);
+
+            }
+
+            if (offerBeanLists.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
+                holder.likeimg.setImageResource(R.drawable.filled_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
+            } else {
+                holder.likeimg.setImageResource(R.drawable.ic_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
+            }
+
+            holder.sharelay.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Uri bmpUri = getLocalBitmapUri(holder.offerimage);
+
+                    try {
+
+                        if (bmpUri != null) {
+                            Intent shareIntent = new Intent();
+                            shareIntent.setAction(Intent.ACTION_SEND);
+                            shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + offerBeanLists.get(listPosition).getOfferName() + " \n" + " Price :" + mySession.getValueOf(MySession.CurrencySign) + offerBeanLists.get(listPosition).getOfferPrice() + "\n" + offerBeanLists.get(listPosition).getShareLink());
+                            shareIntent.setType("image/*");
+                            startActivity(shareIntent);
+                        } else {
+
+                        }
+
+                    } catch (Exception e) {
+                        Log.e("EXC", " > " + e.getMessage());
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
+
+            holder.likebut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    current_offer_pos = listPosition;
+                    likedislikeoffer_fun(offerBeanLists.get(listPosition).getId());
+
+                }
+
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 2;
+            return offerBeanLists == null ? 0 : offerBeanLists.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView real_price, liketv, discounts, offername, offer_desc, pricediscount, likecount;
+            ImageView likeimg, offerimage;
+            LinearLayout sharelay, likebut;
+
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                // this.viewLine = (View) itemView.findViewById(R.id.viewLine);
+                this.offerimage = itemView.findViewById(R.id.offerimage);
+                this.likecount = itemView.findViewById(R.id.likecount);
+                this.discounts = itemView.findViewById(R.id.discounts);
+                this.pricediscount = itemView.findViewById(R.id.pricediscount);
+                this.offername = itemView.findViewById(R.id.offername);
+                this.offer_desc = itemView.findViewById(R.id.offer_desc);
+                this.sharelay = itemView.findViewById(R.id.sharelay);
+                this.likebut = itemView.findViewById(R.id.likebut);
+                this.likeimg = itemView.findViewById(R.id.likeimg);
+                this.liketv = itemView.findViewById(R.id.liketv);
+                this.real_price = itemView.findViewById(R.id.real_price);
+            }
+        }
     }
 
 }

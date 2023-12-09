@@ -14,8 +14,8 @@ import main.com.ngrewards.QrCodeActivity;
 final class DecodeThread extends Thread {
 
     private final QrCodeActivity mActivity;
-    private Handler mHandler;
     private final CountDownLatch mHandlerInitLatch;
+    private Handler mHandler;
 
     DecodeThread(QrCodeActivity activity) {
         this.mActivity = activity;

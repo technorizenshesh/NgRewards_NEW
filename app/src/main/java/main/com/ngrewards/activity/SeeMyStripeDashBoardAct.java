@@ -3,7 +3,6 @@ package main.com.ngrewards.activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -11,6 +10,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
     private RelativeLayout backlay;
     private WebView stripewebview;
     private ProgressBar progressabar;
-    private String user_id="",stripe_login_url="";
+    private String user_id = "", stripe_login_url = "";
     private MySession mySession;
 
     @Override
@@ -48,14 +49,13 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
             }
         }
         Bundle bundle = getIntent().getExtras();
-        if (bundle==null||bundle.isEmpty())
-        {
+        if (bundle == null || bundle.isEmpty()) {
 
-        }
-        else {
+        } else {
             stripe_login_url = bundle.getString("stripe_login_url");
-            Log.e("", "onCreate: stripe_login_urlstripe_login_url===="+ stripe_login_url  );
-        }idinitn();
+            Log.e("", "onCreate: stripe_login_urlstripe_login_url====" + stripe_login_url);
+        }
+        idinitn();
         clickevent();
     }
 
@@ -82,7 +82,6 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
         Log.e("stripeurl >>"," >> "+stripeurl);
 
         stripewebview.loadUrl(stripeurl);*/
-
 
 
         stripewebview.getSettings().setLoadsImagesAutomatically(true);
@@ -122,20 +121,10 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
                 progressabar.setVisibility(View.GONE);
 
 
-
             }
         });
 
 
-    }
-
-
-    private class HelloWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
     }
 
     @Override
@@ -144,6 +133,13 @@ public class SeeMyStripeDashBoardAct extends AppCompatActivity {
 
     }
 
+    private class HelloWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 
     private class Callback extends WebViewClient {
         @Override

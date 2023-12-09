@@ -106,14 +106,15 @@ public final class GetFilePathFromDevice {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
-    public static String getVideoPath2(Context context,  Uri uri) {
+
+    public static String getVideoPath2(Context context, Uri uri) {
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         String document_id = cursor.getString(0);
         document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
         cursor.close();
 
-        cursor =   context.getContentResolver().query(
+        cursor = context.getContentResolver().query(
                 android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
         cursor.moveToFirst();

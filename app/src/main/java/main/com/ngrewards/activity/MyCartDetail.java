@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,25 +45,26 @@ import retrofit2.Response;
 
 public class MyCartDetail extends AppCompatActivity {
 
-    private RecyclerView mycartlistRecycleview;
+    private final boolean apickeck = false;
     SwipeRefreshLayout swipeToRefresh;
-    private String user_id = "";
     MySession mySession;
+    Myapisession myapisession;
+    private RecyclerView mycartlistRecycleview;
+    private String user_id = "";
     private ArrayList<CartListBean> cartListBeanArrayList;
     private MycartAdapter mycartAdapter;
     private TextView total_amount, nocartitem;
     private RelativeLayout backlay;
     private TextView checkout;
-    Myapisession myapisession;
-    private boolean apists=false;
+    private boolean apists = false;
     private String idd;
     private ProgressBar progresbar;
-    private final boolean apickeck = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +103,7 @@ public class MyCartDetail extends AppCompatActivity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MyCartDetail.this, CheckOutAct.class);
+                Intent i = new Intent(MyCartDetail.this, CheckOutAct.class);
                 startActivity(i);
             }
         });
@@ -121,8 +122,8 @@ public class MyCartDetail extends AppCompatActivity {
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!apists){
-                 getMyCartDetail();
+                if (!apists) {
+                    getMyCartDetail();
                 }
 
             }
@@ -133,13 +134,12 @@ public class MyCartDetail extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (myapisession.getKeyCartitem()==null||myapisession.getKeyCartitem().equalsIgnoreCase("")){
-            if (!apists){
+        if (myapisession.getKeyCartitem() == null || myapisession.getKeyCartitem().equalsIgnoreCase("")) {
+            if (!apists) {
                 getMyCartDetail();
             }
 
-        }
-        else {
+        } else {
             try {
                 cartListBeanArrayList = new ArrayList<>();
                 String responseData = myapisession.getKeyCartitem();
@@ -153,7 +153,7 @@ public class MyCartDetail extends AppCompatActivity {
                 }
                 if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                     nocartitem.setVisibility(View.VISIBLE);
-                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
+                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " 0.00");
                     mycartAdapter = new MycartAdapter(cartListBeanArrayList);
                     mycartlistRecycleview.setAdapter(mycartAdapter);
                     mycartAdapter.notifyDataSetChanged();
@@ -171,167 +171,62 @@ public class MyCartDetail extends AppCompatActivity {
         }
     }
 
-    class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
-        ArrayList<CartListBean> mycartlistxx;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
-            ImageView product_img, removecartitem123;
-            Button plusq, minusq;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.product_name = itemView.findViewById(R.id.product_name);
-                this.merchant_name = itemView.findViewById(R.id.merchant_name);
-                this.product_desc = itemView.findViewById(R.id.product_desc);
-                this.quant_tv = itemView.findViewById(R.id.quant_tv);
-
-                this.product_img = itemView.findViewById(R.id.product_img);
-                this.mainprice = itemView.findViewById(R.id.mainprice);
-                this.plusq = itemView.findViewById(R.id.plusq);
-                this.minusq = itemView.findViewById(R.id.minusq);
-                this.removecartitem123 = itemView.findViewById(R.id.removecartitem123);
-
-            }
-        }
-
-        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
-            this.mycartlistxx = mycartlist;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_cart_item_lay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
-            if (mycartlistxx.get(listPosition).getProductDetail()!=null){
-                Log.e("TAG", "onBindViewHolder: "+mycartlistxx.get(listPosition).getProductDetail());
-                holder.product_desc.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductDescription());
-                holder.product_name.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductName());
-
-
-
-            // holder.merchant_name.setText("" + mycartlistxx.get(listPosition).getUserDetails().get(0).getBusinessName());
-            holder.quant_tv.setText("" + mycartlistxx.get(listPosition).getQuantity());
-            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlistxx.get(listPosition).getProductDetail().getProduct_cart_price());
-
-            String image_url = mycartlistxx.get(listPosition).getProductDetail().getThumbnailImage();
-            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Glide.with(MyCartDetail.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
-            }
-
-
-            holder.plusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_stock_count=0;
-                        int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
-                        if (mycartlistxx.get(listPosition).getProductDetail().getStock()!=null&&!mycartlistxx.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")){
-                            total_stock_count = Integer.parseInt(mycartlistxx.get(listPosition).getProductDetail().getStock());
-
-                        }
-                        if (total_count<total_stock_count){
-                            int new_count = ++total_count;
-
-                            updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(),""+new_count );
-                        }
-                    }
-                }
-            });
-
-            holder.minusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
-                        if (total_count>1){
-                            int new_count = --total_count;
-                            updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(),""+new_count );
-                        }
-
-                    }
-                }
-            });
-
-            holder.removecartitem123.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                        addUpdateQty(mycartlistxx.get(listPosition).getId());
-                }
-            });
-        }
-        }
-        @Override
-        public int getItemCount() {
-            //return 4;
-            return mycartlistxx == null ? 0 : mycartlistxx.size();
-        }
-    }
-
-     private void addUpdateQty(String id) {
+    private void addUpdateQty(String id) {
 
         swipeToRefresh.setRefreshing(true);
-         progresbar.setVisibility(View.VISIBLE);
-         Call<ResponseBody> call = ApiClient.getApiInterface().removeSinglecartItem(id);
-         call.enqueue(new Callback<ResponseBody>() {
-             @Override
-             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        progresbar.setVisibility(View.VISIBLE);
+        Call<ResponseBody> call = ApiClient.getApiInterface().removeSinglecartItem(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                 progresbar.setVisibility(View.GONE);
-                 //  swipeToRefresh.setRefreshing(false);
-                 if (response.isSuccessful()) {
-                     try {
-                         String responseData = response.body().string();
-                         JSONObject object = new JSONObject(responseData);
-                         Log.e("Remove Cart >", " >" + responseData);
-                         if (object.getString("status").equals("1")) {
+                progresbar.setVisibility(View.GONE);
+                //  swipeToRefresh.setRefreshing(false);
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("Remove Cart >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
 
-                             if (!apickeck) {
-                                 getMyCartDetail();
-                             }
+                            if (!apickeck) {
+                                getMyCartDetail();
+                            }
 
-                         }
+                        }
 
 
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     } catch (JSONException e) {
-                         e.printStackTrace();
-                     }
-                 }
-             }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-             @Override
-             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                 // Log error here since request failed
-                 t.printStackTrace();
-                 progresbar.setVisibility(View.GONE);
-                 // swipeToRefresh.setRefreshing(false);
-                 Log.e("TAG", t.toString());
-             }
-         });
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+                // swipeToRefresh.setRefreshing(false);
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
 
     private void getMyCartDetail() {
-         apists =true;
-         swipeToRefresh.setRefreshing(true);
-         cartListBeanArrayList = new ArrayList<>();
-         Call<ResponseBody> call = ApiClient.getApiInterface().getMyCart(user_id);
-         call.enqueue(new Callback<ResponseBody>() {
+        apists = true;
+        swipeToRefresh.setRefreshing(true);
+        cartListBeanArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMyCart(user_id);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // progresbar.setVisibility(View.GONE);
                 swipeToRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
-                    apists =false;
+                    apists = false;
 
                     try {
 
@@ -343,15 +238,14 @@ public class MyCartDetail extends AppCompatActivity {
                             myapisession.setKeyCartitem(responseData);
                             CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                             cartListBeanArrayList.addAll(successData.getResult());
-                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
-                        }
-                        else {
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotalPrice());
+                        } else {
                             myapisession.setKeyCartitem("");
                         }
 
                         if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                             nocartitem.setVisibility(View.VISIBLE);
-                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " 0.00");
                             mycartAdapter = new MycartAdapter(cartListBeanArrayList);
                             mycartlistRecycleview.setAdapter(mycartAdapter);
                             mycartAdapter.notifyDataSetChanged();
@@ -363,12 +257,11 @@ public class MyCartDetail extends AppCompatActivity {
                         }
 
 
-                    } catch (Exception  e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else {
-                    apists =false;
+                } else {
+                    apists = false;
                     myapisession.setKeyCartitem("");
                 }
             }
@@ -376,7 +269,7 @@ public class MyCartDetail extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-                apists =false;
+                apists = false;
                 swipeToRefresh.setRefreshing(false);
                 Log.e("TAG", t.toString());
             }
@@ -387,7 +280,7 @@ public class MyCartDetail extends AppCompatActivity {
         swipeToRefresh.setRefreshing(true);
         //progresbar.setVisibility(View.VISIBLE);
 
-        Call<ResponseBody> call = ApiClient.getApiInterface().updatCartItem(user_id, id,quantity);
+        Call<ResponseBody> call = ApiClient.getApiInterface().updatCartItem(user_id, id, quantity);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -400,7 +293,7 @@ public class MyCartDetail extends AppCompatActivity {
                         Log.e("Update Cart>", " >" + responseData);
                         if (object.getString("status").equals("1")) {
 
-                            if (!apists){
+                            if (!apists) {
                                 getMyCartDetail();
                             }
 
@@ -422,5 +315,110 @@ public class MyCartDetail extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
+        ArrayList<CartListBean> mycartlistxx;
+
+        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
+            this.mycartlistxx = mycartlist;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_cart_item_lay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
+            if (mycartlistxx.get(listPosition).getProductDetail() != null) {
+                Log.e("TAG", "onBindViewHolder: " + mycartlistxx.get(listPosition).getProductDetail());
+                holder.product_desc.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductDescription());
+                holder.product_name.setText("" + mycartlistxx.get(listPosition).getProductDetail().getProductName());
+
+
+                // holder.merchant_name.setText("" + mycartlistxx.get(listPosition).getUserDetails().get(0).getBusinessName());
+                holder.quant_tv.setText("" + mycartlistxx.get(listPosition).getQuantity());
+                holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlistxx.get(listPosition).getProductDetail().getProduct_cart_price());
+
+                String image_url = mycartlistxx.get(listPosition).getProductDetail().getThumbnailImage();
+                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                    Glide.with(MyCartDetail.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
+                }
+
+
+                holder.plusq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                            int total_stock_count = 0;
+                            int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
+                            if (mycartlistxx.get(listPosition).getProductDetail().getStock() != null && !mycartlistxx.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")) {
+                                total_stock_count = Integer.parseInt(mycartlistxx.get(listPosition).getProductDetail().getStock());
+
+                            }
+                            if (total_count < total_stock_count) {
+                                int new_count = ++total_count;
+
+                                updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(), "" + new_count);
+                            }
+                        }
+                    }
+                });
+
+                holder.minusq.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mycartlistxx.get(listPosition).getQuantity() != null && !mycartlistxx.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                            int total_count = Integer.parseInt(mycartlistxx.get(listPosition).getQuantity());
+                            if (total_count > 1) {
+                                int new_count = --total_count;
+                                updateMyCartItemQuantity(mycartlistxx.get(listPosition).getProductId(), "" + new_count);
+                            }
+
+                        }
+                    }
+                });
+
+                holder.removecartitem123.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        addUpdateQty(mycartlistxx.get(listPosition).getId());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 4;
+            return mycartlistxx == null ? 0 : mycartlistxx.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
+            ImageView product_img, removecartitem123;
+            Button plusq, minusq;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.product_name = itemView.findViewById(R.id.product_name);
+                this.merchant_name = itemView.findViewById(R.id.merchant_name);
+                this.product_desc = itemView.findViewById(R.id.product_desc);
+                this.quant_tv = itemView.findViewById(R.id.quant_tv);
+
+                this.product_img = itemView.findViewById(R.id.product_img);
+                this.mainprice = itemView.findViewById(R.id.mainprice);
+                this.plusq = itemView.findViewById(R.id.plusq);
+                this.minusq = itemView.findViewById(R.id.minusq);
+                this.removecartitem123 = itemView.findViewById(R.id.removecartitem123);
+
+            }
+        }
     }
 }

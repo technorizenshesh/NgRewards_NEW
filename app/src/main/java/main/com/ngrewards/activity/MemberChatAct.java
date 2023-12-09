@@ -27,10 +27,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import androidx.annotation.RequiresApi;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,12 +44,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -327,10 +324,12 @@ public class MemberChatAct extends AppCompatActivity {
 
         return path;
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -726,13 +725,13 @@ public class MemberChatAct extends AppCompatActivity {
                         assert selectedVideo != null;
                         try {
                             String path = Tools.getRealPathFromUri(MemberChatAct.this, selectedVideo);
-                            VideoPath= path;
+                            VideoPath = path;
                             Log.e("TAG", "onActivityResult: " + VideoPath);
                             uploadPost();
 
                         } catch (Exception e) {
-                            Log.e("ThumbnailPath ", e.getLocalizedMessage().toString());
-                            Log.e("ThumbnailPath ", e.getMessage().toString());
+                            Log.e("ThumbnailPath ", e.getLocalizedMessage());
+                            Log.e("ThumbnailPath ", e.getMessage());
                             Log.e("ThumbnailPath ", e.getCause().toString());
 
                         }
@@ -1306,7 +1305,7 @@ public class MemberChatAct extends AppCompatActivity {
                             .override(200, 200)
                             .centerCrop()
                             //  .placeholder(R.drawable.profile_ic)
-                             
+
                             //.dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(my_profile);

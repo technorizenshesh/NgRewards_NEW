@@ -8,10 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,12 +60,11 @@ import main.com.ngrewards.fragments.FragmentWebView;
 public class PurchasedItemDetailAct extends
         AppCompatActivity implements
         RecyclerViewClickListenerSplit {
+    private final String upspackage_str = "";
     private Dialog dialogSts;
-
     private RelativeLayout backlay;
     private ImageView product_img;
     private TextView product_name, merchant_name, mainprice, order_id, saledate, upspackage, shipaddress;
-    private final String upspackage_str = "";
     private String quantity_str = "";
     private String color_str = "";
     private String size_str = "";
@@ -102,7 +101,7 @@ public class PurchasedItemDetailAct extends
     private MySession mySession;
     private Button btn_strip_receipt;
     private String reciept_url;
-    private String split_invoice = "",cart_id = "";
+    private String split_invoice = "", cart_id = "";
     private String split_date = "";
     private String split_payment = "";
 
@@ -113,6 +112,7 @@ public class PurchasedItemDetailAct extends
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,9 +172,9 @@ public class PurchasedItemDetailAct extends
             payment_made_by_emi = bundle.getString("payment_made_by_emi");
             split_payment = bundle.getString("split_payment");
             split_amount = bundle.getString("split_amount");
-            Log.e("TAG", "onCreate:split_datesplit_datesplit_datesplit_datesplit_datesplit_date "+split_date );
-            Log.e("TAG", "onCreate:split_amountsplit_amountsplit_amountsplit_amount "+split_amount );
-            Log.e("TAG", "onCreate:merchant_contact_namemerchant_contact_namemerchant_contact_namemerchant_contact_name "+merchant_contact_name );
+            Log.e("TAG", "onCreate:split_datesplit_datesplit_datesplit_datesplit_datesplit_date " + split_date);
+            Log.e("TAG", "onCreate:split_amountsplit_amountsplit_amountsplit_amount " + split_amount);
+            Log.e("TAG", "onCreate:merchant_contact_namemerchant_contact_namemerchant_contact_namemerchant_contact_name " + merchant_contact_name);
         }
 
 
@@ -187,19 +187,18 @@ public class PurchasedItemDetailAct extends
             @Override
             public void onClick(View v) {
 
-                if (post_review_lay.getVisibility()==View.VISIBLE){
+                if (post_review_lay.getVisibility() == View.VISIBLE) {
                     rating_str = String.valueOf(rating.getRating());
                     comment_str = comment_et.getText().toString();
-                    if (rating_str==null||rating_str.equalsIgnoreCase("")||rating_str.equalsIgnoreCase("0")||rating_str.equalsIgnoreCase("0.0")){
-Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.selectatleast),Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    if (rating_str == null || rating_str.equalsIgnoreCase("") || rating_str.equalsIgnoreCase("0") || rating_str.equalsIgnoreCase("0.0")) {
+                        Toast.makeText(PurchasedItemDetailAct.this, getResources().getString(R.string.selectatleast), Toast.LENGTH_LONG).show();
+                    } else {
                         new AddReviewAsc().execute();
                     }
                 }
-                if (post_review_lay.getVisibility()==View.GONE){
+                if (post_review_lay.getVisibility() == View.GONE) {
                     post_review_lay.setVisibility(View.VISIBLE);
-                    writereview.setText(""+getResources().getString(R.string.submitreview));
+                    writereview.setText("" + getResources().getString(R.string.submitreview));
                 }
 
             }
@@ -209,14 +208,14 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PurchasedItemDetailAct.this, MemberChatAct.class);
-                i.putExtra("receiver_id",merchant_id);
-                i.putExtra("type","Member");
-                i.putExtra("receiver_type","Merchant");
-               // i.putExtra("receiver_fullname", merchant_contact_name);
+                i.putExtra("receiver_id", merchant_id);
+                i.putExtra("type", "Member");
+                i.putExtra("receiver_type", "Merchant");
+                // i.putExtra("receiver_fullname", merchant_contact_name);
                 i.putExtra("receiver_fullname", merchant_name_str);
 
-                i.putExtra("receiver_img",merchant_img_str);
-                i.putExtra("receiver_name",merchant_name_str);
+                i.putExtra("receiver_img", merchant_img_str);
+                i.putExtra("receiver_name", merchant_name_str);
                 startActivity(i);
             }
         });
@@ -257,28 +256,26 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
         upspackage = findViewById(R.id.upspackage);
         shipaddress = findViewById(R.id.shipaddress);
 
-        if(review_status==null||review_status.equalsIgnoreCase("")||review_status.equalsIgnoreCase("No")||review_status.equalsIgnoreCase("no"))
-        {
+        if (review_status == null || review_status.equalsIgnoreCase("") || review_status.equalsIgnoreCase("No") || review_status.equalsIgnoreCase("no")) {
             writereview.setVisibility(View.VISIBLE);
             post_review_lay.setVisibility(View.GONE);
             done_review_lay.setVisibility(View.GONE);
 
-        }
-        else {
-            donereview_tv.setText(""+review_str);
+        } else {
+            donereview_tv.setText("" + review_str);
             rating_done.setRating(Float.parseFloat(average_rating));
             post_review_lay.setVisibility(View.GONE);
             writereview.setVisibility(View.GONE);
             done_review_lay.setVisibility(View.VISIBLE);
         }
 
-        size_tv.setText(getResources().getString(R.string.size_s)+" :" + size_str);
-        color_tv.setText(getResources().getString(R.string.color)+" :" +color_str);
-        quantity_tv.setText(getResources().getString(R.string.quanity)+" :" +quantity_str);
+        size_tv.setText(getResources().getString(R.string.size_s) + " :" + size_str);
+        color_tv.setText(getResources().getString(R.string.color) + " :" + color_str);
+        quantity_tv.setText(getResources().getString(R.string.quanity) + " :" + quantity_str);
         product_name.setText("" + product_name_str);
         merchant_name.setText("" + merchant_name_str);
         mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mainprice_str);
-        shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + shipping_price);
+        shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + shipping_price);
         order_id.setText("" + order_id_str);
 
         btn_strip_receipt.setOnClickListener(v -> {
@@ -303,7 +300,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
                 }
 
                 show_remaining_payments.setVisibility(View.VISIBLE);
-               // send_reminder.setVisibility(View.VISIBLE);
+                // send_reminder.setVisibility(View.VISIBLE);
                 show_remaining_payments.setOnClickListener(v -> {
                     listSplits(splitLists, "1");
 
@@ -347,19 +344,21 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
 
         //   saledate.setText(""+saledate_str);
-         String str = "" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str;
-         if (str.contains("null")){
-             String daa= str.replace("null","");
-             shipaddress.setText(daa);
+        String str = "" + shipping_username + "\n" + shipaddress_str + " " + shipadd_opt_str;
+        if (str.contains("null")) {
+            String daa = str.replace("null", "");
+            shipaddress.setText(daa);
 
-         }else {
-        shipaddress.setText(str);}
-       // upspackage.setText(delivery_date_str);
+        } else {
+            shipaddress.setText(str);
+        }
+        // upspackage.setText(delivery_date_str);
         if (product_img_str != null && !product_img_str.equalsIgnoreCase("") && !product_img_str.equalsIgnoreCase(BaseUrl.image_baseurl)) {
             Glide.with(PurchasedItemDetailAct.this).load(product_img_str).placeholder(R.drawable.placeholder).into(product_img);
         }
 
     }
+
     private void listSplits(ArrayList<SplitList>
                                     splitLists,
                             String type) {
@@ -398,7 +397,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
     @Override
     public void onClick1(SplitList id_item) {
         dialogSts.dismiss();
-        Log.e("TAG", "onClick1: " );
+        Log.e("TAG", "onClick1: ");
         String data = "{" +
                 " type=" + "member" +
                 ", contentAvailable=" + "contentAvailable" +
@@ -407,20 +406,20 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
                 ", split_amount_x='" + id_item.getAmount() + '\'' +
                 ", merchant_id='" + merchant_id + '\'' +
                 ", merchant_business_no='" + merchant_contact_name + '\'' +
-                ", merchant_business_name='" + merchant_name_str+ '\'' +
+                ", merchant_business_name='" + merchant_name_str + '\'' +
                 ", memberId='" + user_id + '\'' +
                 ", dueDate='" + id_item.getDate() + '\'' +
                 ", message='" + "message" + '\'' +
                 ", numberOfEmi='" + id_item.getId() + '\'' +
                 '}';
-        Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
-        intentw.putExtra("object",data);
+        Intent intentw = new Intent(getApplicationContext(), EMIManualActivity.class);
+        intentw.putExtra("object", data);
         startActivity(intentw);
     }
+
     public class FinalPuzzelAdapter extends
             RecyclerView.Adapter<
-                    FinalPuzzelAdapter.SelectTimeViewHolder>
-    {
+                    FinalPuzzelAdapter.SelectTimeViewHolder> {
         private final ArrayList<SplitList> peopleList;
         Context context;
         String type;
@@ -458,15 +457,15 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
 
                 if (peopleList.get(position).getIsPaid().equalsIgnoreCase("done")) {
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" " + splitList.getAmount() + " Paid");
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Paid");
 
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
-                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign) +" "  + splitList.getAmount() + " Due - " + splitList.getDate());
+                    ivFinalImage.setText(splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Due - " + splitList.getDate());
                 }
 
                 ivFinalImage.setOnClickListener(v -> {
-                    Log.e("TAG", "onBindViewHolder: --------" );
+                    Log.e("TAG", "onBindViewHolder: --------");
                     recyclerViewClickListener1.onClick1(splitList);
                 });
 
@@ -477,7 +476,7 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
                 } else {
                     ivFinalImage.setTextColor(getColor(R.color.red));
                     ivFinalImage.setTextSize(10);
-                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " "+mySession.getValueOf(MySession.CurrencySign)+" " + splitList.getAmount() + " Due On - " + splitList.getDate());
+                    ivFinalImage.setText("Send Reminder For " + splitList.getId() + str + " Payment " + " " + mySession.getValueOf(MySession.CurrencySign) + " " + splitList.getAmount() + " Due On - " + splitList.getDate());
                     holder.itemView.setOnClickListener(v -> {
                         recyclerViewClickListener1.onClick1(splitList);
                     });
@@ -499,11 +498,6 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
             }
         }
     }
-
-
-
-
-
 
 
     private class AddReviewAsc extends AsyncTask<String, String, String> {
@@ -572,18 +566,18 @@ Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.sel
 
             } else {
                 try {
-                    Log.e("result review >"," >> "+result);
+                    Log.e("result review >", " >> " + result);
                     JSONObject jsonObject = new JSONObject(result);
                     String message = jsonObject.getString("status");
                     if (message.equalsIgnoreCase("1")) {
-                        donereview_tv.setText(""+comment_str);
-                        if (rating_str!=null){
+                        donereview_tv.setText("" + comment_str);
+                        if (rating_str != null) {
                             rating_done.setRating(Float.parseFloat(rating_str));
                         }
                         post_review_lay.setVisibility(View.GONE);
                         writereview.setVisibility(View.GONE);
                         done_review_lay.setVisibility(View.VISIBLE);
-                        Toast.makeText(PurchasedItemDetailAct.this,getResources().getString(R.string.reviewsubmited),Toast.LENGTH_LONG).show();
+                        Toast.makeText(PurchasedItemDetailAct.this, getResources().getString(R.string.reviewsubmited), Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

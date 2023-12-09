@@ -3,12 +3,13 @@ package main.com.ngrewards.activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
@@ -17,10 +18,10 @@ import main.com.ngrewards.R;
 
 public class WebViewAc extends AppCompatActivity {
 
-    private WebView TermsWV;
-    private String Url;
     boolean loadingFinished = true;
     boolean redirect = false;
+    private WebView TermsWV;
+    private String Url;
     private WP10ProgressBar loader_page;
 
     @Override
@@ -51,7 +52,7 @@ public class WebViewAc extends AppCompatActivity {
             TermsWV.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        Log.e("signup_url>>>",Url);
+        Log.e("signup_url>>>", Url);
         TermsWV.loadUrl(Url);
         TermsWV.setWebViewClient(new WebViewClient() {
             @Override

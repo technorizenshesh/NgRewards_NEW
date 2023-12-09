@@ -2,9 +2,6 @@ package main.com.ngrewards.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -46,11 +44,10 @@ import retrofit2.Response;
 
 public class FeaturedFrag extends Fragment {
     View v;
-
-    private GridView fetaured_product;
-    private RecyclerView featured_product_rec;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
     ProductGridAdp productGridAdp;
+    private GridView fetaured_product;
+    private RecyclerView featured_product_rec;
     private ProgressBar progresbar;
     private ArrayList<Productlistbean> productlistbeanArrayList;
     private String user_id = "";
@@ -116,7 +113,7 @@ public class FeaturedFrag extends Fragment {
     private void getFeaturedProducts() {
         progresbar.setVisibility(View.VISIBLE);
         productlistbeanArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getFeaturedProduct(user_id,"","","");
+        Call<ResponseBody> call = ApiClient.getApiInterface().getFeaturedProduct(user_id, "", "", "");
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -161,19 +158,6 @@ public class FeaturedFrag extends Fragment {
 
         ArrayList<Productlistbean> productlistbeanArrayList;
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView paybill,product_name,product_description;
-            ImageView product_img;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.product_description = itemView.findViewById(R.id.product_description);
-                this.product_name = itemView.findViewById(R.id.product_name);
-                this.paybill = itemView.findViewById(R.id.paybill);
-                this.product_img = itemView.findViewById(R.id.product_img);
-            }
-        }
-
         public ProductGridAdp(ArrayList<Productlistbean> productlistbeanArrayList) {
             this.productlistbeanArrayList = productlistbeanArrayList;
         }
@@ -189,23 +173,22 @@ public class FeaturedFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
-            holder.product_name.setText(""+productlistbeanArrayList.get(listPosition).getProductName());
-            holder.product_description.setText(""+productlistbeanArrayList.get(listPosition).getProductDescription());
+            holder.product_name.setText("" + productlistbeanArrayList.get(listPosition).getProductName());
+            holder.product_description.setText("" + productlistbeanArrayList.get(listPosition).getProductDescription());
 
             String product_img = productlistbeanArrayList.get(listPosition).getThumbnailImage();
-            if (product_img==null||product_img.equalsIgnoreCase("")||product_img.equalsIgnoreCase(BaseUrl.image_baseurl)){
+            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
 
-            }
-            else {
+            } else {
                 Glide.with(getActivity())
                         .load(product_img)
                         .thumbnail(0.5f)
                         .override(400, 150)
                         .centerCrop()
-                         
+
                         .placeholder(R.drawable.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                         
+
                         .into(holder.product_img);
 
             }
@@ -221,9 +204,9 @@ public class FeaturedFrag extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getActivity(), ProduCtDetailAct.class);
-                    i.putExtra("product_id",productlistbeanArrayList.get(listPosition).getId());
-                    i.putExtra("product_name_str",productlistbeanArrayList.get(listPosition).getProductName());
-                    i.putExtra("user_id",user_id);
+                    i.putExtra("product_id", productlistbeanArrayList.get(listPosition).getId());
+                    i.putExtra("product_name_str", productlistbeanArrayList.get(listPosition).getProductName());
+                    i.putExtra("user_id", user_id);
                     startActivity(i);
                 }
             });
@@ -233,6 +216,19 @@ public class FeaturedFrag extends Fragment {
         public int getItemCount() {
             // return 4;
             return productlistbeanArrayList == null ? 0 : productlistbeanArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView paybill, product_name, product_description;
+            ImageView product_img;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.product_description = itemView.findViewById(R.id.product_description);
+                this.product_name = itemView.findViewById(R.id.product_name);
+                this.paybill = itemView.findViewById(R.id.paybill);
+                this.product_img = itemView.findViewById(R.id.product_img);
+            }
         }
     }
 

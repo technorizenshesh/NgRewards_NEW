@@ -15,7 +15,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,20 +59,11 @@ import main.com.ngrewards.constant.MySession;
 
 public class MerchantBottumAct extends TabActivity {
 
+    public static String user_log_data = "", user_id = "", notification_data = "";
+    public static ArrayList<GalleryBean> ImagePathArrayList;
     int WhichIndex = 0;
-    private Boolean exit;
     String scrsts = "";
     MySession mySession;
-    public static String user_log_data = "", user_id = "", notification_data = "";
-    TextView counter_wallet, counter_message;
-    ScheduledExecutorService scheduleTaskExecutor;
-    String currentVersion = "";
-    private Dialog canceldialog;
-    public static ArrayList<GalleryBean> ImagePathArrayList;
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
     public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -106,117 +96,15 @@ public class MerchantBottumAct extends TabActivity {
             }
         }
     };
+    TextView counter_wallet, counter_message;
+    ScheduledExecutorService scheduleTaskExecutor;
+    String currentVersion = "";
+    private Boolean exit;
+    private Dialog canceldialog;
 
-    private class GetProfile extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ImagePathArrayList = new ArrayList<>();
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "merchant_profile.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("merchant_id", user_id);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e(" MER BOTTEM GetProfile Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    // Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: "+jsonObject.toString() );
-                    String message = jsonObject.getString("status");
-                    reqcounft.setVisibility(View.GONE);
-                    if (message.equalsIgnoreCase("1")) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                        String unseen_count = jsonObject1.getString("unseen_count");
-                        String admin_created_password = jsonObject1.getString("admin_created_password");
-                        String sell_items_reomve_access = jsonObject1.getString("sell_items_reomve_access");
-                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: sell_items_reomve_access" + jsonObject);
-                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: sell_items_reomve_access" + sell_items_reomve_access);
-                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject:admin_created_password " + admin_created_password);
-                        mySession.setsell_items_reomve_access(sell_items_reomve_access);
-                        mySession.setadmin_created_password(admin_created_password);
-
-
-                        mySession.setPassSet("");
-
-
-                        if (unseen_count.equals("0")) {
-                            reqcounft.setVisibility(View.GONE);
-                        } else {
-                            reqcounft.setVisibility(View.VISIBLE);
-                            reqcounft.setText("" + unseen_count);
-                        }
-
-                        Log.e("unseen_count>>>", unseen_count);
-
-                        String country_id = jsonObject1.getString("country_id");
-                        String currency_sign = jsonObject1.getString("currency_sign");
-                        String currency_code = jsonObject1.getString("currency_code");
-                        String country_name = jsonObject1.getString("country_name");
-                        mySession = new MySession(MerchantBottumAct.this);
-                        mySession.setValueOf(MySession.CountryId, country_id);
-                        mySession.setValueOf(MySession.CurrencyCode, currency_code);
-                        mySession.setValueOf(MySession.CurrencySign, currency_sign);
-                        mySession.setValueOf(MySession.CountryName, country_name);
-                        Log.e(TAG, "onCreate:  country_id   ----  " + mySession.getValueOf(MySession.CountryId));
-                        Log.e(TAG, "onCreate:  currency_code   ----  " + mySession.getValueOf(MySession.CurrencyCode));
-                        Log.e(TAG, "onCreate:  currency_sign   ----  " + mySession.getValueOf(MySession.CurrencySign));
-                        Log.e(TAG, "onCreate:  country_name    ----  " + mySession.getValueOf(MySession.CountryName));
-
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
@@ -402,6 +290,164 @@ public class MerchantBottumAct extends TabActivity {
         }, 0, 8, TimeUnit.SECONDS);
     }
 
+    private void appUpdate() {
+        canceldialog = new Dialog(MerchantBottumAct.this);
+        canceldialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        canceldialog.setCancelable(false);
+        canceldialog.setContentView(R.layout.appupdatelayout);
+        canceldialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        final TextView yes_tv = (TextView) canceldialog.findViewById(R.id.yes_tv);
+        final TextView no_tv = (TextView) canceldialog.findViewById(R.id.no_tv);
+        final TextView body_tv = (TextView) canceldialog.findViewById(R.id.body_tv);
+        body_tv.setText("" + getResources().getString(R.string.appupdateneed));
+        no_tv.setText("" + getResources().getString(R.string.remindlater));
+        yes_tv.setText("" + getResources().getString(R.string.ok));
+
+        yes_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canceldialog.dismiss();
+                final String appPackageName = BuildConfig.APPLICATION_ID; // package name of the app
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+
+        no_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mySession.setAppUpdate("later");
+                canceldialog.dismiss();
+
+            }
+        });
+
+        if (canceldialog == null) {
+            canceldialog.show();
+        } else if (canceldialog.isShowing()) {
+
+        } else {
+            canceldialog.show();
+        }
+    }
+
+    private class GetProfile extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ImagePathArrayList = new ArrayList<>();
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String postReceiverUrl = BaseUrl.baseurl + "merchant_profile.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("merchant_id", user_id);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e(" MER BOTTEM GetProfile Response", ">>>>>>>>>>>>" + response);
+                return response;
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    // Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: "+jsonObject.toString() );
+                    String message = jsonObject.getString("status");
+                    reqcounft.setVisibility(View.GONE);
+                    if (message.equalsIgnoreCase("1")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                        String unseen_count = jsonObject1.getString("unseen_count");
+                        String admin_created_password = jsonObject1.getString("admin_created_password");
+                        String sell_items_reomve_access = jsonObject1.getString("sell_items_reomve_access");
+                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: sell_items_reomve_access" + jsonObject);
+                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject: sell_items_reomve_access" + sell_items_reomve_access);
+                        Log.e("TAG", "JSONObjectJSONObjectJSONObjectJSONObject:admin_created_password " + admin_created_password);
+                        mySession.setsell_items_reomve_access(sell_items_reomve_access);
+                        mySession.setadmin_created_password(admin_created_password);
+
+
+                        mySession.setPassSet("");
+
+
+                        if (unseen_count.equals("0")) {
+                            reqcounft.setVisibility(View.GONE);
+                        } else {
+                            reqcounft.setVisibility(View.VISIBLE);
+                            reqcounft.setText("" + unseen_count);
+                        }
+
+                        Log.e("unseen_count>>>", unseen_count);
+
+                        String country_id = jsonObject1.getString("country_id");
+                        String currency_sign = jsonObject1.getString("currency_sign");
+                        String currency_code = jsonObject1.getString("currency_code");
+                        String country_name = jsonObject1.getString("country_name");
+                        mySession = new MySession(MerchantBottumAct.this);
+                        mySession.setValueOf(MySession.CountryId, country_id);
+                        mySession.setValueOf(MySession.CurrencyCode, currency_code);
+                        mySession.setValueOf(MySession.CurrencySign, currency_sign);
+                        mySession.setValueOf(MySession.CountryName, country_name);
+                        Log.e(TAG, "onCreate:  country_id   ----  " + mySession.getValueOf(MySession.CountryId));
+                        Log.e(TAG, "onCreate:  currency_code   ----  " + mySession.getValueOf(MySession.CurrencyCode));
+                        Log.e(TAG, "onCreate:  currency_sign   ----  " + mySession.getValueOf(MySession.CurrencySign));
+                        Log.e(TAG, "onCreate:  country_name    ----  " + mySession.getValueOf(MySession.CountryName));
+
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
     private class MyCounterVal extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -547,52 +593,6 @@ public class MerchantBottumAct extends TabActivity {
 
             }
 
-        }
-    }
-
-    private void appUpdate() {
-        canceldialog = new Dialog(MerchantBottumAct.this);
-        canceldialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        canceldialog.setCancelable(false);
-        canceldialog.setContentView(R.layout.appupdatelayout);
-        canceldialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        final TextView yes_tv = (TextView) canceldialog.findViewById(R.id.yes_tv);
-        final TextView no_tv = (TextView) canceldialog.findViewById(R.id.no_tv);
-        final TextView body_tv = (TextView) canceldialog.findViewById(R.id.body_tv);
-        body_tv.setText("" + getResources().getString(R.string.appupdateneed));
-        no_tv.setText("" + getResources().getString(R.string.remindlater));
-        yes_tv.setText("" + getResources().getString(R.string.ok));
-
-        yes_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canceldialog.dismiss();
-                final String appPackageName = BuildConfig.APPLICATION_ID; // package name of the app
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                }
-            }
-        });
-
-        no_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mySession.setAppUpdate("later");
-                canceldialog.dismiss();
-
-            }
-        });
-
-        if (canceldialog == null) {
-            canceldialog.show();
-        } else if (canceldialog.isShowing()) {
-
-        } else {
-            canceldialog.show();
         }
     }
 

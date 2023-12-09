@@ -3,8 +3,6 @@ package main.com.ngrewards.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,10 +56,12 @@ public class CommissionDetail extends AppCompatActivity {
     private String user_id = "", stripe_account_id = "", withdraw_status = "", withdaraw_accoutn_str = "0.00", remain_ng_cash_str = "0.00", affiliate_number = "";
     private MySession mySession;
     private ProgressBar progressabar;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,7 +209,7 @@ public class CommissionDetail extends AppCompatActivity {
         amountpercant.setAdapter(amountSeleAdapter);
 
         weekdatemont_tv.setText("Week " + week_str + "/" + total_week_count + "\n" + week_start_month_str + "-" + week_end_month_str);
-        total_week_commision.setText(mySession.getValueOf(MySession.CurrencySign)  + total_week_commision_str);
+        total_week_commision.setText(mySession.getValueOf(MySession.CurrencySign) + total_week_commision_str);
         amountpercant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -222,9 +224,9 @@ public class CommissionDetail extends AppCompatActivity {
                         double res = (comission_str / 100) * 25;
                         Log.e("Data 25 >> ", " >> " + res);
 
-                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     } else if (amountlist.get(position).equalsIgnoreCase("50 %")) {
@@ -233,9 +235,9 @@ public class CommissionDetail extends AppCompatActivity {
                         double res = (comission_str / 100) * 50;
                         Log.e("Data 50 >> ", " >> " + res);
 
-                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
 
@@ -243,10 +245,10 @@ public class CommissionDetail extends AppCompatActivity {
                         double comission_str = Double.parseDouble(total_week_commision_str);
 
                         double res = (comission_str / 100) * 75;
-                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(res)));
                         Log.e("Data 75 >> ", " >> " + res);
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     } else if (amountlist.get(position).equalsIgnoreCase("100 %")) {
@@ -254,9 +256,9 @@ public class CommissionDetail extends AppCompatActivity {
 
                         double res = (comission_str / 100) * 100;
                         Log.e("Data 100 >> ", " >> " + res);
-                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(res)));
+                        ngcash_remain.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(res)));
                         double withdraw_amt = comission_str - res;
-                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(withdraw_amt)));
+                        withdraw_bank_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(withdraw_amt)));
                         withdaraw_accoutn_str = String.format("%.2f", new BigDecimal(withdraw_amt));
                         remain_ng_cash_str = String.format("%.2f", new BigDecimal(res));
                     }
@@ -272,8 +274,8 @@ public class CommissionDetail extends AppCompatActivity {
 
     public class CommisionDetAdapter extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         List<CommissionData> commissionDataArrayList;
+        private LayoutInflater inflater = null;
 
         public CommisionDetAdapter(Activity chatActivity, List<CommissionData> commissionDataArrayList) {
             // TODO Auto-generated constructor stub
@@ -325,7 +327,7 @@ public class CommissionDetail extends AppCompatActivity {
             merchant_no_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getBusinessNo());
             phone_number_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getContactNumber());
             address_tv.setText("" + commissionDataArrayList.get(position).getMerchantDetail().getAddress());
-            commission_amount.setText("Commission :  "+mySession.getValueOf(MySession.CurrencySign)  + commissionDataArrayList.get(position).getMerchantComision());
+            commission_amount.setText("Commission :  " + mySession.getValueOf(MySession.CurrencySign) + commissionDataArrayList.get(position).getMerchantComision());
             return rowView;
         }
 
@@ -334,18 +336,6 @@ public class CommissionDetail extends AppCompatActivity {
 
     public class CommisionAdpter extends RecyclerView.Adapter<CommisionAdpter.MyViewHolder> {
         Context context;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView payment_sts;
-
-            public MyViewHolder(View view) {
-                super(view);
-                payment_sts = itemView.findViewById(R.id.payment_sts);
-
-
-            }
-        }
-
 
         public CommisionAdpter(Activity myContacts) {
             this.context = myContacts;
@@ -360,7 +350,6 @@ public class CommissionDetail extends AppCompatActivity {
             return holder;
             // return new MyViewHolder(itemView);
         }
-
 
         @Override
         public void onBindViewHolder(final CommisionAdpter.MyViewHolder holder, final int position) {
@@ -378,6 +367,17 @@ public class CommissionDetail extends AppCompatActivity {
         public int getItemCount() {
             return 2;
             //return chatBeanArrayList == null ? 0 : chatBeanArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView payment_sts;
+
+            public MyViewHolder(View view) {
+                super(view);
+                payment_sts = itemView.findViewById(R.id.payment_sts);
+
+
+            }
         }
     }
 

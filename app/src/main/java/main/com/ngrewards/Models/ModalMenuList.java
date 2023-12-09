@@ -14,12 +14,16 @@ public class ModalMenuList {
     private String status;
     private String menu_id;
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
@@ -27,8 +31,8 @@ public class ModalMenuList {
         this.title = title;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitleDiscription() {
+        return titleDiscription;
     }
 
     public void setTitleDiscription(String titleDiscription) {
@@ -36,8 +40,8 @@ public class ModalMenuList {
         this.titleDiscription = titleDiscription;
     }
 
-    public String getTitleDiscription() {
-        return titleDiscription;
+    public String getPrice() {
+        return price;
     }
 
     public void setPrice(String price) {
@@ -45,8 +49,8 @@ public class ModalMenuList {
         this.price = price;
     }
 
-    public String getPrice() {
-        return price;
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
@@ -55,8 +59,8 @@ public class ModalMenuList {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public String getList() {
+        return list;
     }
 
     public void setList(String list) {
@@ -64,8 +68,8 @@ public class ModalMenuList {
         this.list = list;
     }
 
-    public String getList() {
-        return list;
+    public String getImage() {
+        return image;
     }
 
     public void setImage(String image) {
@@ -73,8 +77,8 @@ public class ModalMenuList {
         this.image = image;
     }
 
-    public String getImage() {
-        return image;
+    public String getItem_id() {
+        return item_id;
     }
 
     public void setItem_id(String item_id) {
@@ -82,8 +86,8 @@ public class ModalMenuList {
         this.item_id = item_id;
     }
 
-    public String getItem_id() {
-        return item_id;
+    public String getStatus() {
+        return status;
     }
 
     public void setStatus(String status) {
@@ -91,16 +95,12 @@ public class ModalMenuList {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMenu_id() {
+        return menu_id;
     }
 
     public void setMenu_id(String menu_id) {
 
         this.menu_id = menu_id;
-    }
-
-    public String getMenu_id() {
-        return menu_id;
     }
 }

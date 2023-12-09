@@ -2,8 +2,6 @@ package main.com.ngrewards.bottumtab;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.draweractivity.BaseActivity;
@@ -22,7 +23,8 @@ public class TrasActivityPrevious extends BaseActivity {
     FrameLayout contentFrameLayout;
     CustomViewPager activity_pager;
     ActivityPagerAdp activityPagerAdp;
-    private RelativeLayout previouslay,nextlay;
+    private RelativeLayout previouslay, nextlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,8 @@ public class TrasActivityPrevious extends BaseActivity {
                 }
 
             }
-        }); previouslay.setOnClickListener(new View.OnClickListener() {
+        });
+        previouslay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (activity_pager.getCurrentItem() > 0) {
@@ -139,10 +142,6 @@ public class TrasActivityPrevious extends BaseActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -163,6 +162,10 @@ public class TrasActivityPrevious extends BaseActivity {
                 }
             });
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }

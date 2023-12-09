@@ -15,6 +15,24 @@ import com.android.volley.toolbox.Volley;
  * <p/>
  * Sketch Project Studio
  * Created by Angga on 22/04/2016 22.58.
+ * <p>
+ * Private constructor, only initialization from getInstance.
+ *
+ * @param context parent context
+ * <p>
+ * Singleton construct design pattern.
+ * @param context parent context
+ * @return single instance of VolleySingleton
+ * <p>
+ * Get current request queue.
+ * @return RequestQueue
+ * <p>
+ * Add new request depend on type like string, json object, json array request.
+ * @param req new request
+ * @param <T> request type
+ * <p>
+ * Get image loader.
+ * @return ImageLoader
  *//*
 
 public class VolleySingleton {
@@ -25,10 +43,10 @@ public class VolleySingleton {
 
     */
 /**
-     * Private constructor, only initialization from getInstance.
-     *
-     * @param context parent context
-     *//*
+ * Private constructor, only initialization from getInstance.
+ *
+ * @param context parent context
+ *//*
 
     private VolleySingleton(Context context) {
         mCtx = context;
@@ -52,11 +70,11 @@ public class VolleySingleton {
 
     */
 /**
-     * Singleton construct design pattern.
-     *
-     * @param context parent context
-     * @return single instance of VolleySingleton
-     *//*
+ * Singleton construct design pattern.
+ *
+ * @param context parent context
+ * @return single instance of VolleySingleton
+ *//*
 
     public static synchronized VolleySingleton getInstance(Context context) {
         if (mInstance == null) {
@@ -67,10 +85,10 @@ public class VolleySingleton {
 
     */
 /**
-     * Get current request queue.
-     *
-     * @return RequestQueue
-     *//*
+ * Get current request queue.
+ *
+ * @return RequestQueue
+ *//*
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -83,11 +101,11 @@ public class VolleySingleton {
 
     */
 /**
-     * Add new request depend on type like string, json object, json array request.
-     *
-     * @param req new request
-     * @param <T> request type
-     *//*
+ * Add new request depend on type like string, json object, json array request.
+ *
+ * @param req new request
+ * @param <T> request type
+ *//*
 
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
@@ -95,10 +113,10 @@ public class VolleySingleton {
 
     */
 /**
-     * Get image loader.
-     *
-     * @return ImageLoader
-     *//*
+ * Get image loader.
+ *
+ * @return ImageLoader
+ *//*
 
     public ImageLoader getImageLoader() {
         return mImageLoader;

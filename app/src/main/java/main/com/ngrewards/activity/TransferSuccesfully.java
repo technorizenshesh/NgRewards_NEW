@@ -3,11 +3,12 @@ package main.com.ngrewards.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 
 public class TransferSuccesfully extends AppCompatActivity {
 
+    MySession mySession;
     private String user_id, merchant_id, merchant_no, amount, tip_amount, employee_name,
             employee_id, order_guset_No, order_Table_No, oreder_meber_Name, order_Address_Id,
             order_special_request, ngcash, order_Date, order_Time, card_id, card_number, timezone, card_brand, customer_id, type;
@@ -40,12 +42,12 @@ public class TransferSuccesfully extends AppCompatActivity {
     private String Transfer;
     private String time_zone;
     private JSONObject result;
-MySession mySession ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_paid_succesfully);
-mySession = new MySession(this);
+        mySession = new MySession(this);
         progresbar = findViewById(R.id.progresbar);
         Calendar c = Calendar.getInstance();
         TimeZone tz = c.getTimeZone();
@@ -68,12 +70,12 @@ mySession = new MySession(this);
         TransferOrderBill(user_id, member_id, comment_str, amount_str, apply_ngcassh, card_id, card_number, card_brand, customer_id, type);
     }
 
-     private void TransferOrderBill(String user_id, String member_id, String comment_str, String amount_str, String apply_ngcassh, String card_id, String card_number, String card_brand, String customer_id, String Transfer) {
+    private void TransferOrderBill(String user_id, String member_id, String comment_str, String amount_str, String apply_ngcassh, String card_id, String card_number, String card_brand, String customer_id, String Transfer) {
 
         Log.e("transfer_money", "user_id" + user_id + "member_id" + member_id + "comment_str" + comment_str + "amount_str" + amount_str + "card_id" + card_id + "card_number" + card_number + "card_brand" + card_brand + "customer_id" + customer_id + "Transfer" + Transfer);
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().transferorrequest(user_id, member_id, comment_str, amount_str,
-                apply_ngcassh, card_id, card_number, card_brand, customer_id, Transfer, time_zone,mySession.getValueOf(MySession.CurrencyCode));
+                apply_ngcassh, card_id, card_number, card_brand, customer_id, Transfer, time_zone, mySession.getValueOf(MySession.CurrencyCode));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

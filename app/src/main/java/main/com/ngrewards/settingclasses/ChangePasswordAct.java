@@ -2,7 +2,6 @@ package main.com.ngrewards.settingclasses;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,22 +29,24 @@ public class ChangePasswordAct extends AppCompatActivity {
 
     private TextView change_tv;
     private ProgressBar progresbar;
-    private EditText cur_password_et,new_password_et,ver_password_et;
-    private String cur_password_str="",new_password_str="",ver_password_str="";
+    private EditText cur_password_et, new_password_et, ver_password_et;
+    private String cur_password_str = "", new_password_str = "", ver_password_str = "";
     private MySession mySession;
-    private String user_id="",type_str;
+    private String user_id = "", type_str;
     private RelativeLayout backlay;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Tools.reupdateResources(this);
         setContentView(R.layout.activity_change_password);
         Bundle bundle = getIntent().getExtras();
-        if (bundle!=null&&!bundle.isEmpty()){
+        if (bundle != null && !bundle.isEmpty()) {
             type_str = bundle.getString("type");
 
         }
@@ -58,10 +61,9 @@ public class ChangePasswordAct extends AppCompatActivity {
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    if (type_str.equalsIgnoreCase("Member")){
+                    if (type_str.equalsIgnoreCase("Member")) {
                         user_id = jsonObject1.getString("id");
-                    }
-                    else {
+                    } else {
                         user_id = jsonObject1.getString("id");
                     }
 
@@ -87,33 +89,28 @@ public class ChangePasswordAct extends AppCompatActivity {
         change_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cur_password_str  = cur_password_et.getText().toString();
-                new_password_str  = new_password_et.getText().toString();
-                ver_password_str  = ver_password_et.getText().toString();
-                if (cur_password_str==null||cur_password_str.equalsIgnoreCase("")){
-                    Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.enteryourcurrnetpass),Toast.LENGTH_LONG).show();
-                }
-                else if (new_password_str==null||new_password_str.equalsIgnoreCase("")){
-                    Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.enternewpass),Toast.LENGTH_LONG).show();
+                cur_password_str = cur_password_et.getText().toString();
+                new_password_str = new_password_et.getText().toString();
+                ver_password_str = ver_password_et.getText().toString();
+                if (cur_password_str == null || cur_password_str.equalsIgnoreCase("")) {
+                    Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.enteryourcurrnetpass), Toast.LENGTH_LONG).show();
+                } else if (new_password_str == null || new_password_str.equalsIgnoreCase("")) {
+                    Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.enternewpass), Toast.LENGTH_LONG).show();
 
-                }
-                else if (ver_password_str==null||ver_password_str.equalsIgnoreCase("")){
-                    Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.enterverifypass),Toast.LENGTH_LONG).show();
+                } else if (ver_password_str == null || ver_password_str.equalsIgnoreCase("")) {
+                    Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.enterverifypass), Toast.LENGTH_LONG).show();
 
-                }
-                else {
-                    if (new_password_str.equalsIgnoreCase(ver_password_str)){
-                        if (type_str.equalsIgnoreCase("Member")){
+                } else {
+                    if (new_password_str.equalsIgnoreCase(ver_password_str)) {
+                        if (type_str.equalsIgnoreCase("Member")) {
                             changePass();
-                        }
-                        else {
+                        } else {
                             changePassMerchant();
                         }
 
 
-                    }
-                    else {
-                        Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.newpascverpas),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.newpascverpas), Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -134,7 +131,7 @@ public class ChangePasswordAct extends AppCompatActivity {
     private void changePass() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().changeMemberPass(user_id,new_password_str,cur_password_str);
+        Call<ResponseBody> call = ApiClient.getApiInterface().changeMemberPass(user_id, new_password_str, cur_password_str);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -143,22 +140,20 @@ public class ChangePasswordAct extends AppCompatActivity {
                     try {
 
                         String responseData = response.body().string();
-                        Log.e("SALE DATA"," >>"+responseData);
+                        Log.e("SALE DATA", " >>" + responseData);
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equals("1")) {
-                            Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.yourpasswordchangedsucc),Toast.LENGTH_LONG).show();
-finish();
-                        }
-                        else {
-                            Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.youenteredwrongpass),Toast.LENGTH_LONG).show();
+                            Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.yourpasswordchangedsucc), Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.youenteredwrongpass), Toast.LENGTH_LONG).show();
 
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     progresbar.setVisibility(View.GONE);
                 }
 
@@ -176,10 +171,11 @@ finish();
 
 
     }
+
     private void changePassMerchant() {
 //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().changeMerchnatPass(user_id,new_password_str,cur_password_str);
+        Call<ResponseBody> call = ApiClient.getApiInterface().changeMerchnatPass(user_id, new_password_str, cur_password_str);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -188,22 +184,20 @@ finish();
                     try {
 
                         String responseData = response.body().string();
-                        Log.e("SALE DATA"," >>"+responseData);
+                        Log.e("SALE DATA", " >>" + responseData);
                         JSONObject object = new JSONObject(responseData);
                         if (object.getString("status").equals("1")) {
-                            Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.yourpasswordchangedsucc),Toast.LENGTH_LONG).show();
-finish();
-                        }
-                        else {
-                            Toast.makeText(ChangePasswordAct.this,getResources().getString(R.string.youenteredwrongpass),Toast.LENGTH_LONG).show();
+                            Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.yourpasswordchangedsucc), Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(ChangePasswordAct.this, getResources().getString(R.string.youenteredwrongpass), Toast.LENGTH_LONG).show();
 
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     progresbar.setVisibility(View.GONE);
                 }
 

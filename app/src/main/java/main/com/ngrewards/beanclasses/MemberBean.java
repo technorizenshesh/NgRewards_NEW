@@ -28,7 +28,7 @@ public class MemberBean {
     @SerializedName("total_ng_cash_earned")
     @Expose
     private String total_ng_cash_earned;
-@SerializedName("total_earning_this_week")
+    @SerializedName("total_earning_this_week")
     @Expose
     private String total_earning_this_week;
 
@@ -42,6 +42,10 @@ public class MemberBean {
 
     public List<MemberDetail> getResult() {
         return result;
+    }
+
+    public void setResult(List<MemberDetail> result) {
+        this.result = result;
     }
 
     public String getTotalfriends() {
@@ -66,10 +70,6 @@ public class MemberBean {
 
     public void setTotal_ng_cash_earned(String total_ng_cash_earned) {
         this.total_ng_cash_earned = total_ng_cash_earned;
-    }
-
-    public void setResult(List<MemberDetail> result) {
-        this.result = result;
     }
 
     public String getMessage() {

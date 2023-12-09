@@ -3,7 +3,6 @@ package main.com.ngrewards.stripepaymentclasses;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -63,6 +62,30 @@ public class CreditCardFormatTextWatcher implements TextWatcher {
      */
     public CreditCardFormatTextWatcher(@NonNull Context context, float paddingSp) {
         setPaddingSp(context, paddingSp);
+    }
+
+    public static void formatCardNumber(@NonNull Editable ccNumber, int paddingPx) {
+        formatCardNumber(ccNumber, paddingPx, NO_MAX_LENGTH);
+    }
+
+    public static void formatCardNumber(@NonNull Editable ccNumber, int paddingPx, int maxLength) {
+        int textLength = ccNumber.length();
+        // first remove any previous span
+        PaddingRightSpan[] spans = ccNumber.getSpans(0, ccNumber.length(), PaddingRightSpan.class);
+        for (int i = 0; i < spans.length; i++) {
+            ccNumber.removeSpan(spans[i]);
+        }
+        // then truncate to max length
+        if (maxLength > 0 && textLength > maxLength - 1) {
+            ccNumber.replace(maxLength, textLength, "");
+        }
+        // finally add margin spans
+        for (int i = 1; i <= ((textLength - 1) / 4); i++) {
+            int end = i * 4;
+            int start = end - 1;
+            PaddingRightSpan marginSPan = new PaddingRightSpan(paddingPx);
+            ccNumber.setSpan(marginSPan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
     /**
@@ -131,30 +154,6 @@ public class CreditCardFormatTextWatcher implements TextWatcher {
         afterTextChanged(textView.getEditableText());
     }
 
-    public static void formatCardNumber(@NonNull Editable ccNumber, int paddingPx) {
-        formatCardNumber(ccNumber, paddingPx, NO_MAX_LENGTH);
-    }
-
-    public static void formatCardNumber(@NonNull Editable ccNumber, int paddingPx, int maxLength) {
-        int textLength = ccNumber.length();
-        // first remove any previous span
-        PaddingRightSpan[] spans = ccNumber.getSpans(0, ccNumber.length(), PaddingRightSpan.class);
-        for (int i = 0; i < spans.length; i++) {
-            ccNumber.removeSpan(spans[i]);
-        }
-        // then truncate to max length
-        if (maxLength > 0 && textLength > maxLength - 1) {
-            ccNumber.replace(maxLength, textLength, "");
-        }
-        // finally add margin spans
-        for (int i = 1; i <= ((textLength - 1) / 4); i++) {
-            int end = i * 4;
-            int start = end - 1;
-            PaddingRightSpan marginSPan = new PaddingRightSpan(paddingPx);
-            ccNumber.setSpan(marginSPan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-    }
-
     public static class PaddingRightSpan extends ReplacementSpan {
 
         private final int mPadding;
@@ -184,4 +183,4 @@ public class CreditCardFormatTextWatcher implements TextWatcher {
 
 /*
 
-*/
+ */

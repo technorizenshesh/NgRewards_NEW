@@ -3,9 +3,6 @@ package main.com.ngrewards.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +14,12 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,15 +48,17 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
     private TextView recent_tv, top_tv;
     private View recentview, topview;
     private CustomMyReviewAdp customMyReviewAdp;
-    private String merchant_id = "",user_id="";
+    private String merchant_id = "", user_id = "";
     private ProgressBar progresbar;
     private ArrayList<MerchantTopReview> merchantTopReviewArrayList;
     private int current_offer_pos;
     private MySession mySession;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +117,7 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
         });
 
     }
+
     private void idinit() {
         progresbar = findViewById(R.id.progresbar);
         backlay = findViewById(R.id.backlay);
@@ -131,84 +134,11 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
         getMerchantsReview(merchant_id);
     }
 
-    class CustomMyReviewAdp extends RecyclerView.Adapter<CustomMyReviewAdp.MyViewHolder> {
-        ArrayList<MerchantTopReview> merchantTopReviewArrayList;
-        Context context;
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            CircleImageView user_img;
-            TextView username, datetime, review,liketv,likecount;
-            ImageView likeimg;
-            LinearLayout likebut;
-            RatingBar rating;
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.user_img = itemView.findViewById(R.id.user_img);
-                this.username = itemView.findViewById(R.id.username);
-                this.datetime = itemView.findViewById(R.id.datetime);
-                this.review = itemView.findViewById(R.id.review);
-                this.likeimg = itemView.findViewById(R.id.likeimg);
-                this.liketv = itemView.findViewById(R.id.liketv);
-                this.likecount = itemView.findViewById(R.id.likecount);
-                this.likebut = itemView.findViewById(R.id.likebut);
-                this.rating = itemView.findViewById(R.id.rating);
-            }
-        }
-
-        public CustomMyReviewAdp(Activity activity, ArrayList<MerchantTopReview> merchantTopReviewArrayList) {
-            this.merchantTopReviewArrayList = merchantTopReviewArrayList;
-            this.context = activity;
-        }
-
-        @Override
-        public CustomMyReviewAdp.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                 int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_allmerchant_reviewlay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final CustomMyReviewAdp.MyViewHolder holder, final int listPosition) {
-            holder.username.setText("" + merchantTopReviewArrayList.get(listPosition).getFullname());
-            holder.datetime.setText("" + merchantTopReviewArrayList.get(listPosition).getCreatedDate());
-            holder.review.setText("" + merchantTopReviewArrayList.get(listPosition).getReview());
-            String image_url = merchantTopReviewArrayList.get(listPosition).getMemberImage();
-            holder.likecount.setText("" + merchantTopReviewArrayList.get(listPosition).getLikeCount());
-            if (merchantTopReviewArrayList.get(listPosition).getRating()!=null&&!merchantTopReviewArrayList.get(listPosition).getRating().equalsIgnoreCase("")){
-                holder.rating.setRating(Float.parseFloat(merchantTopReviewArrayList.get(listPosition).getRating()));
-            }
-            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Glide.with(AllMerchantReviewActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
-            }
-            if (merchantTopReviewArrayList.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
-                holder.likeimg.setImageResource(R.drawable.filled_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
-            } else {
-                holder.likeimg.setImageResource(R.drawable.ic_like);
-                holder.liketv.setText("" + getResources().getString(R.string.like));
-            }
-            holder.likebut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    current_offer_pos = listPosition;
-                    likedislikemerchantreview_fun(merchantTopReviewArrayList.get(listPosition).getId());
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return merchantTopReviewArrayList == null ? 0 : merchantTopReviewArrayList.size();
-        }
-    }
-
     private void getMerchantsReview(String merchant_id) {
 
         progresbar.setVisibility(View.VISIBLE);
         merchantTopReviewArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantReviewList(merchant_id,user_id);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantReviewList(merchant_id, user_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -247,6 +177,7 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
             }
         });
     }
+
     public void likedislikemerchantreview_fun(String id) {
         progresbar.setVisibility(View.VISIBLE);
 
@@ -267,9 +198,9 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
                                 merchantTopReview.setLikeStatus("dislike");
                                 //offerBeanListArrayList.set(current_offer_pos, offerBeanList);
                                 int like = Integer.parseInt(merchantTopReviewArrayList.get(current_offer_pos).getLikeCount());
-                                if (like>0){
-                                    int likett=like-1;
-                                    merchantTopReviewArrayList.get(current_offer_pos).setLikeCount(likett+"");
+                                if (like > 0) {
+                                    int likett = like - 1;
+                                    merchantTopReviewArrayList.get(current_offer_pos).setLikeCount(likett + "");
                                 }
 
 
@@ -281,8 +212,8 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
 
                                 merchantTopReviewArrayList.get(current_offer_pos).setLikeStatus("like");
                                 int like = Integer.parseInt(merchantTopReviewArrayList.get(current_offer_pos).getLikeCount());
-                                int likett=like+1;
-                                merchantTopReviewArrayList.get(current_offer_pos).setLikeCount(likett+"");
+                                int likett = like + 1;
+                                merchantTopReviewArrayList.get(current_offer_pos).setLikeCount(likett + "");
 
                             }
                             customMyReviewAdp = new CustomMyReviewAdp(AllMerchantReviewActivity.this, merchantTopReviewArrayList);
@@ -292,7 +223,6 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
 
 
                         }
-
 
 
                     } catch (IOException e) {
@@ -311,6 +241,81 @@ public class AllMerchantReviewActivity extends AppCompatActivity {
                 Log.e("TAG", t.toString());
             }
         });
+    }
+
+    class CustomMyReviewAdp extends RecyclerView.Adapter<CustomMyReviewAdp.MyViewHolder> {
+        ArrayList<MerchantTopReview> merchantTopReviewArrayList;
+        Context context;
+
+        public CustomMyReviewAdp(Activity activity, ArrayList<MerchantTopReview> merchantTopReviewArrayList) {
+            this.merchantTopReviewArrayList = merchantTopReviewArrayList;
+            this.context = activity;
+        }
+
+        @Override
+        public CustomMyReviewAdp.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                 int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_allmerchant_reviewlay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final CustomMyReviewAdp.MyViewHolder holder, final int listPosition) {
+            holder.username.setText("" + merchantTopReviewArrayList.get(listPosition).getFullname());
+            holder.datetime.setText("" + merchantTopReviewArrayList.get(listPosition).getCreatedDate());
+            holder.review.setText("" + merchantTopReviewArrayList.get(listPosition).getReview());
+            String image_url = merchantTopReviewArrayList.get(listPosition).getMemberImage();
+            holder.likecount.setText("" + merchantTopReviewArrayList.get(listPosition).getLikeCount());
+            if (merchantTopReviewArrayList.get(listPosition).getRating() != null && !merchantTopReviewArrayList.get(listPosition).getRating().equalsIgnoreCase("")) {
+                holder.rating.setRating(Float.parseFloat(merchantTopReviewArrayList.get(listPosition).getRating()));
+            }
+            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                Glide.with(AllMerchantReviewActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(holder.user_img);
+            }
+            if (merchantTopReviewArrayList.get(listPosition).getLikeStatus().equalsIgnoreCase("like")) {
+                holder.likeimg.setImageResource(R.drawable.filled_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
+                //holder.liketv.setText("" + getResources().getString(R.string.dislike));
+            } else {
+                holder.likeimg.setImageResource(R.drawable.ic_like);
+                holder.liketv.setText("" + getResources().getString(R.string.like));
+            }
+            holder.likebut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    current_offer_pos = listPosition;
+                    likedislikemerchantreview_fun(merchantTopReviewArrayList.get(listPosition).getId());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return merchantTopReviewArrayList == null ? 0 : merchantTopReviewArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            CircleImageView user_img;
+            TextView username, datetime, review, liketv, likecount;
+            ImageView likeimg;
+            LinearLayout likebut;
+            RatingBar rating;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.user_img = itemView.findViewById(R.id.user_img);
+                this.username = itemView.findViewById(R.id.username);
+                this.datetime = itemView.findViewById(R.id.datetime);
+                this.review = itemView.findViewById(R.id.review);
+                this.likeimg = itemView.findViewById(R.id.likeimg);
+                this.liketv = itemView.findViewById(R.id.liketv);
+                this.likecount = itemView.findViewById(R.id.likecount);
+                this.likebut = itemView.findViewById(R.id.likebut);
+                this.rating = itemView.findViewById(R.id.rating);
+            }
+        }
     }
 
 }

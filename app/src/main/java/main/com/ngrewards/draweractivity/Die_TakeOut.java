@@ -4,12 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,6 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -66,6 +65,10 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 
 public class Die_TakeOut extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_CODE_QR_SCAN = 3;
+    public ArrayList<MemberDetail> memberDetailArrayList;
+    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    int count = 0;
     private RecyclerView re;
     private DiveInModal modelItem;
     private ArrayList<DiveInModal> all_category_menu;
@@ -74,7 +77,6 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     private LayoutInflater li;
     private View promptsView;
     private AlertDialog.Builder alertDialogBuilder;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
     private AlertDialog alertDialog;
     private String editTextString;
     private ProgressBar progressBar;
@@ -93,10 +95,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     private String user_id;
     private String strPerorFix;
     private String Afflited_name_String;
-    public ArrayList<MemberDetail> memberDetailArrayList;
-    private static final int REQUEST_CODE_QR_SCAN = 3;
     private String merchant_id;
-    int count = 0;
     private ImageView qrcode;
     private String employee_name;
     private String employee_id;
@@ -110,6 +109,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView merchant_num_auto;
     private AutoCompleteTextView employyee_id;
     private String employyee_id_string;
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -331,7 +331,7 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
         Log.e("Get User Name>", " >GET NAME");
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -799,8 +799,8 @@ public class Die_TakeOut extends AppCompatActivity implements View.OnClickListen
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;

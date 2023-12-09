@@ -1,7 +1,7 @@
 package main.com.ngrewards.Models;
 
 public class ModelMenuSetting {
-    String id,image,name;
+    String id, image, name;
     boolean isSelected;
 
     public ModelMenuSetting(String id, String image, String name) {

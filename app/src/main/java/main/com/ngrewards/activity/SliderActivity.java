@@ -10,18 +10,19 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -61,25 +62,25 @@ import main.com.ngrewards.fragments.WhoInvitedFrag;
 
 public class SliderActivity extends AppCompatActivity {
 
+    //code for lat long
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static String member_email_str = "", member_pass_str = "", member_img_path = "", member_first_last = "", user_name_str = "", user_number_str = "",
+            who_invite_id = "";
+    public static Bitmap member_bitmap;
+    ViewPagerAdapter adapter;
+    MySession mySession;
+    LocationManager locationManager;
+    Location location;
+    GPSTracker gpsTracker;
     private Button continue_button;
     private CustomViewPager viewPager;
     private CirclePageIndicator indicator;
     private RelativeLayout backlay;
-    ViewPagerAdapter adapter;
     private boolean click_sts = false;
-    public static String member_email_str = "", member_pass_str = "", member_img_path = "", member_first_last = "", user_name_str = "", user_number_str = "",
-            who_invite_id = "";
     private ProgressBar progresbar;
-    public static Bitmap member_bitmap;
-    MySession mySession;
     private String firebase_regid = "";
-    //code for lat long
-    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
-    LocationManager locationManager;
-    Location location;
     private double latitude = 0, longitude = 0;
-    GPSTracker gpsTracker;
     private String time_zone = "";
     private String Who_invited;
 
@@ -233,6 +234,35 @@ public class SliderActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    private void checkGps() {
+        gpsTracker = new GPSTracker(SliderActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+            }
+        } else {
+
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            } else {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
+            }
+        }
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -260,12 +290,6 @@ public class SliderActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     public class SignupMembers extends AsyncTask<String, String, String> {
@@ -452,29 +476,6 @@ public class SliderActivity extends AppCompatActivity {
             }
 
 
-        }
-    }
-
-    private void checkGps() {
-        gpsTracker = new GPSTracker(SliderActivity.this);
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-            }
         }
     }
 

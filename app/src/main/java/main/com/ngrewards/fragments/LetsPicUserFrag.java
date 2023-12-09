@@ -1,7 +1,6 @@
 package main.com.ngrewards.fragments;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
@@ -21,10 +22,15 @@ import main.com.ngrewards.activity.SliderActivity;
 
 public class LetsPicUserFrag extends Fragment {
 
+    View v;
     private EditText user_name;
     private CircleImageView member_img;
-    private TextView availablename,availablename1,availablename2;
-    View v;
+    private TextView availablename, availablename1, availablename2;
+
+    public LetsPicUserFrag() {
+        // Required empty public constructor
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -32,45 +38,40 @@ public class LetsPicUserFrag extends Fragment {
             if (SliderActivity.member_bitmap != null) {
                 member_img.setImageBitmap(SliderActivity.member_bitmap);
             }
-            if (SliderActivity.member_first_last!=null&&!SliderActivity.member_first_last.equalsIgnoreCase("")){
+            if (SliderActivity.member_first_last != null && !SliderActivity.member_first_last.equalsIgnoreCase("")) {
                 String str = SliderActivity.member_first_last;
                 String[] splitStr = str.split("\\s+");
-                Log.e("SLI NAME ="," >> "+SliderActivity.member_first_last);
+                Log.e("SLI NAME =", " >> " + SliderActivity.member_first_last);
             /*
     Example: If member’s full name is John Snow then app can recommend usernames: johnsnow1, snowjohn, johnsnow02
 
     */
-                String first = "",second="",third="";
+                String first = "", second = "", third = "";
                 if (splitStr != null && splitStr.length > 1) {
-                    first = splitStr[0] + splitStr[1]+"1";
-                    third = splitStr[0] + splitStr[1]+"02";
+                    first = splitStr[0] + splitStr[1] + "1";
+                    third = splitStr[0] + splitStr[1] + "02";
                     second = splitStr[1] + splitStr[0];
                     //availablename.setText(""+first+" , "+second+" , "+third);
-                    availablename.setText(""+first);
-                    availablename1.setText(""+second);
-                    availablename2.setText(""+third);
-                }
-                else if (splitStr != null && splitStr.length > 0) {
-                    first = splitStr[0]+"1";
-                    third = splitStr[0]+"02";
-                   // second = splitStr[1] + splitStr[0];
-                    availablename.setText(""+first+" , "+third);
-                    availablename.setText(""+first);
-                    availablename1.setText(""+third);
+                    availablename.setText("" + first);
+                    availablename1.setText("" + second);
+                    availablename2.setText("" + third);
+                } else if (splitStr != null && splitStr.length > 0) {
+                    first = splitStr[0] + "1";
+                    third = splitStr[0] + "02";
+                    // second = splitStr[1] + splitStr[0];
+                    availablename.setText("" + first + " , " + third);
+                    availablename.setText("" + first);
+                    availablename1.setText("" + third);
                     availablename2.setText("");
 
                 }
 
-                Log.e("AVB NAME ="," >> "+first+" ,"+second+" ,"+third);
+                Log.e("AVB NAME =", " >> " + first + " ," + second + " ," + third);
 
             }
 
+        } else {
         }
-        else {
-        }
-    }
-    public LetsPicUserFrag() {
-        // Required empty public constructor
     }
 
     @Override
@@ -92,20 +93,20 @@ public class LetsPicUserFrag extends Fragment {
         availablename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_name.setText(""+availablename.getText().toString());
+                user_name.setText("" + availablename.getText().toString());
             }
         });
         availablename1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_name.setText(""+availablename1.getText().toString());
+                user_name.setText("" + availablename1.getText().toString());
 
             }
         });
         availablename2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_name.setText(""+availablename2.getText().toString());
+                user_name.setText("" + availablename2.getText().toString());
 
             }
         });

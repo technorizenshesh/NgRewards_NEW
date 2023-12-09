@@ -10,8 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +45,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,16 +62,16 @@ import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 
 public class UpdateShipingAddress extends AppCompatActivity {
-    private final Integer THRESHOLD = 2;
-    GPSTracker gpsTracker;
-    private int count = 0;
-    CircleImageView merchant_img;
-    private double longitude = 0.0, latitude = 0.0;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    private final Integer THRESHOLD = 2;
+    GPSTracker gpsTracker;
+    CircleImageView merchant_img;
     LocationManager locationManager;
     Location location;
-
+    CountryListAdapter countryListAdapter;
+    private int count = 0;
+    private double longitude = 0.0, latitude = 0.0;
     private RelativeLayout backlay;
     private EditText fullname, optionaladdress, city, state, zipcode, phone_number;
     private String addid = "", user_id = "", email_str = "", order_landmarkadd = "", fullname_str = "", country_str = "",
@@ -79,7 +79,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
     private AutoCompleteTextView gettypedlocation;
     private TextView update_adress;
     private Spinner state_spn, country_spn, city_spn;
-    CountryListAdapter countryListAdapter;
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
     private ProgressBar progresbar;
     private MySession mySession;
@@ -135,7 +134,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
         autocompleteView();
 
         //if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
-            new GetCountryList().execute();
+        new GetCountryList().execute();
 //        } else {
 //            JSONObject jsonObject = null;
 //            try {
@@ -343,6 +342,60 @@ public class UpdateShipingAddress extends AppCompatActivity {
 
     // country state city
 
+    private void autocompleteView() {
+
+
+        gettypedlocation.setThreshold(THRESHOLD);
+        gettypedlocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.length() > 0) {
+
+                    //clear_pick_ic.setVisibility(View.VISIBLE);
+                    loadData(gettypedlocation.getText().toString());
+                } else {
+                    //clear_pick_ic.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void loadData(String s) {
+
+
+        try {
+            if (count == 0) {
+                List<String> l1 = new ArrayList<>();
+                if (s == null) {
+
+                } else {
+
+                    l1.add(s);
+
+                    GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(UpdateShipingAddress.this, l1, "" + latitude, "" + longitude);
+                    gettypedlocation.setAdapter(ga);
+                    ga.notifyDataSetChanged();
+                }
+
+            }
+            count++;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private class UpdateAddress extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -433,7 +486,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
             }
         }
     }
-
 
     private class GetCountryList extends AsyncTask<String, String, String> {
         @Override
@@ -744,10 +796,9 @@ public class UpdateShipingAddress extends AppCompatActivity {
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -787,7 +838,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
         }
     }
 
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -811,11 +861,11 @@ public class UpdateShipingAddress extends AppCompatActivity {
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private List<String> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
         private final WebOperations wo;
         private final String lat;
         private final String lon;
+        private List<String> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;
@@ -887,7 +937,7 @@ public class UpdateShipingAddress extends AppCompatActivity {
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
-                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
+                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key="+getString(R.string.googlekey)+"&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
                         String result = null;
                         try {
                             result = new MyTask(wo, 3).execute().get();
@@ -952,60 +1002,6 @@ public class UpdateShipingAddress extends AppCompatActivity {
             }
 
             return addresses;
-        }
-    }
-
-    private void autocompleteView() {
-
-
-        gettypedlocation.setThreshold(THRESHOLD);
-        gettypedlocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (s.length() > 0) {
-
-                    //clear_pick_ic.setVisibility(View.VISIBLE);
-                    loadData(gettypedlocation.getText().toString());
-                } else {
-                    //clear_pick_ic.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void loadData(String s) {
-
-
-        try {
-            if (count == 0) {
-                List<String> l1 = new ArrayList<>();
-                if (s == null) {
-
-                } else {
-
-                    l1.add(s);
-
-                    GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(UpdateShipingAddress.this, l1, "" + latitude, "" + longitude);
-                    gettypedlocation.setAdapter(ga);
-                    ga.notifyDataSetChanged();
-                }
-
-            }
-            count++;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

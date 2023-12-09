@@ -13,16 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -33,9 +23,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;*/
-import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +54,6 @@ import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.CommisionActivity;
 import main.com.ngrewards.activity.EmployeesalesActivity;
-import main.com.ngrewards.activity.MemberMessageAct;
 import main.com.ngrewards.activity.MyCartDetail;
 import main.com.ngrewards.activity.NetworkAct;
 import main.com.ngrewards.activity.PreferenceConnector;
@@ -107,34 +101,34 @@ public class BaseActivity extends AppCompatActivity {
     private String user_log_data;
     public final BroadcastReceiver broadcastReceiver =
             new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+                @Override
+                public void onReceive(Context context, Intent intent) {
 
-            if (intent != null) {
-                String str = intent.getStringExtra("key");
-                Log.e("message>>>>>>>", str);
-                mySession = new MySession(getApplicationContext());
-                user_log_data = mySession.getKeyAlldata();
-                if (user_log_data == null) {
+                    if (intent != null) {
+                        String str = intent.getStringExtra("key");
+                        Log.e("message>>>>>>>", str);
+                        mySession = new MySession(getApplicationContext());
+                        user_log_data = mySession.getKeyAlldata();
+                        if (user_log_data == null) {
 
-                } else {
+                        } else {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(user_log_data);
-                        String message = jsonObject.getString("status");
-                        if (message.equalsIgnoreCase("1")) {
-                            JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                            user_id = jsonObject1.getString("id");
+                            try {
+                                JSONObject jsonObject = new JSONObject(user_log_data);
+                                String message = jsonObject.getString("status");
+                                if (message.equalsIgnoreCase("1")) {
+                                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                                    user_id = jsonObject1.getString("id");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        reqcount.setVisibility(View.GONE);
+                        new GetProfile().execute();
                     }
                 }
-                reqcount.setVisibility(View.GONE);
-                new GetProfile().execute();
-            }
-        }
-    };
+            };
     private String username_str;
     private String name123;
     private String name1234;
@@ -286,10 +280,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onRestart();
         new GetProfile().execute();
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     private void idinitui() {
 
         Toast.makeText(this, "status : " + logout_status, Toast.LENGTH_SHORT).show();
@@ -442,8 +438,8 @@ public class BaseActivity extends AppCompatActivity {
         messagelay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        //        Intent i = new Intent(BaseActivity.this, MemberMessageAct.class);
-        //        startActivity(i);
+                //        Intent i = new Intent(BaseActivity.this, MemberMessageAct.class);
+                //        startActivity(i);
             }
         });
 
@@ -621,7 +617,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-         super.onResume();
+        super.onResume();
         new GetProfile().execute();
         Tools.reupdateResources(this);
         registerReceiver(broadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
@@ -779,7 +775,7 @@ public class BaseActivity extends AppCompatActivity {
                         username_str = jsonObject1.getString("affiliate_name");
 
                         user_name.setText("" + jsonObject1.getString("username"));
-                        ngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + jsonObject1.getString("member_ngcash"));
+                        ngcash.setText(mySession.getValueOf(MySession.CurrencySign) + jsonObject1.getString("member_ngcash"));
 
                         if (username_str == null || username_str.equalsIgnoreCase("")) {
                             user_name.setEnabled(true);

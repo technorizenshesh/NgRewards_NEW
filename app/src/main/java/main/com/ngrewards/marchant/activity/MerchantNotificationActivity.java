@@ -5,16 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,10 +59,18 @@ public class MerchantNotificationActivity extends AppCompatActivity {
     private ArrayList<NotificationModel.Result> notificationModels;
     private TextView nonotiavb;
     private String type;
+
+    public static String fromBase64(String message) {
+        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        return new String(data, StandardCharsets.UTF_8);
+
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +128,76 @@ public class MerchantNotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    private void idinit() {
+        nonotiavb = findViewById(R.id.nonotiavb);
+        swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        backlay = findViewById(R.id.backlay);
+        notificationlist = findViewById(R.id.notificationlist);
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(MerchantNotificationActivity.this, LinearLayoutManager.VERTICAL, false);
+        notificationlist.setLayoutManager(horizontalLayoutManagaer);
+
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyNotification();
+                //  new MyNotification().execute();
+                // swipeToRefresh.setRefreshing(false);
+            }
+        });
+
+        //getMyNotification();
+        getMyNotification();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //  new MyNotification().execute();
+    }
+
+    private void getMyNotification() {
+        swipeToRefresh.setRefreshing(true);
+        notificationModels = new ArrayList<>();
+        Call<NotificationModel> call =
+                ApiClient.getApiInterface().admin_notification_list_new(user_id, type);
+        call.enqueue(new Callback<NotificationModel>() {
+            @Override
+            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
+                //progresbar.setVisibility(View.GONE);
+                swipeToRefresh.setRefreshing(false);
+                if (response.isSuccessful()) {
+                    try {
+                        if (response.body().getStatus().equalsIgnoreCase("1")) {
+                            Log.e("TAG",
+                                    "onResponse: response.body().getStatus()----" + response.body().getStatus());
+                            notificationModels = response.body().getResult();
+                            notificationAdpter = new NotificationAdpter(MerchantNotificationActivity.this, notificationModels);
+                            notificationlist.setAdapter(notificationAdpter);
+                            notificationAdpter.notifyDataSetChanged();
+                        } else {
+                            nonotiavb.setVisibility(View.VISIBLE);
+                        }
+                    } catch (Exception e) {
+                        nonotiavb.setVisibility(View.VISIBLE);
+                        e.printStackTrace();
+                    }
+                } else {
+                    nonotiavb.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NotificationModel> call, Throwable t) {
+                t.printStackTrace();
+                swipeToRefresh.setRefreshing(false);
+                Log.e("TAG", t.toString());
+                Log.e("TAG", "onFailure: " + t.getMessage());
+                Log.e("TAG", "onFailure: " + t.getLocalizedMessage());
             }
         });
     }
@@ -187,10 +266,10 @@ public class MerchantNotificationActivity extends AppCompatActivity {
                     JSONObject jsonObject = null;
                     jsonObject = new JSONObject(result);
                     if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                      //  Toast.makeText(MerchantNotificationActivity.this, getResources().getString(R.string.status), Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(MerchantNotificationActivity.this, getResources().getString(R.string.status), Toast.LENGTH_LONG).show();
 
                     } else {
-                    //    Toast.makeText(MerchantNotificationActivity.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
+                        //    Toast.makeText(MerchantNotificationActivity.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
 
                     }
                 } catch (Exception e) {
@@ -198,151 +277,6 @@ public class MerchantNotificationActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private void idinit() {
-        nonotiavb = findViewById(R.id.nonotiavb);
-        swipeToRefresh = findViewById(R.id.swipeToRefresh);
-        backlay = findViewById(R.id.backlay);
-        notificationlist = findViewById(R.id.notificationlist);
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(MerchantNotificationActivity.this, LinearLayoutManager.VERTICAL, false);
-        notificationlist.setLayoutManager(horizontalLayoutManagaer);
-
-        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getMyNotification();
-              //  new MyNotification().execute();
-                // swipeToRefresh.setRefreshing(false);
-            }
-        });
-
-        //getMyNotification();
-        getMyNotification();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-      //  new MyNotification().execute();
-    }
-
-    public class NotificationAdpter extends RecyclerView.Adapter<NotificationAdpter.MyViewHolder> {
-        Context context;
-        ArrayList<NotificationModel.Result> notificationBeanNewArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public RelativeLayout backlay;
-            CircleImageView user_img;
-            TextView user_name_tv, message_tv, time_tv, reqcount;
-
-            public MyViewHolder(View view) {
-                super(view);
-                reqcount = itemView.findViewById(R.id.reqcount);
-                user_img = itemView.findViewById(R.id.user_img);
-                user_name_tv = itemView.findViewById(R.id.user_name_tv);
-                message_tv = itemView.findViewById(R.id.message_tv);
-                time_tv = itemView.findViewById(R.id.time_tv);
-            }
-        }
-
-
-        public NotificationAdpter(Activity myContacts,
-                                  ArrayList<NotificationModel.Result> notificationBeanNewArrayList) {
-            this.context = myContacts;
-            this.notificationBeanNewArrayList = notificationBeanNewArrayList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_notilay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-            return holder;
-            // return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            NotificationModel.Result result = notificationBeanNewArrayList.get(position);
-            NotificationModel.Result.Payload paylode = notificationBeanNewArrayList.get(position).getPayload();
-                      if (paylode.getDueDate()!=null){
-                          try {
-                              int number_of_emi = Integer.parseInt(paylode.getNumberOfEmi());
-                              String str = "th";
-                              if (number_of_emi == 1) str = "st";
-                              if (number_of_emi == 2) str = "nd";
-                              if (number_of_emi == 3) str = "rd";
-                              holder.message_tv.setText("Reminder for " + number_of_emi + str +
-                                      " Payment " + paylode.getSplitAmountX() + "  Due on " + paylode.getDueDate());
-
-                          }catch (Exception e){
-                              holder.message_tv.setText("Reminder for EMI"  + " Payment " + paylode.getSplitAmountX() + "Due on " + paylode.getDueDate());
-
-                          }
-
-                          holder.itemView.setOnClickListener(v -> {
-                              Log.e("TAG",
-                                      "onBindViewHolder: paylode.toString()---" + paylode);
-                              Intent intentw=new Intent(getApplicationContext(), EMIManualActivity.class);
-                              intentw.putExtra("object",paylode.toString());
-                              context.startActivity(intentw);
-                          });
-                      }else {
-                          holder.message_tv.setText("" + result.getChatMessage());
-                      }
-                      holder.time_tv.setText("" +result.getDateTime());
-
-         }
-
-        @Override
-        public int getItemCount() {
-            // return 6;
-            return notificationBeanNewArrayList == null ? 0 : notificationBeanNewArrayList.size();
-        }
-    }
-
-    private void getMyNotification() {
-        swipeToRefresh.setRefreshing(true);
-        notificationModels = new ArrayList<>();
-        Call<NotificationModel> call =
-                ApiClient.getApiInterface().admin_notification_list_new(user_id,type);
-        call.enqueue(new Callback<NotificationModel>() {
-            @Override
-            public void onResponse(Call<NotificationModel> call, Response<NotificationModel> response) {
-                //progresbar.setVisibility(View.GONE);
-                swipeToRefresh.setRefreshing(false);
-                if (response.isSuccessful()) {
-                    try {
-                        if (response.body().getStatus().equalsIgnoreCase("1")) {
-                            Log.e("TAG",
-                                    "onResponse: response.body().getStatus()----"+response.body().getStatus() );
-                            notificationModels=response.body().getResult();
-                            notificationAdpter = new NotificationAdpter(MerchantNotificationActivity.this, notificationModels);
-                            notificationlist.setAdapter(notificationAdpter);
-                            notificationAdpter.notifyDataSetChanged();
-                        } else {
-                            nonotiavb.setVisibility(View.VISIBLE);
-                        }
-                    } catch (Exception e) {
-                        nonotiavb.setVisibility(View.VISIBLE);
-                        e.printStackTrace();
-                    }
-                } else {
-                    nonotiavb.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NotificationModel> call, Throwable t) {
-                t.printStackTrace();
-                swipeToRefresh.setRefreshing(false);
-                Log.e("TAG", t.toString());
-                Log.e("TAG", "onFailure: "+t.getMessage() );
-                Log.e("TAG", "onFailure: "+t.getLocalizedMessage() );
-            }
-        });
     }
 
 /*    private class MyNotification extends AsyncTask<String, String, String> {
@@ -470,10 +404,78 @@ public class MerchantNotificationActivity extends AppCompatActivity {
         }
     }*/
 
-    public static String fromBase64(String message) {
-        byte[] data = Base64.decode(message, Base64.DEFAULT);
-        return new String(data, StandardCharsets.UTF_8);
+    public class NotificationAdpter extends RecyclerView.Adapter<NotificationAdpter.MyViewHolder> {
+        Context context;
+        ArrayList<NotificationModel.Result> notificationBeanNewArrayList;
 
+        public NotificationAdpter(Activity myContacts,
+                                  ArrayList<NotificationModel.Result> notificationBeanNewArrayList) {
+            this.context = myContacts;
+            this.notificationBeanNewArrayList = notificationBeanNewArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_notilay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            NotificationModel.Result result = notificationBeanNewArrayList.get(position);
+            NotificationModel.Result.Payload paylode = notificationBeanNewArrayList.get(position).getPayload();
+            if (paylode.getDueDate() != null) {
+                try {
+                    int number_of_emi = Integer.parseInt(paylode.getNumberOfEmi());
+                    String str = "th";
+                    if (number_of_emi == 1) str = "st";
+                    if (number_of_emi == 2) str = "nd";
+                    if (number_of_emi == 3) str = "rd";
+                    holder.message_tv.setText("Reminder for " + number_of_emi + str +
+                            " Payment " + paylode.getSplitAmountX() + "  Due on " + paylode.getDueDate());
+
+                } catch (Exception e) {
+                    holder.message_tv.setText("Reminder for EMI" + " Payment " + paylode.getSplitAmountX() + "Due on " + paylode.getDueDate());
+
+                }
+
+                holder.itemView.setOnClickListener(v -> {
+                    Log.e("TAG",
+                            "onBindViewHolder: paylode.toString()---" + paylode);
+                    Intent intentw = new Intent(getApplicationContext(), EMIManualActivity.class);
+                    intentw.putExtra("object", paylode.toString());
+                    context.startActivity(intentw);
+                });
+            } else {
+                holder.message_tv.setText("" + result.getChatMessage());
+            }
+            holder.time_tv.setText("" + result.getDateTime());
+
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 6;
+            return notificationBeanNewArrayList == null ? 0 : notificationBeanNewArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public RelativeLayout backlay;
+            CircleImageView user_img;
+            TextView user_name_tv, message_tv, time_tv, reqcount;
+
+            public MyViewHolder(View view) {
+                super(view);
+                reqcount = itemView.findViewById(R.id.reqcount);
+                user_img = itemView.findViewById(R.id.user_img);
+                user_name_tv = itemView.findViewById(R.id.user_name_tv);
+                message_tv = itemView.findViewById(R.id.message_tv);
+                time_tv = itemView.findViewById(R.id.time_tv);
+            }
+        }
     }
 }
 

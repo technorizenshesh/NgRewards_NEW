@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,34 +47,46 @@ import main.com.ngrewards.stripepaymentclasses.Utils;
 
 public class UpdateMemberCard extends AppCompatActivity {
 
+    private final boolean asc_sts = true;
+    private final String security_code_str = "";
+    private final String token_id = "";
+    private final String email_str = "";
+    private final String accountid = "";
+    private final String stripe_account_id = "";
+    int month, year_int;
+    ArrayList<String> modellist;
+    ArrayList<String> datelist;
+    CreditCardFormatTextWatcher tv, tv2;
     private RelativeLayout backlay;
     private EditText email_address;
     private CheckBox acceptcondition;
     private TextView submit, myaccountemail, addcardbut;
     private ProgressBar prgressbar;
-    private final boolean asc_sts = true;
     private MySession mySession;
     private LinearLayout alreadyavbacountlay, accountcreate, adddebitcardlay;
     private EditText cardname, security_code;
     private TextView cardnumber;
-    private final String security_code_str = "";
-    private final String token_id = "";
-    private final String email_str = "";
     private Spinner yearspinner, datespinner;
     private String expiryyear_str = "", date_str = "", user_id = "", card_id = "", customer_id = "";
     private BasicCustomAdp basicCustomAdp;
-    int month, year_int;
-    private final String accountid = "";
-    private final String stripe_account_id = "";
     private String cardname_str = "";
     private String cardnumber_str = "";
-    ArrayList<String> modellist;
-    ArrayList<String> datelist;
-    CreditCardFormatTextWatcher tv, tv2;
     private TextView savedcardnumber, validdate, cardbrand, cardtype;
     private LinearLayout savecardlay;
     private ImageView delete_card;
     private MySavedCardInfo mySavedCardInfo;
+
+    private static int getLastModelYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -10);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private static int getThisYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, 0);
+        return prevYear.get(Calendar.YEAR);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,24 +121,23 @@ public class UpdateMemberCard extends AppCompatActivity {
         // modellist.add("" + thisyear);
         for (int i = 1; i < 13; i++) {
             String dates = String.valueOf(i);
-            if (i<10){
-                dates = "0"+dates;
+            if (i < 10) {
+                dates = "0" + dates;
             }
             datelist.add("" + dates);
         }
         Bundle bundle = getIntent().getExtras();
-        if (bundle!=null&&!bundle.isEmpty()){
+        if (bundle != null && !bundle.isEmpty()) {
             cardnumber_str = bundle.getString("cardnumber_str");
             cardname_str = bundle.getString("cardholder_name");
             date_str = bundle.getString("expmonth");
             expiryyear_str = bundle.getString("expyear");
             card_id = bundle.getString("card_id");
             customer_id = bundle.getString("customer_id");
-            if (date_str!=null&&!date_str.equalsIgnoreCase(""))
-            {
+            if (date_str != null && !date_str.equalsIgnoreCase("")) {
                 int dd = Integer.parseInt(date_str);
-                if (dd<10){
-                    date_str="0"+date_str;
+                if (dd < 10) {
+                    date_str = "0" + date_str;
                 }
             }
 
@@ -188,6 +200,94 @@ public class UpdateMemberCard extends AppCompatActivity {
 
     }
 
+    private void idninit() {
+        cardtype = findViewById(R.id.cardtype);
+        cardbrand = findViewById(R.id.cardbrand);
+        delete_card = findViewById(R.id.delete_card);
+        validdate = findViewById(R.id.validdate);
+        savecardlay = findViewById(R.id.savecardlay);
+        savedcardnumber = findViewById(R.id.savedcardnumber);
+        adddebitcardlay = findViewById(R.id.adddebitcardlay);
+        addcardbut = findViewById(R.id.addcardbut);
+        accountcreate = findViewById(R.id.accountcreate);
+        myaccountemail = findViewById(R.id.myaccountemail);
+        alreadyavbacountlay = findViewById(R.id.alreadyavbacountlay);
+        prgressbar = findViewById(R.id.prgressbar);
+        submit = findViewById(R.id.submit);
+        backlay = findViewById(R.id.backlay);
+        acceptcondition = findViewById(R.id.acceptcondition);
+        email_address = findViewById(R.id.email_address);
+
+
+        security_code = findViewById(R.id.security_code);
+
+        datespinner = findViewById(R.id.datespinner);
+        yearspinner = findViewById(R.id.yearspinner);
+        yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                expiryyear_str = modellist.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        datespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                date_str = datelist.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        backlay = findViewById(R.id.backlay);
+        cardname = findViewById(R.id.cardname);
+        cardnumber = findViewById(R.id.cardnumber);
+        tv = new CreditCardFormatTextWatcher(cardnumber);
+        tv2 = new CreditCardFormatTextWatcher(savedcardnumber);
+        cardnumber.addTextChangedListener(tv);
+        savedcardnumber.addTextChangedListener(tv2);
+        cardnumber.setText("" + cardnumber_str);
+        cardname.setText("" + cardname_str);
+
+        basicCustomAdp = new BasicCustomAdp(UpdateMemberCard.this, android.R.layout.simple_spinner_item, modellist);
+        yearspinner.setAdapter(basicCustomAdp);
+        basicCustomAdp = new BasicCustomAdp(UpdateMemberCard.this, android.R.layout.simple_spinner_item, datelist);
+        datespinner.setAdapter(basicCustomAdp);
+
+
+        Log.e("date_str >> ", " >>" + date_str);
+        if (datelist != null && !datelist.isEmpty()) {
+            for (int i = 0; i < datelist.size(); i++) {
+                if (date_str != null && !date_str.equalsIgnoreCase("")) {
+                    if (date_str.equalsIgnoreCase(datelist.get(i))) {
+                        datespinner.setSelection(i);
+                    }
+                }
+            }
+
+        }
+
+        if (modellist != null && !modellist.isEmpty()) {
+            for (int i = 0; i < modellist.size(); i++) {
+                if (expiryyear_str != null && !expiryyear_str.equalsIgnoreCase("")) {
+                    if (expiryyear_str.equalsIgnoreCase(modellist.get(i))) {
+                        yearspinner.setSelection(i);
+                    }
+                }
+            }
+
+        }
+
+
+    }
+
     private class UpdateCardAsc extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -203,7 +303,7 @@ public class UpdateMemberCard extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-      try {
+            try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "update_customer_card.php?";
                 URL url = new URL(postReceiverUrl);
@@ -212,8 +312,8 @@ public class UpdateMemberCard extends AppCompatActivity {
                 params.put("customer_id", customer_id);
                 params.put("card_id", card_id);
                 params.put("name", cardname_str);
-                params.put("exp_month",date_str );
-                params.put("exp_year",expiryyear_str);
+                params.put("exp_month", date_str);
+                params.put("exp_year", expiryyear_str);
                 StringBuilder postData = new StringBuilder();
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');
@@ -282,123 +382,15 @@ public class UpdateMemberCard extends AppCompatActivity {
         }
     }
 
-
-    private void idninit() {
-        cardtype = findViewById(R.id.cardtype);
-        cardbrand = findViewById(R.id.cardbrand);
-        delete_card = findViewById(R.id.delete_card);
-        validdate = findViewById(R.id.validdate);
-        savecardlay = findViewById(R.id.savecardlay);
-        savedcardnumber = findViewById(R.id.savedcardnumber);
-        adddebitcardlay = findViewById(R.id.adddebitcardlay);
-        addcardbut = findViewById(R.id.addcardbut);
-        accountcreate = findViewById(R.id.accountcreate);
-        myaccountemail = findViewById(R.id.myaccountemail);
-        alreadyavbacountlay = findViewById(R.id.alreadyavbacountlay);
-        prgressbar = findViewById(R.id.prgressbar);
-        submit = findViewById(R.id.submit);
-        backlay = findViewById(R.id.backlay);
-        acceptcondition = findViewById(R.id.acceptcondition);
-        email_address = findViewById(R.id.email_address);
-
-
-        security_code = findViewById(R.id.security_code);
-
-        datespinner = findViewById(R.id.datespinner);
-        yearspinner = findViewById(R.id.yearspinner);
-        yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                expiryyear_str = modellist.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        datespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                date_str = datelist.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        backlay = findViewById(R.id.backlay);
-        cardname = findViewById(R.id.cardname);
-        cardnumber = findViewById(R.id.cardnumber);
-        tv = new CreditCardFormatTextWatcher(cardnumber);
-        tv2 = new CreditCardFormatTextWatcher(savedcardnumber);
-        cardnumber.addTextChangedListener(tv);
-        savedcardnumber.addTextChangedListener(tv2);
-        cardnumber.setText(""+cardnumber_str);
-        cardname.setText(""+cardname_str);
-
-        basicCustomAdp = new BasicCustomAdp(UpdateMemberCard.this, android.R.layout.simple_spinner_item, modellist);
-        yearspinner.setAdapter(basicCustomAdp);
-        basicCustomAdp = new BasicCustomAdp(UpdateMemberCard.this, android.R.layout.simple_spinner_item, datelist);
-        datespinner.setAdapter(basicCustomAdp);
-
-
-        Log.e("date_str >> "," >>"+date_str);
-        if (datelist!=null&&!datelist.isEmpty()){
-            for (int i=0;i<datelist.size();i++){
-                if (date_str!=null&&!date_str.equalsIgnoreCase("")){
-                    if (date_str.equalsIgnoreCase(datelist.get(i))){
-                        datespinner.setSelection(i);
-                    }
-                }
-            }
-
-        }
-
-        if (modellist!=null&&!modellist.isEmpty()){
-            for (int i=0;i<modellist.size();i++){
-                if (expiryyear_str!=null&&!expiryyear_str.equalsIgnoreCase("")){
-                    if (expiryyear_str.equalsIgnoreCase(modellist.get(i))){
-                        yearspinner.setSelection(i);
-                    }
-                }
-            }
-
-        }
-
-
-    }
-
-
-
-    private static int getLastModelYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, -10);
-        return prevYear.get(Calendar.YEAR);
-    }
-
-    private static int getThisYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, 0);
-        return prevYear.get(Calendar.YEAR);
-    }
-
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -449,6 +441,11 @@ public class UpdateMemberCard extends AppCompatActivity {
 
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
         }
     }
 }

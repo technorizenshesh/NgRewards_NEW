@@ -3,7 +3,6 @@ package main.com.ngrewards.start_fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -28,8 +28,8 @@ import main.com.ngrewards.constant.CountryBean;
 public class NgHelpFrag extends Fragment {
     ArrayList<CountryBean> countryBeanArrayList;
     View v;
-    private Spinner country_spn;
     CountryListAdapter countryListAdapter;
+    private Spinner country_spn;
     private ProgressBar progresbar;
 
     public NgHelpFrag() {
@@ -53,7 +53,7 @@ public class NgHelpFrag extends Fragment {
     private void idinti() {
         country_spn = v.findViewById(R.id.country_spn);
         progresbar = v.findViewById(R.id.progresbar);
-       // new GetCountryList().execute();
+        // new GetCountryList().execute();
 /*
         country_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -73,81 +73,75 @@ public class NgHelpFrag extends Fragment {
     }
 
 
-/*
-    public class CountryListAdapter extends BaseAdapter {
-        Context context;
+    /*
+        public class CountryListAdapter extends BaseAdapter {
+            Context context;
 
-        LayoutInflater inflter;
-        private ArrayList<CountryBean> values;
+            LayoutInflater inflter;
+            private ArrayList<CountryBean> values;
 
-        public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
-            this.context = applicationContext;
-            this.values = values;
+            public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
+                this.context = applicationContext;
+                this.values = values;
 
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-
-            return values == null ? 0 : values.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.country_item_lay_flag, null);
-
-            TextView names = (TextView) view.findViewById(R.id.name_tv);
-            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
-            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
-
-            } else {
-                Glide.with(getActivity())
-                        .load(values.get(i).getFlag_url())
-                        .thumbnail(0.5f)
-                        .override(50, 50)
-                        .centerCrop()
-                         
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                         
-                        .into(country_flag);
+                inflter = (LayoutInflater.from(applicationContext));
             }
 
+            @Override
+            public int getCount() {
 
-            names.setText(values.get(i).getName());
+                return values == null ? 0 : values.size();
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                view = inflter.inflate(R.layout.country_item_lay_flag, null);
+
+                TextView names = (TextView) view.findViewById(R.id.name_tv);
+                ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+                //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+                if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
+
+                } else {
+                    Glide.with(getActivity())
+                            .load(values.get(i).getFlag_url())
+                            .thumbnail(0.5f)
+                            .override(50, 50)
+                            .centerCrop()
+
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+                            .into(country_flag);
+                }
 
 
-            return view;
+                names.setText(values.get(i).getName());
+
+
+                return view;
+            }
         }
-    }
-*/
+    */
     public class CountryListAdapter extends ArrayAdapter<CountryBean> {
+        private final ArrayList<CountryBean> items;
         Context context;
         Activity activity;
-    private final ArrayList<CountryBean> items;
 
         public CountryListAdapter(Context context, int resourceId, ArrayList<CountryBean> aritems) {
             super(context, resourceId, aritems);
             this.context = context;
 
             this.items = aritems;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
-            ImageView country_flag;
         }
 
         @Override
@@ -221,6 +215,12 @@ public class NgHelpFrag extends Fragment {
 
 
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
+            ImageView country_flag;
         }
     }
 

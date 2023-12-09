@@ -2,15 +2,16 @@ package main.com.ngrewards.fragments;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,7 +134,7 @@ public class FragmentOrderSubmit extends Fragment {
             }
         });
 
-          binding.btnContinue.setOnClickListener(v -> {
+        binding.btnContinue.setOnClickListener(v -> {
 
             name_affilited = merchantData.getContactName();
 
@@ -188,7 +189,7 @@ public class FragmentOrderSubmit extends Fragment {
     boolean Validation() {
 
         if (binding.tvSelectDate.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(),getString(R.string.select_time), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.select_time), Toast.LENGTH_SHORT).show();
             return false;
         }
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by technorizen on 21/7/18.
  */
 
-public class MemberDetail  implements Serializable {
+public class MemberDetail implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;
@@ -22,27 +22,9 @@ public class MemberDetail  implements Serializable {
     @SerializedName("username")
     @Expose
     private String username;
-
-    public String getB_name() {
-        return b_name;
-    }
-
-    public void setB_name(String b_name) {
-        this.b_name = b_name;
-    }
-
-    public String getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(String order_id) {
-        this.order_id = order_id;
-    }
-
     @SerializedName("b_name")
     @Expose
     private String b_name;
-
     @SerializedName("phone")
     @Expose
     private String phone;
@@ -71,10 +53,28 @@ public class MemberDetail  implements Serializable {
 
     @Expose
     private String business_name;
-
     @SerializedName("order_id")
     @Expose
     private String order_id;
+    @SerializedName("order_date")
+    @Expose
+    private String order_date;
+
+    public String getB_name() {
+        return b_name;
+    }
+
+    public void setB_name(String b_name) {
+        this.b_name = b_name;
+    }
+
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
 
     public String getOrder_date() {
         return order_date;
@@ -83,10 +83,6 @@ public class MemberDetail  implements Serializable {
     public void setOrder_date(String order_date) {
         this.order_date = order_date;
     }
-
-    @SerializedName("order_date")
-    @Expose
-    private String order_date;
 
     public String getBusiness_name() {
         return business_name;

@@ -77,68 +77,24 @@ public class MerchantListBean implements Serializable {
     @SerializedName("facebook_url")
     @Expose
     private String facebookUrl;
-
-    public String getEmployee_sale_name() {
-        return employee_sale_name;
-    }
-
-    public void setEmployee_sale_name(String employee_sale_name) {
-        this.employee_sale_name = employee_sale_name;
-    }
-
-    public String getEmployee_sale_id() {
-        return employee_sale_id;
-    }
-
-    public void setEmployee_sale_id(String employee_sale_id) {
-        this.employee_sale_id = employee_sale_id;
-    }
-
     @SerializedName("twitter_url")
     @Expose
     private String twitterUrl;
-
-
     @SerializedName("opening_time")
     @Expose
     private String opening_time;
-
-
-    public String getOpening_time() {
-        return opening_time;
-    }
-
-    public void setOpening_time(String opening_time) {
-        this.opening_time = opening_time;
-    }
-
-    public String getClosing_time() {
-        return closing_time;
-    }
-
-    public void setClosing_time(String closing_time) {
-        this.closing_time = closing_time;
-    }
-
     @SerializedName("closing_time")
     @Expose
     private String closing_time;
-
-
     @SerializedName("linkdin_url")
     @Expose
     private String linkdinUrl;
-
-
     @SerializedName("employee_sale_name")
     @Expose
     private String employee_sale_name;
-
     @SerializedName("employee_sale_id")
     @Expose
     private String employee_sale_id;
-
-
     @SerializedName("google_plus_url")
     @Expose
     private String googlePlusUrl;
@@ -202,6 +158,59 @@ public class MerchantListBean implements Serializable {
     @SerializedName("order_status")
     @Expose
     private String order_status;
+    @SerializedName("share_link")
+    @Expose
+    private String share_link;
+    @SerializedName("one_star_percentage")
+    @Expose
+    private Integer oneStarPercentage;
+    @SerializedName("two_star_percentage")
+    @Expose
+    private Integer twoStarPercentage;
+    @SerializedName("three_star_percentage")
+    @Expose
+    private Integer threeStarPercentage;
+    @SerializedName("four_star_percentage")
+    @Expose
+    private Integer fourStarPercentage;
+    @SerializedName("five_star_percentage")
+    @Expose
+    private Integer fiveStarPercentage;
+    @SerializedName("merchant_top_review")
+    @Expose
+    private List<MerchantTopReview> merchantTopReview = null;
+
+    public String getEmployee_sale_name() {
+        return employee_sale_name;
+    }
+
+    public void setEmployee_sale_name(String employee_sale_name) {
+        this.employee_sale_name = employee_sale_name;
+    }
+
+    public String getEmployee_sale_id() {
+        return employee_sale_id;
+    }
+
+    public void setEmployee_sale_id(String employee_sale_id) {
+        this.employee_sale_id = employee_sale_id;
+    }
+
+    public String getOpening_time() {
+        return opening_time;
+    }
+
+    public void setOpening_time(String opening_time) {
+        this.opening_time = opening_time;
+    }
+
+    public String getClosing_time() {
+        return closing_time;
+    }
+
+    public void setClosing_time(String closing_time) {
+        this.closing_time = closing_time;
+    }
 
     public String getShare_link() {
         return share_link;
@@ -210,10 +219,6 @@ public class MerchantListBean implements Serializable {
     public void setShare_link(String share_link) {
         this.share_link = share_link;
     }
-
-    @SerializedName("share_link")
-    @Expose
-    private String share_link;
 
     public String getYoutube_url() {
         return youtube_url;
@@ -238,25 +243,6 @@ public class MerchantListBean implements Serializable {
     public void setKeywordS(String keywordS) {
         this.keywordS = keywordS;
     }
-
-    @SerializedName("one_star_percentage")
-    @Expose
-    private Integer oneStarPercentage;
-    @SerializedName("two_star_percentage")
-    @Expose
-    private Integer twoStarPercentage;
-    @SerializedName("three_star_percentage")
-    @Expose
-    private Integer threeStarPercentage;
-    @SerializedName("four_star_percentage")
-    @Expose
-    private Integer fourStarPercentage;
-    @SerializedName("five_star_percentage")
-    @Expose
-    private Integer fiveStarPercentage;
-    @SerializedName("merchant_top_review")
-    @Expose
-    private List<MerchantTopReview> merchantTopReview = null;
 
     public String getBusinessCategoryName() {
         return businessCategoryName;

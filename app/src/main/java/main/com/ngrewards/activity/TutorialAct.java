@@ -3,9 +3,6 @@ package main.com.ngrewards.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubePlayerView;
@@ -40,14 +40,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TutorialAct extends YouTubeBaseActivity {
+    private static final int RECOVERY_REQUEST = 1;
+    YouTubePlayerView youtube1;
     private RelativeLayout backlay;
     private RecyclerView playerapi;
     private YouTubeAdapter youTubeAdapter;
-    private String type="";
+    private String type = "";
     private ArrayList<YouTubeVideoList> youTubeVideoListArrayList;
-    private static final int RECOVERY_REQUEST = 1;
     private ProgressBar progressbar;
-    YouTubePlayerView youtube1;
+
+    public static String extractYTId(String ytUrl) {
+        String vId = null;
+        Pattern pattern = Pattern.compile(
+                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+                Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(ytUrl);
+        if (matcher.matches()) {
+            vId = matcher.group(1);
+        }
+        return vId;
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -60,7 +72,7 @@ public class TutorialAct extends YouTubeBaseActivity {
         Tools.reupdateResources(this);
         setContentView(R.layout.activity_tutorial);
         Bundle bundle = getIntent().getExtras();
-        if (bundle!=null){
+        if (bundle != null) {
             type = bundle.getString("type");
         }
         idint();
@@ -84,10 +96,9 @@ public class TutorialAct extends YouTubeBaseActivity {
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(TutorialAct.this, LinearLayoutManager.VERTICAL, false);
         playerapi.setLayoutManager(horizontalLayoutManagaer);
-        if (type.equalsIgnoreCase("member")){
+        if (type.equalsIgnoreCase("member")) {
             getVideo();
-        }
-        else {
+        } else {
             getMerVideo();
         }
 
@@ -168,7 +179,7 @@ public class TutorialAct extends YouTubeBaseActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressbar.setVisibility(View.GONE);
-            //    swipeToRefresh.setRefreshing(false);
+                //    swipeToRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
                     try {
                         String responseData = response.body().string();
@@ -196,11 +207,12 @@ public class TutorialAct extends YouTubeBaseActivity {
                 // Log error here since request failed
                 t.printStackTrace();
                 progressbar.setVisibility(View.GONE);
-             //   swipeToRefresh.setRefreshing(false);
+                //   swipeToRefresh.setRefreshing(false);
                 Log.e("TAG", t.toString());
             }
         });
     }
+
     private void getMerVideo() {
 
         progressbar.setVisibility(View.VISIBLE);
@@ -210,7 +222,7 @@ public class TutorialAct extends YouTubeBaseActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressbar.setVisibility(View.GONE);
-            //    swipeToRefresh.setRefreshing(false);
+                //    swipeToRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
                     try {
                         String responseData = response.body().string();
@@ -238,28 +250,24 @@ public class TutorialAct extends YouTubeBaseActivity {
                 // Log error here since request failed
                 t.printStackTrace();
                 progressbar.setVisibility(View.GONE);
-             //   swipeToRefresh.setRefreshing(false);
+                //   swipeToRefresh.setRefreshing(false);
                 Log.e("TAG", t.toString());
             }
         });
     }
 
-    class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.MyViewHolder>  {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RECOVERY_REQUEST) {
+            Log.e("TRUE", "COMEHERE");
+            // Retry initialization if user performed a recovery action
+            //  getYouTubePlayerProvider().initialize(Config.YOUTUBE_API_KEY, this);
+        }
+    }
+
+    class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.MyViewHolder> {
         ArrayList<YouTubeVideoList> youTubeVideoListArrayList;
 
-
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-          //  YouTubePlayerView youtube_player;
-            WebView webView;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-              // this.youtube_player = itemView.findViewById(R.id.youtube_player);
-               this.webView = itemView.findViewById(R.id.webView);
-
-            }
-        }
 
         public YouTubeAdapter(ArrayList<YouTubeVideoList> youTubeVideoListArrayList) {
             this.youTubeVideoListArrayList = youTubeVideoListArrayList;
@@ -267,7 +275,7 @@ public class TutorialAct extends YouTubeBaseActivity {
 
         @Override
         public YouTubeAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                          int viewType) {
+                                                              int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.custom_youtube_player, parent, false);
             YouTubeAdapter.MyViewHolder myViewHolder = new YouTubeAdapter.MyViewHolder(view);
@@ -279,10 +287,10 @@ public class TutorialAct extends YouTubeBaseActivity {
             //holder.offer_title.setText("" + offerBeanListArrayList.get(listPosition).getOfferName());
 
             //String frameVideo = "<html><body><iframe src="+youTubeVideoListArrayList.get(listPosition).getUrl()+"></iframe></body></html>";
-            String id =  extractYTId(youTubeVideoListArrayList.get(listPosition).getUrl());
-            String frameVideo = "<html><body><iframe width=\"100%\" height=\"250\" src=\"https://www.youtube.com/embed/"+id+"\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></body></html>";
+            String id = extractYTId(youTubeVideoListArrayList.get(listPosition).getUrl());
+            String frameVideo = "<html><body><iframe width=\"100%\" height=\"250\" src=\"https://www.youtube.com/embed/" + id + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></body></html>";
 
-            holder.webView.setWebViewClient(new WebViewClient(){
+            holder.webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     return false;
@@ -368,25 +376,17 @@ public class TutorialAct extends YouTubeBaseActivity {
             //return 4;
             return youTubeVideoListArrayList == null ? 0 : youTubeVideoListArrayList.size();
         }
-    }
 
-    public static String extractYTId(String ytUrl) {
-        String vId = null;
-        Pattern pattern = Pattern.compile(
-                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-                Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(ytUrl);
-        if (matcher.matches()){
-            vId = matcher.group(1);
-        }
-        return vId;
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RECOVERY_REQUEST) {
-            Log.e("TRUE","COMEHERE");
-            // Retry initialization if user performed a recovery action
-          //  getYouTubePlayerProvider().initialize(Config.YOUTUBE_API_KEY, this);
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            //  YouTubePlayerView youtube_player;
+            WebView webView;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                // this.youtube_player = itemView.findViewById(R.id.youtube_player);
+                this.webView = itemView.findViewById(R.id.webView);
+
+            }
         }
     }
 

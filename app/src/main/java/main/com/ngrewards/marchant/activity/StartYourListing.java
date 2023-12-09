@@ -17,10 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -42,6 +38,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
@@ -152,8 +153,8 @@ public class StartYourListing extends AppCompatActivity {
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
                 categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
                 JSONObject object = new JSONObject(myapisession.getProductdata());
                 Log.e("loginCall >", " >" + myapisession.getProductdata());
@@ -439,7 +440,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 if (Build.VERSION.SDK_INT >= 33) {
                     Intent i = new Intent(StartYourListing.this, MultiPhotoSelectActivity2.class);
                     startActivity(i);
-                }else {
+                } else {
                     Intent i = new Intent(StartYourListing.this, MultiPhotoSelectActivity.class);
                     startActivity(i);
 
@@ -643,8 +644,8 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
         categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -752,10 +753,10 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
             if (ImagePathArrayList_adp.get(position) != null) {
                 if (Build.VERSION.SDK_INT >= 33) {
 
-                    Log.e("TAG", "onBindViewHolder: ---------- "+ImagePathArrayList_adp.get(position) );
-                  //  File tempfile = Tools.persistImage(bitmapImage, getApplicationContext());
-                  //  ppath = tempfile.getAbsolutePath();
-                 //   holder.ProductImageImagevies.setImageURI(Uri.fromFile(Tools.persistImage()));
+                    Log.e("TAG", "onBindViewHolder: ---------- " + ImagePathArrayList_adp.get(position));
+                    //  File tempfile = Tools.persistImage(bitmapImage, getApplicationContext());
+                    //  ppath = tempfile.getAbsolutePath();
+                    //   holder.ProductImageImagevies.setImageURI(Uri.fromFile(Tools.persistImage()));
                     holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArrayList_adp.get(position))));
 
                 } else {

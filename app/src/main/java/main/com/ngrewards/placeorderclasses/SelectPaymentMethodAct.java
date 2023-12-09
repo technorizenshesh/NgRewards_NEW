@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,15 +46,15 @@ import main.com.ngrewards.constant.MySession;
 
 public class SelectPaymentMethodAct extends AppCompatActivity {
 
+    public static String card_id = "", card_number = "", card_brand = "", customer_id = "";
     private ExpandableHeightListView addedcardlist;
     private ArrayList<CardBean> cardBeanArrayList;
     private MySavedCardInfo mySavedCardInfo;
     private ProgressBar progresbar;
     private MySession mySession;
-    private String user_id="";
+    private String user_id = "";
     private CustomCardAdp customCardAdp;
-    public static String card_id="",card_number="",card_brand="",customer_id="";
-    private RelativeLayout addaddressdlay,backlay;
+    private RelativeLayout addaddressdlay, backlay;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -102,7 +103,7 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
         backlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                finish();
             }
         });
     }
@@ -151,19 +152,18 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
                         cardBeanArrayList.add(cardBean);
 
                     }
-                    customCardAdp = new CustomCardAdp(SelectPaymentMethodAct.this,cardBeanArrayList);
+                    customCardAdp = new CustomCardAdp(SelectPaymentMethodAct.this, cardBeanArrayList);
                     addedcardlist.setAdapter(customCardAdp);
                     customCardAdp.notifyDataSetChanged();
 
-                 } else {
+                } else {
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-        }
-        else {
+        } else {
             new GetAddedCard().execute();
         }
 
@@ -171,8 +171,8 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
 
     public class CustomCardAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<CardBean> cardBeanArrayList;
+        private LayoutInflater inflater = null;
 
         public CustomCardAdp(Context contexts, ArrayList<CardBean> cardBeanArrayList) {
             this.context = contexts;
@@ -199,10 +199,6 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -221,15 +217,13 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
             RadioButton creditcard_rbut = rowView.findViewById(R.id.creditcard_rbut);
 
 
-
             String cardbrandstr = cardBeanArrayList.get(position).getBrand();
             String carnum = cardBeanArrayList.get(position).getLast4();
-            if (cardbrandstr.length() > 4)
-            {
+            if (cardbrandstr.length() > 4) {
                 cardbrandstr = cardbrandstr.substring(0, 4);
             }
             String stars = "**** ****";
-            savedcardnumber.setText(""+cardbrandstr+" "+stars+" "+carnum);
+            savedcardnumber.setText("" + cardbrandstr + " " + stars + " " + carnum);
 
             // savedcardnumber.setText(""+cardBeanArrayList.get(position).getSetfullcardnumber());
 
@@ -254,17 +248,21 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Intent i = new Intent(SelectPaymentMethodAct.this, UpdateMemberCard.class);
-                    i.putExtra("cardnumber_str",cardBeanArrayList.get(position).getSetfullcardnumber());
-                    i.putExtra("cardholder_name",cardBeanArrayList.get(position).getCard_name());
-                    i.putExtra("expmonth",cardBeanArrayList.get(position).getExp_month());
-                    i.putExtra("expyear",cardBeanArrayList.get(position).getExp_year());
-                    i.putExtra("card_id",cardBeanArrayList.get(position).getId());
-                    i.putExtra("customer_id",cardBeanArrayList.get(position).getCustomer());
+                    i.putExtra("cardnumber_str", cardBeanArrayList.get(position).getSetfullcardnumber());
+                    i.putExtra("cardholder_name", cardBeanArrayList.get(position).getCard_name());
+                    i.putExtra("expmonth", cardBeanArrayList.get(position).getExp_month());
+                    i.putExtra("expyear", cardBeanArrayList.get(position).getExp_year());
+                    i.putExtra("card_id", cardBeanArrayList.get(position).getId());
+                    i.putExtra("customer_id", cardBeanArrayList.get(position).getCustomer());
                     startActivity(i);
                 }
             });
             // cardnumber.setText(""+getLastfour(cardBeanArrayList.get(position).getCard_number()));
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }
@@ -284,7 +282,7 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-               try {
+            try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "get_customer_stripe_card_list.php?";
                 URL url = new URL(postReceiverUrl);
@@ -372,11 +370,11 @@ public class SelectPaymentMethodAct extends AppCompatActivity {
 
                         }
 
-                        customCardAdp = new CustomCardAdp(SelectPaymentMethodAct.this,cardBeanArrayList);
+                        customCardAdp = new CustomCardAdp(SelectPaymentMethodAct.this, cardBeanArrayList);
                         addedcardlist.setAdapter(customCardAdp);
                         customCardAdp.notifyDataSetChanged();
 
-                       // new TransferAmount().execute(customer_id);
+                        // new TransferAmount().execute(customer_id);
 
 
                     } else {

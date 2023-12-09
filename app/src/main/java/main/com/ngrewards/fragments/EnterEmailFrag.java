@@ -1,7 +1,6 @@
 package main.com.ngrewards.fragments;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SliderActivity;
@@ -21,6 +22,7 @@ import main.com.ngrewards.activity.WelcomeActivity;
 public class EnterEmailFrag extends Fragment {
     View v;
     private EditText email_id;
+
     public EnterEmailFrag() {
         // Required empty public constructor
     }
@@ -47,7 +49,7 @@ public class EnterEmailFrag extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s == null || s.length() == 0) {
-                    SliderActivity.member_email_str="";
+                    SliderActivity.member_email_str = "";
                 } else {
                     SliderActivity.member_email_str = s.toString();
                     Log.e("sa >.", "> " + SliderActivity.member_email_str);

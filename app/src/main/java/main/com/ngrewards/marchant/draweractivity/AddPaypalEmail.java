@@ -2,12 +2,13 @@ package main.com.ngrewards.marchant.draweractivity;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
@@ -17,7 +18,8 @@ public class AddPaypalEmail extends AppCompatActivity {
     private TextView addpaypal;
     private RelativeLayout backlay;
     private EditText paypal_email_et;
-    private String paypal_email_str="";
+    private String paypal_email_str = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +27,7 @@ public class AddPaypalEmail extends AppCompatActivity {
         idinit();
         clickevent();
     }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -40,10 +43,9 @@ public class AddPaypalEmail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 paypal_email_str = paypal_email_et.getText().toString();
-                if (paypal_email_str==null||paypal_email_str.equalsIgnoreCase("")){
-                    Toast.makeText(AddPaypalEmail.this,getResources().getString(R.string.enterpaypalemail),Toast.LENGTH_LONG).show();
-                }
-                else {
+                if (paypal_email_str == null || paypal_email_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddPaypalEmail.this, getResources().getString(R.string.enterpaypalemail), Toast.LENGTH_LONG).show();
+                } else {
 
                 }
             }

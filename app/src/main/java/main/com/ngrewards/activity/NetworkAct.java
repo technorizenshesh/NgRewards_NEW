@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -27,11 +23,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.numetriclabz.numandroidcharts.BarChart;
 import com.numetriclabz.numandroidcharts.ChartData;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +67,12 @@ import retrofit2.Response;
 
 public class NetworkAct extends AppCompatActivity {
 
+    List<ChartData> friendsvalue;
+    List<ChartData> spent_this_weeklist;
+    List<ChartData> spent_this_data_weeklist;
+    List<ChartData> ng_cash_earned;
+    List<ChartData> ng_cash_data_earned;
+    BarChart myspentbarchart, myearningchart;
     private RelativeLayout backlay;
     private RecyclerView friendslist;
     private CustomFriendsAdpter customFriendsAdpter;
@@ -82,14 +88,9 @@ public class NetworkAct extends AppCompatActivity {
     private MySession mySession;
     private String user_id = "", affiliate_number = "";
     private ArrayList<NetworkBean> networkBeanArrayList;
-    List<ChartData> friendsvalue;
-    List<ChartData> spent_this_weeklist;
-    List<ChartData> spent_this_data_weeklist;
-    List<ChartData> ng_cash_earned;
-    List<ChartData> ng_cash_data_earned;
     private ProgressBar progresbar;
-    BarChart myspentbarchart, myearningchart;
     private float friend_count;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
@@ -306,20 +307,95 @@ public class NetworkAct extends AppCompatActivity {
         });
     }
 
+    private void getMyFriends() {
+        swipeToRefreshFriends.setRefreshing(true);
+        memberDetailArrayList = new ArrayList<>();
+
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMyCodeUseFriend(affiliate_number, user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                swipeToRefreshFriends.setRefreshing(false);
+                if (response.isSuccessful()) {
+
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User name list>", " >" + responseData);
+
+                        if (object.getString("status").equals("1")) {
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+
+                            if (successData.getResult() != null) {
+
+                                memberDetailArrayList.addAll(successData.getResult());
+
+                                if (successData.getTotalfriends() != null && !successData.getTotalfriends().equalsIgnoreCase("")) {
+                                    total_friends.setText("" + successData.getTotalfriends());
+                                }
+                                if (successData.getTotal_spent_this_week() != null && !successData.getTotal_spent_this_week().equalsIgnoreCase("")) {
+                                    total_spent.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_spent_this_week());
+                                }
+                                if (successData.getTotal_earning_this_week() != null && !successData.getTotal_earning_this_week().equalsIgnoreCase("")) {
+                                    earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_earning_this_week());
+                                }
+                            }
+
+                        } else {
+
+                        }
+
+                        if (memberDetailArrayList == null || memberDetailArrayList.isEmpty() || memberDetailArrayList.size() == 0) {
+                            nofriends.setVisibility(View.VISIBLE);
+                        } else {
+                            nofriends.setVisibility(View.GONE);
+                        }
+
+                        HashMap<String, MemberDetail> hashMap = new HashMap<>();
+
+                        for (int i = 0; i < memberDetailArrayList.size(); i++) {
+                            hashMap.put(memberDetailArrayList.get(i).getId(), memberDetailArrayList.get(i));
+                        }
+
+                        for (int i = 0; i < memberDetailArrayList.size(); i++)
+                            Log.e("afsafdsafdsf", "Before = " + memberDetailArrayList.get(i).getId());
+
+                        ArrayList<MemberDetail> newmemberDetailArrayList = new ArrayList<>(hashMap.values());
+
+                        for (int i = 0; i < newmemberDetailArrayList.size(); i++)
+                            Log.e("afsafdsafdsf", "After = " + newmemberDetailArrayList.get(i).getId());
+
+                        customFriendsAdpter = new CustomFriendsAdpter(newmemberDetailArrayList);
+                        friendslist.setAdapter(customFriendsAdpter);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                swipeToRefreshFriends.setRefreshing(false);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -371,25 +447,15 @@ public class NetworkAct extends AppCompatActivity {
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
         }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
+        }
     }
 
     class CustomFriendsAdpter extends RecyclerView.Adapter<CustomFriendsAdpter.MyViewHolder> {
         ArrayList<MemberDetail> memberDetailArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView option, chating;
-            CircleImageView friendimg;
-            TextView member_name;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-
-                this.option = itemView.findViewById(R.id.option);
-                this.member_name = itemView.findViewById(R.id.member_name);
-                this.friendimg = itemView.findViewById(R.id.friendimg);
-                this.chating = itemView.findViewById(R.id.chating);
-            }
-        }
 
         public CustomFriendsAdpter(ArrayList<MemberDetail> memberDetailArrayList) {
             this.memberDetailArrayList = memberDetailArrayList;
@@ -488,86 +554,21 @@ public class NetworkAct extends AppCompatActivity {
             return memberDetailArrayList.size();
 
         }
-    }
 
-    private void getMyFriends() {
-        swipeToRefreshFriends.setRefreshing(true);
-        memberDetailArrayList = new ArrayList<>();
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView option, chating;
+            CircleImageView friendimg;
+            TextView member_name;
 
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMyCodeUseFriend(affiliate_number, user_id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public MyViewHolder(View itemView) {
+                super(itemView);
 
-                swipeToRefreshFriends.setRefreshing(false);
-                if (response.isSuccessful()) {
-
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("User name list>", " >" + responseData);
-
-                        if (object.getString("status").equals("1")) {
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-
-                            if (successData.getResult() != null) {
-
-                                memberDetailArrayList.addAll(successData.getResult());
-
-                                if (successData.getTotalfriends() != null && !successData.getTotalfriends().equalsIgnoreCase("")) {
-                                    total_friends.setText("" + successData.getTotalfriends());
-                                }
-                                if (successData.getTotal_spent_this_week() != null && !successData.getTotal_spent_this_week().equalsIgnoreCase("")) {
-                                    total_spent.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_spent_this_week());
-                                }
-                                if (successData.getTotal_earning_this_week() != null && !successData.getTotal_earning_this_week().equalsIgnoreCase("")) {
-                                    earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_earning_this_week());
-                                }
-                            }
-
-                        } else {
-
-                        }
-
-                        if (memberDetailArrayList == null || memberDetailArrayList.isEmpty() || memberDetailArrayList.size() == 0) {
-                            nofriends.setVisibility(View.VISIBLE);
-                        } else {
-                            nofriends.setVisibility(View.GONE);
-                        }
-
-                        HashMap<String, MemberDetail> hashMap = new HashMap<>();
-
-                        for (int i = 0; i < memberDetailArrayList.size(); i++) {
-                            hashMap.put(memberDetailArrayList.get(i).getId(), memberDetailArrayList.get(i));
-                        }
-
-                        for (int i = 0; i < memberDetailArrayList.size(); i++)
-                            Log.e("afsafdsafdsf", "Before = " + memberDetailArrayList.get(i).getId());
-
-                        ArrayList<MemberDetail> newmemberDetailArrayList = new ArrayList<>(hashMap.values());
-
-                        for (int i = 0; i < newmemberDetailArrayList.size(); i++)
-                            Log.e("afsafdsafdsf", "After = " + newmemberDetailArrayList.get(i).getId());
-
-                        customFriendsAdpter = new CustomFriendsAdpter(newmemberDetailArrayList);
-                        friendslist.setAdapter(customFriendsAdpter);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+                this.option = itemView.findViewById(R.id.option);
+                this.member_name = itemView.findViewById(R.id.member_name);
+                this.friendimg = itemView.findViewById(R.id.friendimg);
+                this.chating = itemView.findViewById(R.id.chating);
             }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                swipeToRefreshFriends.setRefreshing(false);
-
-                Log.e("TAG", t.toString());
-            }
-        });
+        }
     }
 
     private class GetMyNetworkAsc extends AsyncTask<String, String, String> {
@@ -649,10 +650,10 @@ public class NetworkAct extends AppCompatActivity {
                             total_friends.setText("" + json.getString("level_first_member_count"));
                         }
                         if (json.getString("total_spent_this_week") != null && !json.getString("total_spent_this_week").equalsIgnoreCase("")) {
-                            total_spent.setText(mySession.getValueOf(MySession.CurrencySign)  + json.getString("total_spent_this_week"));
+                            total_spent.setText(mySession.getValueOf(MySession.CurrencySign) + json.getString("total_spent_this_week"));
                         }
                         if (json.getString("total_earning_this_week") != null && !json.getString("total_earning_this_week").equalsIgnoreCase("")) {
-                            earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign)  + json.getString("total_earning_this_week"));
+                            earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign) + json.getString("total_earning_this_week"));
                         }
 
                         JSONObject jsonObject1 = json.getJSONObject("result");
@@ -770,8 +771,8 @@ public class NetworkAct extends AppCompatActivity {
 
                     } else {
                         total_friends.setText("0");
-                        total_spent.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
-                        earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                        total_spent.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+                        earn_ng_cash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                     }
                     mynetworkchart.setData(null);
                 } catch (JSONException e) {

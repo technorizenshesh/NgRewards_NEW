@@ -1,11 +1,14 @@
 package main.com.ngrewards;
 
+
 import android.app.Application;
 import android.content.Context;
 
+import main.com.ngrewards.activity.app.Config;
 
 public class MainApplication extends Application {
-    private MainApplication smsApp;
+     MainApplication smsApp;
+     Context context;
 
     public MainApplication getInstance() {
         return smsApp;
@@ -14,8 +17,10 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        smsApp =this;
-       }
+        smsApp = this;
+        context = getBaseContext();
+
+    }
 
 
 }

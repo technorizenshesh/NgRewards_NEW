@@ -1,9 +1,8 @@
 package main.com.ngrewards.Utils;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,13 +14,13 @@ import java.util.Date;
 public class VideoUtils {
 
     public static File uriToFile(Context context, Uri uri) throws IOException {
-        File videoFile = new File(context.getCacheDir(), new Date()+".mp4");
+        File videoFile = new File(context.getCacheDir(), new Date() + ".mp4");
         videoFile.createNewFile();
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
-        OutputStream outputStream ;
+        OutputStream outputStream;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             outputStream = Files.newOutputStream(videoFile.toPath());
-        }else {
+        } else {
             outputStream = new FileOutputStream(videoFile);
         }
         byte[] buffer = new byte[1024];

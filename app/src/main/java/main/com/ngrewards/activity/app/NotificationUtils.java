@@ -20,7 +20,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -43,11 +42,83 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 public class NotificationUtils {
 
     private static final String TAG = NotificationUtils.class.getSimpleName();
-    private final Context mContext;
     public static Ringtone r;
+    private final Context mContext;
 
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;
+    }
+
+    /**
+     * Method checks if the app is in background or not
+     */
+    public static boolean isAppIsInBackground(Context context) {
+        boolean isInBackground = true;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+            ComponentName componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+
+        return isInBackground;
+    }
+
+    // Clears notification tray messages
+    public static void clearNotifications(Context context) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+
+/*
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
+        playNotificationSound();
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.addLine(message);
+        Notification notification;
+        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
+                .setAutoCancel(true)
+                .setContentTitle(title)
+                .setContentIntent(resultPendingIntent)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setOnlyAlertOnce(true)
+                .setStyle(inboxStyle)
+                .setWhen(getTimeMilliSec(timeStamp))
+               // .setColor(mContext.getResources().getColor(R.color.white))
+                .setSmallIcon(R.mipmap.ic_launcher)
+               // .setSmallIcon(icon_sm)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                .setContentText(message)
+                .build();
+        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(Config.NOTIFICATION_ID, notification);
+    }
+*/
+
+    public static long getTimeMilliSec(String timeStamp) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = format.parse(timeStamp);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public void showNotificationMessage(String title, String message, String timeStamp, Intent intent, String route_img, String type) {
@@ -87,7 +158,7 @@ public class NotificationUtils {
                     mContext,
                     0,
                     intent1,
-                    PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_MUTABLE);
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_MUTABLE);
 
         } else {
             resultPendingIntent = PendingIntent.getActivity(
@@ -129,33 +200,6 @@ public class NotificationUtils {
             //playNotificationSound();
         }
     }
-
-
-/*
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
-        playNotificationSound();
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.addLine(message);
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentIntent(resultPendingIntent)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(Notification.PRIORITY_MAX)
-                .setOnlyAlertOnce(true)
-                .setStyle(inboxStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-               // .setColor(mContext.getResources().getColor(R.color.white))
-                .setSmallIcon(R.mipmap.ic_launcher)
-               // .setSmallIcon(icon_sm)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(message)
-                .build();
-        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Config.NOTIFICATION_ID, notification);
-    }
-*/
 
     private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
         if (!message.equalsIgnoreCase("Tip amount is updated") && !message.equalsIgnoreCase("your booking request is Now")) {
@@ -290,51 +334,6 @@ public class NotificationUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Method checks if the app is in background or not
-     */
-    public static boolean isAppIsInBackground(Context context) {
-        boolean isInBackground = true;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
-            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
-                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    for (String activeProcess : processInfo.pkgList) {
-                        if (activeProcess.equals(context.getPackageName())) {
-                            isInBackground = false;
-                        }
-                    }
-                }
-            }
-        } else {
-            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-            ComponentName componentInfo = taskInfo.get(0).topActivity;
-            if (componentInfo.getPackageName().equals(context.getPackageName())) {
-                isInBackground = false;
-            }
-        }
-
-        return isInBackground;
-    }
-
-    // Clears notification tray messages
-    public static void clearNotifications(Context context) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
-    }
-
-    public static long getTimeMilliSec(String timeStamp) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date date = format.parse(timeStamp);
-            return date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
 }

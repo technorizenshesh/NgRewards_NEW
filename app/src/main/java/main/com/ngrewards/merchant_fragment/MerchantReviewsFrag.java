@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,24 +63,26 @@ import retrofit2.Response;
  */
 
 public class MerchantReviewsFrag extends Fragment {
+    public static ArrayList<MerchantListBean> merchantListBeanArrayList;
     View v;
     CustomReviewAdp customReviewAdp;
-    private TextView donereview_tv,submit_review, total_review_count, outofstar, seeallreview, oneper, twoper, fivper, forper, theeper;
+    private TextView donereview_tv, submit_review, total_review_count, outofstar, seeallreview, oneper, twoper, fivper, forper, theeper;
     private EditText comment_et;
     private ExpandableHeightListView topreviewlist;
     private String comment_str = "", user_id = "";
-    private RatingBar rating,allrating,rating_done;
+    private RatingBar rating, allrating, rating_done;
     private float rating_val;
     private ProgressBar progresbar;
     private MySession mySession;
-    private ProgressBar onestarProgressbar,twostarProgbar,threestrprogbar,fourstrProgbr,fivestrPrgbar;
-private LinearLayout done_review_lay,post_review_lay;
-private int current_offer_pos;
-    public static ArrayList<MerchantListBean> merchantListBeanArrayList;
+    private ProgressBar onestarProgressbar, twostarProgbar, threestrprogbar, fourstrProgbr, fivestrPrgbar;
+    private LinearLayout done_review_lay, post_review_lay;
+    private int current_offer_pos;
+    private SwipeRefreshLayout swipeToRefresh;
+
     public MerchantReviewsFrag() {
         // Required empty public constructor
     }
-    private SwipeRefreshLayout swipeToRefresh;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,14 +138,15 @@ private int current_offer_pos;
             }
         });
     }
+
     private void getMerchantsDetail(String merchant_id) {
         swipeToRefresh.setRefreshing(true);
-        Log.e("USER ID=="+user_id," > MERchant Id "+merchant_id);
+        Log.e("USER ID==" + user_id, " > MERchant Id " + merchant_id);
         //progresbar.setVisibility(View.VISIBLE);
         merchantListBeanArrayList = new ArrayList<>();
-        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: "+user_id );
-        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: "+merchant_id );
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchnantReview(user_id,merchant_id);
+        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: " + user_id);
+        Log.e("TAG", "getMerchantsDetailgetMerchantsDetail: " + merchant_id);
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchnantReview(user_id, merchant_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -154,7 +154,7 @@ private int current_offer_pos;
                 swipeToRefresh.setRefreshing(false);
                 if (response.isSuccessful()) {
                     try {
-                        if (response.body()==null){
+                        if (response.body() == null) {
                             return;
                         }
                         String responseData = response.body().string();
@@ -168,8 +168,8 @@ private int current_offer_pos;
 
                         }
                         if (merchantListBeanArrayList != null) {
-                            if (getActivity()!=null){
-                                customReviewAdp = new CustomReviewAdp(getActivity(),merchantListBeanArrayList.get(0).getMerchantTopReview());
+                            if (getActivity() != null) {
+                                customReviewAdp = new CustomReviewAdp(getActivity(), merchantListBeanArrayList.get(0).getMerchantTopReview());
                                 topreviewlist.setAdapter(customReviewAdp);
                                 customReviewAdp.notifyDataSetChanged();
                             }
@@ -179,17 +179,15 @@ private int current_offer_pos;
                             threestrprogbar.setProgress(merchantListBeanArrayList.get(0).getThreeStarPercentage());
                             twostarProgbar.setProgress(merchantListBeanArrayList.get(0).getTwoStarPercentage());
                             onestarProgressbar.setProgress(merchantListBeanArrayList.get(0).getOneStarPercentage());
-                            if (merchantListBeanArrayList.get(0).getReviewCount()!=null&&!merchantListBeanArrayList.get(0).getReviewCount().equalsIgnoreCase("")){
+                            if (merchantListBeanArrayList.get(0).getReviewCount() != null && !merchantListBeanArrayList.get(0).getReviewCount().equalsIgnoreCase("")) {
                                 int ddd = Integer.parseInt(merchantListBeanArrayList.get(0).getReviewCount());
-                                if (ddd==0){
+                                if (ddd == 0) {
                                     seeallreview.setText("" + merchantListBeanArrayList.get(0).getReviewCount() + " customer reviews.");
 
-                                }
-                                else if (ddd==1){
+                                } else if (ddd == 1) {
                                     seeallreview.setText("See " + merchantListBeanArrayList.get(0).getReviewCount() + " customer reviews.");
 
-                                }
-                                else {
+                                } else {
                                     seeallreview.setText("See all " + merchantListBeanArrayList.get(0).getReviewCount() + " customer reviews.");
 
                                 }
@@ -220,7 +218,6 @@ private int current_offer_pos;
                         }
 
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -233,7 +230,7 @@ private int current_offer_pos;
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 // Log error here since request failed
                 t.printStackTrace();
-               // progresbar.setVisibility(View.GONE);
+                // progresbar.setVisibility(View.GONE);
                 swipeToRefresh.setRefreshing(false);
                 Log.e("TAG", t.toString());
             }
@@ -282,10 +279,77 @@ private int current_offer_pos;
         super.onResume();
     }
 
+    public void likedislikemerchantreview_fun(String id) {
+        progresbar.setVisibility(View.VISIBLE);
+
+        Call<ResponseBody> call = ApiClient.getApiInterface().likedislikemerchantReview(id, user_id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("My Review Likes >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            if (object.getString("result").equalsIgnoreCase("Review Unlike Successfully")) {
+                                MerchantTopReview merchantTopReview = new MerchantTopReview();
+                                merchantTopReview.setLikeStatus("dislike");
+                                //offerBeanListArrayList.set(current_offer_pos, offerBeanList);
+                                int like = Integer.parseInt(merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).getLikeCount());
+                                if (like > 0) {
+                                    int likett = like - 1;
+                                    merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeCount(likett + "");
+                                }
+
+
+                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeStatus("dislike");
+                            } else {
+                                MerchantTopReview merchantTopReview = new MerchantTopReview();
+                                merchantTopReview.setLikeStatus("like");
+                                //offerBeanListArrayList.set(current_offer_pos, offerBeanList);
+
+                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeStatus("like");
+                                int like = Integer.parseInt(merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).getLikeCount());
+                                int likett = like + 1;
+                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeCount(likett + "");
+
+                            }
+                            if (getActivity() != null) {
+                                customReviewAdp = new CustomReviewAdp(getActivity(), merchantListBeanArrayList.get(0).getMerchantTopReview());
+                                topreviewlist.setAdapter(customReviewAdp);
+                                customReviewAdp.notifyDataSetChanged();
+                                topreviewlist.setSelection(current_offer_pos);
+                            }
+
+
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
     public class CustomReviewAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         List<MerchantTopReview> merchantTopReview;
+        private LayoutInflater inflater = null;
 
         public CustomReviewAdp(Context contexts, List<MerchantTopReview> merchantTopReview) {
             this.context = contexts;
@@ -297,7 +361,7 @@ private int current_offer_pos;
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-           // return 2;
+            // return 2;
             return merchantTopReview == null ? 0 : merchantTopReview.size();
 
         }
@@ -312,10 +376,6 @@ private int current_offer_pos;
         public long getItemId(int position) {
             // TODO Auto-generated method stub
             return position;
-        }
-
-        public class Holder {
-
         }
 
         @Override
@@ -335,10 +395,10 @@ private int current_offer_pos;
             TextView datetime = rowView.findViewById(R.id.datetime);
             TextView review_message = rowView.findViewById(R.id.review_message);
             RatingBar rating = rowView.findViewById(R.id.rating);
-            review_message.setText(""+merchantTopReview.get(position).getReview());
+            review_message.setText("" + merchantTopReview.get(position).getReview());
 
             try {
-                String mytime=merchantTopReview.get(position).getCreatedDate();
+                String mytime = merchantTopReview.get(position).getCreatedDate();
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                         "MM-dd-yyyy hh:mm:ss");
                 Date myDate = null;
@@ -346,22 +406,22 @@ private int current_offer_pos;
 
                 SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy");
                 String finalDate = timeFormat.format(myDate);
-                datetime.setText(""+finalDate);
+                datetime.setText("" + finalDate);
 
 
-            }catch (Exception e){
-                Log.e("EXC TRUE"," RRR");
-                datetime.setText(""+merchantTopReview.get(position).getCreatedDate());
+            } catch (Exception e) {
+                Log.e("EXC TRUE", " RRR");
+                datetime.setText("" + merchantTopReview.get(position).getCreatedDate());
 
             }
 
-         //   datetime.setText(""+merchantTopReview.get(position).getCreatedDate());
-            Log.e("TAG", "getViewgetViewgetView: "+ merchantTopReview.get(position).getFullname());
-            user_name.setText(""+merchantTopReview.get(position).getFullname());
+            //   datetime.setText(""+merchantTopReview.get(position).getCreatedDate());
+            Log.e("TAG", "getViewgetViewgetView: " + merchantTopReview.get(position).getFullname());
+            user_name.setText("" + merchantTopReview.get(position).getFullname());
             String image_url = merchantTopReview.get(position).getMemberImage();
             likecount.setText("" + merchantTopReview.get(position).getLikeCount());
 
-            if (merchantTopReview.get(position).getRating()!=null&&!merchantTopReview.get(position).getRating().equalsIgnoreCase("")){
+            if (merchantTopReview.get(position).getRating() != null && !merchantTopReview.get(position).getRating().equalsIgnoreCase("")) {
                 rating.setRating(Float.parseFloat(merchantTopReview.get(position).getRating()));
             }
             if (merchantTopReview.get(position).getLikeStatus().equalsIgnoreCase("like")) {
@@ -388,74 +448,11 @@ private int current_offer_pos;
             return rowView;
         }
 
+        public class Holder {
 
-    }
-    public void likedislikemerchantreview_fun(String id) {
-        progresbar.setVisibility(View.VISIBLE);
-
-        Call<ResponseBody> call = ApiClient.getApiInterface().likedislikemerchantReview(id, user_id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("My Review Likes >", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            if (object.getString("result").equalsIgnoreCase("Review Unlike Successfully")) {
-                                MerchantTopReview merchantTopReview = new MerchantTopReview();
-                                merchantTopReview.setLikeStatus("dislike");
-                                //offerBeanListArrayList.set(current_offer_pos, offerBeanList);
-                                int like = Integer.parseInt(merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).getLikeCount());
-                                if (like>0){
-                                    int likett=like-1;
-                                    merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeCount(likett+"");
-                                }
+        }
 
 
-                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeStatus("dislike");
-                            } else {
-                                MerchantTopReview merchantTopReview = new MerchantTopReview();
-                                merchantTopReview.setLikeStatus("like");
-                                //offerBeanListArrayList.set(current_offer_pos, offerBeanList);
-
-                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeStatus("like");
-                                int like = Integer.parseInt(merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).getLikeCount());
-                                int likett=like+1;
-                                merchantListBeanArrayList.get(0).getMerchantTopReview().get(current_offer_pos).setLikeCount(likett+"");
-
-                            }
-                            if (getActivity()!=null){
-                                customReviewAdp = new CustomReviewAdp(getActivity(),merchantListBeanArrayList.get(0).getMerchantTopReview());
-                                topreviewlist.setAdapter(customReviewAdp);
-                                customReviewAdp.notifyDataSetChanged();
-                                topreviewlist.setSelection(current_offer_pos);
-                            }
-
-
-                        }
-
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-                Log.e("TAG", t.toString());
-            }
-        });
     }
 
     private class SubmitReviewAsc extends AsyncTask<String, String, String> {

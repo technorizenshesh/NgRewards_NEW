@@ -1,18 +1,17 @@
 package main.com.ngrewards.fragments;
 
 import android.app.Dialog;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +26,7 @@ import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.databinding.FragmentItemDetailsBinding;
 import www.develpoeramit.mapicall.ApiCallBuilder;
 
- public class FragmentItemDetails extends BottomSheetDialogFragment {
+public class FragmentItemDetails extends BottomSheetDialogFragment {
 
     private FragmentItemDetailsBinding binding;
     private BottomSheetBehavior<View> behavior;
@@ -142,5 +141,5 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 
                     }
                 });
-            }
-     }
+    }
+}

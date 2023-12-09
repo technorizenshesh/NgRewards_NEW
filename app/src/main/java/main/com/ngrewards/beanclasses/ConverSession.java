@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by technorizen on 19/12/17.
  */
 
-public class ConverSession  implements Serializable {
+public class ConverSession implements Serializable {
     String message;
     String chat_id;
     String image;
@@ -23,6 +23,20 @@ public class ConverSession  implements Serializable {
     String fullname;
     boolean fileIsAvb;
     File file;
+    String id;
+    String senderid;
+    String reciverid;
+    String datetime;
+    String time;
+    String senderimg;
+    String reciverimg;
+    String sendername;
+    String recname;
+    String sender_online_status;
+    String userimg;
+    String username;
+    String chat_image;
+    String receiver_type;
 
     public String getNo_of_message() {
         return no_of_message;
@@ -96,20 +110,6 @@ public class ConverSession  implements Serializable {
         this.chat_video = chat_video;
     }
 
-    String id;
-    String senderid;
-    String reciverid;
-    String datetime;
-    String time;
-    String senderimg;
-    String reciverimg;
-    String sendername;
-    String recname;
-    String sender_online_status;
-    String userimg;
-    String username;
-    String chat_image;
-
     public String getFullname() {
         return fullname;
     }
@@ -126,8 +126,6 @@ public class ConverSession  implements Serializable {
         this.receiver_type = receiver_type;
     }
 
-    String receiver_type;
-
     public String getUsername() {
         return username;
     }
@@ -140,16 +138,16 @@ public class ConverSession  implements Serializable {
         return userimg;
     }
 
+    public void setUserimg(String userimg) {
+        this.userimg = userimg;
+    }
+
     public String getChat_image() {
         return chat_image;
     }
 
     public void setChat_image(String chat_image) {
         this.chat_image = chat_image;
-    }
-
-    public void setUserimg(String userimg) {
-        this.userimg = userimg;
     }
 
     public String getReciverid() {
@@ -255,6 +253,7 @@ public class ConverSession  implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
     public String getChat_id() {
         return chat_id;
     }

@@ -2,13 +2,7 @@ package main.com.ngrewards.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,57 +11,53 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
-import main.com.ngrewards.activity.memberstripe.MemberStripeExpressAcountAct;
-import main.com.ngrewards.activity.memberstripe.SeeMemberMyStripeDashBoardAct;
-import main.com.ngrewards.beanclasses.CommisionMain;
-import main.com.ngrewards.beanclasses.CommissionData;
-import main.com.ngrewards.beanclasses.FirstData;
-import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.restapi.ApiClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+
 public class MemberRefListAct extends AppCompatActivity {
 
-    private RecyclerView commision_list;
-    private RelativeLayout   backlay;
-    private RefAdapter commisionAdpter;
     MySession mySession;
-    private String user_id = "", affiliate_number = "",stripe_account_id="",stripe_account_login_link="";
-    private ArrayList<Result> firstDataArrayList;
     ProgressBar progressbar;
-    private TextView nocommission;
     SwipeRefreshLayout swipeToRefresh;
+    private RecyclerView commision_list;
+    private RelativeLayout backlay;
+    private RefAdapter commisionAdpter;
+    private String user_id = "";
+    private String affiliate_number = "";
+    private final String stripe_account_id = "";
+    private final String stripe_account_login_link = "";
+    private ArrayList<Result> firstDataArrayList;
+    private TextView nocommission;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,14 +71,14 @@ public class MemberRefListAct extends AppCompatActivity {
         } else {
 
             try {
-                Log.e("TAG", "onCreate:user_log_data "+user_log_data );
+                Log.e("TAG", "onCreate:user_log_data " + user_log_data);
                 JSONObject jsonObject = new JSONObject(user_log_data);
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
                     affiliate_number = jsonObject1.getString("affiliate_number");
-                   // image_url = jsonObject1.getString("member_image");
+                    // image_url = jsonObject1.getString("member_image");
                     Log.e("affiliate_number ", " .> " + affiliate_number);
                 }
             } catch (JSONException e) {
@@ -141,69 +131,6 @@ public class MemberRefListAct extends AppCompatActivity {
         });
     }
 
-     public class RefAdapter extends RecyclerView.Adapter<RefAdapter.MyViewHolder> {
-        Context context;
-        ArrayList<Result> firstDataArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView  weeknumber_tv, week_date_range;
-CircleImageView weekearning_amount;
-            public MyViewHolder(View view) {
-                super(view);
-                weeknumber_tv = itemView.findViewById(R.id.weeknumber_tv);
-                week_date_range = itemView.findViewById(R.id.week_date_range);
-                weekearning_amount = itemView.findViewById(R.id.weekearning_amount);
-            }
-        }
-
-
-        public RefAdapter(Activity myContacts, ArrayList<Result> firstDataArrayList) {
-            this.context = myContacts;
-            this.firstDataArrayList = firstDataArrayList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_ref_lay, parent, false);
-            MyViewHolder holder = new MyViewHolder(itemView);
-
-            return holder;
-            // return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.weeknumber_tv.setText("Email : " + firstDataArrayList.get(position).getTeamEmail());
-            holder.week_date_range.setText("Business Name : " + firstDataArrayList.get(position).getBusinessName());
-            Glide.with(context).load(firstDataArrayList.get(position).getMerchantImage()).into(holder.weekearning_amount);
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   /* commissionDataArrayList =   firstDataArrayList.get(position).getData();
-                    Intent i = new Intent(MemberRefListAct.this, CommissionDetail.class);
-                    i.putExtra("week_str",firstDataArrayList.get(position).getWeek());
-                    i.putExtra("stripe_account_id",stripe_account_id);
-                    i.putExtra("week_year_str",firstDataArrayList.get(position).getYear());
-                    i.putExtra("week_start_month_str",firstDataArrayList.get(position).getData().get(0).getWeekStart());
-                    i.putExtra("week_end_month_str",firstDataArrayList.get(position).getData().get(0).getWeekEnd());
-                    i.putExtra("total_week_count","53");
-                    i.putExtra("total_week_commision_str",""+firstDataArrayList.get(position).getWeekComission());
-                    i.putExtra("availabel_week_withdraw_status",""+firstDataArrayList.get(position).getAvailabel_week_withdraw_status());
-                    i.putExtra("withdraw_status",""+firstDataArrayList.get(position).getWithdraw_status());
-                    startActivity(i);*/
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            // return 6;
-            return firstDataArrayList == null ? 0 : firstDataArrayList.size();
-        }
-    }
-
     private void getMyCommission() {
 
         swipeToRefresh.setRefreshing(true);
@@ -222,20 +149,20 @@ CircleImageView weekearning_amount;
 
                         String responseData = response.body().string();
 
-                        Log.e("affiliate_number!",affiliate_number);
-                        Log.e("responseData!!!s",responseData);
+                        Log.e("affiliate_number!", affiliate_number);
+                        Log.e("responseData!!!s", responseData);
 
                         Log.e("Get Commision Data>", " >" + responseData);
                         JSONObject object = new JSONObject(responseData);
 
                         if (object.getString("status").equals("1")) {
                             RefList successData = new Gson().fromJson(responseData, RefList.class);
-                            if (successData.getResult()!=null){
+                            if (successData.getResult() != null) {
                                 firstDataArrayList.addAll(successData.getResult());
                             }
                         }
 
-                        if(firstDataArrayList == null || firstDataArrayList.isEmpty()) {
+                        if (firstDataArrayList == null || firstDataArrayList.isEmpty()) {
                             nocommission.setVisibility(View.VISIBLE);
                         } else {
                             nocommission.setVisibility(View.GONE);
@@ -263,7 +190,7 @@ CircleImageView weekearning_amount;
         });
     }
 
-public static class  RefList{
+    public static class RefList {
         @SerializedName("result")
         @Expose
         private List<Result> result;
@@ -1018,6 +945,69 @@ public static class  RefList{
             this.profileStatus = profileStatus;
         }
 
+    }
+
+    public class RefAdapter extends RecyclerView.Adapter<RefAdapter.MyViewHolder> {
+        Context context;
+        ArrayList<Result> firstDataArrayList;
+
+        public RefAdapter(Activity myContacts, ArrayList<Result> firstDataArrayList) {
+            this.context = myContacts;
+            this.firstDataArrayList = firstDataArrayList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_ref_lay, parent, false);
+            MyViewHolder holder = new MyViewHolder(itemView);
+
+            return holder;
+            // return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            holder.weeknumber_tv.setText("Email : " + firstDataArrayList.get(position).getTeamEmail());
+            holder.week_date_range.setText("Business Name : " + firstDataArrayList.get(position).getBusinessName());
+            Glide.with(context).load(firstDataArrayList.get(position).getMerchantImage()).into(holder.weekearning_amount);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   /* commissionDataArrayList =   firstDataArrayList.get(position).getData();
+                    Intent i = new Intent(MemberRefListAct.this, CommissionDetail.class);
+                    i.putExtra("week_str",firstDataArrayList.get(position).getWeek());
+                    i.putExtra("stripe_account_id",stripe_account_id);
+                    i.putExtra("week_year_str",firstDataArrayList.get(position).getYear());
+                    i.putExtra("week_start_month_str",firstDataArrayList.get(position).getData().get(0).getWeekStart());
+                    i.putExtra("week_end_month_str",firstDataArrayList.get(position).getData().get(0).getWeekEnd());
+                    i.putExtra("total_week_count","53");
+                    i.putExtra("total_week_commision_str",""+firstDataArrayList.get(position).getWeekComission());
+                    i.putExtra("availabel_week_withdraw_status",""+firstDataArrayList.get(position).getAvailabel_week_withdraw_status());
+                    i.putExtra("withdraw_status",""+firstDataArrayList.get(position).getWithdraw_status());
+                    startActivity(i);*/
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 6;
+            return firstDataArrayList == null ? 0 : firstDataArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView weeknumber_tv, week_date_range;
+            CircleImageView weekearning_amount;
+
+            public MyViewHolder(View view) {
+                super(view);
+                weeknumber_tv = itemView.findViewById(R.id.weeknumber_tv);
+                week_date_range = itemView.findViewById(R.id.week_date_range);
+                weekearning_amount = itemView.findViewById(R.id.weekearning_amount);
+            }
+        }
     }
 }
 

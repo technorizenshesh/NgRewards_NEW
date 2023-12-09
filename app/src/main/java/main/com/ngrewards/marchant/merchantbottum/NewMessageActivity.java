@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +18,8 @@ import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -42,15 +43,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NewMessageActivity extends AppCompatActivity {
-    private RelativeLayout backlay;
-    private AutoCompleteTextView merchant_number;
-    int count = 0;
-    private MySession mySession;
-    private String user_id = "", image_url = "";
     private final String time_zone = "";
     private final String messagetext = "";
     private final String date_time = "";
     private final String ImagePath = "";
+    int count = 0;
+    private RelativeLayout backlay;
+    private AutoCompleteTextView merchant_number;
+    private MySession mySession;
+    private String user_id = "", image_url = "";
     private String receiver_name = "";
     private String receiver_fullname = "";
     private String receiver_id = "";
@@ -168,11 +169,47 @@ public class NewMessageActivity extends AppCompatActivity {
 
     }
 
+    private void getUsername() {
+        progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+            }
+        });
+    }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -213,34 +250,33 @@ public class NewMessageActivity extends AppCompatActivity {
                         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                                 InputMethodManager.HIDE_NOT_ALWAYS);
                         // checkic.setImageResource(R.drawable.check);
-                        if (l2!=null&&l2.get(i)!=null)
-                        {
-                            Log.e("TAG", "l2l2l2l2l2l2l2: "+l2.get(i).toString() );
-                            MemberDetail memberDetail =l2.get(i);
-                            if (memberDetail.getUsername() != null){
+                        if (l2 != null && l2.get(i) != null) {
+                            Log.e("TAG", "l2l2l2l2l2l2l2: " + l2.get(i).toString());
+                            MemberDetail memberDetail = l2.get(i);
+                            if (memberDetail.getUsername() != null) {
                                 merchant_number.setText(memberDetail.getUsername());
                             }
-                            if (memberDetail.getId()!=null){
+                            if (memberDetail.getId() != null) {
                                 receiver_id = memberDetail.getId();
                             }
-                            if (memberDetail.getMemberImage()!=null){
+                            if (memberDetail.getMemberImage() != null) {
                                 receiver_img = memberDetail.getMemberImage();
                             }
-                            if (memberDetail.getUsername()!=null){
+                            if (memberDetail.getUsername() != null) {
                                 receiver_name = memberDetail.getUsername();
                             }
-                            if (memberDetail.getFullname()!=null){
+                            if (memberDetail.getFullname() != null) {
                                 receiver_fullname = memberDetail.getFullname();
                             }
                             type = "Merchant";
-                            Log.e("NewMemberActivity", "onClick: "+"NewMemberActivityNewMemberActivity" );
+                            Log.e("NewMemberActivity", "onClick: " + "NewMemberActivityNewMemberActivity");
                             Intent i = new Intent(NewMessageActivity.this, MemberChatAct.class);
-                            i.putExtra("receiver_id",receiver_id);
-                            i.putExtra("type","Merchant");
-                            i.putExtra("receiver_fullname",receiver_fullname);
-                            i.putExtra("receiver_type","Member");
-                            i.putExtra("receiver_img", BaseUrl.image_baseurl+receiver_img);
-                            i.putExtra("receiver_name",receiver_name);
+                            i.putExtra("receiver_id", receiver_id);
+                            i.putExtra("type", "Merchant");
+                            i.putExtra("receiver_fullname", receiver_fullname);
+                            i.putExtra("receiver_type", "Member");
+                            i.putExtra("receiver_img", BaseUrl.image_baseurl + receiver_img);
+                            i.putExtra("receiver_name", receiver_name);
                             startActivity(i);
                             merchant_number.dismissDropDown();
                         }
@@ -249,7 +285,7 @@ public class NewMessageActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-e.printStackTrace();
+                e.printStackTrace();
             }
 
             return view;
@@ -294,42 +330,6 @@ e.printStackTrace();
         }
 
 
-    }
-    private void getUsername() {
-        progresbar.setVisibility(View.VISIBLE);
-        memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1"))
-                        {
-                            myapisession.setKeyMemberusername(responseData);
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-                            memberDetailArrayList.addAll(successData.getResult());
-                        }
-
-
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-            }
-        });
     }
 
 }

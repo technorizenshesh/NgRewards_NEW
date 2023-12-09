@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -41,9 +40,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +74,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateOfferProduct extends AppCompatActivity {
+    Myapisession myapisession;
+    CategoryAdpters categoryAdpters;
     private EditText tital_name_et, offer_desc, offer_price;
     private ImageView uploadimg;
     private SeekBar seekbar;
@@ -84,12 +86,11 @@ public class UpdateOfferProduct extends AppCompatActivity {
     private ProgressBar progresbar;
     private MySession mySession;
     private Button publish_product;
-    private String user_id = "",offer_discountprice_str="",category_id="",after_discount_str="",offer_image_url="",offer_id="", tital_name_str = "", offer_desc_str = "", offer_price_str = "", ImagePath = "";
-    Myapisession myapisession;
-    CategoryAdpters categoryAdpters;
+    private String user_id = "", offer_discountprice_str = "", category_id = "", after_discount_str = "", offer_image_url = "", offer_id = "", tital_name_str = "", offer_desc_str = "", offer_price_str = "", ImagePath = "";
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private Spinner category_spinner;
     private TextView offer_discount_price_tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
         }
         idinit();
         Bundle bundle = getIntent().getExtras();
-        if (bundle!=null){
+        if (bundle != null) {
             offer_id = bundle.getString("id");
             category_id = bundle.getString("category_id");
             tital_name_str = bundle.getString("offername");
@@ -123,9 +124,9 @@ public class UpdateOfferProduct extends AppCompatActivity {
             offer_price_str = bundle.getString("offerprice");
             offer_discountprice_str = bundle.getString("offer_discountprice_str");
             offer_image_url = bundle.getString("offerimage");
-            offer_price.setText(""+offer_price_str);
-            tital_name_et.setText(""+tital_name_str);
-            offer_desc.setText(""+offer_desc_str);
+            offer_price.setText("" + offer_price_str);
+            tital_name_et.setText("" + tital_name_str);
+            offer_desc.setText("" + offer_desc_str);
             percantae.setText("" + cur_progress + " %");
             offer_discount_price_tv.setText("" + offer_discountprice_str);
             seekbar.setProgress((int) cur_progress);
@@ -133,10 +134,9 @@ public class UpdateOfferProduct extends AppCompatActivity {
         }
         clickevent();
 
-        if (myapisession.getKeyOffercate()==null||myapisession.getKeyOffercate().equalsIgnoreCase("")){
+        if (myapisession.getKeyOffercate() == null || myapisession.getKeyOffercate().equalsIgnoreCase("")) {
             getOfferCategory();
-        }
-        else {
+        } else {
             try {
                 categoryBeanListArrayList = new ArrayList<>();
 
@@ -152,11 +152,11 @@ public class UpdateOfferProduct extends AppCompatActivity {
                 categoryAdpters = new CategoryAdpters(UpdateOfferProduct.this, categoryBeanListArrayList);
                 category_spinner.setAdapter(categoryAdpters);
                 //  Log.e("category_id >>","dddd "+category_id);
-                if (categoryBeanListArrayList!=null&&!categoryBeanListArrayList.isEmpty()){
-                    for (int i = 0;i<categoryBeanListArrayList.size();i++){
-                        Log.e("category_id >>"," dd "+categoryBeanListArrayList.get(i).getCategoryId());
+                if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
+                    for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
+                        Log.e("category_id >>", " dd " + categoryBeanListArrayList.get(i).getCategoryId());
 
-                        if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
+                        if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())) {
                             category_spinner.setSelection(i);
                         }
 
@@ -182,12 +182,10 @@ public class UpdateOfferProduct extends AppCompatActivity {
             offer_price_str = offer_price.getText().toString();
             if (tital_name_str == null || tital_name_str.equalsIgnoreCase("")) {
                 Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.entertite), Toast.LENGTH_LONG).show();
-            }
-            else if (category_id == null || category_id.equalsIgnoreCase("")) {
+            } else if (category_id == null || category_id.equalsIgnoreCase("")) {
                 Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.selectoffercate), Toast.LENGTH_LONG).show();
 
-            }
-            else if (offer_desc_str == null || offer_desc_str.equalsIgnoreCase("")) {
+            } else if (offer_desc_str == null || offer_desc_str.equalsIgnoreCase("")) {
                 Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.enterdesc), Toast.LENGTH_LONG).show();
 
             } /*else if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
@@ -242,26 +240,25 @@ public class UpdateOfferProduct extends AppCompatActivity {
                /* cur_progress =progress;
                 MerchantSignupSlider.mer_reward= String.valueOf(progress);
                 percantae.setText(""+cur_progress+" %");*/
-                String off_price=offer_price.getText().toString();
+                String off_price = offer_price.getText().toString();
                 int MIN = 0;
                 if (progress <= MIN) {
                     offer_discount_price_tv.setText("");
-                    after_discount_str="";
+                    after_discount_str = "";
                     cur_progress = 0;
                     percantae.setText("" + cur_progress + " %");
 
 
                 } else {
                     cur_progress = progress;
-                    if (off_price==null||off_price.equalsIgnoreCase("")){
+                    if (off_price == null || off_price.equalsIgnoreCase("")) {
 
-                    }
-                    else {
+                    } else {
                         double price = Double.parseDouble(off_price);
-                        double ppp= cur_progress/100;
-                        double discountet_price= price*(1-ppp);
-                        after_discount_str= String.format("%.2f", new BigDecimal(discountet_price));
-                        offer_discount_price_tv.setText(""+after_discount_str);
+                        double ppp = cur_progress / 100;
+                        double discountet_price = price * (1 - ppp);
+                        after_discount_str = String.format("%.2f", new BigDecimal(discountet_price));
+                        offer_discount_price_tv.setText("" + after_discount_str);
 
 
                     }
@@ -283,7 +280,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
 
             }
         });
-        offer_price.setFilters(new InputFilter[] {
+        offer_price.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
                     final int afterDecimal = 2;
@@ -321,17 +318,16 @@ public class UpdateOfferProduct extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String off_price = offer_price.getText().toString();
-                if (off_price==null||off_price.equalsIgnoreCase("")){
+                if (off_price == null || off_price.equalsIgnoreCase("")) {
                     offer_discount_price_tv.setText("");
-                    after_discount_str="";
-                }
-                else {
-                    if (cur_progress>0){
+                    after_discount_str = "";
+                } else {
+                    if (cur_progress > 0) {
                         double price = Double.parseDouble(off_price);
-                        double ppp= cur_progress/100;
-                        double discountet_price= price*(1-ppp);
-                        after_discount_str= String.format("%.2f", new BigDecimal(discountet_price));
-                        offer_discount_price_tv.setText(""+after_discount_str);
+                        double ppp = cur_progress / 100;
+                        double discountet_price = price * (1 - ppp);
+                        after_discount_str = String.format("%.2f", new BigDecimal(discountet_price));
+                        offer_discount_price_tv.setText("" + after_discount_str);
 
 
                     }
@@ -344,84 +340,6 @@ public class UpdateOfferProduct extends AppCompatActivity {
 
             }
         });
-
-    }
-
-
-    public class UpdateProduct extends AsyncTask<String, String, String> {
-        String Jsondata;
-
-        protected void onPreExecute() {
-            try {
-                super.onPreExecute();
-                progresbar.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String charset = "UTF-8";
-            String requestURL = BaseUrl.baseurl + "update_offer.php?";
-            Log.e("requestURL >>", requestURL);
-            Log.e("category_id >>", ">>> "+category_id);
-            Log.e("after_discount_str >>", ">>> "+after_discount_str);
-            try {
-                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-               // multipart.addFormField("user_id", user_id);
-                multipart.addFormField("offer_id", offer_id);
-                multipart.addFormField("offer_name", tital_name_str);
-                multipart.addFormField("offer_description", offer_desc_str);
-                multipart.addFormField("offer_price", offer_price_str);
-                multipart.addFormField("offer_discount", "" + cur_progress);
-                multipart.addFormField("category_id", "" + category_id);
-                multipart.addFormField("offer_discount_price", "" + after_discount_str.trim());
-
-                if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
-
-                } else {
-                    File ImageFile = new File(ImagePath);
-                    multipart.addFilePart("offer_image", ImageFile);
-                }
-                List<String> response = multipart.finish();
-                for (String line : response) {
-                    Jsondata = line;
-                }
-                JSONObject object = new JSONObject(Jsondata);
-                return Jsondata;
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progresbar.setVisibility(View.GONE);
-            Log.e("Add Product ", " >> " + result);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                        Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.offeradded), Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-
 
     }
 
@@ -487,7 +405,7 @@ public class UpdateOfferProduct extends AppCompatActivity {
         String dateToStr = format.format(today);
         ContextWrapper cw = new ContextWrapper(UpdateOfferProduct.this);
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_"+dateToStr+".JPEG");
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
@@ -503,7 +421,6 @@ public class UpdateOfferProduct extends AppCompatActivity {
         }
         return mypath.getAbsolutePath();
     }
-
 
     public void decodeFile(String filePath) {
         // Decode image size
@@ -581,8 +498,8 @@ public class UpdateOfferProduct extends AppCompatActivity {
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
         categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -605,9 +522,9 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
                         categoryAdpters = new CategoryAdpters(UpdateOfferProduct.this, categoryBeanListArrayList);
                         category_spinner.setAdapter(categoryAdpters);
-                        if (categoryBeanListArrayList!=null&&!categoryBeanListArrayList.isEmpty()){
-                            for (int i = 0;i<categoryBeanListArrayList.size();i++){
-                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
+                        if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
+                            for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
+                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())) {
                                     category_spinner.setSelection(i);
                                 }
                             }
@@ -632,10 +549,139 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         });
     }
 
+    private void getOfferCategory() {
+//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
+        categoryBeanListArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyOffercate(responseData);
+
+                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
+                            categoryBeanListArrayList.addAll(successData.getResult());
+
+                        }
+
+                        categoryAdpters = new CategoryAdpters(UpdateOfferProduct.this, categoryBeanListArrayList);
+                        category_spinner.setAdapter(categoryAdpters);
+                        if (categoryBeanListArrayList != null && !categoryBeanListArrayList.isEmpty()) {
+                            for (int i = 0; i < categoryBeanListArrayList.size(); i++) {
+/*
+                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
+                                    category_spinner.setSelection(i);
+                                }
+*/
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+
+
+                Log.e("TAG", t.toString());
+            }
+        });
+
+
+    }
+
+    public class UpdateProduct extends AsyncTask<String, String, String> {
+        String Jsondata;
+
+        protected void onPreExecute() {
+            try {
+                super.onPreExecute();
+                progresbar.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String charset = "UTF-8";
+            String requestURL = BaseUrl.baseurl + "update_offer.php?";
+            Log.e("requestURL >>", requestURL);
+            Log.e("category_id >>", ">>> " + category_id);
+            Log.e("after_discount_str >>", ">>> " + after_discount_str);
+            try {
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
+                // multipart.addFormField("user_id", user_id);
+                multipart.addFormField("offer_id", offer_id);
+                multipart.addFormField("offer_name", tital_name_str);
+                multipart.addFormField("offer_description", offer_desc_str);
+                multipart.addFormField("offer_price", offer_price_str);
+                multipart.addFormField("offer_discount", "" + cur_progress);
+                multipart.addFormField("category_id", "" + category_id);
+                multipart.addFormField("offer_discount_price", "" + after_discount_str.trim());
+
+                if (ImagePath == null || ImagePath.equalsIgnoreCase("")) {
+
+                } else {
+                    File ImageFile = new File(ImagePath);
+                    multipart.addFilePart("offer_image", ImageFile);
+                }
+                List<String> response = multipart.finish();
+                for (String line : response) {
+                    Jsondata = line;
+                }
+                JSONObject object = new JSONObject(Jsondata);
+                return Jsondata;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progresbar.setVisibility(View.GONE);
+            Log.e("Add Product ", " >> " + result);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        Toast.makeText(UpdateOfferProduct.this, getResources().getString(R.string.offeradded), Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+
+    }
+
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -673,57 +719,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
             }
             return view;
         }
-    }
-    private void getOfferCategory() {
-//http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
-        categoryBeanListArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getOfferCategory();
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyOffercate(responseData);
-
-                            CategoryBean successData = new Gson().fromJson(responseData, CategoryBean.class);
-                            categoryBeanListArrayList.addAll(successData.getResult());
-
-                        }
-
-                        categoryAdpters = new CategoryAdpters(UpdateOfferProduct.this, categoryBeanListArrayList);
-                        category_spinner.setAdapter(categoryAdpters);
-                        if (categoryBeanListArrayList!=null&&!categoryBeanListArrayList.isEmpty()){
-                            for (int i = 0;i<categoryBeanListArrayList.size();i++){
-/*
-                                if (category_id.equalsIgnoreCase(categoryBeanListArrayList.get(i).getCategoryId())){
-                                    category_spinner.setSelection(i);
-                                }
-*/
-                            }
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-
-
-                Log.e("TAG", t.toString());
-            }
-        });
-
-
     }
 
 

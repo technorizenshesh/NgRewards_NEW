@@ -1,9 +1,10 @@
 package main.com.ngrewards.constant;
 
 import android.content.Context;
-import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by technorizen on 27/2/17.
@@ -19,7 +20,7 @@ public class MyViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
-        if(enabled)
+        if (enabled)
             return super.onInterceptTouchEvent(arg0);
 
         return false;

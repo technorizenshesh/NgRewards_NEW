@@ -18,16 +18,16 @@ import java.util.List;
 
 public class BarChartCustomOld extends View {
 
+    private static final int INVALID_POINTER_ID = -1;
     private final Paint paint;
-    private List<ChartDataCustom> values;
-    private List<String> hori_labels;
     private final List<Float> horizontal_width_list = new ArrayList<>();
-    private String description;
     private final float border = 30;
     private final float horstart = border * 2;
     private final ScaleGestureDetector mScaleDetector;
+    private List<ChartDataCustom> values;
+    private List<String> hori_labels;
+    private String description;
     private int parentHeight, parentWidth;
-    private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
     private float mPosY;
     private float mLastTouchX;
@@ -38,10 +38,11 @@ public class BarChartCustomOld extends View {
     private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartDataCustom> list_cordinate = new ArrayList<>();
-    private float height ,width,  maxX_values, min, graphheight, graphwidth;
+    private float height, width, maxX_values, min, graphheight, graphwidth;
     private float left, right, top, bottom, barheight, colwidth;
-private int maxY_values;
-    public BarChartCustomOld(Context context, AttributeSet attrs){
+    private int maxY_values;
+
+    public BarChartCustomOld(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
@@ -49,17 +50,17 @@ private int maxY_values;
         this.paint = paint;
     }
 
-    public void setData(List<ChartDataCustom> values){
+    public void setData(List<ChartDataCustom> values) {
 
-        if(values != null)
+        if (values != null)
             this.values = values;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setGesture(Boolean gesture){
+    public void setGesture(Boolean gesture) {
         this.gesture = gesture;
     }
 
@@ -103,21 +104,21 @@ private int maxY_values;
         }
     }
 
-    private void CanvasScaleFator(){
+    private void CanvasScaleFator() {
 
         canvas.save();
         canvas.translate(mPosX, mPosY);
         canvas.scale(mScaleFactor, mScaleFactor);
     }
 
-    private void intilaizeValue(Canvas canvas){
+    private void intilaizeValue(Canvas canvas) {
 
-        height = parentHeight -60;
+        height = parentHeight - 60;
         width = parentWidth;
         AxisFormatterCustom axisFormatter = new AxisFormatterCustom();
         maxY_values = axisFormatter.getMaxY_Values(values);
 
-        if(values.get(0).getLabels() == null)
+        if (values.get(0).getLabels() == null)
             maxX_values = axisFormatter.getMaxX_Values(values);
 
         // min = axisFormatter.getMinValues(values);
@@ -131,60 +132,46 @@ private int maxY_values;
         paint.setColor(Color.BLACK);
         for (int i = 0; i < values.size(); i++) {
 
-            if((list_cordinate.get(i).getTop() - 30) >0) {
+            if ((list_cordinate.get(i).getTop() - 30) > 0) {
 
-                canvas.drawText(values.get(i).getY_values()+"",
+                canvas.drawText(values.get(i).getY_values() + "",
                         list_cordinate.get(i).getLeft() + border,
                         list_cordinate.get(i).getTop() - 30, paint);
             } else {
 
                 canvas.drawText(values.get(i).getY_values() + "",
-                        list_cordinate.get(i).getLeft() + border -colwidth/2 ,
+                        list_cordinate.get(i).getLeft() + border - colwidth / 2,
                         list_cordinate.get(i).getTop() + 30, paint);
             }
         }
     }
 
-    private  List<ChartDataCustom> StoredCordinate(Float graphheight){
+    private List<ChartDataCustom> StoredCordinate(Float graphheight) {
 
 
-        for(int i = 0;i<values.size(); i++){
+        for (int i = 0; i < values.size(); i++) {
 
             float x_ratio = 0;
-            barheight = (graphheight/maxY_values)*values.get(i).getY_values() ;
-            if(values.get(0).getLabels() != null){
+            barheight = (graphheight / maxY_values) * values.get(i).getY_values();
+            if (values.get(0).getLabels() != null) {
 
                 left = (i * colwidth) + horstart;
                 top = (border - barheight) + graphheight;
                 right = ((i * colwidth) + horstart) + (colwidth - 1);
                 bottom = graphheight + border;
-            }
-            else{
+            } else {
 
-                x_ratio = (maxX_values/(values.size()-1));
-                left = ((colwidth/x_ratio) *values.get(i).getX_values()) +border ;
+                x_ratio = (maxX_values / (values.size() - 1));
+                left = ((colwidth / x_ratio) * values.get(i).getX_values()) + border;
                 top = (border - barheight) + graphheight;
-                right = left+border+20;
-                bottom =  graphheight + border;
+                right = left + border + 20;
+                bottom = graphheight + border;
             }
 
             list_cordinate.add(new ChartDataCustom(left, top, right, bottom));
         }
 
         return list_cordinate;
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
-
-            invalidate();
-            return true;
-        }
     }
 
     @Override
@@ -253,6 +240,19 @@ private int maxY_values;
         }
 
         return true;
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
+
+            invalidate();
+            return true;
+        }
     }
 
 }

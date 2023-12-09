@@ -5,14 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
@@ -28,12 +29,82 @@ import main.com.ngrewards.marchant.merchantbottum.MerStatusAct;
 
 public class FragMerAudience extends Fragment {
 
-    private TextView menlay,alltv,womentv,citytv,state,menpercant,womenpercant;
-    private View mainview,allview,womenview,cityview,stateview, v;
+    private TextView menlay, alltv, womentv, citytv, state, menpercant, womenpercant;
+    private View mainview, allview, womenview, cityview, stateview, v;
     private SwipeRefreshLayout swipeToRefresh;
     private ExpandableHeightListView locationlist;
     private CustomLocationAdp customLocationAdp;
-    private ProgressBar range1progress,range2progress,range3progress,range4progress,range5progress,range6progress;
+    private ProgressBar range1progress, range2progress, range3progress, range4progress, range5progress, range6progress;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                    menpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
+                    womenpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
+
+                }
+                if (mainview.getVisibility() == View.VISIBLE) {
+                    if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentMale());
+                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentMale());
+                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentMale());
+                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentMale());
+                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentMale());
+                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentMale());
+
+                    }
+
+                } else if (womenview.getVisibility() == View.VISIBLE) {
+                    if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentFemale());
+                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentFemale());
+                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentFemale());
+                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentFemale());
+                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentFemale());
+                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentFemale());
+
+                    }
+
+                } else {
+                    if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentAll());
+                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentAll());
+                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentAll());
+                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentAll());
+                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentAll());
+                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentAll());
+
+                    }
+
+                }
+
+                if (cityview.getVisibility() == View.VISIBLE) {
+                    if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                        customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getCity());
+                        locationlist.setAdapter(customLocationAdp);
+                        customLocationAdp.notifyDataSetChanged();
+                    }
+
+                } else {
+                    if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                        customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getState(), "state");
+                        locationlist.setAdapter(customLocationAdp);
+                        customLocationAdp.notifyDataSetChanged();
+                    }
+
+                }
+
+
+            } catch (Exception e) {
+
+            }
+
+
+        }
+    };
+
     public FragMerAudience() {
         // Required empty public constructor
     }
@@ -47,7 +118,7 @@ public class FragMerAudience extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.frag_mer_audience_lay, container, false);
+        v = inflater.inflate(R.layout.frag_mer_audience_lay, container, false);
         idinit();
         return v;
     }
@@ -82,16 +153,16 @@ public class FragMerAudience extends Fragment {
         alltv = v.findViewById(R.id.alltv);
         mainview = v.findViewById(R.id.mainview);
         allview = v.findViewById(R.id.allview);
-        if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-            menpercant.setText(""+MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent()+" %");
-            womenpercant.setText(""+MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent()+" %");
+        if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+            menpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
+            womenpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
 
         }
 
         womentv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
                     range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentFemale());
                     range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentFemale());
                     range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentFemale());
@@ -115,7 +186,7 @@ public class FragMerAudience extends Fragment {
         menlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
                     range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentMale());
                     range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentMale());
                     range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentMale());
@@ -140,7 +211,7 @@ public class FragMerAudience extends Fragment {
         alltv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
                     range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentAll());
                     range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentAll());
                     range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentAll());
@@ -172,7 +243,7 @@ public class FragMerAudience extends Fragment {
 
                 state.setTextColor(getResources().getColor(R.color.black));
                 stateview.setVisibility(View.GONE);
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
                     customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getCity());
                     locationlist.setAdapter(customLocationAdp);
                     customLocationAdp.notifyDataSetChanged();
@@ -190,8 +261,8 @@ public class FragMerAudience extends Fragment {
 
                 citytv.setTextColor(getResources().getColor(R.color.black));
                 cityview.setVisibility(View.GONE);
-                if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                    customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getState(),"state");
+                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
+                    customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getState(), "state");
                     locationlist.setAdapter(customLocationAdp);
                     customLocationAdp.notifyDataSetChanged();
                 }
@@ -200,79 +271,6 @@ public class FragMerAudience extends Fragment {
             }
         });
     }
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-
-                if (MerStatusAct.salesAudienceBeanArrayList != null && !MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                    menpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
-                    womenpercant.setText("" + MerStatusAct.salesAudienceBeanArrayList.get(0).getMalePercent() + " %");
-
-                }
-                if (mainview.getVisibility() == View.VISIBLE) {
-                    if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentMale());
-                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentMale());
-                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentMale());
-                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentMale());
-                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentMale());
-                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentMale());
-
-                    }
-
-                }
-                else if (womenview.getVisibility()==View.VISIBLE){
-                    if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentFemale());
-                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentFemale());
-                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentFemale());
-                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentFemale());
-                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentFemale());
-                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentFemale());
-
-                    }
-
-                }
-                else {
-                    if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                        range1progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange1PercentAll());
-                        range2progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange2PercentAll());
-                        range3progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange3PercentAll());
-                        range4progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange4PercentAll());
-                        range5progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange5PercentAll());
-                        range6progress.setProgress((int) MerStatusAct.salesAudienceBeanArrayList.get(0).getTotalAgeRange6PercentAll());
-
-                    }
-
-                }
-
-                if (cityview.getVisibility()==View.VISIBLE){
-                    if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                        customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getCity());
-                        locationlist.setAdapter(customLocationAdp);
-                        customLocationAdp.notifyDataSetChanged();
-                    }
-
-                }
-                else {
-                    if (MerStatusAct.salesAudienceBeanArrayList!=null&&!MerStatusAct.salesAudienceBeanArrayList.isEmpty()) {
-                        customLocationAdp = new CustomLocationAdp(getActivity(), MerStatusAct.salesAudienceBeanArrayList.get(0).getState(),"state");
-                        locationlist.setAdapter(customLocationAdp);
-                        customLocationAdp.notifyDataSetChanged();
-                    }
-
-                }
-
-
-
-            } catch (Exception e) {
-
-            }
-
-
-        }
-    };
 
     @Override
     public void onPause() {
@@ -289,10 +287,11 @@ public class FragMerAudience extends Fragment {
 
     public class CustomLocationAdp extends BaseAdapter {
         Context context;
-        String type="";
-        private LayoutInflater inflater = null;
+        String type = "";
         List<CityLoc> cityLocList;
         List<State> stateList;
+        private LayoutInflater inflater = null;
+
         public CustomLocationAdp(Context contexts, List<CityLoc> cityLocList) {
             this.context = contexts;
             this.type = "";
@@ -300,6 +299,7 @@ public class FragMerAudience extends Fragment {
             inflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
+
         public CustomLocationAdp(Context contexts, List<State> stateList, String type) {
             this.type = type;
             this.context = contexts;
@@ -311,11 +311,9 @@ public class FragMerAudience extends Fragment {
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            if (type!=null&&type.equalsIgnoreCase("state"))
-            {
+            if (type != null && type.equalsIgnoreCase("state")) {
                 return stateList == null ? 0 : stateList.size();
-            }
-            else {
+            } else {
                 return cityLocList == null ? 0 : cityLocList.size();
             }
         }
@@ -332,10 +330,6 @@ public class FragMerAudience extends Fragment {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -345,21 +339,19 @@ public class FragMerAudience extends Fragment {
             rowView = inflater.inflate(R.layout.custom_location_progress, null);
             TextView name_loc = rowView.findViewById(R.id.name_loc);
             ProgressBar progress_percant = rowView.findViewById(R.id.progress_percant);
-            if (type!=null&&type.equalsIgnoreCase("state"))
-            {
-                if (stateList.get(position).getState()!=null&&!stateList.get(position).getState().equalsIgnoreCase("")){
+            if (type != null && type.equalsIgnoreCase("state")) {
+                if (stateList.get(position).getState() != null && !stateList.get(position).getState().equalsIgnoreCase("")) {
                     progress_percant.setProgress(Integer.parseInt(stateList.get(position).getStatePercent()));
 
                 }
-                name_loc.setText(""+stateList.get(position).getState());
+                name_loc.setText("" + stateList.get(position).getState());
 
-            }
-            else {
-                if (cityLocList.get(position).getCity()!=null&&!cityLocList.get(position).getCity().equalsIgnoreCase("")){
+            } else {
+                if (cityLocList.get(position).getCity() != null && !cityLocList.get(position).getCity().equalsIgnoreCase("")) {
                     progress_percant.setProgress(Integer.parseInt(cityLocList.get(position).getCityPercent()));
 
                 }
-                name_loc.setText(""+cityLocList.get(position).getCity());
+                name_loc.setText("" + cityLocList.get(position).getCity());
 
             }
 
@@ -368,8 +360,11 @@ public class FragMerAudience extends Fragment {
             return rowView;
         }
 
-    }
+        public class Holder {
 
+        }
+
+    }
 
 
 }

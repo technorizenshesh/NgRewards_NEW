@@ -3,8 +3,7 @@
     <string name="FACEBOOK_APP_ID">396537575068789</string>
     <string name="facebook_app_id">396537575068789</string>
     <string name="fb_login_protocol_scheme">fb396537575068789</string>
-    <string name="googlekey">AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU</string>
-    <string name="google_search">AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU</string>
+
     <string name="amper"><![CDATA[&]]></string>
     <string name="privacysefty"><![CDATA[Privacy & Safety]]></string>
     <string name="bytapingwithdraw"><![CDATA[By tapping withdraw you agree to our Terms & Conditions.]]></string>

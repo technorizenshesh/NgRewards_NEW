@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -43,6 +42,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.bumptech.glide.Glide;
@@ -129,10 +130,12 @@ public class ProfileActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,7 +370,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void getUsername() {
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -411,20 +414,20 @@ public class ProfileActivity extends AppCompatActivity {
             switch (requestCode) {
                 case 1:
                     if (Build.VERSION.SDK_INT >= 33) {
-                            if (data == null) return;
-                            // Get photo picker response for single select.
-                            final Uri selectedImage = data.getData();
+                        if (data == null) return;
+                        // Get photo picker response for single select.
+                        final Uri selectedImage = data.getData();
                         try {
                             assert selectedImage != null;
                             try (final InputStream stream = getContentResolver().openInputStream(selectedImage)) {
                                 final Bitmap bitmap = BitmapFactory.decodeStream(stream);
                                 user_img.setImageBitmap(bitmap);
-                             File tempfile =   Tools.persistImage(bitmap,ProfileActivity.this);
-                                ImagePath= tempfile.getAbsolutePath();
-                                Log.e("ImagePath", "onActivityResult: "+ImagePath );
+                                File tempfile = Tools.persistImage(bitmap, ProfileActivity.this);
+                                ImagePath = tempfile.getAbsolutePath();
+                                Log.e("ImagePath", "onActivityResult: " + ImagePath);
                             }
                         } catch (IOException e) {
-                            ToolsShowDialog(getApplicationContext(),e.getLocalizedMessage());
+                            ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
                         }
                     } else {
                         Uri selectedImage = data.getData();

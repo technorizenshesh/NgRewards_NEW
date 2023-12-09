@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -47,15 +48,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NewMemberMessageActivity extends AppCompatActivity {
-    private RelativeLayout backlay;
-    private AutoCompleteTextView merchant_number;
-    int count = 0;
-    private MySession mySession;
-    private String user_id = "", image_url = "";
     private final String time_zone = "";
     private final String messagetext = "";
     private final String date_time = "";
     private final String ImagePath = "";
+    int count = 0;
+    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    private RelativeLayout backlay;
+    private AutoCompleteTextView merchant_number;
+    private MySession mySession;
+    private String user_id = "", image_url = "";
     private String receiver_name = "";
     private String receiver_id = "";
     private String receiver_fullname = "";
@@ -63,13 +65,14 @@ public class NewMemberMessageActivity extends AppCompatActivity {
     private String receiver_type_str = "Merchant";
     private String type = "";
     private Myapisession myapisession;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
     private ProgressBar progresbar;
     private ArrayList<MemberDetail> memberDetailArrayList;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,11 +207,88 @@ public class NewMemberMessageActivity extends AppCompatActivity {
 
     }
 
+    private void getBusnessNumber() {
+        progresbar.setVisibility(View.VISIBLE);
+        merchantListBeanArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum(mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyBusinessnumber(responseData);
+                            MarchantBean successData = new Gson().fromJson(responseData, MarchantBean.class);
+                            merchantListBeanArrayList.addAll(successData.getResult());
+
+                        }
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    private void getUsername() {
+
+        progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User name list>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MerchantListBean> l2, String lat, String lon) {
             this.context = context;
@@ -236,7 +316,7 @@ public class NewMemberMessageActivity extends AppCompatActivity {
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
 
-            view =    layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
+            view = layoutInflater.inflate(R.layout.geo_search_result, viewGroup, false);
             TextView geo_search_result_text = (TextView) view.findViewById(R.id.geo_search_result_text);
             try {
                 geo_search_result_text.setText(l2.get(i).getBusinessNo());
@@ -251,67 +331,61 @@ public class NewMemberMessageActivity extends AppCompatActivity {
                                 InputMethodManager.HIDE_NOT_ALWAYS);
 
                         // checkic.setImageResource(R.drawable.check);
-                        if (l2!=null&&(l2.size() >=1)){
-                            if (l2.get(i).getBusinessNo() != null){
+                        if (l2 != null && (l2.size() >= 1)) {
+                            if (l2.get(i).getBusinessNo() != null) {
                                 merchant_number.setText(l2.get(i).getBusinessNo());
                             }
                             try {
-                                if (l2!=null&&l2.get(i).getId()!=null&&!(l2.size() ==0)){
-                                    try{
+                                if (l2 != null && l2.get(i).getId() != null && !(l2.size() == 0)) {
+                                    try {
 
                                         receiver_id = l2.get(i).getId();
-                                    }
-                                    catch (ArrayIndexOutOfBoundsException e){
+                                    } catch (ArrayIndexOutOfBoundsException e) {
                                         e.printStackTrace();
                                     }
 
                                 }
-                            }
-
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-                            if (l2!=null&&l2.get(i).getMerchantImage()!=null){
+                            if (l2 != null && l2.get(i).getMerchantImage() != null) {
                                 receiver_img = l2.get(i).getMerchantImage();
                             }
-                            if (l2!=null&&!l2.isEmpty()&&l2.get(i).getBusinessNo()!=null){
+                            if (l2 != null && !l2.isEmpty() && l2.get(i).getBusinessNo() != null) {
 
-                                if(l2.size()!=0){
+                                if (l2.size() != 0) {
                                     receiver_name = l2.get(i).getBusinessNo();
-                                }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"sucess!!!",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "sucess!!!", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
                           /*  if (l2!=null&&l2.get(i).getBusinessName()!=null){
                                 receiver_name = l2.get(i).getBusinessName();
                             }*/
-                            if (l2!=null&&l2.get(i).getContactName()!=null){
-                                try{
+                            if (l2 != null && l2.get(i).getContactName() != null) {
+                                try {
                                     receiver_fullname = l2.get(i).getContactName();
-                                }
-                                catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
                             }
                             type = "Member";
-                            if (l2==null||l2.get(i).getReceiver_type()==null||l2.get(i).getReceiver_type().equalsIgnoreCase("")){
+                            if (l2 == null || l2.get(i).getReceiver_type() == null || l2.get(i).getReceiver_type().equalsIgnoreCase("")) {
                                 receiver_type_str = "Merchant";
                                 receiver_fullname = l2.get(i).getBusinessName();
-                            }
-                            else {
+                            } else {
                                 receiver_type_str = l2.get(i).getReceiver_type();
                             }
-                            Log.e("TAG", "onClick: "+"NewMemberMessageActivityNewMemberMessageActivity" );
-                           Log.e("receiver_id-=-=-=-=",receiver_id);
-                           Log.e("type-=-=-=-=","Member");
-                           Log.e("receiver_type-=-=-=-=",receiver_type_str);
-                           Log.e("receiver_e-=-=-=-=",receiver_fullname);
-                           Log.e("receiver_img-=-=-=-=", BaseUrl.image_baseurl+receiver_img);
-                           Log.e("receiver_name-=-=-=-=",receiver_name);
+                            Log.e("TAG", "onClick: " + "NewMemberMessageActivityNewMemberMessageActivity");
+                            Log.e("receiver_id-=-=-=-=", receiver_id);
+                            Log.e("type-=-=-=-=", "Member");
+                            Log.e("receiver_type-=-=-=-=", receiver_type_str);
+                            Log.e("receiver_e-=-=-=-=", receiver_fullname);
+                            Log.e("receiver_img-=-=-=-=", BaseUrl.image_baseurl + receiver_img);
+                            Log.e("receiver_name-=-=-=-=", receiver_name);
 /* receiver_id = bun
  type = bundle.get
  type = type.trim(
@@ -319,23 +393,25 @@ public class NewMemberMessageActivity extends AppCompatActivity {
  receiver_type = b
  receiver_name = b
  receiver_fullname*/
-                            if (receiver_id.equalsIgnoreCase("")){}else {
-                            Intent i = new Intent(NewMemberMessageActivity.this, MemberChatAct.class);
-                            i.putExtra("receiver_id",receiver_id);
-                            i.putExtra("type","Member");
-                            i.putExtra("receiver_type",receiver_type_str);
-                            i.putExtra("receiver_fullname",receiver_fullname);
-                            i.putExtra("receiver_img", BaseUrl.image_baseurl+receiver_img);
-                            i.putExtra("receiver_name",receiver_name);
-                            startActivity(i);
-                            merchant_number.dismissDropDown();}
+                            if (receiver_id.equalsIgnoreCase("")) {
+                            } else {
+                                Intent i = new Intent(NewMemberMessageActivity.this, MemberChatAct.class);
+                                i.putExtra("receiver_id", receiver_id);
+                                i.putExtra("type", "Member");
+                                i.putExtra("receiver_type", receiver_type_str);
+                                i.putExtra("receiver_fullname", receiver_fullname);
+                                i.putExtra("receiver_img", BaseUrl.image_baseurl + receiver_img);
+                                i.putExtra("receiver_name", receiver_name);
+                                startActivity(i);
+                                merchant_number.dismissDropDown();
+                            }
                         }
 
                     }
                 });
 
             } catch (Exception e) {
-e.printStackTrace();
+                e.printStackTrace();
             }
 
             return view;
@@ -355,13 +431,12 @@ e.printStackTrace();
                                 if (wp.getBusinessNo().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
                                 {
 
-                                    try{
+                                    try {
                                         l2.add(wp);
-                                    }catch (Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                }
-                                else {
+                                } else {
 
                                 }
                             }
@@ -369,7 +444,7 @@ e.printStackTrace();
                             for (MemberDetail mem : memberDetailArrayList) {
                                 if (mem.getUsername().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
                                 {
-                                    Log.e("NewMembers", "performFiltering: " );
+                                    Log.e("NewMembers", "performFiltering: ");
                                     MerchantListBean memberDetail = new MerchantListBean();
                                     memberDetail.setId(mem.getId());
                                     memberDetail.setBusinessName(mem.getUsername());
@@ -404,82 +479,6 @@ e.printStackTrace();
         }
 
 
-    }
-    private void getBusnessNumber() {
-        progresbar.setVisibility(View.VISIBLE);
-        merchantListBeanArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMerchantBusNum(  mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyBusinessnumber(responseData);
-                            MarchantBean successData = new Gson().fromJson(responseData, MarchantBean.class);
-                            merchantListBeanArrayList.addAll(successData.getResult());
-
-                        }
-
-
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-    private void getUsername() {
-
-        progresbar.setVisibility(View.VISIBLE);
-        memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("User name list>", " >" + responseData);
-                        if (object.getString("status").equals("1"))
-                        {
-                            myapisession.setKeyMemberusername(responseData);
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-                            memberDetailArrayList.addAll(successData.getResult());
-                        }
-
-
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
     }
 
 }

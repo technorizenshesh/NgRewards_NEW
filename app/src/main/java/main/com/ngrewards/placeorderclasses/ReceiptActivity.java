@@ -3,7 +3,6 @@ package main.com.ngrewards.placeorderclasses;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,7 +104,7 @@ public class ReceiptActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && !bundle.isEmpty()) {
-            Log.e("TAG", " bundlebundlebundle   -------"+bundle.toString());
+            Log.e("TAG", " bundlebundlebundle   -------" + bundle);
             Order_cart_id_str = bundle.getString("order_cart_id");
             order_id_str = bundle.getString("order_id");
             merchant_name_str = bundle.getString("merchant_name");
@@ -242,10 +243,10 @@ public class ReceiptActivity extends AppCompatActivity {
         tipamount_tv.setText(getString(R.string.tip) + mySession.getValueOf(MySession.CurrencySign) + tip_str);
 
         if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- " + mySession.getValueOf(MySession.CurrencySign) + " 0.00");
 
         } else {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- "+mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- " + mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
 
         }
 
@@ -258,10 +259,10 @@ public class ReceiptActivity extends AppCompatActivity {
         }
 
         if (mdate != null && !mdate.equals("null")) {
-                  tv_date.setText(getString(R.string.date) + mdate);
-                  tv_time.setText(getString(R.string.time)+ time);
+            tv_date.setText(getString(R.string.date) + mdate);
+            tv_time.setText(getString(R.string.time) + time);
             tv_guest_user.setText(getString(R.string.guest_no) + Order_guset_No);
-            tv_table_no.setText(getString(R.string.table_no)  + Order_Table_No);
+            tv_table_no.setText(getString(R.string.table_no) + Order_Table_No);
             li_memberinfo.setVisibility(View.GONE);
 
         } else {

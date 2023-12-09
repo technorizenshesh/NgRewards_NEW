@@ -2,11 +2,12 @@ package main.com.ngrewards.productfragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import androidx.fragment.app.Fragment;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.constant.ExpandableHeightListView;
@@ -81,10 +82,6 @@ public class ProReviewsFrag extends Fragment {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -94,6 +91,10 @@ public class ProReviewsFrag extends Fragment {
 
             rowView = inflater.inflate(R.layout.top_customer_review_lay, null);
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }

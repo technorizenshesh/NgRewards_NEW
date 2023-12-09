@@ -2,13 +2,14 @@ package main.com.ngrewards.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
@@ -20,10 +21,12 @@ public class NetworkActFirst extends AppCompatActivity {
     private RelativeLayout backlay;
     private ExpandableHeightListView networklist;
     private CustomNetworkList customNetworkList;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +46,13 @@ public class NetworkActFirst extends AppCompatActivity {
     }
 
     private void idinti() {
-        backlay  = findViewById(R.id.backlay);
-        networklist  = findViewById(R.id.networklist);
+        backlay = findViewById(R.id.backlay);
+        networklist = findViewById(R.id.networklist);
         networklist.setExpanded(true);
         customNetworkList = new CustomNetworkList(this);
         networklist.setAdapter(customNetworkList);
     }
+
     public class CustomNetworkList extends BaseAdapter {
         Context context;
         private LayoutInflater inflater = null;
@@ -78,10 +82,6 @@ public class NetworkActFirst extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -93,6 +93,10 @@ public class NetworkActFirst extends AppCompatActivity {
             TextView paybill = rowView.findViewById(R.id.paybill);
 
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }

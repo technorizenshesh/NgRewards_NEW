@@ -8,10 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,12 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,15 +41,15 @@ import main.com.ngrewards.constant.MySession;
 public class MyQrCodeActivity extends AppCompatActivity {
 
     public final static int QRcodeWidth = 500;
+    MySession mySession;
+    Uri bmpUri;
     private RelativeLayout backlay;
     private Bitmap bitmap;
     private ImageView myqrview;
-    MySession mySession;
     private String user_id = "", merchant_number = "", murchant_name = "", merchant_img_url;
     private CircleImageView merchant_img;
     private TextView merchant_name, merchant_number_tv;
     private LinearLayout share_my_code, savegallery;
-    Uri bmpUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,8 +220,8 @@ public class MyQrCodeActivity extends AppCompatActivity {
                 jsonObject.put("murchant_name", "" + murchant_name);
                 jsonObject.put("merchant_number", "" + merchant_number);
                 jsonObject.put("merchant_id", "" + user_id);
-                String s =  murchant_name+","+merchant_number+","+user_id;
-                        bitmap = TextToImageEncode(s);
+                String s = murchant_name + "," + merchant_number + "," + user_id;
+                bitmap = TextToImageEncode(s);
                 myqrview.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();

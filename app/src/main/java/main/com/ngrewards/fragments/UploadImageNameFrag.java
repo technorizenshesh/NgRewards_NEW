@@ -1,7 +1,6 @@
 package main.com.ngrewards.fragments;
 
 import static android.app.Activity.RESULT_OK;
-
 import static main.com.ngrewards.Utils.Tools.ToolsShowDialog;
 
 import android.annotation.SuppressLint;
@@ -18,7 +17,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +29,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,18 +41,17 @@ import java.util.Date;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.SliderActivity;
-import main.com.ngrewards.draweractivity.ProfileActivity;
 
 /**
  * Created by technorizen on 13/6/18.
  */
 
 public class UploadImageNameFrag extends Fragment {
-private ImageView user_img;
-private EditText first_last_name;
-private ImageView member_img;
-
     View v;
+    private ImageView user_img;
+    private EditText first_last_name;
+    private ImageView member_img;
+
     public UploadImageNameFrag() {
         // Required empty public constructor
     }
@@ -66,7 +65,7 @@ private ImageView member_img;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.frag_uploadimage, container, false);
+        v = inflater.inflate(R.layout.frag_uploadimage, container, false);
         idinit();
         return v;
     }
@@ -80,7 +79,7 @@ private ImageView member_img;
             @Override
             public void afterTextChanged(Editable s) {
                 if (s == null || s.length() == 0) {
-                    SliderActivity.member_first_last="";
+                    SliderActivity.member_first_last = "";
                 } else {
                     SliderActivity.member_first_last = s.toString();
                     Log.e("sa >.", "> " + SliderActivity.member_first_last);
@@ -113,9 +112,10 @@ private ImageView member_img;
 
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("TAG", "onActivityResult: -----------------------------------------------------------" );
+        Log.e("TAG", "onActivityResult: -----------------------------------------------------------");
         //super method removed
 /*
         if (resultCode == RESULT_OK) {
@@ -147,12 +147,12 @@ private ImageView member_img;
                             try (final InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage)) {
                                 final Bitmap bitmap = BitmapFactory.decodeStream(stream);
                                 member_img.setImageBitmap(bitmap);
-                                File tempfile =   Tools.persistImage(bitmap, getActivity());
-                                SliderActivity.member_bitmap=bitmap;
+                                File tempfile = Tools.persistImage(bitmap, getActivity());
+                                SliderActivity.member_bitmap = bitmap;
                                 SliderActivity.member_img_path = tempfile.getAbsolutePath();
                             }
                         } catch (IOException e) {
-                            ToolsShowDialog(getActivity(),e.getLocalizedMessage());
+                            ToolsShowDialog(getActivity(), e.getLocalizedMessage());
                         }
                     } else {
 
@@ -182,6 +182,7 @@ private ImageView member_img;
         //Uri returnUri;
         //returnUri = data.getData();
     }
+
     @SuppressLint("Range")
     public String getPath(Uri uri) {
         String path = null;
@@ -206,7 +207,7 @@ private ImageView member_img;
         String dateToStr = format.format(today);
         ContextWrapper cw = new ContextWrapper(getActivity());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_"+dateToStr+".JPEG");
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
@@ -245,11 +246,12 @@ private ImageView member_img;
         BitmapFactory.Options o2 = new BitmapFactory.Options();
         o2.inSampleSize = scale;
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-        SliderActivity.member_bitmap   = bitmap;
+        SliderActivity.member_bitmap = bitmap;
         SliderActivity.member_img_path = saveToInternalStorage(bitmap);
-        Log.e("DECODE PATH","ff "+SliderActivity.member_img_path);
+        Log.e("DECODE PATH", "ff " + SliderActivity.member_img_path);
         member_img.setImageBitmap(bitmap);
     }
+
     private void selectImage() {
         final Dialog dialogSts = new Dialog(getActivity(), R.style.DialogSlideAnim);
         dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);

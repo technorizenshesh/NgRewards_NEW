@@ -38,16 +38,16 @@ public class HourBean {
         return opening_status;
     }
 
+    public void setOpening_status(String opening_status) {
+        this.opening_status = opening_status;
+    }
+
     public String getFullday_open_status() {
         return fullday_open_status;
     }
 
     public void setFullday_open_status(String fullday_open_status) {
         this.fullday_open_status = fullday_open_status;
-    }
-
-    public void setOpening_status(String opening_status) {
-        this.opening_status = opening_status;
     }
 
     public String getId() {

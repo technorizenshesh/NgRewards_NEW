@@ -1,10 +1,11 @@
 package main.com.ngrewards.activity;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 
@@ -12,6 +13,7 @@ public class SeeDocumentUrl extends AppCompatActivity {
 
     private WebView webview;
     private RelativeLayout backlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

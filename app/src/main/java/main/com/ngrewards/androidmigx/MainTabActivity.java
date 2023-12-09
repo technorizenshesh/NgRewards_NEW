@@ -52,10 +52,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -91,9 +89,9 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 
 public class MainTabActivity extends AppCompatActivity {
     private static final float END_SCALE = 0.85f;
-    public static String user_log_data = "",username_str, ngcash = "", user_id = "", currency_code = "",
+    public static String user_log_data = "", username_str, ngcash = "", user_id = "", currency_code = "",
             currency_sign = "", country_name = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
-    TextView ngcash_txt ;
+    public static String member_ngcash = "0";
     public final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -137,7 +135,14 @@ public class MainTabActivity extends AppCompatActivity {
             }
         }
     };
-
+    private final boolean isVisible = false;
+    public Dialog dialogSts;
+    TextView ngcash_txt;
+    int WhichIndex = 0;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String scrsts = "";
+    MySession mySession;
     public final BroadcastReceiver broadcastReceiver2 =
             new BroadcastReceiver() {
                 @Override
@@ -168,36 +173,25 @@ public class MainTabActivity extends AppCompatActivity {
                     }
                 }
             };
-    int WhichIndex = 0;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    String scrsts = "";
-    MySession mySession;
     TextView counter_wallet, counter_shedule, counter_order, counter_message;
     ScheduledExecutorService scheduleTaskExecutor;
     String currentVersion = "";
     CircleImageView user_img;
+    boolean mSlideState = false;
+    CircleImageView drwr_user_img;
+    MySavedCardInfo mySavedCardInfo;
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private BottomNavigationView bottomNavView;
+///////////234567890-
     private CoordinatorLayout contentView;
     private Boolean exit;
     private Dialog canceldialog;
     private String facebook_name;
     private String facebook_image;
     private String result = "";
-///////////234567890-
-
-
-    public static String member_ngcash = "0";
-    private final boolean isVisible = false;
-    public Dialog dialogSts;
-
-    boolean mSlideState = false;
-    CircleImageView  drwr_user_img;
-    MySavedCardInfo mySavedCardInfo;
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
@@ -216,7 +210,7 @@ public class MainTabActivity extends AppCompatActivity {
     private ProgressBar progresbar;
     private String gender_str;
     private String age_str;
-  
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,8 +258,7 @@ public class MainTabActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             Log.e("Get Notification >>", "NULL");
-        } else
-        {
+        } else {
 
             String message = bundle.getString("message");
             facebook_name = bundle.getString("facebook_name");
@@ -305,7 +298,7 @@ public class MainTabActivity extends AppCompatActivity {
         }
 
         onCreate2();
-        
+
     }
 
     private void onCreate2() {
@@ -340,10 +333,10 @@ public class MainTabActivity extends AppCompatActivity {
         mySession = new MySession(this);
 
         craete_profile = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Create_Profile, "");
-       // logout_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Logout_Status, "");
-      //  fb_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Status_Facebook, "");
-      //  fb_status111 = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Profile_com, "");
-      //  Toast.makeText(this, "status : " + logout_status, Toast.LENGTH_SHORT).show();
+        // logout_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Logout_Status, "");
+        //  fb_status = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Status_Facebook, "");
+        //  fb_status111 = PreferenceConnector.readString(MainTabActivity.this, PreferenceConnector.Profile_com, "");
+        //  Toast.makeText(this, "status : " + logout_status, Toast.LENGTH_SHORT).show();
 
         new MainTabActivity.GetProfile().execute();
         user_log_data = mySession.getKeyAlldata();
@@ -392,6 +385,7 @@ public class MainTabActivity extends AppCompatActivity {
         bottomNavView.clearAnimation();
         BottomNavigationViewHelper.disableShiftMode(bottomNavView);
         contentView = findViewById(R.id.content_view);
+        counter_message = findViewById(R.id.reqcount);
         user_img = findViewById(R.id.user_img);
         user_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,8 +395,8 @@ public class MainTabActivity extends AppCompatActivity {
                 //  }
             }
         });
-          /*R.id.nav_profile, R.id.nav_transfer_img, R.id.nav_network, R.id.nav_commission_ic, R.id.nav_employee_sales, R.id.nav_tutorilas, R.id.nav_messages, R.id.nav_ic_settings, R.id.nav_rate_us, R.id.nav_logout,*/
-        mAppBarConfiguration = new AppBarConfiguration.Builder( R.id.bottom_home, R.id.bottom_paybill, R.id.bottom_activity, R.id.bottom_message, R.id.bottom_invite).setDrawerLayout(drawer).build();
+        /*R.id.nav_profile, R.id.nav_transfer_img, R.id.nav_network, R.id.nav_commission_ic, R.id.nav_employee_sales, R.id.nav_tutorilas, R.id.nav_messages, R.id.nav_ic_settings, R.id.nav_rate_us, R.id.nav_logout,*/
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.bottom_home, R.id.bottom_paybill, R.id.bottom_activity, R.id.bottom_message, R.id.bottom_invite).setDrawerLayout(drawer).build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //  NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 
@@ -517,49 +511,49 @@ public class MainTabActivity extends AppCompatActivity {
         new MainTabActivity.GetProfile().execute();
         Tools.reupdateResources(this);
         registerReceiver(broadcastReceiver2, new IntentFilter(Config.PUSH_NOTIFICATION));
-try {
-    mySession = new MySession(this);
-
-    String user_log_data = mySession.getKeyAlldata();
-
-    if (user_log_data == null) {
-
-    } else {
-
         try {
+            mySession = new MySession(this);
 
-            JSONObject jsonObject = new JSONObject(user_log_data);
-            String message = jsonObject.getString("status");
+            String user_log_data = mySession.getKeyAlldata();
 
-            if (message.equalsIgnoreCase("1")) {
+            if (user_log_data == null) {
 
-                Log.e("jsonObject12345", "" + jsonObject);
+            } else {
 
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                String business_name = jsonObject1.getString("fullname");
-                String username = jsonObject1.getString("affiliate_name");
+                try {
 
-                String image_url = jsonObject1.getString("member_image");
-                if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                    Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
-                    Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                    JSONObject jsonObject = new JSONObject(user_log_data);
+                    String message = jsonObject.getString("status");
+
+                    if (message.equalsIgnoreCase("1")) {
+
+                        Log.e("jsonObject12345", "" + jsonObject);
+
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                        String business_name = jsonObject1.getString("fullname");
+                        String username = jsonObject1.getString("affiliate_name");
+
+                        String image_url = jsonObject1.getString("member_image");
+                        if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                            Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(drwr_user_img);
+                            Glide.with(MainTabActivity.this).load(image_url).placeholder(R.drawable.user_propf).into(user_img);
+                        }
+
+                        if (username == null || username.equalsIgnoreCase("") || username.equalsIgnoreCase("null")) {
+
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+
                 }
-
-                if (username == null || username.equalsIgnoreCase("") || username.equalsIgnoreCase("null")) {
-
-                }
-
             }
-
-        } catch (JSONException e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
-
         }
-    }
-}catch (Exception e){
-    e.printStackTrace();
-}
         try {
             scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
             scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
@@ -567,8 +561,8 @@ try {
                     new MyCounterVal().execute();
                 }
             }, 0, 8, TimeUnit.SECONDS);
-        }catch (Exception e){
-            Log.e(TAG, "onResume: "+e.getCause() );
+        } catch (Exception e) {
+            Log.e(TAG, "onResume: " + e.getCause());
         }
     }
 
@@ -616,6 +610,251 @@ try {
             canceldialog.show();
 
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        new GetProfile().execute();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+
+    /////234567890-
+
+    private void clcickev() {
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //  Toast.makeText(MainTabActivity.this, "Successs!!!!!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainTabActivity.this,
+                        MerchantNotificationActivity.class)
+                        .putExtra("type", "member");
+                startActivity(i);
+            }
+        });
+
+        qrcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, QrCodeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        profile_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, ProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
+        employeesaleslay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, EmployeesalesActivity.class);
+                startActivity(i);
+            }
+        });
+
+        setting_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, SettingActivity.class);
+                startActivity(i);
+            }
+        });
+
+        networklay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, NetworkAct.class);
+                startActivity(i);
+            }
+        });
+
+
+        tutoriallay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, TutorialAct.class);
+                i.putExtra("type", "member");
+                startActivity(i);
+            }
+        });
+
+
+        transferlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, TransferToaFriend.class);
+                startActivity(i);
+            }
+        });
+
+
+        messagelay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //        Intent i = new Intent(MainTabActivity.this, MemberMessageAct.class);
+                //        startActivity(i);
+            }
+        });
+
+
+        commissionlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, CommisionActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+        cartimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainTabActivity.this, MyCartDetail.class);
+                startActivity(i);
+            }
+        });
+
+
+        rate_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=main.com.ngrewards"));
+                    startActivity(intent);
+
+                } catch (Exception e) {
+
+                }
+            }
+        });
+
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, "");
+                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, "");
+/*
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut();
+                }*/
+
+                mySession.signinusers(false);
+                mySavedCardInfo.clearCardData();
+                myapisession.setKeyAddressdata("");
+                myapisession.setKeyCartitem("");
+                myapisession.setProductdata("");
+                myapisession.setKeyOffercate("");
+
+                Intent i = new Intent(MainTabActivity.this, AccountTypeSelectionAct.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                i.putExtra("logout_status", "false");
+                startActivity(i);
+                finish();
+
+            }
+        });
+
+        user_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSlideState) {
+                    drawer_layout.openDrawer(GravityCompat.END);
+                } else {
+                    drawer_layout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+    }
+
+    private void idinit() {
+
+        ngcash_txt = findViewById(R.id.ngcash_txt);
+        progresbar = findViewById(R.id.progresbar);
+        cartcount = findViewById(R.id.cartcount);
+        reqcount = findViewById(R.id.reqcount);
+
+        if (MainTabActivity.notification_unseen_count == null || MainTabActivity.notification_unseen_count.equalsIgnoreCase("") || MainTabActivity.notification_unseen_count.equalsIgnoreCase("0")) {
+            reqcount.setVisibility(View.GONE);
+        } else {
+            reqcount.setVisibility(View.VISIBLE);
+            reqcount.setText("" + MainTabActivity.notification_unseen_count);
+        }
+
+        if (MainTabActivity.cart_unseen_count == null || MainTabActivity.cart_unseen_count.equalsIgnoreCase("") || MainTabActivity.cart_unseen_count.equalsIgnoreCase("0")) {
+            cartcount.setVisibility(View.GONE);
+        } else {
+            cartcount.setVisibility(View.VISIBLE);
+            cartcount.setText("" + MainTabActivity.cart_unseen_count);
+        }
+
+        cartimg = findViewById(R.id.cartimg);
+        commissionlay = findViewById(R.id.commissionlay);
+        messagelay = findViewById(R.id.messagelay);
+        notification = findViewById(R.id.notification);
+        qrcode = findViewById(R.id.qrcode);
+        name = findViewById(R.id.name);
+        // reqcount =  findViewById(R.id.reqcount);
+        rate_lay = findViewById(R.id.rate_lay);
+        transferlay = findViewById(R.id.transferlay);
+        tutoriallay = findViewById(R.id.tutoriallay);
+        networklay = findViewById(R.id.networklay);
+        drwr_user_img = findViewById(R.id.drwr_user_img);
+        user_name = findViewById(R.id.user_name);
+        logout = findViewById(R.id.logout);
+        profile_lay = findViewById(R.id.profile_lay);
+        employeesaleslay = findViewById(R.id.employeesaleslay);
+        user_img = findViewById(R.id.user_img);
+        setting_lay = findViewById(R.id.setting_lay);
+
+    }
+
+    private void adddrawer() {
+
+        //  setSupportActionBar(toolbar);
+        navigationview = findViewById(R.id.navigationview);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+        drawer_layout.setDrawerListener(new ActionBarDrawerToggle(this,
+                drawer_layout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mSlideState = false;
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mSlideState = true;
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -787,254 +1026,6 @@ try {
         }
     }
 
-
-
-
-    /////234567890-
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        new GetProfile().execute();
-    }
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
-    private void clcickev() {
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //  Toast.makeText(MainTabActivity.this, "Successs!!!!!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(MainTabActivity.this,
-                        MerchantNotificationActivity.class)
-                        .putExtra("type", "member");
-                startActivity(i);
-            }
-        });
-
-        qrcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, QrCodeActivity.class);
-                startActivity(i);
-            }
-        });
-
-        profile_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, ProfileActivity.class);
-                startActivity(i);
-            }
-        });
-
-        employeesaleslay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, EmployeesalesActivity.class);
-                startActivity(i);
-            }
-        });
-
-        setting_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, SettingActivity.class);
-                startActivity(i);
-            }
-        });
-
-        networklay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, NetworkAct.class);
-                startActivity(i);
-            }
-        });
-
-
-        tutoriallay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, TutorialAct.class);
-                i.putExtra("type", "member");
-                startActivity(i);
-            }
-        });
-
-
-        transferlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, TransferToaFriend.class);
-                startActivity(i);
-            }
-        });
-
-
-        messagelay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //        Intent i = new Intent(MainTabActivity.this, MemberMessageAct.class);
-                //        startActivity(i);
-            }
-        });
-
-
-        commissionlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, CommisionActivity.class);
-                startActivity(i);
-            }
-        });
-
-
-        cartimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainTabActivity.this, MyCartDetail.class);
-                startActivity(i);
-            }
-        });
-
-
-        rate_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=main.com.ngrewards"));
-                    startActivity(intent);
-
-                } catch (Exception e) {
-
-                }
-            }
-        });
-
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_id, "");
-                PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.employee_name, "");
-/*
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    LoginManager.getInstance().logOut();
-                }*/
-
-                mySession.signinusers(false);
-                mySavedCardInfo.clearCardData();
-                myapisession.setKeyAddressdata("");
-                myapisession.setKeyCartitem("");
-                myapisession.setProductdata("");
-                myapisession.setKeyOffercate("");
-
-                Intent i = new Intent(MainTabActivity.this, AccountTypeSelectionAct.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                i.putExtra("logout_status", "false");
-                startActivity(i);
-                finish();
-
-            }
-        });
-
-        user_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSlideState) {
-                    drawer_layout.openDrawer(GravityCompat.END);
-                } else {
-                    drawer_layout.openDrawer(GravityCompat.START);
-                }
-            }
-        });
-    }
-
-    private void idinit() {
-
-        ngcash_txt = findViewById(R.id.ngcash_txt);
-        progresbar = findViewById(R.id.progresbar);
-        cartcount = findViewById(R.id.cartcount);
-        reqcount = findViewById(R.id.reqcount);
-
-        if (MainTabActivity.notification_unseen_count == null ||  MainTabActivity.notification_unseen_count.equalsIgnoreCase("") ||  MainTabActivity.notification_unseen_count.equalsIgnoreCase("0")) {
-            reqcount.setVisibility(View.GONE);
-        } else {
-            reqcount.setVisibility(View.VISIBLE);
-            reqcount.setText("" +  MainTabActivity.notification_unseen_count);
-        }
-
-        if ( MainTabActivity.cart_unseen_count == null ||  MainTabActivity.cart_unseen_count.equalsIgnoreCase("") ||  MainTabActivity.cart_unseen_count.equalsIgnoreCase("0")) {
-            cartcount.setVisibility(View.GONE);
-        } else {
-            cartcount.setVisibility(View.VISIBLE);
-            cartcount.setText("" +  MainTabActivity.cart_unseen_count);
-        }
-
-        cartimg = findViewById(R.id.cartimg);
-        commissionlay = findViewById(R.id.commissionlay);
-        messagelay = findViewById(R.id.messagelay);
-        notification = findViewById(R.id.notification);
-        qrcode = findViewById(R.id.qrcode);
-        name = findViewById(R.id.name);
-        // reqcount =  findViewById(R.id.reqcount);
-        rate_lay = findViewById(R.id.rate_lay);
-        transferlay = findViewById(R.id.transferlay);
-        tutoriallay = findViewById(R.id.tutoriallay);
-        networklay = findViewById(R.id.networklay);
-        drwr_user_img = findViewById(R.id.drwr_user_img);
-        user_name = findViewById(R.id.user_name);
-        logout = findViewById(R.id.logout);
-        profile_lay = findViewById(R.id.profile_lay);
-        employeesaleslay = findViewById(R.id.employeesaleslay);
-        user_img = findViewById(R.id.user_img);
-        setting_lay = findViewById(R.id.setting_lay);
-
-    }
-
-    private void adddrawer() {
-
-      //  setSupportActionBar(toolbar);
-        navigationview = findViewById(R.id.navigationview);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        drawer_layout.setDrawerListener(new ActionBarDrawerToggle(this,
-                drawer_layout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close) {
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                mSlideState = false;
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                mSlideState = true;
-
-            }
-        });
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
-    }
-
-
-
     private class GetProfile extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -1153,7 +1144,7 @@ try {
                         username_str = jsonObject1.getString("affiliate_name");
 
                         user_name.setText("" + jsonObject1.getString("username"));
-                        ngcash_txt.setText(mySession.getValueOf(MySession.CurrencySign)  + jsonObject1.getString("member_ngcash"));
+                        ngcash_txt.setText(mySession.getValueOf(MySession.CurrencySign) + jsonObject1.getString("member_ngcash"));
 
                         if (username_str == null || username_str.equalsIgnoreCase("")) {
                             user_name.setEnabled(true);

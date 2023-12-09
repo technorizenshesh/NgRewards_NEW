@@ -9,6 +9,12 @@ android {
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
         }
+        release {
+            storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
+            storePassword 'ngrewards123'
+            keyAlias 'Ngrewards'
+            keyPassword 'ngrewards123'
+        }
     }
      packagingOptions {
           exclude 'META-INF/services/javax.annotation.processing.Processor'
@@ -17,17 +23,35 @@ android {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 67
-        versionName "11.08"
+        versionCode 69
+        versionName "11.09"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         //multiDexEnabled true
+        resValue("string", "googlekey", "AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU")
+        resValue("string", "googlekey2", "AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs")
+        resValue("string", "google_search", "AIzaSyABRtmxwu4OgB64OR2rq_8GecRDQf2TsLU")
     }
 
     buildTypes {
+        debug{
+          // debuggable false
+         //  minifyEnabled true
+         //  shrinkResources true
+         //  proguardFiles getDefaultProguardFile(
+         //          'proguard-android-optimize.txt'),
+         //         'proguard-rules.pro'
+
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
     packagingOptions {
@@ -58,7 +82,15 @@ android {
     }
     buildToolsVersion '33.0.1'
     compileSdk 34
+    defaultConfig {
+        resConfigs "en", "es", "hi"
+    }
+    bundle {
 
+        language {
+            enableSplit = false
+        }
+    }
 }
 
 

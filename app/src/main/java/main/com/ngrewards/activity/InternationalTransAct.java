@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -26,11 +25,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +57,7 @@ import main.com.ngrewards.constant.Myapisession;
 
 public class InternationalTransAct extends AppCompatActivity {
 
+    int count = 0;
     private RelativeLayout backlay;
     private Spinner country_spn;
     private CountryListAdapter countryListAdapter;
@@ -67,13 +66,14 @@ public class InternationalTransAct extends AppCompatActivity {
     private AutoCompleteTextView usernameauto;
     private TextView memname;
     private EditText amount;
-    int count =0;
     private MySession mySession;
     private Myapisession myapisession;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +82,9 @@ public class InternationalTransAct extends AppCompatActivity {
         myapisession = new Myapisession(this);
         idint();
         clcikevent();
-      //  if (myapisession.getKeyCountry()==null||myapisession.getKeyCountry().equalsIgnoreCase("")){
-            new GetCountryList().execute();
-      //  }
+        //  if (myapisession.getKeyCountry()==null||myapisession.getKeyCountry().equalsIgnoreCase("")){
+        new GetCountryList().execute();
+        //  }
        /* else {
             JSONObject jsonObject = null;
             try {
@@ -120,7 +120,7 @@ public class InternationalTransAct extends AppCompatActivity {
                 e.printStackTrace();
             }*/
 
-       // }
+        // }
     }
 
     private void clcikevent() {
@@ -134,7 +134,7 @@ public class InternationalTransAct extends AppCompatActivity {
 
     private void idint() {
         amount = findViewById(R.id.amount);
-        amount.setFilters(new InputFilter[] {
+        amount.setFilters(new InputFilter[]{
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
                     final int afterDecimal = 2;
@@ -185,7 +185,7 @@ public class InternationalTransAct extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 if (count == 0) {
-                    Log.e("FIRST","KK");
+                    Log.e("FIRST", "KK");
                     ArrayList<MemberDetail> l1 = new ArrayList<>();
                     if (s == null) {
 
@@ -194,7 +194,7 @@ public class InternationalTransAct extends AppCompatActivity {
                         memberlist.setAffiliateName(s.toString());
                         l1.add(memberlist);
 
-                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(InternationalTransAct.this, l1, "" , "");
+                        GeoAutoCompleteAdapter ga = new GeoAutoCompleteAdapter(InternationalTransAct.this, l1, "", "");
                         usernameauto.setAdapter(ga);
                         ga.notifyDataSetChanged();
 
@@ -204,11 +204,11 @@ public class InternationalTransAct extends AppCompatActivity {
                 count++;
 
 
-
             }
         });
 
     }
+
     private class GetCountryList extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -311,11 +311,11 @@ public class InternationalTransAct extends AppCompatActivity {
 
         }
     }
-    public class CountryListAdapter extends BaseAdapter {
-        Context context;
 
-        LayoutInflater inflter;
+    public class CountryListAdapter extends BaseAdapter {
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -355,9 +355,9 @@ public class InternationalTransAct extends AppCompatActivity {
                         .thumbnail(0.5f)
                         .override(50, 50)
                         .centerCrop()
-                         
+
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                         
+
                         .into(country_flag);
             }
 
@@ -368,17 +368,18 @@ public class InternationalTransAct extends AppCompatActivity {
             return view;
         }
     }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
             this.l2 = l2;
             layoutInflater = LayoutInflater.from(context);
-            Log.e("FIRST","CONS");
+            Log.e("FIRST", "CONS");
         }
 
         @Override
@@ -438,15 +439,14 @@ public class InternationalTransAct extends AppCompatActivity {
                     if (constraint != null) {
 
 
-
                         if (constraint.length() == 0) {
                         } else {
                             l2.clear();
-                            if (MemberTransfer.memberDetailArrayList!=null&&!MemberTransfer.memberDetailArrayList.isEmpty()){
+                            if (MemberTransfer.memberDetailArrayList != null && !MemberTransfer.memberDetailArrayList.isEmpty()) {
                                 for (MemberDetail wp : MemberTransfer.memberDetailArrayList) {
                                     if (wp.getAffiliateName().toLowerCase().startsWith((String) constraint))//.toLowerCase(Locale.getDefault())
                                     {
-                                        Log.e("TRUE"," >> FILTER"+wp.getAffiliateName());
+                                        Log.e("TRUE", " >> FILTER" + wp.getAffiliateName());
                                         l2.add(wp);
                                     }
                                 }

@@ -22,11 +22,11 @@ import main.com.ngrewards.SquareImageView;
  */
 
 public class ImageAdpterGrid extends BaseAdapter {
-    private ArrayList<String> mImagesList;
     private final Context mContext;
     private final SparseBooleanArray mSparseBooleanArray;
     private final SparseBooleanArray mSparseBooleanArray_new;
     LayoutInflater inflater;
+    private ArrayList<String> mImagesList;
 
     public ImageAdpterGrid(Context context, ArrayList<String> imageList) {
         mContext = context;
@@ -72,17 +72,13 @@ public class ImageAdpterGrid extends BaseAdapter {
         return position;
     }
 
-    public class Holder {
-
-    }
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         View rowView;
         CheckBox checkBox;
         final SquareImageView imageView;
-        final ImageView selectedview,blur_back;
+        final ImageView selectedview, blur_back;
 
         rowView = inflater.inflate(R.layout.row_multiphoto_item, null);
 
@@ -125,6 +121,10 @@ public class ImageAdpterGrid extends BaseAdapter {
             }
         });
         return rowView;
+    }
+
+    public class Holder {
+
     }
 
 }

@@ -17,86 +17,86 @@ import java.util.List;
 
 public class ChartDataCustom extends Application implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private int y_values;
-    private Float  x_values, size, left, top, right, bottom, data, mValue, highest_value;
-    private Float lowest_value,opening, closing;
-    private final Path mPath = new Path();
-    private final Region mRegion = new Region();
-    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends;
-    List<ChartData> list;
-
-    private int pyramid_value;
-
     public static final String LineChart = "LineChart";
     public static final String BarChart = "BarChart";
-
+    private static final long serialVersionUID = 1L;
+    private final Path mPath = new Path();
+    private final Region mRegion = new Region();
+    List<ChartData> list;
+    private int y_values;
+    private Float x_values, size, left, top, right, bottom, data, mValue, highest_value;
+    private Float lowest_value, opening, closing;
+    private String cordinate, pieLabel, sectorLabel, chartName, labels, pyramidLabel, legends;
+    private int pyramid_value;
     private JSONObject radarData;
     private Float[] y_list;
 
-    public ChartDataCustom(JSONObject data){
+    public ChartDataCustom(JSONObject data) {
         this.radarData = data;
     }
 
-    public ChartDataCustom(){
+    public ChartDataCustom() {
     }
 
-    public ChartDataCustom(int y_values, Float x_values){
+    public ChartDataCustom(int y_values, Float x_values) {
         this.y_values = y_values;
         this.x_values = x_values;
     }
 
-    public ChartDataCustom(int y_values, Float x_values, Float size){
+    public ChartDataCustom(int y_values, Float x_values, Float size) {
         this.y_values = y_values;
         this.x_values = x_values;
         this.size = size;
     }
 
-    protected ChartDataCustom(Float left, Float top, Float right,Float bottom){
+    protected ChartDataCustom(Float left, Float top, Float right, Float bottom) {
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
     }
 
-    protected ChartDataCustom(int y_axis, Float x_axis, Float size,String cordinate){
+    protected ChartDataCustom(int y_axis, Float x_axis, Float size, String cordinate) {
         this.y_values = y_axis;
         this.x_values = x_axis;
         this.size = size;
         this.cordinate = cordinate;
     }
 
-    public ChartDataCustom(String label, Float val){
+    public ChartDataCustom(String label, Float val) {
         this.data = val;
         this.pieLabel = label;
     }
 
-    protected ChartDataCustom(int y_axis, Float x_axis, String cordinate){
+    protected ChartDataCustom(int y_axis, Float x_axis, String cordinate) {
         this.y_values = y_axis;
         this.x_values = x_axis;
         this.cordinate = cordinate;
 
     }
 
-    public ChartDataCustom(List<ChartData> list){
+    public ChartDataCustom(List<ChartData> list) {
         this.list = list;
     }
 
-    public ChartDataCustom(int y_axis, String x_axis){
+    public ChartDataCustom(int y_axis, String x_axis) {
         this.y_values = y_axis;
         this.labels = x_axis;
 
     }
-    public ChartDataCustom(int y_axis, String x_axis,float top){
+
+    public ChartDataCustom(int y_axis, String x_axis, float top) {
         this.y_values = y_axis;
         this.labels = x_axis;
         this.highest_value = highest_value;
     }
-    public ChartDataCustom(float y_axis, String x_axis,String dd){
+
+    public ChartDataCustom(float y_axis, String x_axis, String dd) {
         this.y_values = (int) y_axis;
         this.labels = x_axis;
     }
-    public ChartDataCustom(Float x_values, Float highest_value, Float lowest_value, Float opening,Float closing){
+
+    public ChartDataCustom(Float x_values, Float highest_value, Float lowest_value, Float opening, Float closing) {
         this.x_values = x_values;
         this.highest_value = highest_value;
         this.lowest_value = lowest_value;
@@ -104,86 +104,122 @@ public class ChartDataCustom extends Application implements Serializable {
         this.closing = closing;
     }
 
-    public ChartDataCustom(List<ChartData> list, String chartName){
+    public ChartDataCustom(List<ChartData> list, String chartName) {
         this.list = list;
         this.chartName = chartName;
     }
 
-    public ChartDataCustom(Float val){
+    public ChartDataCustom(Float val) {
 
         this.data = val;
     }
 
-    public ChartDataCustom(String label, int value){
+    public ChartDataCustom(String label, int value) {
         this.pyramidLabel = label;
         this.pyramid_value = value;
     }
 
-    public ChartDataCustom(Float[] y_axis, String legends){
+    public ChartDataCustom(Float[] y_axis, String legends) {
         this.legends = legends;
         this.y_list = y_axis;
     }
 
-    public ChartDataCustom(String labels){
+    public ChartDataCustom(String labels) {
         this.labels = labels;
     }
 
 
-    public String getPyramidLabel(){
+    public String getPyramidLabel() {
         return pyramidLabel;
     }
 
-    public void setPyramidLabel(String label){
+    public void setPyramidLabel(String label) {
         this.pyramidLabel = label;
     }
 
-    public int getPyramid_value(){
+    public int getPyramid_value() {
         return pyramid_value;
     }
 
-    public void setPyramid_value(int value){
+    public void setPyramid_value(int value) {
         this.pyramid_value = value;
     }
 
-    public int getY_values(){return y_values;}
+    public int getY_values() {
+        return y_values;
+    }
 
-    public Float getX_values(){ return x_values;}
+    public void setY_values(int y_values) {
+        this.y_values = y_values;
+    }
 
-    public void setY_values(int y_values){ this.y_values = y_values;}
+    public Float getX_values() {
+        return x_values;
+    }
 
-    public  void setX_values(Float x_values){ this.x_values = x_values;}
+    public void setX_values(Float x_values) {
+        this.x_values = x_values;
+    }
 
-    public  void setSize(Float size){ this.size = size;}
+    public Float getSize() {
+        return size;
+    }
 
-    public Float getSize(){ return  size; }
+    public void setSize(Float size) {
+        this.size = size;
+    }
 
-    public  void setLeft(Float left){ this.left = left;}
+    public Float getLeft() {
+        return left;
+    }
 
-    public Float getLeft(){ return  left; }
+    public void setLeft(Float left) {
+        this.left = left;
+    }
 
-    public  void setTop(Float top){ this.top = top;}
+    public Float getTop() {
+        return top;
+    }
 
-    public Float getTop(){ return  top; }
+    public void setTop(Float top) {
+        this.top = top;
+    }
 
-    public  void setRight(Float right){ this.right = right;}
+    public Float getRight() {
+        return right;
+    }
 
-    public Float getRight(){ return  right; }
+    public void setRight(Float right) {
+        this.right = right;
+    }
 
-    public  void setBottom(Float bottom){ this.bottom = bottom;}
+    public Float getBottom() {
+        return bottom;
+    }
 
-    public Float getBottom(){ return  bottom; }
+    public void setBottom(Float bottom) {
+        this.bottom = bottom;
+    }
 
-    public  void setValue(Float data){ this.data = data;}
-
-    public String getPieLabel(){
+    public String getPieLabel() {
         return this.pieLabel;
     }
 
-    public Float getValue(){ return  this.data; }
+    public Float getValue() {
+        return this.data;
+    }
 
-    public  void setCordinate(String cordinate){ this.cordinate = cordinate;}
+    public void setValue(Float data) {
+        this.data = data;
+    }
 
-    public String getCordinate(){ return  this.cordinate; }
+    public String getCordinate() {
+        return this.cordinate;
+    }
+
+    public void setCordinate(String cordinate) {
+        this.cordinate = cordinate;
+    }
 
     public Path getPath() {
         return mPath;
@@ -201,29 +237,49 @@ public class ChartDataCustom extends Application implements Serializable {
         mValue = value;
     }
 
-    public JSONObject getRadarData(){
+    public JSONObject getRadarData() {
         return this.radarData;
     }
 
-    public void setHighest_value(float highest_value){ this.highest_value = highest_value;}
+    public Float getHighest_value() {
+        return highest_value;
+    }
 
-    public Float getHighest_value(){ return highest_value;}
+    public void setHighest_value(float highest_value) {
+        this.highest_value = highest_value;
+    }
 
-    public void setLowest_value(float lowest_value){ this.lowest_value = lowest_value;}
+    public Float getLowest_value() {
+        return lowest_value;
+    }
 
-    public Float getLowest_value(){ return lowest_value;}
+    public void setLowest_value(float lowest_value) {
+        this.lowest_value = lowest_value;
+    }
 
-    public void setOpening(float opening){ this.opening = opening; }
+    public Float getOpening() {
+        return opening;
+    }
 
-    public Float getOpening(){ return opening;}
+    public void setOpening(float opening) {
+        this.opening = opening;
+    }
 
-    public void setClosing(Float closing){ this.closing = closing;}
+    public Float getClosing() {
+        return closing;
+    }
 
-    public Float getClosing(){ return closing;}
+    public void setClosing(Float closing) {
+        this.closing = closing;
+    }
 
-    public void setList(List<ChartData> list){ this.list = list;}
+    public List<ChartData> getList() {
+        return list;
+    }
 
-    public List<ChartData> getList(){ return  list; }
+    public void setList(List<ChartData> list) {
+        this.list = list;
+    }
 
     public String getSectorLabel() {
         return sectorLabel;
@@ -233,24 +289,38 @@ public class ChartDataCustom extends Application implements Serializable {
         sectorLabel = value;
     }
 
-    public void setChartName(String chartName){ this.chartName = chartName;}
-
-    public String getChartName(){return  chartName; }
-
-    public String getLabels(){
-        if(labels == null){
-            labels = cordinate;
-        }
-        return  labels;
+    public String getChartName() {
+        return chartName;
     }
 
-    public void setLabels(String labels){ this.labels = labels;}
+    public void setChartName(String chartName) {
+        this.chartName = chartName;
+    }
 
-    public void setY_List(Float [] y_list){ this.y_list = y_list;}
+    public String getLabels() {
+        if (labels == null) {
+            labels = cordinate;
+        }
+        return labels;
+    }
 
-    public Float[] getY_List(){ return  y_list;}
+    public void setLabels(String labels) {
+        this.labels = labels;
+    }
 
-    public void  setLegends(String legends){ this.legends = legends;}
+    public Float[] getY_List() {
+        return y_list;
+    }
 
-    public String getLegends(){return  legends;}
+    public void setY_List(Float[] y_list) {
+        this.y_list = y_list;
+    }
+
+    public String getLegends() {
+        return legends;
+    }
+
+    public void setLegends(String legends) {
+        this.legends = legends;
+    }
 }

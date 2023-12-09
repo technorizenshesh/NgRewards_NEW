@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
@@ -22,15 +23,17 @@ import main.com.ngrewards.marchant.MarchantLogin;
 
 public class AccountTypeSelectionAct extends AppCompatActivity {
 
+    public String account_type = "";
     private ImageView member_img, marchant_img;
     private TextView member_txt_lay, marchant_txt, next_tv, memtxt, martxt;
     private LinearLayout merchant_lay, member_lay;
-    public String account_type = "";
     private Dialog dialogSts;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

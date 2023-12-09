@@ -3,7 +3,6 @@ package main.com.ngrewards.constant;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 
@@ -20,11 +19,9 @@ import main.com.ngrewards.R;
  */
 
 public class CreditCardEditText extends AppCompatEditText {
-    private SparseArray<Pattern> mCCPatterns = null;
-
     private final char mSeparator = ' ';
-
     private final int mDefaultDrawableResId = R.drawable.creditcard; //default credit card image
+    private SparseArray<Pattern> mCCPatterns = null;
     private int mCurrentDrawableResId = 0;
     private Drawable mCurrentDrawable;
 

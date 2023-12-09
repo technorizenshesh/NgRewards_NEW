@@ -1,15 +1,17 @@
 package main.com.ngrewards.fragments;
 
 import android.app.Dialog;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.databinding.DataBindingUtil;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.databinding.FragmentWebViewBinding;
@@ -29,10 +31,10 @@ public class FragmentWebView extends BottomSheetDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog=(BottomSheetDialog)super.onCreateDialog(savedInstanceState);
-        binding= DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.fragment_web_view,null,false);
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.fragment_web_view, null, false);
         dialog.setContentView(binding.getRoot());
-        behavior=BottomSheetBehavior.from((View)binding.getRoot().getParent());
+        behavior = BottomSheetBehavior.from((View) binding.getRoot().getParent());
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         BindView();
         return dialog;
@@ -43,7 +45,7 @@ public class FragmentWebView extends BottomSheetDialogFragment {
         binding.tvTitle.setText(title);
         binding.mWebView.getSettings().setJavaScriptEnabled(true);
         binding.mWebView.setWebViewClient(new AppWebViewClients());
-        binding.imgBack.setOnClickListener(v->dismiss());
+        binding.imgBack.setOnClickListener(v -> dismiss());
     }
 
     @Override
@@ -57,6 +59,7 @@ public class FragmentWebView extends BottomSheetDialogFragment {
         super.onStart();
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
+
     public class AppWebViewClients extends WebViewClient {
 
 
@@ -72,7 +75,7 @@ public class FragmentWebView extends BottomSheetDialogFragment {
         public void onPageFinished(WebView view, String url) {
             // TODO Auto-generated method stub
             super.onPageFinished(view, url);
-          binding.swipeRefresh.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         }
     }
 }

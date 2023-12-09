@@ -6,13 +6,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -30,13 +30,36 @@ import main.com.ngrewards.R;
 
 public class CropActivity extends AppCompatActivity {
 
+    private final String language = "";
     CropImageView newCropImageView;
     LinearLayout CropCancelLL, CropDoneLL, RotateDoneLL2;
     Toolbar toolbar;
     Uri fileUri;
     int degree = 0;
     String number;
-    private final String language = "";
+
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/Fixezi");
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("Hello Camera", "Oops! Failed create Hello Camera directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+        return mediaFile;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +77,9 @@ public class CropActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         String ImagePath = extra.getString("ImagePath");
         number = extra.getString("number");
-        if (ImagePath==null){
+        if (ImagePath == null) {
 
-        }
-        else {
+        } else {
             newCropImageView.setImageUriAsync(Uri.fromFile(new File(ImagePath)));
         }
         CropCancelLL.setOnClickListener(new View.OnClickListener() {
@@ -115,32 +137,8 @@ public class CropActivity extends AppCompatActivity {
         });
     }
 
-
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-
-    private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/Fixezi");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("Hello Camera", "Oops! Failed create Hello Camera directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".jpg");
-        return mediaFile;
     }
 
     @Override
@@ -153,6 +151,7 @@ public class CropActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onResume() {
         super.onResume();

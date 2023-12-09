@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * Created by technorizen on 14/6/18.
@@ -31,7 +30,7 @@ public class LightTextView extends androidx.appcompat.widget.AppCompatTextView {
         this.setTypeface(tf);
     }
 
-    protected void onDraw (Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
 

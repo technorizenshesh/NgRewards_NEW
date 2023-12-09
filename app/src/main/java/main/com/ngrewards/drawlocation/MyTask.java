@@ -7,8 +7,8 @@ import android.os.AsyncTask;
  */
 
 public class MyTask extends AsyncTask<String, String, String> {
-    WebOperations wo=null;
-    int x=0;
+    WebOperations wo = null;
+    int x = 0;
 
     public MyTask(WebOperations wo, int x) {
         this.x = x;
@@ -31,16 +31,13 @@ public class MyTask extends AsyncTask<String, String, String> {
     protected String doInBackground(String... params) {
         String result;
 
-        if(x==0) {
-             result = wo.doPost();
-        }
-        else  if(x==2) {
+        if (x == 0) {
+            result = wo.doPost();
+        } else if (x == 2) {
             result = wo.doPostMap();
-        }
-        else  if(x==3) {
+        } else if (x == 3) {
             result = wo.doGetMap();
-        }
-        else {
+        } else {
             result = wo.doGet();
         }
         return result;

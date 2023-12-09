@@ -170,7 +170,6 @@ public class NotificationBeanNew {
     }
 
 
-
     public String getReceiver_type() {
         return receiver_type;
     }
@@ -178,7 +177,6 @@ public class NotificationBeanNew {
     public void setReceiver_type(String receiver_type) {
         this.receiver_type = receiver_type;
     }
-
 
 
     public String getUsername() {
@@ -193,16 +191,16 @@ public class NotificationBeanNew {
         return userimg;
     }
 
+    public void setUserimg(String userimg) {
+        this.userimg = userimg;
+    }
+
     public String getChat_image() {
         return chat_image;
     }
 
     public void setChat_image(String chat_image) {
         this.chat_image = chat_image;
-    }
-
-    public void setUserimg(String userimg) {
-        this.userimg = userimg;
     }
 
     public String getReciverid() {
@@ -317,12 +315,12 @@ public class NotificationBeanNew {
         this.chat_id = chat_id;
     }
 
+    public String getChatMesssage() {
+        return chatMesssage;
+    }
+
     public void setChatMesssage(String chatMesssage) {
 
         this.chatMesssage = chatMesssage;
-    }
-
-    public String getChatMesssage() {
-        return chatMesssage;
     }
 }

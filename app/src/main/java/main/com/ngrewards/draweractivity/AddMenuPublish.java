@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,13 +25,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +57,7 @@ import main.com.ngrewards.constant.Myapisession;
 
 public class AddMenuPublish extends AppCompatActivity implements View.OnClickListener {
 
+    private final int GALLERY = 1;
     private String id_item_string;
     private String name_item_string;
     private TextView add_menu_txt;
@@ -79,7 +80,6 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
     private String extension;
     private String timeStamp;
     private byte[] imageBytes;
-    private final int GALLERY = 1;
     private Uri selectedImage;
     private String publish_string;
     private String discription_string;
@@ -260,10 +260,10 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
 
                         try {
 
-                            status =  response.getString("status");
+                            status = response.getString("status");
 
 
-                            if(status.equals("1")){
+                            if (status.equals("1")) {
 
                                 progresbar.setVisibility(View.GONE);
 
@@ -280,8 +280,6 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
 
 
                     }
@@ -316,92 +314,6 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
         } else {
 
             new AddOfferProdAsc().execute();
-        }
-    }
-
-    public class AddOfferProdAsc extends AsyncTask<String, String, String> {
-
-        String Jsondata;
-
-        protected void onPreExecute() {
-            try {
-                super.onPreExecute();
-                progresbar.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            String charset = "UTF-8";
-
-            requestURL = BaseUrl.baseurl + "add_item.php?";
-
-            Log.e("file!!!", String.valueOf(file));
-
-
-            try {
-
-                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-                multipart.addFormField("menu_id", id_item_string);
-                multipart.addFormField("title", tital_name_str);
-                multipart.addFormField("description", offer_desc_str);
-                multipart.addFormField("price", offer_price_str);
-                multipart.addFormField("merchant_id", user_id);
-
-                if (file == null || file.equals("")) {
-
-                } else {
-
-                    multipart.addFilePart("menu_image", file);
-                }
-
-                List<String> response = multipart.finish();
-                for (String line : response) {
-                    Jsondata = line;
-                }
-                JSONObject object = new JSONObject(Jsondata);
-                return Jsondata;
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progresbar.setVisibility(View.GONE);
-            Log.e("Add Product ", " >> " + result);
-
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-
-                    JSONObject jsonObject = new JSONObject(result);
-
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-
-                        Toast.makeText(AddMenuPublish.this, "Add Item Sucessfully", Toast.LENGTH_LONG).show();
-
-                        Intent intent = new Intent(AddMenuPublish.this, MerchantMenuSetting.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
         }
     }
 
@@ -618,6 +530,92 @@ public class AddMenuPublish extends AppCompatActivity implements View.OnClickLis
         }
 
         return data;
+    }
+
+    public class AddOfferProdAsc extends AsyncTask<String, String, String> {
+
+        String Jsondata;
+
+        protected void onPreExecute() {
+            try {
+                super.onPreExecute();
+                progresbar.setVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String charset = "UTF-8";
+
+            requestURL = BaseUrl.baseurl + "add_item.php?";
+
+            Log.e("file!!!", String.valueOf(file));
+
+
+            try {
+
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
+                multipart.addFormField("menu_id", id_item_string);
+                multipart.addFormField("title", tital_name_str);
+                multipart.addFormField("description", offer_desc_str);
+                multipart.addFormField("price", offer_price_str);
+                multipart.addFormField("merchant_id", user_id);
+
+                if (file == null || file.equals("")) {
+
+                } else {
+
+                    multipart.addFilePart("menu_image", file);
+                }
+
+                List<String> response = multipart.finish();
+                for (String line : response) {
+                    Jsondata = line;
+                }
+                JSONObject object = new JSONObject(Jsondata);
+                return Jsondata;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progresbar.setVisibility(View.GONE);
+            Log.e("Add Product ", " >> " + result);
+
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(result);
+
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+
+                        Toast.makeText(AddMenuPublish.this, "Add Item Sucessfully", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(AddMenuPublish.this, MerchantMenuSetting.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
 
 }

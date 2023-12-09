@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * Custom request to make multipart header and upload file.
- *
+ * <p>
  * Sketch Project Studio
  * Created by Angga on 27/04/2016 12.05.
  */
@@ -64,15 +64,13 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
     }
 
 
-
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         return (mHeaders != null) ? mHeaders : super.getHeaders();
     }
 
     @Override
-    public String getBodyContentType()
-    {
+    public String getBodyContentType() {
         return "multipart/form-data;boundary=" + boundary;
     }
 
@@ -229,6 +227,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
         /**
          * Default data part
+         *
          * @param imageString
          */
         public DataPart(String imageString) {

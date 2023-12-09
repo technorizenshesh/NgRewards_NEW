@@ -17,10 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -43,9 +39,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,30 +77,30 @@ import retrofit2.Response;
 
 public class UpdateListingProduct extends AppCompatActivity {
     private static final String TAG = "UpdateListingProduct";
+    public static ArrayList<ProductImage> ImagePathArrayList;
+    public static ArrayList<String> ImagePathArrayList_str;
+    HorizontalAdapter horizontalAdapter;
+    ProgressBar progresbar;
+    File[] filearray;
+    MySession mySession;
+    Myapisession myapisession;
+    boolean IsSplited = false;
+    LinearLayout split_lay;
+    CheckBox split_check;
     //public static ArrayList<String> ImagePathArrayList;
     private RelativeLayout backlay;
     private ImageView uploadimg;
-    HorizontalAdapter horizontalAdapter;
     private RecyclerView add_product_list;
     private Spinner category_spinner;
-    ProgressBar progresbar;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private CategoryAdpters categoryAdpters;
     private String category_id = "";
     private EditText shipping_price_et, stock_et, tital_name_et, description_et, price_et, shipping_et, sizes_et, colors_et;
     private String user_id = "", stock_str = "", shipping_price_str = "", tital_name_str = "", description_str = "", price_str = "", sizes_str = "", colors_str = "", shipping_str = "";
     private TextView show_pricing_type, update_item_tv;
-    File[] filearray;
-    MySession mySession;
-    Myapisession myapisession;
     private int remove_pos;
-    public static ArrayList<ProductImage> ImagePathArrayList;
-    public static ArrayList<String> ImagePathArrayList_str;
     private String split_amount = "";
     private String split_payments = "";
-    boolean IsSplited = false;
-    LinearLayout split_lay;
-    CheckBox split_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +152,8 @@ public class UpdateListingProduct extends AppCompatActivity {
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
                 categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
                 JSONObject object = new JSONObject(myapisession.getProductdata());
                 Log.e("loginCall >", " >" + myapisession.getProductdata());
@@ -415,7 +415,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 if (Build.VERSION.SDK_INT >= 33) {
                     Intent i = new Intent(UpdateListingProduct.this, MultiPhotoSelectActivity2.class);
                     startActivity(i);
-                }else {
+                } else {
                     Intent i = new Intent(UpdateListingProduct.this, MultiPhotoSelectActivity.class);
                     startActivity(i);
                 }
@@ -518,42 +518,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
     }
 
-    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
-        private final ArrayList<String> peopleList;
-
-        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
-            this.peopleList = peopleList;
-        }
-
-        @NonNull
-        @Override
-        public FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
-            FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
-            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
-            int prop = position + 1;
-            ivFinalImage.setText("Payment " + prop + " - " + mySession.getValueOf(MySession.CurrencySign) + " " + peopleList.get(position));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return peopleList.size();
-        }
-
-        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
-            public SelectTimeViewHolder(@NonNull View itemView) {
-                super(itemView);
-            }
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -584,108 +548,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         }
 
 
-    }
-
-    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
-
-        private ArrayList<Bitmap> horizontalList;
-        private final ArrayList<ProductImage> ImagePathArray;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public ImageView ProductImageImagevies, remove_images;
-            //   RelativeLayout RLRemovePhoto;
-
-            public MyViewHolder(View view) {
-                super(view);
-                remove_images = (ImageView) view.findViewById(R.id.remove_images);
-                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
-                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
-
-            }
-        }
-
-
-        public HorizontalAdapter(ArrayList<ProductImage> ImagePathArrayList) {
-            this.horizontalList = horizontalList;
-            this.ImagePathArray = ImagePathArrayList;
-        }
-
-        @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.business_lay_img, parent, false);
-
-            return new HorizontalAdapter.MyViewHolder(itemView);
-        }
-
-        @SuppressLint("RecyclerView")
-        @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, int position) {
-            if (ImagePathArray.get(position) != null) {
-
-                if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
-                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getProductImage())));
-                } else {
-                    String product_img = ImagePathArray.get(position).getProductImage();
-                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-                    } else {
-
-                        Glide.with(UpdateListingProduct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
-
-
-/*
-                        Glide.with(UpdateListingProduct.this)
-                                .load(product_img)
-                                .thumbnail(0.5f)
-                                .override(150, 150)
-                                .centerCrop()
-                                 
-                                .placeholder(R.drawable.placeholder)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .listener(new RequestListener<String, GlideDrawable>() {
-                                    @Override
-                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                        return false;
-
-                                    }
-
-                                    @Override
-                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
-                                        return false;
-                                    }
-                                })
-                                .into(holder.ProductImageImagevies);
-*/
-
-                    }
-                }
-
-
-            }
-            holder.remove_images.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
-                        ImagePathArrayList.remove(position);
-                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-                        add_product_list.setAdapter(horizontalAdapter);
-                        horizontalAdapter.notifyDataSetChanged();
-                    } else {
-                        remove_pos = position;
-                        removeImages(remove_pos, ImagePathArray.get(position).getImageId());
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return ImagePathArrayList == null ? 0 : ImagePathArrayList.size();
-
-        }
     }
 
     private void removeImages(final int remove_pos, String id) {
@@ -825,7 +687,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         return mypath.getAbsolutePath();
     }
 
-
     public void decodeFile(String filePath) {
         // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();
@@ -860,8 +721,8 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
         categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -913,10 +774,147 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         });
     }
 
+    public class FinalPuzzelAdapter extends RecyclerView.Adapter<FinalPuzzelAdapter.SelectTimeViewHolder> {
+        private final ArrayList<String> peopleList;
+
+        public FinalPuzzelAdapter(ArrayList<String> peopleList) {
+            this.peopleList = peopleList;
+        }
+
+        @NonNull
+        @Override
+        public FinalPuzzelAdapter.SelectTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View listItem = layoutInflater.inflate(R.layout.list_split_item_item, parent, false);
+            FinalPuzzelAdapter.SelectTimeViewHolder viewHolder = new FinalPuzzelAdapter.SelectTimeViewHolder(listItem);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull FinalPuzzelAdapter.SelectTimeViewHolder holder, @SuppressLint("RecyclerView") int position) {
+            TextView ivFinalImage = holder.itemView.findViewById(R.id.emi_item);
+            int prop = position + 1;
+            ivFinalImage.setText("Payment " + prop + " - " + mySession.getValueOf(MySession.CurrencySign) + " " + peopleList.get(position));
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return peopleList.size();
+        }
+
+        public class SelectTimeViewHolder extends RecyclerView.ViewHolder {
+            public SelectTimeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+        private final ArrayList<ProductImage> ImagePathArray;
+        private ArrayList<Bitmap> horizontalList;
+
+        public HorizontalAdapter(ArrayList<ProductImage> ImagePathArrayList) {
+            this.horizontalList = horizontalList;
+            this.ImagePathArray = ImagePathArrayList;
+        }
+
+        @Override
+        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.business_lay_img, parent, false);
+
+            return new HorizontalAdapter.MyViewHolder(itemView);
+        }
+
+        @SuppressLint("RecyclerView")
+        @Override
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, int position) {
+            if (ImagePathArray.get(position) != null) {
+
+                if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
+                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getProductImage())));
+                } else {
+                    String product_img = ImagePathArray.get(position).getProductImage();
+                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+                    } else {
+
+                        Glide.with(UpdateListingProduct.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
+
+
+/*
+                        Glide.with(UpdateListingProduct.this)
+                                .load(product_img)
+                                .thumbnail(0.5f)
+                                .override(150, 150)
+                                .centerCrop()
+
+                                .placeholder(R.drawable.placeholder)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        return false;
+
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+                                        return false;
+                                    }
+                                })
+                                .into(holder.ProductImageImagevies);
+*/
+
+                    }
+                }
+
+
+            }
+            holder.remove_images.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ImagePathArray.get(position).getImageId().equalsIgnoreCase("0")) {
+                        ImagePathArrayList.remove(position);
+                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+                        add_product_list.setAdapter(horizontalAdapter);
+                        horizontalAdapter.notifyDataSetChanged();
+                    } else {
+                        remove_pos = position;
+                        removeImages(remove_pos, ImagePathArray.get(position).getImageId());
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return ImagePathArrayList == null ? 0 : ImagePathArrayList.size();
+
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public ImageView ProductImageImagevies, remove_images;
+            //   RelativeLayout RLRemovePhoto;
+
+            public MyViewHolder(View view) {
+                super(view);
+                remove_images = (ImageView) view.findViewById(R.id.remove_images);
+                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
+                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
+
+            }
+        }
+    }
+
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;

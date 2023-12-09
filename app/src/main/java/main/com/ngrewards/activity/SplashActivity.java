@@ -18,15 +18,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +42,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -65,6 +66,7 @@ import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
+import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 public class SplashActivity extends AppCompatActivity implements
         //http://main.com.ngrewards/?productId=1
@@ -108,7 +110,7 @@ public class SplashActivity extends AppCompatActivity implements
         mySession = new MySession(this);
         PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.reult_intent_mem, "");
         Tools.updateResources(this, mySession.getValueOf(MySession.KEY_LANGUAGE));
-
+        displayFirebaseRegId();
         String newMutableList = "Test";
 
         Log.d(TAG, "MutableListComparison: " + mutableList.equals(newMutableList));
@@ -286,9 +288,16 @@ public class SplashActivity extends AppCompatActivity implements
     }
 
     private void displayFirebaseRegId() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        String firebase_regid = pref.getString("regId", null);
-        Log.e("Splash", "Firebase reg id: " + firebase_regid);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
+            Log.d("deviceTokenUpdate()=>", "" + instanceIdResult.getToken());
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("regId", instanceIdResult.getToken());
+            editor.commit();
+            Log.d("deviceTokenUpdate()=>", "" + pref.getString("regId",""));
+
+        });
+
     }
 
 
@@ -301,7 +310,7 @@ public class SplashActivity extends AppCompatActivity implements
             int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
             int FifthPermissionResult2 = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.POST_NOTIFICATIONS);
             int FifthPermissionResult3 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_MEDIA_VIDEO);
-            return FirstPermissionResult == PackageManager.PERMISSION_GRANTED && camera == PackageManager.PERMISSION_GRANTED && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED && FourthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult2 == PackageManager.PERMISSION_GRANTED&& FifthPermissionResult3 == PackageManager.PERMISSION_GRANTED;
+            return FirstPermissionResult == PackageManager.PERMISSION_GRANTED && camera == PackageManager.PERMISSION_GRANTED && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED && FourthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult == PackageManager.PERMISSION_GRANTED && FifthPermissionResult2 == PackageManager.PERMISSION_GRANTED && FifthPermissionResult3 == PackageManager.PERMISSION_GRANTED;
         } else {
             int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
             int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -351,8 +360,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                       // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
+                                         Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        //Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -393,8 +402,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                        // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
+                                         Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                        //Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -420,8 +429,8 @@ public class SplashActivity extends AppCompatActivity implements
 
                                 if (mySession.IsLoggedIn()) {
                                     if (user_type.equalsIgnoreCase("Merchant")) {
-                                        // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                        Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
+                                         Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                      //  Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                         startActivity(i);
                                         finish();
                                     } else {
@@ -552,8 +561,8 @@ public class SplashActivity extends AppCompatActivity implements
                             }
                             Log.e(TAG, "user_typeuser_typeuser_typeuser_typeuser_type: " + user_type);
                             if (user_type.equalsIgnoreCase("Merchant")) {
-                                // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
+                                 Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                              //  Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                 startActivity(i);
                                 finish();
 
@@ -562,7 +571,7 @@ public class SplashActivity extends AppCompatActivity implements
                                         MainTabActivity.class)
                                         .putExtra("result", reult_intent_mem);
 
-                                Log.e(TAG, "run:  "+reult_intent_mem );
+                                Log.e(TAG, "run:  " + reult_intent_mem);
                                 PreferenceConnector.writeString(SplashActivity.this, PreferenceConnector.reult_intent_mem, reult_intent_mem);
                                 startActivity(i);
                                 finish();
@@ -660,8 +669,8 @@ public class SplashActivity extends AppCompatActivity implements
                                 // Intent i = new Intent(SplashAct.this, CheckLocationActivity.class);
                                 if (user_type.equalsIgnoreCase("Merchant")) {
 
-                                    // Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
-                                    Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
+                                     Intent i = new Intent(SplashActivity.this, MerchantBottumAct.class);
+                                   // Intent i = new Intent(SplashActivity.this, MerHomeActivity.class);
                                     startActivity(i);
                                     finish();
 

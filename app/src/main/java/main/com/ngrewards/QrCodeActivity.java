@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -28,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.blikoon.qrcodescanner.camera.CameraManager;
 import com.blikoon.qrcodescanner.decode.DecodeImageCallback;
@@ -117,6 +118,7 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
         Intent i = createIntent(context);
         context.startActivity(i);
     }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -371,6 +373,7 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) {
             return;
         }
@@ -485,7 +488,7 @@ public class QrCodeActivity extends AppCompatActivity implements Callback, OnCli
                         i.putExtra("merchant_id", member_id);
                         i.putExtra("merchant_name", memname);
                         i.putExtra("merchant_number", usernameauto);
-                     //   i.putExtra("country_id", country_id);
+                        //   i.putExtra("country_id", country_id);
                         i.putExtra("total_amount_due", amount);
                         i.putExtra("type", "paybill");
                         startActivity(i);

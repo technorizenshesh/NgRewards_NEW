@@ -3,12 +3,13 @@ package main.com.ngrewards.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 
@@ -33,18 +34,19 @@ import retrofit2.Response;
 
 public class MemberTransfer extends AppCompatActivity {
 
-    private TextView toafriend,international;
+    public static ArrayList<MemberDetail> memberDetailArrayList;
+    private TextView toafriend, international;
     private RelativeLayout backlay;
     private ProgressBar progresbar;
-    public static ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
     private MySession mySession;
-    private  String user_id="",country_id="";
+    private String user_id = "", country_id = "";
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,16 +63,18 @@ public class MemberTransfer extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
             }
-        }); toafriend.setOnClickListener(new View.OnClickListener() {
+        });
+        toafriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MemberTransfer.this,TransferToaFriend.class);
+                Intent i = new Intent(MemberTransfer.this, TransferToaFriend.class);
                 startActivity(i);
             }
-        }); international.setOnClickListener(new View.OnClickListener() {
+        });
+        international.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MemberTransfer.this,InternationalTransAct.class);
+                Intent i = new Intent(MemberTransfer.this, InternationalTransAct.class);
                 startActivity(i);
             }
         });
@@ -81,10 +85,9 @@ public class MemberTransfer extends AppCompatActivity {
         backlay = findViewById(R.id.backlay);
         international = findViewById(R.id.international);
         toafriend = findViewById(R.id.toafriend);
-        if (myapisession.getKeyMemberusername()==null||myapisession.getKeyMemberusername().equalsIgnoreCase("")){
+        if (myapisession.getKeyMemberusername() == null || myapisession.getKeyMemberusername().equalsIgnoreCase("")) {
             getUsername();
-        }
-        else {
+        } else {
             try {
                 memberDetailArrayList = new ArrayList<>();
                 JSONObject object = new JSONObject(myapisession.getKeyMemberusername());
@@ -92,8 +95,7 @@ public class MemberTransfer extends AppCompatActivity {
                 if (object.getString("status").equals("1")) {
                     MemberBean successData = new Gson().fromJson(myapisession.getKeyMemberusername(), MemberBean.class);
                     memberDetailArrayList.addAll(successData.getResult());
-                }
-                else {
+                } else {
                     getUsername();
                 }
 
@@ -124,12 +126,13 @@ public class MemberTransfer extends AppCompatActivity {
             }
         }
     }
+
     private void getUsername() {
         Log.e("User name list>", " >GET NAME");
 
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -140,8 +143,7 @@ public class MemberTransfer extends AppCompatActivity {
                         String responseData = response.body().string();
                         JSONObject object = new JSONObject(responseData);
                         Log.e("User name list>", " >" + responseData);
-                        if (object.getString("status").equals("1"))
-                        {
+                        if (object.getString("status").equals("1")) {
                             myapisession.setKeyMemberusername(responseData);
                             MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
                             memberDetailArrayList.addAll(successData.getResult());

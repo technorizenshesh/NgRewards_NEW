@@ -5,13 +5,13 @@ package main.com.ngrewards.beanclasses;
  */
 
 public class GalleryBean {
-String id;
-String merchant_id;
-String gallery_image;
-String created_date;
-String status_taken;
-String like_count;
-String like_status;
+    String id;
+    String merchant_id;
+    String gallery_image;
+    String created_date;
+    String status_taken;
+    String like_count;
+    String like_status;
 
 
     public String getLike_count() {

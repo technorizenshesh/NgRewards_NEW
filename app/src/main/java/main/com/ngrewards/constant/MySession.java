@@ -33,15 +33,13 @@ public class MySession {
     public static final String admin_created_password = "admin_created_password";
     public static final String sell_items_reomve_access = "sell_items_reomve_access";
     public static final String PassSet = "pass_set";
+    public static final String CountryId = "country_id";
+    public static final String CurrencyCode = "currency_code";
+    public static final String CurrencySign = "currency_sign";
+    public static final String CountryName = "country_name";
     private static final String PREF_NAME = "MyPref";
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String IS_ONLINE = "IsOnline";
-    public static final String   CountryId="country_id";
-    public static final String   CurrencyCode="currency_code";
-    public static final String   CurrencySign="currency_sign";
-    public static final String   CountryName = "country_name";
-
-
     private final String language = "";
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -160,11 +158,13 @@ public class MySession {
         editor.commit();
 
     }
+
     public String getValueOf(String id) {
-        if (Objects.equals(id, CurrencySign)){
+        if (Objects.equals(id, CurrencySign)) {
             return pref.getString(id, "$");
-        }else {
-        return pref.getString(id, "");}
+        } else {
+            return pref.getString(id, "");
+        }
     }
 
 

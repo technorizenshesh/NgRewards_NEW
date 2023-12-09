@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -43,18 +44,69 @@ import main.com.ngrewards.marchant.merchantbottum.MerStatusAct;
 
 public class FragMerSales extends Fragment {
 
+    LineChartView saleschart;
     private Spinner timespinner;
     private ArrayList<String> timesellist;
     private View v;
     private MonthSelAdp monthSelAdp;
     private GraphView graph, monthgraph, yeargraph;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                graph.removeAllSeries();
+                if (MerStatusAct.salesBeanListArrayList != null && !MerStatusAct.salesBeanListArrayList.isEmpty()) {
+                    DataPoint[] dataPoints = new DataPoint[MerStatusAct.salesBeanListArrayList.get(0).getWeek().size()]; // declare an array of DataPoint objects with the same size as your list
+                    for (int i = 0; i < MerStatusAct.salesBeanListArrayList.get(0).getWeek().size(); i++) {
+                        dataPoints[i] = new DataPoint(i, MerStatusAct.salesBeanListArrayList.get(0).getWeek().get(i).getTotal()); // not sure but I think the second argument should be of type double
+                    }
+                    LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints); // This one should be obvious right? :)
+                    graph.addSeries(series);
+                    series.setDrawDataPoints(true);
+                    series.setDataPointsRadius(12);
+                    series.setThickness(10);
+                    graph.refreshDrawableState();
+                    StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+                    staticLabelsFormatter.setHorizontalLabels(new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"});
+                    //   staticLabelsFormatter.setVerticalLabels(new String[] {"Sun","Mon","Tue","Tue","Tue"});
+                    graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+                    graph.getViewport().setScrollable(true); // enables horizontal scrolling
+                    graph.getViewport().setScrollableY(true); // enables vertical scrolling
+                    graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+                    graph.getViewport().setScalableY(true);
+                }
+
+
+            } catch (Exception e) {
+
+            }
+
+
+        }
+    };
     private SwipeRefreshLayout swipeToRefresh;
     private TextView graph_time;
-    LineChartView saleschart;
     private String week_startdate = "", week_last_date = "", current_year_str = "", current_month_str = "", selected_str = "";
 
     public FragMerSales() {
         // Required empty public constructor
+    }
+
+    public static Date getWeekStartDate() {
+        Calendar calendar = Calendar.getInstance();
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DATE, -1);
+        }
+        return calendar.getTime();
+    }
+
+    public static Date getWeekEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DATE, 1);
+        }
+        calendar.add(Calendar.DATE, -1);
+        return calendar.getTime();
     }
 
     @Override
@@ -126,8 +178,7 @@ public class FragMerSales extends Fragment {
         swipeToRefresh = v.findViewById(R.id.swipeToRefresh);
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 swipeToRefresh.setRefreshing(false);
             }
         });
@@ -249,58 +300,6 @@ public class FragMerSales extends Fragment {
 
     }
 
-    public static Date getWeekStartDate() {
-        Calendar calendar = Calendar.getInstance();
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DATE, -1);
-        }
-        return calendar.getTime();
-    }
-
-    public static Date getWeekEndDate() {
-        Calendar calendar = Calendar.getInstance();
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DATE, 1);
-        }
-        calendar.add(Calendar.DATE, -1);
-        return calendar.getTime();
-    }
-
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                graph.removeAllSeries();
-                if (MerStatusAct.salesBeanListArrayList != null && !MerStatusAct.salesBeanListArrayList.isEmpty()) {
-                    DataPoint[] dataPoints = new DataPoint[MerStatusAct.salesBeanListArrayList.get(0).getWeek().size()]; // declare an array of DataPoint objects with the same size as your list
-                    for (int i = 0; i < MerStatusAct.salesBeanListArrayList.get(0).getWeek().size(); i++) {
-                        dataPoints[i] = new DataPoint(i, MerStatusAct.salesBeanListArrayList.get(0).getWeek().get(i).getTotal()); // not sure but I think the second argument should be of type double
-                    }
-                    LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints); // This one should be obvious right? :)
-                    graph.addSeries(series);
-                    series.setDrawDataPoints(true);
-                    series.setDataPointsRadius(12);
-                    series.setThickness(10);
-                    graph.refreshDrawableState();
-                    StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-                    staticLabelsFormatter.setHorizontalLabels(new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"});
-                    //   staticLabelsFormatter.setVerticalLabels(new String[] {"Sun","Mon","Tue","Tue","Tue"});
-                    graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-                    graph.getViewport().setScrollable(true); // enables horizontal scrolling
-                    graph.getViewport().setScrollableY(true); // enables vertical scrolling
-                    graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
-                    graph.getViewport().setScalableY(true);
-                }
-
-
-            } catch (Exception e) {
-
-            }
-
-
-        }
-    };
-
     @Override
     public void onPause() {
         super.onPause();
@@ -314,9 +313,9 @@ public class FragMerSales extends Fragment {
     }
 
     public class MonthSelAdp extends BaseAdapter {
+        private final ArrayList<String> timesellist;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<String> timesellist;
 
         public MonthSelAdp(Context applicationContext, ArrayList<String> timesellist) {
             this.context = applicationContext;

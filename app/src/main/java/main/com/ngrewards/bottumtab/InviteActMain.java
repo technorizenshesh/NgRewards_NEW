@@ -25,10 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -39,15 +37,15 @@ import main.com.ngrewards.R;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
-import main.com.ngrewards.draweractivity.BaseActivity;
 
 public class InviteActMain extends Fragment {
 
-    FrameLayout contentFrameLayout;
-    private TextView invitefriendsbusiness,invitefriends, usernametv;
-    MySession mySession;
-    private String username;
     public final static int QRcodeWidth = 500;
+    FrameLayout contentFrameLayout;
+    MySession mySession;
+    View root;
+    private TextView invitefriendsbusiness, invitefriends, usernametv;
+    private String username;
     private Bitmap bitmap;
     private ImageView myqrview;
     private String craete_profile;
@@ -56,10 +54,9 @@ public class InviteActMain extends Fragment {
     private String username_s;
     private String user_id;
     private ProgressBar progresbar;
-    private String invite_str,invite_str2;
+    private String invite_str, invite_str2;
     private String id;
 
-    View root;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.activity_invite_act_main, container, false);
@@ -104,7 +101,7 @@ public class InviteActMain extends Fragment {
                             jsonObject12.put("affiliate_number", "" + jsonObject1.getString("affiliate_number"));
                             jsonObject12.put("fullname", "" + jsonObject1.getString("fullname"));
                             jsonObject12.put("id", "" + jsonObject1.getString("id"));
-                         //   String s = "Member," + jsonObject1.getString("affiliate_name") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
+                            //   String s = "Member," + jsonObject1.getString("affiliate_name") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
                             String s = "Member," + jsonObject1.getString("username") + "," + jsonObject1.getString("fullname") + "," + jsonObject1.getString("affiliate_number") + "," + jsonObject1.getString("id");
                             //bitmap = TextToImageEncode(jsonObject12.toString());
                             bitmap = TextToImageEncode(s);
@@ -125,7 +122,59 @@ public class InviteActMain extends Fragment {
 
         idinits();
         idinitui1();
-        return  root;
+        return root;
+    }
+
+    private void idinitui1() {
+        craete_profile = PreferenceConnector.readString(requireActivity(), PreferenceConnector.Create_Profile, "");
+        if (!craete_profile.equals("craete_profile")) {
+            //dialogSts.dismiss();
+        }
+    }
+
+    private void idinits() {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    Bitmap TextToImageEncode(String Value) throws WriterException {
+        BitMatrix bitMatrix;
+        try {
+            bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.QR_CODE, QRcodeWidth, QRcodeWidth, null
+            );
+
+        } catch (IllegalArgumentException Illegalargumentexception) {
+
+            return null;
+        }
+
+        int bitMatrixWidth = bitMatrix.getWidth();
+        int bitMatrixHeight = bitMatrix.getHeight();
+
+        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
+
+        for (int y = 0; y < bitMatrixHeight; y++) {
+            int offset = y * bitMatrixWidth;
+            for (int x = 0; x < bitMatrixWidth; x++) {
+
+                pixels[offset + x] = bitMatrix.get(x, y) ?
+                        getResources().getColor(R.color.black) : getResources().getColor(R.color.white);
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
+
+        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+        return bitmap;
     }
 
     private class GetProfile extends AsyncTask<String, String, String> {
@@ -198,14 +247,14 @@ public class InviteActMain extends Fragment {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                         username = jsonObject1.getString("username");
                         id = jsonObject1.getString("id");
-                       /* affiliate_number1 = jsonObject1.getString("affiliate_number");*/
+                        /* affiliate_number1 = jsonObject1.getString("affiliate_number");*/
 
 
                         usernametv = root.findViewById(R.id.usernametv);
                         usernametv.setText("@" + username);
-                        invite_str = "https://myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
-                        invite_str2 = "https://myngrewards.com/signup-merchant.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number+"&country="+mySession.getValueOf(MySession.CountryId)+"&source=app";
-                                      /*https://myngrewards.com/signup-merchant.php?affiliate_name=Ios&affiliate_no=287&how_invited_you=&country=101&source=app*/
+                        invite_str = "https://myngrewards.com/signup.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number + "&country=" + mySession.getValueOf(MySession.CountryId) + "&source=app";
+                        invite_str2 = "https://myngrewards.com/signup-merchant.php?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number + "&country=" + mySession.getValueOf(MySession.CountryId) + "&source=app";
+                        /*https://myngrewards.com/signup-merchant.php?affiliate_name=Ios&affiliate_no=287&how_invited_you=&country=101&source=app*/
                         Log.e("id>>", id);
                         Log.e("afflited_no>>", affiliate_number);
 
@@ -227,7 +276,7 @@ public class InviteActMain extends Fragment {
                         invitefriendsbusiness.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Log.e("TAG", "onClick:---- "+invite_str2 );
+                                Log.e("TAG", "onClick:---- " + invite_str2);
                                 Intent sendIntent = new Intent();
                                 sendIntent.setAction(Intent.ACTION_SEND);
                                 sendIntent.putExtra(Intent.EXTRA_TEXT, invite_str2);
@@ -244,57 +293,5 @@ public class InviteActMain extends Fragment {
             }
 
         }
-    }
-
-    private void idinitui1() {
-        craete_profile = PreferenceConnector.readString(requireActivity(), PreferenceConnector.Create_Profile, "");
-        if (!craete_profile.equals("craete_profile")) {
-            //dialogSts.dismiss();
-        }
-    }
-
-    private void idinits() {
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    Bitmap TextToImageEncode(String Value) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(Value, BarcodeFormat.QR_CODE, QRcodeWidth, QRcodeWidth, null
-            );
-
-        } catch (IllegalArgumentException Illegalargumentexception) {
-
-            return null;
-        }
-
-        int bitMatrixWidth = bitMatrix.getWidth();
-        int bitMatrixHeight = bitMatrix.getHeight();
-
-        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
-
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-            for (int x = 0; x < bitMatrixWidth; x++) {
-
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.black) : getResources().getColor(R.color.white);
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bitmap;
     }
 }

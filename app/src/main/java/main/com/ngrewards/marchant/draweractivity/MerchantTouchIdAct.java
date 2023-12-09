@@ -2,7 +2,6 @@ package main.com.ngrewards.marchant.draweractivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -31,12 +31,12 @@ import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.MySession;
 
 public class MerchantTouchIdAct extends AppCompatActivity {
-private RelativeLayout backlay;
+    MySession mySession;
+    private RelativeLayout backlay;
     private TextView usefingerprint;
     private Switch member_touch_id;
-    MySession mySession;
     private ProgressBar progresbar;
-    private String user_id="",status_touchid="";
+    private String user_id = "", status_touchid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ private RelativeLayout backlay;
         setContentView(R.layout.activity_touch_id);
         mySession = new MySession(this);
         String user_log_data = mySession.getKeyAlldata();
-        Log.e("User Login Data",">> "+user_log_data);
+        Log.e("User Login Data", ">> " + user_log_data);
         if (user_log_data == null) {
 
         } else {
@@ -76,13 +76,12 @@ private RelativeLayout backlay;
         member_touch_id.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     mySession.touchid(true);
-                    status_touchid ="yes";
+                    status_touchid = "yes";
                     new UpdateToychId().execute();
-                }
-                else {
-                    status_touchid ="no";
+                } else {
+                    status_touchid = "no";
                     mySession.touchid(false);
                     new UpdateToychId().execute();
                 }
@@ -99,7 +98,7 @@ private RelativeLayout backlay;
         String first = getResources().getString(R.string.youusefing);
         String second = getResources().getString(R.string.appand);
         String next = "<font color='#f60241'>" + getResources().getString(R.string.ngrewars) + "</font>";
-        usefingerprint.setText(Html.fromHtml(first + " " + next+" "+second));
+        usefingerprint.setText(Html.fromHtml(first + " " + next + " " + second));
         backlay = findViewById(R.id.backlay);
     }
 
@@ -148,9 +147,6 @@ private RelativeLayout backlay;
                 reader.close();
                 Log.e("Update", ">>>>>>>>>>>>" + response);
                 return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
             } catch (IOException e1) {
 
                 e1.printStackTrace();

@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.core.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -32,6 +31,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -51,52 +52,53 @@ import main.com.ngrewards.constant.MySession;
 public class Tools {
 
     public static void updateResources(Context context, String language) {
-        try{
-        Log.e("TAG", "updateResources: languagelanguage----- "+language );
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Resources resources = context.getResources();
+        try {
+            Log.e("TAG", "updateResources: languagelanguage----- " + language);
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+            Resources resources = context.getResources();
 
-        Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+            Configuration configuration = resources.getConfiguration();
+            configuration.locale = locale;
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
             Resources res = context.getResources();
             DisplayMetrics dm = res.getDisplayMetrics();
             Configuration conf = res.getConfiguration();
             conf.locale = locale;
             res.updateConfiguration(conf, dm);
-          //  AppCompatDelegate.setApplicationLocales(appLocale)
+            //  AppCompatDelegate.setApplicationLocales(appLocale)
             LocaleHelper.setLocale(context, language);
-        }catch (Exception e){
-            Log.e("TAG", "updateResources: "+e.getMessage() );
-            Log.e("TAG", "updateResources: "+e.getLocalizedMessage() );
-            Log.e("TAG", "updateResources: "+e.getCause() );
+        } catch (Exception e) {
+            Log.e("TAG", "updateResources: " + e.getMessage());
+            Log.e("TAG", "updateResources: " + e.getLocalizedMessage());
+            Log.e("TAG", "updateResources: " + e.getCause());
         }
     }
-    public static void reupdateResources(Context context) {
-        try{
-            MySession mySession =new MySession(context);
-            mySession.getValueOf(MySession.KEY_LANGUAGE);
-        Log.e("TAG", "updateResources: languagelanguage-----" +
-                " "+mySession.getValueOf(MySession.KEY_LANGUAGE) );
-        Locale locale = new Locale(mySession.getValueOf(MySession.KEY_LANGUAGE));
-        Locale.setDefault(locale);
-        Resources resources = context.getResources();
 
-        Configuration configuration = resources.getConfiguration();
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    public static void reupdateResources(Context context) {
+        try {
+            MySession mySession = new MySession(context);
+            mySession.getValueOf(MySession.KEY_LANGUAGE);
+            Log.e("TAG", "updateResources: languagelanguage-----" +
+                    " " + mySession.getValueOf(MySession.KEY_LANGUAGE));
+            Locale locale = new Locale(mySession.getValueOf(MySession.KEY_LANGUAGE));
+            Locale.setDefault(locale);
+            Resources resources = context.getResources();
+
+            Configuration configuration = resources.getConfiguration();
+            configuration.locale = locale;
+            resources.updateConfiguration(configuration, resources.getDisplayMetrics());
             Resources res = context.getResources();
             DisplayMetrics dm = res.getDisplayMetrics();
             Configuration conf = res.getConfiguration();
             conf.locale = locale;
             res.updateConfiguration(conf, dm);
-          //  AppCompatDelegate.setApplicationLocales(appLocale)
+            //  AppCompatDelegate.setApplicationLocales(appLocale)
             LocaleHelper.setLocale(context, mySession.getValueOf(MySession.KEY_LANGUAGE));
-        }catch (Exception e){
-            Log.e("TAG", "updateResources: "+e.getMessage() );
-            Log.e("TAG", "updateResources: "+e.getLocalizedMessage() );
-            Log.e("TAG", "updateResources: "+e.getCause() );
+        } catch (Exception e) {
+            Log.e("TAG", "updateResources: " + e.getMessage());
+            Log.e("TAG", "updateResources: " + e.getLocalizedMessage());
+            Log.e("TAG", "updateResources: " + e.getCause());
         }
     }
 

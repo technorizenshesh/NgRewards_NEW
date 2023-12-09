@@ -5,11 +5,6 @@ import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
@@ -42,7 +38,6 @@ import main.com.ngrewards.constant.CountryBean;
 import main.com.ngrewards.constant.CustomViewPager;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.MarchantLogin;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.start_fragment.BecontrolFrag;
 import main.com.ngrewards.start_fragment.DiscoverFrag;
@@ -130,7 +125,7 @@ public class StartSliderAct extends AppCompatActivity {
                         Tools.updateResources(StartSliderAct.this, language_list.get(position).getSortname());
                         mySession.setValueOf(KEY_LANGUAGE, language_list.get(position).getSortname());
                         startActivity(new Intent(getApplicationContext(), StartSliderAct.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     }
                 }
@@ -355,35 +350,6 @@ public class StartSliderAct extends AppCompatActivity {
         }
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
     /**
      * Created by technorizen on 2/7/18.
      */
@@ -431,6 +397,35 @@ public class StartSliderAct extends AppCompatActivity {
 
         public void setName(String name) {
             this.name = name;
+        }
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 

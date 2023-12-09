@@ -8,18 +8,18 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,15 +30,17 @@ import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.marchant.adapter.ImageAdpterGrid;
 
 public class MultiPhotoSelectActivity extends AppCompatActivity {
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
+    private static final int REQUEST_FOR_STORAGE_PERMISSION = 123;
+    public static ArrayList<String> image;
+    String language = "";
     private RelativeLayout backrell;
     private TextView done_but;
     private ImageAdpterGrid imageAdpterGrid;
-    private static final int REQUEST_FOR_STORAGE_PERMISSION = 123;
-  public static ArrayList<String> image;
-    String language ="";
+
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +59,12 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<String> selectedItems = imageAdpterGrid.getCheckedItems();
 
-                if (selectedItems!= null && selectedItems.size() > 0) {
-                     image = imageAdpterGrid.getCheckedItems();
-                    Log.e("Images Path",""+image.get(0));
+                if (selectedItems != null && selectedItems.size() > 0) {
+                    image = imageAdpterGrid.getCheckedItems();
+                    Log.e("Images Path", "" + image.get(0));
                     finish();
                     Log.e(MultiPhotoSelectActivity.class.getSimpleName(), "Selected Items: " + selectedItems);
-                }
-                else {
+                } else {
                     Toast.makeText(MultiPhotoSelectActivity.this, "No image selected" + selectedItems.size(), Toast.LENGTH_SHORT).show();
 
                 }
@@ -72,7 +73,7 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
         populateImagesFromGallery();
     }
 
-    public void btnChoosePhotosClick(View v){
+    public void btnChoosePhotosClick(View v) {
 
 
     }
@@ -129,7 +130,7 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
     }
 
     private ArrayList<String> loadPhotosFromNativeGallery() {
-        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
+        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
         Cursor imagecursor = managedQuery(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
@@ -142,7 +143,7 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
             int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
             imageUrls.add(imagecursor.getString(dataColumnIndex));
 
-            System.out.println("=====> Array path => "+imageUrls.get(i));
+            System.out.println("=====> Array path => " + imageUrls.get(i));
         }
 
         return imageUrls;
@@ -151,7 +152,7 @@ public class MultiPhotoSelectActivity extends AppCompatActivity {
     private void initializeRecyclerView(ArrayList<String> imageUrls) {
         imageAdpterGrid = new ImageAdpterGrid(this, imageUrls);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),3);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 3);
         GridView recyclerView = (GridView) findViewById(R.id.gridView);
 /*
         recyclerView.setLayoutManager(layoutManager);

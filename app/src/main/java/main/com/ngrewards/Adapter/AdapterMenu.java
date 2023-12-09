@@ -2,9 +2,6 @@ package main.com.ngrewards.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -18,12 +15,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -41,14 +41,15 @@ import main.com.ngrewards.draweractivity.AddMenuPublish;
 /**
  * Created by admin4 on 11/5/2016.
  */
-public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolder> {
+public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolder> {
 
     private final ArrayList<ModalMenuList> all_category_subcategory;
     private final IMethodCaller IMethode;
+    private final Context activity;
+    private final RecyclerViewClickListener1 mListener;
     private View itemView;
     private String desage_name_string;
     private char first_char;
-    private final Context activity;
     private String dish_title_string;
     private String discription_title_string;
     private String Item_Price;
@@ -60,7 +61,6 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog alertDialog;
     private String editTextString;
-    private final RecyclerViewClickListener1 mListener;
     private String h;
     private String name_item;
     private String image_menu;
@@ -72,7 +72,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
     private String price_item;
     private String image_item;
     private String menu_id;
-    private  MySession mySession;
+    private MySession mySession;
 
     public AdapterMenu(Context a, ArrayList<ModalMenuList> all_category_subcategory, RecyclerViewClickListener1 listener, IMethodCaller IMethode) {
         this.activity = a;
@@ -91,7 +91,7 @@ public class    AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int i) {
-mySession = new MySession(activity);
+        mySession = new MySession(activity);
         desage_name_string = all_category_subcategory.get(i).getName();
         dish_title_string = all_category_subcategory.get(i).getTitle();
         discription_title_string = all_category_subcategory.get(i).getTitleDiscription();
@@ -204,7 +204,7 @@ mySession = new MySession(activity);
         holder.name_menu.setText(desage_name_string);
         holder.dish_name.setText(dish_title_string);
         holder.discription.setText(activity.getString(R.string.description_colen) + discription_title_string);
-        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign)+" "  + Item_Price);
+        holder.price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + Item_Price);
 
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -398,6 +398,13 @@ mySession = new MySession(activity);
         APIStatusPublish(fghu);
     }
 
+    @Override
+    public int getItemCount() {
+
+        return all_category_subcategory.size();
+
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView name_menu, dish_name;
@@ -429,14 +436,6 @@ mySession = new MySession(activity);
             menu_list_recycler = itemView.findViewById(R.id.menu_list_recycler);
 
         }
-    }
-
-
-    @Override
-    public int getItemCount() {
-
-        return all_category_subcategory.size();
-
     }
 
 }

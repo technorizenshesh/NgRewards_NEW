@@ -1,10 +1,6 @@
 package main.com.ngrewards.fragments;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,16 +37,17 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentMemberMenu extends Fragment {
+    private final ArrayList<ModelItemList> arrayList = new ArrayList<>();
     private FragmentMemberMenuBinding binding;
     private ModelMenuSetting data;
-    private final ArrayList<ModelItemList> arrayList = new ArrayList<>();
     private String URL = "";
     private String user_id;
     private MerchantListBean MerchentData;
     private String postData;
     private String dfhj;
     private String employeesales_id;
-private MySession mySession ;
+    private MySession mySession;
+
     public FragmentMemberMenu() {
         // Required empty public constructor
     }
@@ -62,7 +63,7 @@ private MySession mySession ;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member_menu, container, false);
         URL = data.getName().equalsIgnoreCase("Delivery") ? BaseUrl.memberDelivery() : BaseUrl.memberMenuList();
-         mySession = new MySession(getActivity());
+        mySession = new MySession(getActivity());
         String user_log_data = mySession.getKeyAlldata();
 
         if (user_log_data != null) {
@@ -86,8 +87,7 @@ private MySession mySession ;
             ((OrderActivity) getActivity()).FragTrans(new FragmentMenuCart().setData(data, MerchentData, postData));
             dfhj = MerchentData.getAffiliateName();
 
-            employeesales_id =  MerchentData.getEmployee_sale_id();
-
+            employeesales_id = MerchentData.getEmployee_sale_id();
 
 
         });
@@ -150,9 +150,9 @@ private MySession mySession ;
                              }
                          }
                 );
-         }
+    }
 
-     class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
+    class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
 
         @NonNull
         @Override

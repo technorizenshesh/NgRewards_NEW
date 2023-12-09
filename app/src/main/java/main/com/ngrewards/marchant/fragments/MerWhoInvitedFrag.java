@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.gson.Gson;
@@ -50,16 +51,16 @@ import retrofit2.Response;
 
 public class MerWhoInvitedFrag extends Fragment {
 
-    AutoCompleteTextView whoinvite;
-    private ProgressBar progresbar;
-    private ArrayList<MemberDetail> memberDetailArrayList;
-    private ImageView qrcode;
+    private static final int REQUEST_CODE_QR_SCAN = 3;
     private final boolean sts = false;
+    AutoCompleteTextView whoinvite;
     int count = 0;
     Myapisession myapisession;
     View v;
-    private static final int REQUEST_CODE_QR_SCAN = 3;
-    private  String user_id="",country_id="";
+    private ProgressBar progresbar;
+    private ArrayList<MemberDetail> memberDetailArrayList;
+    private ImageView qrcode;
+    private String user_id = "", country_id = "";
     private MySession mySession;
 
     public MerWhoInvitedFrag() {
@@ -182,7 +183,7 @@ public class MerWhoInvitedFrag extends Fragment {
 
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -244,8 +245,8 @@ public class MerWhoInvitedFrag extends Fragment {
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;

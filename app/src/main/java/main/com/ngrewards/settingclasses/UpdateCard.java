@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
@@ -41,15 +42,15 @@ import main.com.ngrewards.constant.MySession;
 
 public class UpdateCard extends AppCompatActivity {
 
-    private EditText cardname, cardnumber;
-    private TextView update_tv, delete_tv;
-    ArrayList<String> listOfPattern;
-    ArrayList<String> modellist;
-    ArrayList<String> datelist;
-    private Spinner yearspinner, datespinner;
     private final String user_id = "";
     private final String expiry_date = "";
     private final String expiry_year = "";
+    ArrayList<String> listOfPattern;
+    ArrayList<String> modellist;
+    ArrayList<String> datelist;
+    private EditText cardname, cardnumber;
+    private TextView update_tv, delete_tv;
+    private Spinner yearspinner, datespinner;
     private BasicCustomAdp basicCustomAdp;
     private ProgressBar progressBar;
     private MySession mySession;
@@ -65,6 +66,18 @@ public class UpdateCard extends AppCompatActivity {
     private String cardnumber_str = "";
     private String created_date = "";
     private String card_type = "";
+
+    private static int getLastModelYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -10);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private static int getThisYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, 0);
+        return prevYear.get(Calendar.YEAR);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +107,8 @@ public class UpdateCard extends AppCompatActivity {
 
         for (int i = 1; i < 13; i++) {
             String dates = String.valueOf(i);
-            if (i<10){
-                dates = "0"+dates;
+            if (i < 10) {
+                dates = "0" + dates;
             }
             datelist.add("" + dates);
         }
@@ -115,11 +128,10 @@ public class UpdateCard extends AppCompatActivity {
         listOfPattern.add(ptJcb);
         for (String p : listOfPattern) {
             if (cardnumber_str.matches(p)) {
-                status_match=true;
+                status_match = true;
                 break;
-            }
-            else {
-                status_match=false;
+            } else {
+                status_match = false;
             }
         }
 
@@ -138,29 +150,24 @@ public class UpdateCard extends AppCompatActivity {
         update_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardname_str= cardname.getText().toString();
-                cardnumber_str= cardnumber.getText().toString();
-                if (cardname_str==null||cardname_str.equalsIgnoreCase("")){
-                    Toast.makeText(UpdateCard.this,getResources().getString(R.string.entercardname),Toast.LENGTH_LONG).show();
-                }
-                else if (cardnumber_str==null||cardnumber_str.equalsIgnoreCase("")){
-                    Toast.makeText(UpdateCard.this,getResources().getString(R.string.entercardnumber),Toast.LENGTH_LONG).show();
+                cardname_str = cardname.getText().toString();
+                cardnumber_str = cardnumber.getText().toString();
+                if (cardname_str == null || cardname_str.equalsIgnoreCase("")) {
+                    Toast.makeText(UpdateCard.this, getResources().getString(R.string.entercardname), Toast.LENGTH_LONG).show();
+                } else if (cardnumber_str == null || cardnumber_str.equalsIgnoreCase("")) {
+                    Toast.makeText(UpdateCard.this, getResources().getString(R.string.entercardnumber), Toast.LENGTH_LONG).show();
 
-                }
-                else if (date_str==null||date_str.equalsIgnoreCase("")){
-                    Toast.makeText(UpdateCard.this,getResources().getString(R.string.selectexpdate),Toast.LENGTH_LONG).show();
+                } else if (date_str == null || date_str.equalsIgnoreCase("")) {
+                    Toast.makeText(UpdateCard.this, getResources().getString(R.string.selectexpdate), Toast.LENGTH_LONG).show();
 
-                }
-                else if (expiryyear_str==null||expiryyear_str.equalsIgnoreCase("")){
-                    Toast.makeText(UpdateCard.this,getResources().getString(R.string.selexpyear),Toast.LENGTH_LONG).show();
+                } else if (expiryyear_str == null || expiryyear_str.equalsIgnoreCase("")) {
+                    Toast.makeText(UpdateCard.this, getResources().getString(R.string.selexpyear), Toast.LENGTH_LONG).show();
 
-                }
-                else {
-                    if (status_match){
+                } else {
+                    if (status_match) {
                         new UpdateCardAsc().execute();
-                    }
-                    else {
-                        Toast.makeText(UpdateCard.this,getResources().getString(R.string.cardnumberisnotvalid),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(UpdateCard.this, getResources().getString(R.string.cardnumberisnotvalid), Toast.LENGTH_LONG).show();
 
                     }
 
@@ -207,25 +214,25 @@ public class UpdateCard extends AppCompatActivity {
 
             }
         });
-        for (int k=0;k<modellist.size();k++){
-            if (modellist.get(k).equalsIgnoreCase(expiryyear_str)){
+        for (int k = 0; k < modellist.size(); k++) {
+            if (modellist.get(k).equalsIgnoreCase(expiryyear_str)) {
                 yearspinner.setSelection(k);
-                Log.e("Come True","DD");
+                Log.e("Come True", "DD");
                 break;
             }
         }
-        for (int k=0;k<datelist.size();k++){
-            if (datelist.get(k).equalsIgnoreCase(date_str)){
+        for (int k = 0; k < datelist.size(); k++) {
+            if (datelist.get(k).equalsIgnoreCase(date_str)) {
                 datespinner.setSelection(k);
-                Log.e("Come True","DDDD");
+                Log.e("Come True", "DDDD");
                 break;
             }
         }
         backlay = findViewById(R.id.backlay);
         cardname = findViewById(R.id.cardname);
         cardnumber = findViewById(R.id.cardnumber);
-        cardnumber.setText(""+cardnumber_str);
-        cardname.setText(""+cardname_str);
+        cardnumber.setText("" + cardnumber_str);
+        cardname.setText("" + cardname_str);
         cardnumber.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -234,11 +241,10 @@ public class UpdateCard extends AppCompatActivity {
                     String ccNum = s.toString();
                     for (String p : listOfPattern) {
                         if (ccNum.matches(p)) {
-                            status_match=true;
+                            status_match = true;
                             break;
-                        }
-                        else {
-                            status_match=false;
+                        } else {
+                            status_match = false;
                         }
                     }
                 }
@@ -268,33 +274,15 @@ public class UpdateCard extends AppCompatActivity {
 
     }
 
-    private static int getLastModelYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, -10);
-        return prevYear.get(Calendar.YEAR);
-    }
-
-    private static int getThisYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, 0);
-        return prevYear.get(Calendar.YEAR);
-    }
-
-
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -345,6 +333,11 @@ public class UpdateCard extends AppCompatActivity {
 
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
         }
     }
 
@@ -416,15 +409,14 @@ public class UpdateCard extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = null;
                     jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")){
-                        Toast.makeText(UpdateCard.this,getResources().getString(R.string.cardupdate),Toast.LENGTH_LONG).show();
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        Toast.makeText(UpdateCard.this, getResources().getString(R.string.cardupdate), Toast.LENGTH_LONG).show();
                         finish();
-                    }
-                    else {
-                        Toast.makeText(UpdateCard.this,getResources().getString(R.string.somethingwrong),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(UpdateCard.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
 
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -434,6 +426,7 @@ public class UpdateCard extends AppCompatActivity {
 
         }
     }
+
     private class DeleteCard extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -499,15 +492,14 @@ public class UpdateCard extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = null;
                     jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")){
-                        Toast.makeText(UpdateCard.this,getResources().getString(R.string.cardremove),Toast.LENGTH_LONG).show();
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        Toast.makeText(UpdateCard.this, getResources().getString(R.string.cardremove), Toast.LENGTH_LONG).show();
                         finish();
-                    }
-                    else {
-                        Toast.makeText(UpdateCard.this,getResources().getString(R.string.somethingwrong),Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(UpdateCard.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
 
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
 

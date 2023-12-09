@@ -21,8 +21,8 @@ import java.util.List;
  * @author www.codejava.net
  */
 public class MultipartUtility {
-    private final String boundary;
     private static final String LINE_FEED = "\r\n";
+    private final String boundary;
     private final HttpURLConnection httpConn;
     private final String charset;
     private final OutputStream outputStream;
@@ -31,6 +31,7 @@ public class MultipartUtility {
     /**
      * This constructor initializes a new HTTP POST request with content type
      * is set to multipart/form-data
+     *
      * @param requestURL
      * @param charset
      * @throws IOException
@@ -58,7 +59,8 @@ public class MultipartUtility {
 
     /**
      * Adds a form field to the request
-     * @param name field name
+     *
+     * @param name  field name
      * @param value field value
      */
     public void addFormField(String name, String value) {
@@ -74,7 +76,8 @@ public class MultipartUtility {
 
     /**
      * Adds a upload file section to the request
-     * @param fieldName name attribute in <input type="file" name="..." />
+     *
+     * @param fieldName  name attribute in <input type="file" name="..." />
      * @param uploadFile a File to be uploaded
      * @throws IOException
      */
@@ -83,12 +86,12 @@ public class MultipartUtility {
         String fileName = uploadFile.getName();
         writer.append("--" + boundary).append(LINE_FEED);
         writer.append(
-                "Content-Disposition: form-data; name=\"" + fieldName
-                        + "\"; filename=\"" + fileName + "\"")
+                        "Content-Disposition: form-data; name=\"" + fieldName
+                                + "\"; filename=\"" + fileName + "\"")
                 .append(LINE_FEED);
         writer.append(
-                "Content-Type: "
-                        + URLConnection.guessContentTypeFromName(fileName))
+                        "Content-Type: "
+                                + URLConnection.guessContentTypeFromName(fileName))
                 .append(LINE_FEED);
         writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
         writer.append(LINE_FEED);
@@ -109,7 +112,8 @@ public class MultipartUtility {
 
     /**
      * Adds a header field to the request.
-     * @param name - name of the header field
+     *
+     * @param name  - name of the header field
      * @param value - value of the header field
      */
     public void addHeaderField(String name, String value) {
@@ -119,6 +123,7 @@ public class MultipartUtility {
 
     /**
      * Completes the request and receives response from the server.
+     *
      * @return a list of Strings as response in case the server returned
      * status OK, otherwise an exception is thrown.
      * @throws IOException

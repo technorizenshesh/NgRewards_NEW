@@ -19,6 +19,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import main.com.ngrewards.QrCodeActivity;
+
 final class DecodeHandler extends Handler {
 
     private final QrCodeActivity mActivity;
@@ -37,11 +38,9 @@ final class DecodeHandler extends Handler {
 
     @Override
     public void handleMessage(Message message) {
-        if( message.what == R.id.decode)
-        {
+        if (message.what == R.id.decode) {
             decode((byte[]) message.obj, message.arg1, message.arg2);
-        }else if( message.what == R.id.quit)
-        {
+        } else if (message.what == R.id.quit) {
             Looper looper = Looper.myLooper();
             if (null != looper) {
                 looper.quit();
@@ -53,8 +52,8 @@ final class DecodeHandler extends Handler {
      * Decode the data within the viewfinder rectangle, and time how long it took. For efficiency, reuse the same reader
      * objects from one decode to the next.
      *
-     * @param data The YUV preview frame.
-     * @param width The width of the preview frame.
+     * @param data   The YUV preview frame.
+     * @param width  The width of the preview frame.
      * @param height The height of the preview frame.
      */
     private void decode(byte[] data, int width, int height) {

@@ -1,7 +1,6 @@
 package main.com.ngrewards.fragments;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
 
 import main.com.ngrewards.R;
 import main.com.ngrewards.activity.SliderActivity;
@@ -18,8 +19,9 @@ import main.com.ngrewards.activity.SliderActivity;
  */
 
 public class EnterMobfrag extends Fragment {
-    private EditText entered_mobile;
     View v;
+    private EditText entered_mobile;
+
     public EnterMobfrag() {
         // Required empty public constructor
     }
@@ -33,7 +35,7 @@ public class EnterMobfrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.enter_mem_mobile, container, false);
+        v = inflater.inflate(R.layout.enter_mem_mobile, container, false);
         idinit();
         return v;
     }
@@ -45,7 +47,7 @@ public class EnterMobfrag extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s == null || s.length() == 0) {
-                    SliderActivity.user_number_str="";
+                    SliderActivity.user_number_str = "";
                 } else {
                     SliderActivity.user_number_str = s.toString();
                     Log.e("sa >.", "> " + SliderActivity.user_number_str);

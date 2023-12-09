@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,16 +42,15 @@ import main.com.ngrewards.constant.Myapisession;
 
 public class AllAddedAddressAct extends AppCompatActivity {
 
+    public static String fullname_str = "", state_str = "", city_str = "", zippcode_str = "", address1_str = "", address2_str = "", statecityadd_str = "", countrytv_str = "", phonetv_str = "", AddressID = "";
+    Myapisession myapisession;
     private ArrayList<AddressBean> addressBeanArrayList;
     private ExpandableHeightListView addresslist;
     private ProgressBar progresbar;
     private MySession mySession;
-    private String  user_id="";
+    private String user_id = "";
     private CustomAddresAdp customAddresAdp;
-    private RelativeLayout addaddressdlay,backlay;
-    public static String fullname_str="",state_str="",city_str="",zippcode_str="",address1_str="",address2_str="",statecityadd_str="",countrytv_str="",phonetv_str="",AddressID="";
-    Myapisession myapisession;
-
+    private RelativeLayout addaddressdlay, backlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,27 +77,24 @@ public class AllAddedAddressAct extends AppCompatActivity {
         clickevent();
 
 
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (myapisession.getKeyAddressdata()==null||myapisession.getKeyAddressdata().equalsIgnoreCase("")){
+        if (myapisession.getKeyAddressdata() == null || myapisession.getKeyAddressdata().equalsIgnoreCase("")) {
             new GetSavedAddress().execute();
-        }
-        else {
+        } else {
             try {
                 addressBeanArrayList = new ArrayList<>();
-                String result =myapisession.getKeyAddressdata();
+                String result = myapisession.getKeyAddressdata();
                 JSONObject jsonObject = new JSONObject(result);
                 String message = jsonObject.getString("status");
                 if (message.equalsIgnoreCase("1")) {
                     myapisession.setKeyAddressdata(result);
                     JSONArray jsonArray = jsonObject.getJSONArray("result");
 
-                    for (int i =0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         AddressBean addressBean = new AddressBean();
                         addressBean.setId(jsonObject1.getString("id"));
@@ -117,7 +114,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
 
                     }
 
-                    customAddresAdp = new CustomAddresAdp(AllAddedAddressAct.this,addressBeanArrayList);
+                    customAddresAdp = new CustomAddresAdp(AllAddedAddressAct.this, addressBeanArrayList);
                     addresslist.setAdapter(customAddresAdp);
                     customAddresAdp.notifyDataSetChanged();
 
@@ -147,7 +144,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
         addaddressdlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AllAddedAddressAct.this,AddShipingAddress.class);
+                Intent i = new Intent(AllAddedAddressAct.this, AddShipingAddress.class);
                 startActivity(i);
             }
         });
@@ -236,7 +233,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
                         myapisession.setKeyAddressdata(result);
                         JSONArray jsonArray = jsonObject.getJSONArray("result");
 
-                        for (int i =0;i<jsonArray.length();i++){
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                             AddressBean addressBean = new AddressBean();
                             addressBean.setId(jsonObject1.getString("id"));
@@ -256,7 +253,7 @@ public class AllAddedAddressAct extends AppCompatActivity {
 
                         }
 
-                        customAddresAdp = new CustomAddresAdp(AllAddedAddressAct.this,addressBeanArrayList);
+                        customAddresAdp = new CustomAddresAdp(AllAddedAddressAct.this, addressBeanArrayList);
                         addresslist.setAdapter(customAddresAdp);
 
 /*
@@ -286,8 +283,8 @@ public class AllAddedAddressAct extends AppCompatActivity {
 
     public class CustomAddresAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<AddressBean> addressBeanArrayList;
+        private LayoutInflater inflater = null;
 
         public CustomAddresAdp(Context contexts, ArrayList<AddressBean> addressBeanArrayList) {
             this.context = contexts;
@@ -314,10 +311,6 @@ public class AllAddedAddressAct extends AppCompatActivity {
             return position;
         }
 
-        public class Holder {
-
-        }
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
@@ -332,23 +325,23 @@ public class AllAddedAddressAct extends AppCompatActivity {
             TextView address1 = rowView.findViewById(R.id.address1);
             TextView address2 = rowView.findViewById(R.id.address2);
             TextView phonetv = rowView.findViewById(R.id.phonetv);
-            fullname.setText(""+addressBeanArrayList.get(position).getFullname());
-            address1.setText(""+addressBeanArrayList.get(position).getAddress_1());
-            address2.setText(""+addressBeanArrayList.get(position).getAddress_2());
-            phonetv.setText(""+addressBeanArrayList.get(position).getPhone_number());
+            fullname.setText("" + addressBeanArrayList.get(position).getFullname());
+            address1.setText("" + addressBeanArrayList.get(position).getAddress_1());
+            address2.setText("" + addressBeanArrayList.get(position).getAddress_2());
+            phonetv.setText("" + addressBeanArrayList.get(position).getPhone_number());
             addsel_rdb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    AddressID =  addressBeanArrayList.get(position).getId();
-                    fullname_str =  addressBeanArrayList.get(position).getFullname();
-                    address1_str =  addressBeanArrayList.get(position).getAddress_1();
-                    address2_str =  addressBeanArrayList.get(position).getAddress_2();
-                    state_str =  addressBeanArrayList.get(position).getState();
-                    city_str =  addressBeanArrayList.get(position).getCity();
-                    countrytv_str =  addressBeanArrayList.get(position).getCountry();
-                    phonetv_str =  addressBeanArrayList.get(position).getPhone_number();
-                    zippcode_str =  addressBeanArrayList.get(position).getZipcode();
+                    AddressID = addressBeanArrayList.get(position).getId();
+                    fullname_str = addressBeanArrayList.get(position).getFullname();
+                    address1_str = addressBeanArrayList.get(position).getAddress_1();
+                    address2_str = addressBeanArrayList.get(position).getAddress_2();
+                    state_str = addressBeanArrayList.get(position).getState();
+                    city_str = addressBeanArrayList.get(position).getCity();
+                    countrytv_str = addressBeanArrayList.get(position).getCountry();
+                    phonetv_str = addressBeanArrayList.get(position).getPhone_number();
+                    zippcode_str = addressBeanArrayList.get(position).getZipcode();
                     finish();
                 }
             });
@@ -357,22 +350,26 @@ public class AllAddedAddressAct extends AppCompatActivity {
             edit_but.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   Intent i = new Intent(AllAddedAddressAct.this,UpdateShipingAddress.class);
-                   i.putExtra("addid",addressBeanArrayList.get(position).getId());
-                   i.putExtra("fullname_str",addressBeanArrayList.get(position).getFullname());
-                   i.putExtra("address1_str",addressBeanArrayList.get(position).getAddress_1());
-                   i.putExtra("address2_str",addressBeanArrayList.get(position).getAddress_2());
-                   i.putExtra("state_str",addressBeanArrayList.get(position).getState());
-                   i.putExtra("city_str",addressBeanArrayList.get(position).getCity());
-                   i.putExtra("countrytv_str",addressBeanArrayList.get(position).getCountry());
-                   i.putExtra("phonetv_str",addressBeanArrayList.get(position).getPhone_number());
-                   i.putExtra("zippcode_str",addressBeanArrayList.get(position).getZipcode());
-                   startActivity(i);
+                    Intent i = new Intent(AllAddedAddressAct.this, UpdateShipingAddress.class);
+                    i.putExtra("addid", addressBeanArrayList.get(position).getId());
+                    i.putExtra("fullname_str", addressBeanArrayList.get(position).getFullname());
+                    i.putExtra("address1_str", addressBeanArrayList.get(position).getAddress_1());
+                    i.putExtra("address2_str", addressBeanArrayList.get(position).getAddress_2());
+                    i.putExtra("state_str", addressBeanArrayList.get(position).getState());
+                    i.putExtra("city_str", addressBeanArrayList.get(position).getCity());
+                    i.putExtra("countrytv_str", addressBeanArrayList.get(position).getCountry());
+                    i.putExtra("phonetv_str", addressBeanArrayList.get(position).getPhone_number());
+                    i.putExtra("zippcode_str", addressBeanArrayList.get(position).getZipcode());
+                    startActivity(i);
 
                 }
             });
             // cardnumber.setText(""+getLastfour(cardBeanArrayList.get(position).getCard_number()));
             return rowView;
+        }
+
+        public class Holder {
+
         }
 
     }

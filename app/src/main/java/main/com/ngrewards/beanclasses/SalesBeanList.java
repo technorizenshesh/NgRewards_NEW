@@ -19,6 +19,7 @@ public class SalesBeanList {
     @SerializedName("year")
     @Expose
     private List<Year> year = null;
+
     public List<Week> getWeek() {
         return week;
     }

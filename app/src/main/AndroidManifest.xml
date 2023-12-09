@@ -631,14 +631,14 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-     <!--   <service
+        <service
             android:name=".service.MyFirebaseInstanceIDService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service>-->
+        </service>
         <provider
             android:name=".UncaughtExceptionHandlerContentProvider"
             android:authorities="main.com.ngrewards.MainApplication"

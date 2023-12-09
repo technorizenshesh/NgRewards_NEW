@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -70,16 +68,25 @@ public class MerMessageAct extends MerchantBaseActivity {
     MessageRecycladp messageRecycladp;
     RecyclerView mychat;
     FrameLayout contentFrameLayout;
+    SwipeToAction swipeToAction;
     private ImageView write_to;
     private SwipeRefreshLayout swipeToRefresh;
     private ProgressBar progresbar;
     private ArrayList<ConverSession> converSessionArrayList;
     private MySession mySession;
-    private String user_id="",image_url="";
-    SwipeToAction swipeToAction;
+    private String user_id = "", image_url = "";
     private int del_item_pos;
     private ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
+
+    public static String fromBase64(String message) {
+
+        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        return new String(data, StandardCharsets.UTF_8);
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +105,7 @@ public class MerMessageAct extends MerchantBaseActivity {
                 if (message.equalsIgnoreCase("1")) {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                     user_id = jsonObject1.getString("id");
-                     image_url = jsonObject1.getString("merchant_image");
+                    image_url = jsonObject1.getString("merchant_image");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -108,11 +115,9 @@ public class MerMessageAct extends MerchantBaseActivity {
         clickevent();
 
 
-
-        if (myapisession.getKeyMemberusername()==null||myapisession.getKeyMemberusername().equalsIgnoreCase("")){
+        if (myapisession.getKeyMemberusername() == null || myapisession.getKeyMemberusername().equalsIgnoreCase("")) {
             getUsername();
-        }
-        else {
+        } else {
             try {
                 memberDetailArrayList = new ArrayList<>();
                 JSONObject object = new JSONObject(myapisession.getKeyMemberusername());
@@ -120,8 +125,7 @@ public class MerMessageAct extends MerchantBaseActivity {
                 if (object.getString("status").equals("1")) {
                     MemberBean successData = new Gson().fromJson(myapisession.getKeyMemberusername(), MemberBean.class);
                     memberDetailArrayList.addAll(successData.getResult());
-                }
-                else {
+                } else {
                     getUsername();
                 }
 
@@ -208,20 +212,77 @@ public class MerMessageAct extends MerchantBaseActivity {
 */
     }
 
-    public static String fromBase64(String message) {
-
-        byte[] data = Base64.decode(message, Base64.DEFAULT);
-        return new String(data, StandardCharsets.UTF_8);
-
-
+    private int removeBook(ConverSession book) {
+        int pos = converSessionArrayList.indexOf(book);
+        converSessionArrayList.remove(book);
+        messageRecycladp.notifyItemRemoved(pos);
+        return pos;
     }
 
+    private void addBook(int pos, ConverSession book) {
+        converSessionArrayList.add(pos, book);
+        messageRecycladp.notifyItemInserted(pos);
+    }
+
+    private void displaySnackbar(String text, String actionName, View.OnClickListener action) {
+        Snackbar snack = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG)
+                .setAction(actionName, action);
+
+        View v = snack.getView();
+        v.setBackgroundColor(getResources().getColor(R.color.darkgrey));
+        ((TextView) v.findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+        ((TextView) v.findViewById(R.id.snackbar_action)).setTextColor(Color.BLACK);
+
+        snack.show();
+    }
+
+    private void getUsername() {
+        Log.e("User name list>", " >GET NAME");
+
+        progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User name list>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
 
     private class GetChatList extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             converSessionArrayList = new ArrayList<>();
-           // progresbar.setVisibility(View.VISIBLE);
+            // progresbar.setVisibility(View.VISIBLE);
             swipeToRefresh.setRefreshing(true);
             super.onPreExecute();
             try {
@@ -239,7 +300,7 @@ public class MerMessageAct extends MerchantBaseActivity {
                 String postReceiverUrl = BaseUrl.baseurl + "get_conversation.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
-                Log.e("postReceiverUrl >>"," .."+postReceiverUrl+"user_id="+user_id+"&type=Merchant");
+                Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "user_id=" + user_id + "&type=Merchant");
 
                 params.put("user_id", user_id);
                 params.put("type", "Merchant");
@@ -288,7 +349,7 @@ public class MerMessageAct extends MerchantBaseActivity {
 
             super.onPostExecute(result);
             Log.e("Chat List >>", "" + result);
-           // progresbar.setVisibility(View.GONE);
+            // progresbar.setVisibility(View.GONE);
             swipeToRefresh.setRefreshing(false);
             if (result == null) {
 
@@ -304,47 +365,46 @@ public class MerMessageAct extends MerchantBaseActivity {
                         converSessionArrayList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                             if (jsonObject2.has("id")|jsonObject2.has("tid")){
-                            ConverSession conversession = new ConverSession();
-                            //conversession.setId(jsonObject2.getString("id"));
-                            conversession.setChat_id(jsonObject2.getString("chat_id"));
-                            conversession.setNo_of_message(jsonObject2.getString("no_of_message"));
-                            conversession.setReceiver_type(jsonObject2.getString("receiver_type"));
+                            if (jsonObject2.has("id") | jsonObject2.has("tid")) {
+                                ConverSession conversession = new ConverSession();
+                                //conversession.setId(jsonObject2.getString("id"));
+                                conversession.setChat_id(jsonObject2.getString("chat_id"));
+                                conversession.setNo_of_message(jsonObject2.getString("no_of_message"));
+                                conversession.setReceiver_type(jsonObject2.getString("receiver_type"));
 
-                            if (jsonObject2.getString("last_message")==null||jsonObject2.getString("last_message").equalsIgnoreCase("")){
-                                conversession.setMessage(jsonObject2.getString("msg_type"));
-                            }
-                            else {
-                               // conversession.setMessage(fromBase64(jsonObject2.getString("last_message")));
+                                if (jsonObject2.getString("last_message") == null || jsonObject2.getString("last_message").equalsIgnoreCase("")) {
+                                    conversession.setMessage(jsonObject2.getString("msg_type"));
+                                } else {
+                                    // conversession.setMessage(fromBase64(jsonObject2.getString("last_message")));
 
-                               conversession.setMessage(jsonObject2.getString("last_message"));
-                            }
-
-
-                            if (jsonObject2.getString("type").equalsIgnoreCase("Member")) {
-                                conversession.setSenderid(jsonObject2.getString("tid"));
-                                conversession.setSenderimg(jsonObject2.getString("member_image"));
-                                conversession.setSendername(jsonObject2.getString("username"));
-                                conversession.setFullname(jsonObject2.getString("fullname"));
+                                    conversession.setMessage(jsonObject2.getString("last_message"));
+                                }
 
 
-
-                            } else {
-                                if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")) {
+                                if (jsonObject2.getString("type").equalsIgnoreCase("Member")) {
                                     conversession.setSenderid(jsonObject2.getString("tid"));
                                     conversession.setSenderimg(jsonObject2.getString("member_image"));
-                                    conversession.setSendername(jsonObject2.getString("affiliate_name"));
+                                    conversession.setSendername(jsonObject2.getString("username"));
                                     conversession.setFullname(jsonObject2.getString("fullname"));
 
-                                } else {
-                                    if (jsonObject2.has("id")){
-                                    conversession.setSenderid(jsonObject2.getString("id"));
-                                    conversession.setSenderimg(jsonObject2.getString("merchant_image"));
-                                    conversession.setSendername(jsonObject2.getString("business_name"));
-                                    conversession.setFullname(jsonObject2.getString("business_name"));
-                                }                                  }
 
-                            }
+                                } else {
+                                    if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")) {
+                                        conversession.setSenderid(jsonObject2.getString("tid"));
+                                        conversession.setSenderimg(jsonObject2.getString("member_image"));
+                                        conversession.setSendername(jsonObject2.getString("affiliate_name"));
+                                        conversession.setFullname(jsonObject2.getString("fullname"));
+
+                                    } else {
+                                        if (jsonObject2.has("id")) {
+                                            conversession.setSenderid(jsonObject2.getString("id"));
+                                            conversession.setSenderimg(jsonObject2.getString("merchant_image"));
+                                            conversession.setSendername(jsonObject2.getString("business_name"));
+                                            conversession.setFullname(jsonObject2.getString("business_name"));
+                                        }
+                                    }
+
+                                }
 
                            /* if (jsonObject2.getString("receiver_type").equalsIgnoreCase("Member")){
                                 conversession.setSenderid(jsonObject2.getString("tid"));
@@ -360,32 +420,33 @@ public class MerMessageAct extends MerchantBaseActivity {
                            /* conversession.setSenderimg(jsonObject2.getString("member_image"));
                             conversession.setSendername(jsonObject2.getString("fullname"));*/
 
-                            conversession.setDatetime(jsonObject2.getString("date_time"));
-                            Date date1 = null;
-                            try {
-                                date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonObject2.getString("date_time").trim());
-                                SimpleDateFormat formatter = new SimpleDateFormat("dd MMM hh:mm aa", Locale.ENGLISH);
-                                String strDate = formatter.format(date1);
-                                conversession.setDatetime(strDate);
+                                conversession.setDatetime(jsonObject2.getString("date_time"));
+                                Date date1 = null;
+                                try {
+                                    date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).parse(jsonObject2.getString("date_time").trim());
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM hh:mm aa", Locale.ENGLISH);
+                                    String strDate = formatter.format(date1);
+                                    conversession.setDatetime(strDate);
 
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // conversession.setTime(jsonObject2.getString("time"));
+                                converSessionArrayList.add(conversession);
+                            } else {
+
                             }
-
-                            // conversession.setTime(jsonObject2.getString("time"));
-                            converSessionArrayList.add(conversession);  }else {
-                                 
-                             }
 
 
                         }
 
                     }
                     if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
-                        messageRecycladp = new MessageRecycladp(MerMessageAct.this,converSessionArrayList);
+                        messageRecycladp = new MessageRecycladp(MerMessageAct.this, converSessionArrayList);
                         mychat.setAdapter(messageRecycladp);
                         messageRecycladp.notifyDataSetChanged();
-                    }else {
+                    } else {
 
                     }
                 } catch (JSONException e) {
@@ -397,30 +458,6 @@ public class MerMessageAct extends MerchantBaseActivity {
 
     }
 
-
-    private int removeBook(ConverSession book) {
-        int pos = converSessionArrayList.indexOf(book);
-        converSessionArrayList.remove(book);
-        messageRecycladp.notifyItemRemoved(pos);
-        return pos;
-    }
-
-    private void addBook(int pos, ConverSession book) {
-        converSessionArrayList.add(pos, book);
-        messageRecycladp.notifyItemInserted(pos);
-    }
-
-    private void displaySnackbar(String text, String actionName, View.OnClickListener action) {
-        Snackbar snack = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG)
-                .setAction(actionName, action);
-
-        View v = snack.getView();
-        v.setBackgroundColor(getResources().getColor(R.color.darkgrey));
-        ((TextView) v.findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
-        ((TextView) v.findViewById(R.id.snackbar_action)).setTextColor(Color.BLACK);
-
-        snack.show();
-    }
     private class DeleteChat extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -441,7 +478,7 @@ public class MerMessageAct extends MerchantBaseActivity {
                 String postReceiverUrl = BaseUrl.baseurl + "clear_conversation.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
-                Log.e("postReceiverUrl >>"," .."+postReceiverUrl+"sender_id="+user_id+"&receiver_id="+strings[0]);
+                Log.e("postReceiverUrl >>", " .." + postReceiverUrl + "sender_id=" + user_id + "&receiver_id=" + strings[0]);
                 params.put("receiver_id", user_id);
                 params.put("sender_id", strings[0]);
 
@@ -500,7 +537,7 @@ public class MerMessageAct extends MerchantBaseActivity {
 
                         if (converSessionArrayList != null || !converSessionArrayList.isEmpty()) {
                             converSessionArrayList.remove(del_item_pos);
-                            messageRecycladp = new MessageRecycladp(MerMessageAct.this,converSessionArrayList);
+                            messageRecycladp = new MessageRecycladp(MerMessageAct.this, converSessionArrayList);
                             mychat.setAdapter(messageRecycladp);
                             messageRecycladp.notifyDataSetChanged();
                         }
@@ -515,76 +552,10 @@ public class MerMessageAct extends MerchantBaseActivity {
 
 
     }
-    private void getUsername() {
-        Log.e("User name list>", " >GET NAME");
-
-        progresbar.setVisibility(View.VISIBLE);
-        memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("User name list>", " >" + responseData);
-                        if (object.getString("status").equals("1"))
-                        {
-                            myapisession.setKeyMemberusername(responseData);
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-                            memberDetailArrayList.addAll(successData.getResult());
-                        }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
 
     public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
         Context context;
         ArrayList<ConverSession> converSessionArrayList;
-
-        public class MyViewHolder extends SwipeToAction.ViewHolder<ConverSession> {
-
-            private final TextView fullname;
-            private final TextView name;
-            private final TextView lastmaessage_tv;
-            private final TextView datetiem;
-            private final TextView reqcount;
-            private final CircleImageView propic;
-            private final ImageView deletecon;
-
-
-            public MyViewHolder(View view) {
-                super(view);
-                reqcount = itemView.findViewById(R.id.reqcount);
-                propic = itemView.findViewById(R.id.propic);
-                name = itemView.findViewById(R.id.name);
-                fullname = itemView.findViewById(R.id.fullname);
-                lastmaessage_tv = itemView.findViewById(R.id.lastmaessage_tv);
-                datetiem = itemView.findViewById(R.id.datetiem);
-                deletecon = itemView.findViewById(R.id.deletecon);
-            }
-        }
-
 
         public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
             this.context = myContacts;
@@ -601,7 +572,6 @@ public class MerMessageAct extends MerchantBaseActivity {
             return holder;
             // return new MyViewHolder(itemView);
         }
-
 
         @Override
         public void onBindViewHolder(final MessageRecycladp.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
@@ -668,6 +638,29 @@ public class MerMessageAct extends MerchantBaseActivity {
         public int getItemCount() {
             //return 6;
             return converSessionArrayList == null ? 0 : converSessionArrayList.size();
+        }
+
+        public class MyViewHolder extends SwipeToAction.ViewHolder<ConverSession> {
+
+            private final TextView fullname;
+            private final TextView name;
+            private final TextView lastmaessage_tv;
+            private final TextView datetiem;
+            private final TextView reqcount;
+            private final CircleImageView propic;
+            private final ImageView deletecon;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+                reqcount = itemView.findViewById(R.id.reqcount);
+                propic = itemView.findViewById(R.id.propic);
+                name = itemView.findViewById(R.id.name);
+                fullname = itemView.findViewById(R.id.fullname);
+                lastmaessage_tv = itemView.findViewById(R.id.lastmaessage_tv);
+                datetiem = itemView.findViewById(R.id.datetiem);
+                deletecon = itemView.findViewById(R.id.deletecon);
+            }
         }
     }
 

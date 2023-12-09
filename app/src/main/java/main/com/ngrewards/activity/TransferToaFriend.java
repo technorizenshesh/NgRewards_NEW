@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -27,6 +26,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.gson.Gson;
@@ -53,10 +54,10 @@ import java.util.TimeZone;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
+import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.beanclasses.MemberBean;
 import main.com.ngrewards.beanclasses.MemberDetail;
-import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySavedCardInfo;
@@ -71,12 +72,15 @@ import retrofit2.Response;
 
 public class TransferToaFriend extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_QR_SCAN = 3;
+    public ArrayList<MemberDetail> memberDetailArrayList;
+    int count = 0;
+    CreditCardFormatTextWatcher tv, tv2;
+    CustomCardAdp customCardAdp;
     private RelativeLayout backlay;
     private TextView memname, request_tv, transfer_tv;
     private EditText amount, comment_et;
-    int count = 0;
     private AutoCompleteTextView usernameauto;
-    public ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
     private ProgressBar progresbar;
     private String aff_name = "", user_id = "", member_ngcash = "", time_zone = "", memberfull_name = "", member_id = "", comment_str = "", amount_str = "";
@@ -84,19 +88,18 @@ public class TransferToaFriend extends AppCompatActivity {
     private MySession mySession;
     private String card_id = "", apply_ngcassh = "0", card_number = "", card_brand = "", customer_id = "";
     private ArrayList<CardBean> cardBeanArrayList;
-    CreditCardFormatTextWatcher tv, tv2;
-    CustomCardAdp customCardAdp;
     private ExpandableHeightListView savedcardlist;
     private RelativeLayout addcardlay;
     private TextView avbngcash, applytv, card_amount_tv;
     private EditText ngcashavb;
     private double ngcash_val = 0, total_amt_calculate = 0, apply_ng_cash = 0;
-    private static final int REQUEST_CODE_QR_SCAN = 3;
     private ImageView qrcode;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,106 +151,6 @@ public class TransferToaFriend extends AppCompatActivity {
                 startActivityForResult(i, REQUEST_CODE_QR_SCAN);
             }
         });
-    }
-
-    private class GetProfile extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-
-                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("member_id", user_id);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
-
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            super.onPostExecute(result);
-
-            progresbar.setVisibility(View.GONE);
-
-            if (result == null) {
-
-            } else if (result.isEmpty()) {
-
-            } else {
-
-                try {
-
-                    JSONObject jsonObject = new JSONObject(result);
-
-                    Log.e("jsonObjectresult", String.valueOf(jsonObject));
-
-                    String message = jsonObject.getString("status");
-
-                    if (message.equalsIgnoreCase("1")) {
-
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                        member_ngcash = jsonObject1.getString("member_ngcash");
-
-                        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
-                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
-                        } else {
-                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
-                            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
-                        }
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     @Override
@@ -326,10 +229,10 @@ public class TransferToaFriend extends AppCompatActivity {
 
                 double tot = wait_dob;
                 total_amt_calculate = tot;
-                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
+                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = tot - apply_ng_cash;
-                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(amt)));
+                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(amt)));
                 }
             }
         });
@@ -350,10 +253,10 @@ public class TransferToaFriend extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 applytv.setText("" + getResources().getString(R.string.apply));
-                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(total_amt_calculate)));
+                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(total_amt_calculate)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = total_amt_calculate - apply_ng_cash;
-                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" "  + String.format("%.2f", new BigDecimal(amt)));
+                    card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(amt)));
                 }
             }
         });
@@ -381,7 +284,7 @@ public class TransferToaFriend extends AppCompatActivity {
                                 apply_ng_cash = apply_ng;
                                 double amt = total_amt_calculate - apply_ng;
                                 //card_amount_tv.setText();
-                                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(amt)));
+                                card_amount_tv.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(amt)));
                                 applytv.setText("" + getResources().getString(R.string.applied));
                             }
                         } else {
@@ -568,126 +471,11 @@ public class TransferToaFriend extends AppCompatActivity {
         }
     }
 
-    public class CustomCardAdp extends BaseAdapter {
-
-        Context context;
-        private LayoutInflater inflater = null;
-        ArrayList<CardBean> cardBeanArrayList;
-
-        public CustomCardAdp(Context contexts, ArrayList<CardBean> cardBeanArrayList) {
-            this.context = contexts;
-            this.cardBeanArrayList = cardBeanArrayList;
-            inflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return cardBeanArrayList == null ? 0 : cardBeanArrayList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public class Holder {
-
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            final Holder holder;
-            holder = new Holder();
-            View rowView;
-
-            rowView = inflater.inflate(R.layout.custom_manual_card_lay, null);
-            RadioButton creditcard_rbut = rowView.findViewById(R.id.creditcard_rbut);
-            if (cardBeanArrayList.get(position).isDefaultCard()) {
-                creditcard_rbut.setChecked(true);
-                card_id = cardBeanArrayList.get(position).getId();
-                customer_id = cardBeanArrayList.get(position).getCustomer();
-                card_number = cardBeanArrayList.get(position).getLast4();
-                card_brand = cardBeanArrayList.get(position).getBrand();
-
-            } else {
-                creditcard_rbut.setChecked(false);
-            }
-            TextView cardnumber = rowView.findViewById(R.id.cardnumber);
-            ImageView cardimg = rowView.findViewById(R.id.cardimg);
-            TextView cardholdername = rowView.findViewById(R.id.cardholdername);
-            TextView expiresdate = rowView.findViewById(R.id.expiresdate);
-
-            String cardbrand = cardBeanArrayList.get(position).getBrand();
-            String carnum = cardBeanArrayList.get(position).getLast4();
-            cardholdername.setText("" + cardBeanArrayList.get(position).getCard_name());
-            if (cardbrand.length() > 4) {
-                cardbrand = cardbrand.substring(0, 4);
-            }
-            String stars = "**** ****";
-            cardnumber.setText("" + cardbrand + " " + stars + " " + carnum);
-            expiresdate.setText(getResources().getString(R.string.validtill) + " " + cardBeanArrayList.get(position).getSetfullexpyearmonth());
-
-            creditcard_rbut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    int pos = position;
-                    if (!cardBeanArrayList.get(position).isDefaultCard()) {
-                        for (int k = 0; k < cardBeanArrayList.size(); k++) {
-                            if (pos == k) {
-                                if (cardBeanArrayList.get(k).isDefaultCard()) {
-                                    cardBeanArrayList.get(k).setDefaultCard(false);
-                                    card_id = "";
-                                    customer_id = "";
-                                    card_number = "";
-                                } else {
-                                    card_id = cardBeanArrayList.get(position).getId();
-                                    customer_id = cardBeanArrayList.get(position).getCustomer();
-                                    card_number = cardBeanArrayList.get(position).getLast4();
-                                    card_brand = cardBeanArrayList.get(position).getBrand();
-                                    cardBeanArrayList.get(k).setDefaultCard(true);
-                                }
-                            } else {
-                                cardBeanArrayList.get(k).setDefaultCard(false);
-                            }
-                        }
-                        customCardAdp = new CustomCardAdp(TransferToaFriend.this, cardBeanArrayList);
-                        savedcardlist.setAdapter(customCardAdp);
-                        savedcardlist.setSelection(position);
-                        customCardAdp.notifyDataSetChanged();
-                    } else {
-                        card_id = cardBeanArrayList.get(position).getId();
-                        customer_id = cardBeanArrayList.get(position).getCustomer();
-                        card_number = cardBeanArrayList.get(position).getLast4();
-                        card_brand = cardBeanArrayList.get(position).getBrand();
-                        cardBeanArrayList.get(pos).setDefaultCard(true);
-                        customCardAdp = new CustomCardAdp(TransferToaFriend.this, cardBeanArrayList);
-                        savedcardlist.setAdapter(customCardAdp);
-                        savedcardlist.setSelection(position);
-                        customCardAdp.notifyDataSetChanged();
-                    }
-                }
-            });
-            return rowView;
-        }
-
-    }
-
     private void transferrequest(String user_id, String member_id, String comment_str, String amount_str, String ngcash_app_str, String card_id, String card_number, String card_brand, String customer_id, final String type) {
         progresbar.setVisibility(View.VISIBLE);
         Call<ResponseBody> call = ApiClient.getApiInterface().transferorrequest(
                 user_id, member_id, comment_str, amount_str, ngcash_app_str, card_id, card_number,
-                card_brand, customer_id, type, time_zone,mySession.getValueOf(MySession.CurrencyCode));
+                card_brand, customer_id, type, time_zone, mySession.getValueOf(MySession.CurrencyCode));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -854,11 +642,267 @@ public class TransferToaFriend extends AppCompatActivity {
         });
     }
 
+    private void getUsername() {
+        Log.e("Get User Name>", " >GET NAME");
+
+        progresbar.setVisibility(View.VISIBLE);
+        memberDetailArrayList = new ArrayList<>();
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("User name list>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+                            myapisession.setKeyMemberusername(responseData);
+                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
+                            memberDetailArrayList.addAll(successData.getResult());
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    private class GetProfile extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+                String postReceiverUrl = BaseUrl.baseurl + "member_profile.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("member_id", user_id);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e("GetProfile Response", ">>>>>>>>>>>>" + response);
+
+                return response;
+            } catch (UnsupportedEncodingException e1) {
+
+                e1.printStackTrace();
+
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            super.onPostExecute(result);
+
+            progresbar.setVisibility(View.GONE);
+
+            if (result == null) {
+
+            } else if (result.isEmpty()) {
+
+            } else {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(result);
+
+                    Log.e("jsonObjectresult", String.valueOf(jsonObject));
+
+                    String message = jsonObject.getString("status");
+
+                    if (message.equalsIgnoreCase("1")) {
+
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                        member_ngcash = jsonObject1.getString("member_ngcash");
+
+                        if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0") || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") || member_ngcash.equalsIgnoreCase("null")) {
+                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
+                        } else {
+                            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + member_ngcash);
+                            ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class CustomCardAdp extends BaseAdapter {
+
+        Context context;
+        ArrayList<CardBean> cardBeanArrayList;
+        private LayoutInflater inflater = null;
+
+        public CustomCardAdp(Context contexts, ArrayList<CardBean> cardBeanArrayList) {
+            this.context = contexts;
+            this.cardBeanArrayList = cardBeanArrayList;
+            inflater = (LayoutInflater) context.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return cardBeanArrayList == null ? 0 : cardBeanArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            final Holder holder;
+            holder = new Holder();
+            View rowView;
+
+            rowView = inflater.inflate(R.layout.custom_manual_card_lay, null);
+            RadioButton creditcard_rbut = rowView.findViewById(R.id.creditcard_rbut);
+            if (cardBeanArrayList.get(position).isDefaultCard()) {
+                creditcard_rbut.setChecked(true);
+                card_id = cardBeanArrayList.get(position).getId();
+                customer_id = cardBeanArrayList.get(position).getCustomer();
+                card_number = cardBeanArrayList.get(position).getLast4();
+                card_brand = cardBeanArrayList.get(position).getBrand();
+
+            } else {
+                creditcard_rbut.setChecked(false);
+            }
+            TextView cardnumber = rowView.findViewById(R.id.cardnumber);
+            ImageView cardimg = rowView.findViewById(R.id.cardimg);
+            TextView cardholdername = rowView.findViewById(R.id.cardholdername);
+            TextView expiresdate = rowView.findViewById(R.id.expiresdate);
+
+            String cardbrand = cardBeanArrayList.get(position).getBrand();
+            String carnum = cardBeanArrayList.get(position).getLast4();
+            cardholdername.setText("" + cardBeanArrayList.get(position).getCard_name());
+            if (cardbrand.length() > 4) {
+                cardbrand = cardbrand.substring(0, 4);
+            }
+            String stars = "**** ****";
+            cardnumber.setText("" + cardbrand + " " + stars + " " + carnum);
+            expiresdate.setText(getResources().getString(R.string.validtill) + " " + cardBeanArrayList.get(position).getSetfullexpyearmonth());
+
+            creditcard_rbut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int pos = position;
+                    if (!cardBeanArrayList.get(position).isDefaultCard()) {
+                        for (int k = 0; k < cardBeanArrayList.size(); k++) {
+                            if (pos == k) {
+                                if (cardBeanArrayList.get(k).isDefaultCard()) {
+                                    cardBeanArrayList.get(k).setDefaultCard(false);
+                                    card_id = "";
+                                    customer_id = "";
+                                    card_number = "";
+                                } else {
+                                    card_id = cardBeanArrayList.get(position).getId();
+                                    customer_id = cardBeanArrayList.get(position).getCustomer();
+                                    card_number = cardBeanArrayList.get(position).getLast4();
+                                    card_brand = cardBeanArrayList.get(position).getBrand();
+                                    cardBeanArrayList.get(k).setDefaultCard(true);
+                                }
+                            } else {
+                                cardBeanArrayList.get(k).setDefaultCard(false);
+                            }
+                        }
+                        customCardAdp = new CustomCardAdp(TransferToaFriend.this, cardBeanArrayList);
+                        savedcardlist.setAdapter(customCardAdp);
+                        savedcardlist.setSelection(position);
+                        customCardAdp.notifyDataSetChanged();
+                    } else {
+                        card_id = cardBeanArrayList.get(position).getId();
+                        customer_id = cardBeanArrayList.get(position).getCustomer();
+                        card_number = cardBeanArrayList.get(position).getLast4();
+                        card_brand = cardBeanArrayList.get(position).getBrand();
+                        cardBeanArrayList.get(pos).setDefaultCard(true);
+                        customCardAdp = new CustomCardAdp(TransferToaFriend.this, cardBeanArrayList);
+                        savedcardlist.setAdapter(customCardAdp);
+                        savedcardlist.setSelection(position);
+                        customCardAdp.notifyDataSetChanged();
+                    }
+                }
+            });
+            return rowView;
+        }
+
+        public class Holder {
+
+        }
+
+    }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -966,8 +1010,7 @@ public class TransferToaFriend extends AppCompatActivity {
                         l2 = (ArrayList<MemberDetail>) results.values;
                         notifyDataSetChanged();
                     } else {
-                        if(l2.size()>0)
-                        {
+                        if (l2.size() > 0) {
                             notifyDataSetChanged();
                         }
 
@@ -978,47 +1021,6 @@ public class TransferToaFriend extends AppCompatActivity {
             return filter;
         }
 
-    }
-
-    private void getUsername() {
-        Log.e("Get User Name>", " >GET NAME");
-
-        progresbar.setVisibility(View.VISIBLE);
-        memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("User name list>", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-                            myapisession.setKeyMemberusername(responseData);
-                            MemberBean successData = new Gson().fromJson(responseData, MemberBean.class);
-                            memberDetailArrayList.addAll(successData.getResult());
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-
-                Log.e("TAG", t.toString());
-            }
-        });
     }
 
     private class GetAddedCard extends AsyncTask<String, String, String> {

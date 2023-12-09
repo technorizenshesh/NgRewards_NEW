@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,10 +25,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,50 +72,25 @@ import retrofit2.Response;
 
 public class CheckOutAct extends AppCompatActivity {
 
+    public static LatLng orderlatlong;
+    private final String order_address = "";
+    private final String streat_address = "";
+    private final String zipcode_code_str = "";
     boolean click_sts = false;
+    SwipeRefreshLayout swipeToRefresh;
+    MySession mySession;
+    CheckBox termscheck1;
     private ImageView clear_pick_ic;
     private ProgressBar progresbar;
-    public static LatLng orderlatlong;
-
     //cart dynamic
     private ExpandableHeightListView mycartlist;
-    SwipeRefreshLayout swipeToRefresh;
     private String user_id = "";
-    MySession mySession;
     private ArrayList<CartListBean> cartListBeanArrayList;
     private MycartAdapter mycartAdapter;
     private MycartAdapterExpand mycartAdapterExpand;
     private TextView notice, total_amount, nocartitem, place_order_but, avbngcash;
     private RelativeLayout backlay, addaddressdlay, addcardlay;
     private EditText optionaladdress, zipcode, applyamtcash;
-    private final String order_address = "";
-    private final String streat_address = "";
-    private final String zipcode_code_str = "";
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-
-                    String ngcash_str = intent.getExtras().getString("ngcash");
-
-
-                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00 Available");
-                    } else {
-                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + ngcash_str + " Available");
-                        ngcash_val = Double.parseDouble(ngcash_str);
-                    }
-                }
-
-            } catch (Exception e) {
-
-            }
-
-
-        }
-    };
     private String email_str = "";
     private String shipping_price = "";
     private String time_zone = "";
@@ -133,9 +108,34 @@ public class CheckOutAct extends AppCompatActivity {
     private Myapisession myapisession;
     private boolean apickeck = false;
     private double ngcash_val = 0;
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+
+                    String ngcash_str = intent.getExtras().getString("ngcash");
+
+
+                    if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00 Available");
+                    } else {
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + ngcash_str + " Available");
+                        ngcash_val = Double.parseDouble(ngcash_str);
+                    }
+                }
+
+            } catch (Exception e) {
+
+            }
+
+
+        }
+    };
     private LinearLayout emi_lay;
     private boolean IS = false;
-    CheckBox termscheck1;
+    private String product_quantity_comm = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,55 +188,56 @@ public class CheckOutAct extends AppCompatActivity {
                     CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                     cartListBeanArrayList.addAll(successData.getResult());
                     total_amount_str = successData.getTotal_with_shipping_price();
-                    if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")){
+                    if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")) {
                         emi_lay.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         emi_lay.setVisibility(View.GONE);
 
                     }
-                    String spliting =cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
-                    if (spliting!=null &&!spliting.equalsIgnoreCase("")){
-                        Log.e("TAG", "onBindViewHolder:zzzzzzzzzzzzzzzzzzzzzzz " +spliting);
-                        String []  splitings = spliting.split(",");
-                        Log.e("TAG", "onBindViewHolder:xxxxxxxxxxxxxxxxxxxxxxx " +splitings[0]);
-                        Log.e("TAG", "onBindViewHolder:yyyyyyyyyyyyyyyyyyyyyyy " +splitings[0]);
-                      notice.setText("Total payment is divide by "+splitings.length+" easy payments " +
-                              "you can see invoice details in Activity section after successful " +
-                              "item transaction.");
-                    //    Total Payment is divided by 6 easy payments. You can see invoice
+                    String spliting = cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
+                    if (spliting != null && !spliting.equalsIgnoreCase("")) {
+                        Log.e("TAG", "onBindViewHolder:zzzzzzzzzzzzzzzzzzzzzzz " + spliting);
+                        String[] splitings = spliting.split(",");
+                        Log.e("TAG", "onBindViewHolder:xxxxxxxxxxxxxxxxxxxxxxx " + splitings[0]);
+                        Log.e("TAG", "onBindViewHolder:yyyyyyyyyyyyyyyyyyyyyyy " + splitings[0]);
+                        notice.setText("Total payment is divide by " + splitings.length + " easy payments " +
+                                "you can see invoice details in Activity section after successful " +
+                                "item transaction.");
+                        //    Total Payment is divided by 6 easy payments. You can see invoice
                         //    details in Activity section after successful item transaction.
-                        String str =splitings[0];
-                        if (str.contains(mySession.getValueOf(MySession.CurrencySign) )) {//Make Easy Payments
+                        String str = splitings[0];
+                        if (str.contains(mySession.getValueOf(MySession.CurrencySign))) {//Make Easy Payments
 
-                            str=  str.replace(mySession.getValueOf(MySession.CurrencySign) ,"");
+                            str = str.replace(mySession.getValueOf(MySession.CurrencySign), "");
                         }
                         emi_amount_str = str;
                     }
-                    Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
+                    Log.e("TAG", "emi_amount_stremi_amount_str: --- " + emi_amount_str);
                     shipping_price = successData.getTotal_shipping_price();
 
-                   if (!IS) {
-                       total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
-                       shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_shipping_price());
+                    if (!IS) {
+                        total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_with_shipping_price());
+                        shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_shipping_price());
 
 
-                   } else {
-                       shipping_price_tv.setText("Included In EMI");
+                    } else {
+                        shipping_price_tv.setText("Included In EMI");
 
-                       total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)  + emi_amount_str);}
-                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
-                   // shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_shipping_price());
+                        total_amount.setText("1st EMI - " + mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
+                    }
+                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotalPrice());
+                    // shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_shipping_price());
                     itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                 }
                 if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                     // nocartitem.setVisibility(View.VISIBLE);
-                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
+                    total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " 0.00");
                     total_amount_str = "0";
                     emi_amount_str = "0";
                     shipping_price = "0";
-                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) +" 0.00");
+                    total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) + " 0.00");
                     itemcount.setText("Items(0)");
-                    shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + "0.00");
+                    shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                     mycartAdapterExpand = new MycartAdapterExpand(CheckOutAct.this, cartListBeanArrayList);
                     mycartlist.setAdapter(mycartAdapterExpand);
                     mycartAdapter.notifyDataSetChanged();
@@ -255,242 +256,6 @@ public class CheckOutAct extends AppCompatActivity {
         }
 
     }
-
-
-    public class MycartAdapterExpand extends BaseAdapter {
-        Context context;
-        private LayoutInflater inflater = null;
-        ArrayList<CartListBean> mycartlist;
-
-        public MycartAdapterExpand(Activity context, ArrayList<CartListBean> mycartlist) {
-            this.mycartlist = mycartlist;
-            this.context = context;
-            inflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        }
-
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return mycartlist == null ? 0 : mycartlist.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public class Holder {
-
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            final Holder holder;
-            holder = new Holder();
-            View rowView;
-            TextView product_name, shipingprice, estimatedelivery, mainprice, merchant_name, product_desc, quant_tv;
-            ImageView product_img, removecartitem;
-            Button plusq, minusq;
-            rowView = inflater.inflate(R.layout.custom_checkout_cart_item_lay, null);
-
-            shipingprice = rowView.findViewById(R.id.shipingprice);
-            estimatedelivery = rowView.findViewById(R.id.estimatedelivery);
-            product_name = rowView.findViewById(R.id.product_name);
-            merchant_name = rowView.findViewById(R.id.merchant_name);
-            product_desc = rowView.findViewById(R.id.product_desc);
-            quant_tv = rowView.findViewById(R.id.quant_tv);
-
-            product_img = rowView.findViewById(R.id.product_img);
-            mainprice = rowView.findViewById(R.id.mainprice);
-            plusq = rowView.findViewById(R.id.plusq);
-            minusq = rowView.findViewById(R.id.minusq);
-            removecartitem = rowView.findViewById(R.id.removecartitem);
-
-            product_desc.setText("" + mycartlist.get(position).getProductDetail().getProductDescription());
-            product_name.setText("" + mycartlist.get(position).getProductDetail().getProductName());
-            merchant_name.setText("" + mycartlist.get(position).getUserDetails().get(0).getBusinessName());
-            quant_tv.setText("" + mycartlist.get(position).getQuantity());
-            mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(position).getProductDetail().getProduct_cart_price());
-            shipingprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(position).getShipping_price());
-
-            try {
-                String mytime = mycartlist.get(position).getEstimated_delivery_date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat(
-                        "yyyy-MM-dd");
-                Date myDate = null;
-                myDate = dateFormat.parse(mytime);
-
-                SimpleDateFormat timeFormat = new SimpleDateFormat("EEE, MMM dd");
-                String finalDate = timeFormat.format(myDate);
-                estimatedelivery.setText("Est. Delivery : " + finalDate);
-
-                System.out.println(finalDate);
-            } catch (Exception e) {
-                estimatedelivery.setText("Est. Delivery : " + mycartlist.get(position).getEstimated_delivery_date());
-
-            }
-
-            String image_url = mycartlist.get(position).getProductDetail().getThumbnailImage();
-            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(product_img);
-            }
-
-
-            plusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(position).getQuantity() != null && !mycartlist.get(position).getQuantity().equalsIgnoreCase("")) {
-                        int total_stock_count = 0;
-                        int total_count = Integer.parseInt(mycartlist.get(position).getQuantity());
-                        if (mycartlist.get(position).getProductDetail().getStock() != null && !mycartlist.get(position).getProductDetail().getStock().equalsIgnoreCase("")) {
-                            total_stock_count = Integer.parseInt(mycartlist.get(position).getProductDetail().getStock());
-
-                        }
-                        if (total_count < total_stock_count) {
-                            int new_count = ++total_count;
-                            updateMyCartItemQuantity(mycartlist.get(position).getProductId(), "" + new_count);
-                        }
-
-                    }
-
-                }
-            });
-
-            minusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(position).getQuantity() != null && !mycartlist.get(position).getQuantity().equalsIgnoreCase("")) {
-                        int total_count = Integer.parseInt(mycartlist.get(position).getQuantity());
-                        if (total_count > 1) {
-                            int new_count = --total_count;
-                            updateMyCartItemQuantity(mycartlist.get(position).getProductId(), "" + new_count);
-                        }
-
-                    }
-                }
-            });
-
-      /*      holder.removecartitem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removeMySingleCartItem(mycartlist.get(position).getId());
-                    Toast.makeText(getApplicationContext(),"Success!!!",Toast.LENGTH_SHORT).show();
-                }
-            });
-*/
-            return rowView;
-        }
-
-    }
-
-
-    class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
-        ArrayList<CartListBean> mycartlist;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
-            ImageView product_img, removecartitem123;
-            Button plusq, minusq;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.product_name = itemView.findViewById(R.id.product_name);
-                this.merchant_name = itemView.findViewById(R.id.merchant_name);
-                this.product_desc = itemView.findViewById(R.id.product_desc);
-                this.quant_tv = itemView.findViewById(R.id.quant_tv);
-
-                this.product_img = itemView.findViewById(R.id.product_img);
-                this.mainprice = itemView.findViewById(R.id.mainprice);
-                this.plusq = itemView.findViewById(R.id.plusq);
-                this.minusq = itemView.findViewById(R.id.minusq);
-                this.removecartitem123 = itemView.findViewById(R.id.removecartitem123);
-
-            }
-        }
-
-        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
-            this.mycartlist = mycartlist;
-        }
-
-        @Override
-        public MycartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_cart_item_lay, parent, false);
-            MycartAdapter.MyViewHolder myViewHolder = new MycartAdapter.MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
-            holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
-            holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
-            holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
-            holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
-            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
-
-            String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
-            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
-            }
-
-
-            holder.plusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_stock_count = 0;
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
-                        if (mycartlist.get(listPosition).getProductDetail().getStock() != null && !mycartlist.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")) {
-                            total_stock_count = Integer.parseInt(mycartlist.get(listPosition).getProductDetail().getStock());
-                        }
-                        if (total_count < total_stock_count) {
-                            int new_count = ++total_count;
-                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
-                        }
-                    }
-                }
-            });
-            holder.minusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
-                        if (total_count > 1) {
-                            int new_count = --total_count;
-                            updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(), "" + new_count);
-                        }
-                    }
-                }
-            });
-
-            holder.removecartitem123.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                     Toast.makeText(getApplicationContext(),"successs12345!!!",Toast.LENGTH_SHORT).show();
-                     removeMySingleCartItem(mycartlist.get(listPosition).getId());
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mycartlist == null ? 0 : mycartlist.size();
-        }
-    }
-
 
     private void getMyCartDetail() {
         apickeck = true;
@@ -512,52 +277,52 @@ public class CheckOutAct extends AppCompatActivity {
                             CartBean successData = new Gson().fromJson(responseData, CartBean.class);
                             cartListBeanArrayList.addAll(successData.getResult());
                             total_amount_str = successData.getTotal_with_shipping_price();
-                            String spliting =cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
-                            if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")){
+                            String spliting = cartListBeanArrayList.get(0).getProductDetail().getSplit_amount();
+                            if (cartListBeanArrayList.get(0).getPay_by_emi().equalsIgnoreCase("YES")) {
                                 emi_lay.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 emi_lay.setVisibility(View.GONE);
 
                             }
-                            if (spliting!=null &&!spliting.equalsIgnoreCase("")){
-                                String []  splitings = spliting.split(",");
-                                Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
-                                notice.setText("Total payment is divide by "+splitings.length+" easy payments " +
+                            if (spliting != null && !spliting.equalsIgnoreCase("")) {
+                                String[] splitings = spliting.split(",");
+                                Log.e("TAG", "onBindViewHolder:splitingssplitings " + splitings[0]);
+                                notice.setText("Total payment is divide by " + splitings.length + " easy payments " +
                                         "you can see invoice details in Activity section after successful " +
                                         "item transaction.");
-                                String str =splitings[0];
+                                String str = splitings[0];
 
-                                if (str.contains(mySession.getValueOf(MySession.CurrencySign) )) {
-                                    str=  str.replace(mySession.getValueOf(MySession.CurrencySign) ,"");
+                                if (str.contains(mySession.getValueOf(MySession.CurrencySign))) {
+                                    str = str.replace(mySession.getValueOf(MySession.CurrencySign), "");
                                 }
                                 emi_amount_str = str;
                             }
-                            Log.e("TAG", "emi_amount_stremi_amount_str: --- "+emi_amount_str );
+                            Log.e("TAG", "emi_amount_stremi_amount_str: --- " + emi_amount_str);
                             shipping_price = successData.getTotal_shipping_price();
                             if (!IS) {
-                                total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
+                                total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_with_shipping_price());
                                 shipping_price_tv.setText("Include in EMI");
 
-                            }  else {
-                                total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
-                                shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotal_with_shipping_price());
+                            } else {
+                                total_amount.setText("1st EMI - " + mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
+                                shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotal_with_shipping_price());
 
                             }
 
-                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)  + successData.getTotalPrice());
-                          //  shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData
+                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) + successData.getTotalPrice());
+                            //  shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + successData
                             //  .getTotal_with_shipping_price());
                             itemcount.setText("Items(" + successData.getTotal_cart_count() + ")");
                         } else {
                             myapisession.setKeyCartitem("");
                         }
                         if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
-                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00");
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                             total_amount_str = "0";
                             shipping_price = "0";
-                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00");
+                            total_item_price.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                             itemcount.setText("Items(0)");
-                            shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign)  + "0.00");
+                            shipping_price_tv.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
                             mycartAdapterExpand = new MycartAdapterExpand(CheckOutAct.this, cartListBeanArrayList);
                             mycartlist.setAdapter(mycartAdapterExpand);
                             try {
@@ -640,20 +405,20 @@ public class CheckOutAct extends AppCompatActivity {
                 if (apply_ngcassh == null || apply_ngcassh.equalsIgnoreCase("") || apply_ngcassh.equalsIgnoreCase("0")) {
                     Toast.makeText(CheckOutAct.this, getResources().getString(R.string.enteramount), Toast.LENGTH_LONG).show();
                     ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                       finalngcashredeem.setText("");
+                    finalngcashredeem.setText("");
 
-                    finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)
-                            +"0.00");
+                    finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign)
+                            + "0.00");
                 } else {
                     apply_ng = Double.parseDouble(apply_ngcassh);
                     if (apply_ng > ngcash_val) {
                         Toast.makeText(CheckOutAct.this, getResources().getString(R.string.appliedamtisgreaterthanngcash), Toast.LENGTH_LONG).show();
                         ngapply_tv.setText("" + getResources().getString(R.string.apply));
                         finalngcashredeem.setText("");
-                        finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+"0.00");
+                        finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + "0.00");
                     } else {
 
-                        if (!IS){
+                        if (!IS) {
                             ngapply_tv.setText("" + getResources().getString(R.string.applied));
                             double tot = 0;
                             if (total_amount_str == null || total_amount_str.equalsIgnoreCase("")) {
@@ -670,20 +435,19 @@ public class CheckOutAct extends AppCompatActivity {
                             if (cart_tot_dob > apply_ng_dob) {
                                 tot = cart_tot_dob - apply_ng_dob;
                                 //finalngcashredeem.setText("-$ " + apply_ng_dob);
-                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+                                finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
 
 
                             } else {
                                 tot = 0;
                                 //finalngcashredeem.setText("-$ "+cart_tot_dob);
-                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
+                                finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
 
                             }
 
                             //  grandtotal.setText(" " + tot);
-                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)+" "  + String.format("%.2f", new BigDecimal(tot)));
-                        }
-                        else {
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                        } else {
 
                             ngapply_tv.setText("" + getResources().getString(R.string.applied));
                             double tot = 0;
@@ -701,19 +465,18 @@ public class CheckOutAct extends AppCompatActivity {
                             if (cart_tot_dob > apply_ng_dob) {
                                 tot = cart_tot_dob - apply_ng_dob;
                                 //finalngcashredeem.setText("-$ " + apply_ng_dob);
-                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
+                                finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(apply_ng_dob)));
 
 
                             } else {
                                 tot = 0;
                                 //finalngcashredeem.setText("-$ "+cart_tot_dob);
-                                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" "+ String.format("%.2f", new BigDecimal(cart_tot_dob)));
+                                finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(cart_tot_dob)));
 
                             }
 
                             //  grandtotal.setText(" " + tot);hereeeee
-                            total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)+ String.format("%.2f", new BigDecimal(tot)));
-
+                            total_amount.setText("1st EMI - " + mySession.getValueOf(MySession.CurrencySign) + String.format("%.2f", new BigDecimal(tot)));
 
 
                         }
@@ -832,30 +595,32 @@ public class CheckOutAct extends AppCompatActivity {
         intent.putExtra("card_brand", SelectPaymentMethodAct.card_brand);
         intent.putExtra("shipping_price", shipping_price);
         intent.putExtra("timezone", time_zone);
-         if (IS){
-            String amnt =  total_amount.getText().toString();
-            if (amnt.contains("1st EMI - "+mySession.getValueOf(MySession.CurrencySign))){
-                amnt = amnt.replace("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)," ");
+        if (IS) {
+            String amnt = total_amount.getText().toString();
+            if (amnt.contains("1st EMI - " + mySession.getValueOf(MySession.CurrencySign))) {
+                amnt = amnt.replace("1st EMI - " + mySession.getValueOf(MySession.CurrencySign), " ");
             }
-             Log.e("TAG", "Item_Oreder_Pay_Successfully1: "+amnt.trim() );
-             intent.putExtra("amount", amnt.trim());
-             intent.putExtra("payment_made_by_emi","Yes");
-             //purchase_date=\(Date())&payment_made_by_emi=\(ischeckYes!)
+            Log.e("TAG", "Item_Oreder_Pay_Successfully1: " + amnt.trim());
+            intent.putExtra("amount", amnt.trim());
+            intent.putExtra("payment_made_by_emi", "Yes");
+            //purchase_date=\(Date())&payment_made_by_emi=\(ischeckYes!)
 
             // return;
-         }else {
-             intent.putExtra("payment_made_by_emi", "No");
-             intent.putExtra("amount", total_amount_str);
+        } else {
+            intent.putExtra("payment_made_by_emi", "No");
+            intent.putExtra("amount", total_amount_str);
 
-         }
+        }
 
         startActivity(intent);
 
         finish();
     }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -894,7 +659,6 @@ public class CheckOutAct extends AppCompatActivity {
         }
     }
 
-
     private void idinits() {
 
         emi_lay = findViewById(R.id.emi_lay);
@@ -930,24 +694,24 @@ public class CheckOutAct extends AppCompatActivity {
         mycartlist = findViewById(R.id.mycartlist);
         mycartlist.setExpanded(true);
         termscheck1.setOnCheckedChangeListener((buttonView, isChecked) -> {
-             if (isChecked){
-                 IS = true;
-                 notice.setVisibility(View.VISIBLE);
-                 total_amount.setText("1st EMI - "+mySession.getValueOf(MySession.CurrencySign)  + emi_amount_str  );
+            if (isChecked) {
+                IS = true;
+                notice.setVisibility(View.VISIBLE);
+                total_amount.setText("1st EMI - " + mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
 
-             }else {
-                 IS = false;
-                 notice.setVisibility(View.GONE);
-                 total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + total_amount_str);
+            } else {
+                IS = false;
+                notice.setVisibility(View.GONE);
+                total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + total_amount_str);
 
-             }
+            }
 
         });
         if (BaseActivity.member_ngcash == null || BaseActivity.member_ngcash.equalsIgnoreCase("0") || BaseActivity.member_ngcash.equalsIgnoreCase("null") || BaseActivity.member_ngcash.equalsIgnoreCase("") || BaseActivity.member_ngcash.equalsIgnoreCase("0.0")) {
-            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)+"0.00 Available");
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00 Available");
         } else {
 
-            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + BaseActivity.member_ngcash + " Available");
+            avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + BaseActivity.member_ngcash + " Available");
 
             try {
 
@@ -978,16 +742,343 @@ public class CheckOutAct extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 ngapply_tv.setText("" + getResources().getString(R.string.apply));
-                if (!IS)total_amount.setText(mySession.getValueOf(MySession.CurrencySign)  + total_amount_str);
-                else total_amount.setText("1st EMI - " +mySession.getValueOf(MySession.CurrencySign)+ emi_amount_str);
-              //  total_amount.setText("$ " + total_amount_str);
-                finalngcashredeem.setText("-"+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
+                if (!IS) total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + total_amount_str);
+                else total_amount.setText("1st EMI - " + mySession.getValueOf(MySession.CurrencySign) + emi_amount_str);
+                //  total_amount.setText("$ " + total_amount_str);
+                finalngcashredeem.setText("-" + mySession.getValueOf(MySession.CurrencySign) + " 0.00");
             }
         });
 
     }
 
+    private void removeMySingleCartItem(String id) {
+
+        Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+        swipeToRefresh.setRefreshing(true);
+        progresbar.setVisibility(View.VISIBLE);
+        Call<ResponseBody> call = ApiClient.getApiInterface().removeSinglecartItem(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                progresbar.setVisibility(View.GONE);
+                //  swipeToRefresh.setRefreshing(false);
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("Remove Cart >", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+
+                            if (!apickeck) {
+                                getMyCartDetail();
+                            }
+
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+                progresbar.setVisibility(View.GONE);
+                // swipeToRefresh.setRefreshing(false);
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
     //dghdfugfdughdfuhg/////
+
+    private void updateMyCartItemQuantity(String id, String quantity) {
+        //swipeToRefresh.setRefreshing(true);
+        progresbar.setVisibility(View.VISIBLE);
+        Call<ResponseBody> call = ApiClient.getApiInterface().updatCartItem(user_id, id, quantity);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progresbar.setVisibility(View.GONE);
+                // swipeToRefresh.setRefreshing(false);
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e("Update Cart>", " >" + responseData);
+                        if (object.getString("status").equals("1")) {
+
+                            if (!apickeck) {
+                                getMyCartDetail();
+                            }
+
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Log error here since request failed
+                t.printStackTrace();
+
+                progresbar.setVisibility(View.GONE);
+                // swipeToRefresh.setRefreshing(false);
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    public class MycartAdapterExpand extends BaseAdapter {
+        Context context;
+        ArrayList<CartListBean> mycartlist;
+        private LayoutInflater inflater = null;
+
+        public MycartAdapterExpand(Activity context, ArrayList<CartListBean> mycartlist) {
+            this.mycartlist = mycartlist;
+            this.context = context;
+            inflater = (LayoutInflater) context.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return mycartlist == null ? 0 : mycartlist.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            final Holder holder;
+            holder = new Holder();
+            View rowView;
+            TextView product_name, shipingprice, estimatedelivery, mainprice, merchant_name, product_desc, quant_tv;
+            ImageView product_img, removecartitem;
+            Button plusq, minusq;
+            rowView = inflater.inflate(R.layout.custom_checkout_cart_item_lay, null);
+
+            shipingprice = rowView.findViewById(R.id.shipingprice);
+            estimatedelivery = rowView.findViewById(R.id.estimatedelivery);
+            product_name = rowView.findViewById(R.id.product_name);
+            merchant_name = rowView.findViewById(R.id.merchant_name);
+            product_desc = rowView.findViewById(R.id.product_desc);
+            quant_tv = rowView.findViewById(R.id.quant_tv);
+
+            product_img = rowView.findViewById(R.id.product_img);
+            mainprice = rowView.findViewById(R.id.mainprice);
+            plusq = rowView.findViewById(R.id.plusq);
+            minusq = rowView.findViewById(R.id.minusq);
+            removecartitem = rowView.findViewById(R.id.removecartitem);
+
+            product_desc.setText("" + mycartlist.get(position).getProductDetail().getProductDescription());
+            product_name.setText("" + mycartlist.get(position).getProductDetail().getProductName());
+            merchant_name.setText("" + mycartlist.get(position).getUserDetails().get(0).getBusinessName());
+            quant_tv.setText("" + mycartlist.get(position).getQuantity());
+            mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlist.get(position).getProductDetail().getProduct_cart_price());
+            shipingprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlist.get(position).getShipping_price());
+
+            try {
+                String mytime = mycartlist.get(position).getEstimated_delivery_date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat(
+                        "yyyy-MM-dd");
+                Date myDate = null;
+                myDate = dateFormat.parse(mytime);
+
+                SimpleDateFormat timeFormat = new SimpleDateFormat("EEE, MMM dd");
+                String finalDate = timeFormat.format(myDate);
+                estimatedelivery.setText("Est. Delivery : " + finalDate);
+
+                System.out.println(finalDate);
+            } catch (Exception e) {
+                estimatedelivery.setText("Est. Delivery : " + mycartlist.get(position).getEstimated_delivery_date());
+
+            }
+
+            String image_url = mycartlist.get(position).getProductDetail().getThumbnailImage();
+            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(product_img);
+            }
+
+
+            plusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(position).getQuantity() != null && !mycartlist.get(position).getQuantity().equalsIgnoreCase("")) {
+                        int total_stock_count = 0;
+                        int total_count = Integer.parseInt(mycartlist.get(position).getQuantity());
+                        if (mycartlist.get(position).getProductDetail().getStock() != null && !mycartlist.get(position).getProductDetail().getStock().equalsIgnoreCase("")) {
+                            total_stock_count = Integer.parseInt(mycartlist.get(position).getProductDetail().getStock());
+
+                        }
+                        if (total_count < total_stock_count) {
+                            int new_count = ++total_count;
+                            updateMyCartItemQuantity(mycartlist.get(position).getProductId(), "" + new_count);
+                        }
+
+                    }
+
+                }
+            });
+
+            minusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(position).getQuantity() != null && !mycartlist.get(position).getQuantity().equalsIgnoreCase("")) {
+                        int total_count = Integer.parseInt(mycartlist.get(position).getQuantity());
+                        if (total_count > 1) {
+                            int new_count = --total_count;
+                            updateMyCartItemQuantity(mycartlist.get(position).getProductId(), "" + new_count);
+                        }
+
+                    }
+                }
+            });
+
+      /*      holder.removecartitem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeMySingleCartItem(mycartlist.get(position).getId());
+                    Toast.makeText(getApplicationContext(),"Success!!!",Toast.LENGTH_SHORT).show();
+                }
+            });
+*/
+            return rowView;
+        }
+
+        public class Holder {
+
+        }
+
+    }
+
+    class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
+        ArrayList<CartListBean> mycartlist;
+
+        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
+            this.mycartlist = mycartlist;
+        }
+
+        @Override
+        public MycartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                             int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_cart_item_lay, parent, false);
+            MycartAdapter.MyViewHolder myViewHolder = new MycartAdapter.MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
+            holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
+            holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
+            holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
+            holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
+
+            String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
+            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                Glide.with(CheckOutAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
+            }
+
+
+            holder.plusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                        int total_stock_count = 0;
+                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
+                        if (mycartlist.get(listPosition).getProductDetail().getStock() != null && !mycartlist.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")) {
+                            total_stock_count = Integer.parseInt(mycartlist.get(listPosition).getProductDetail().getStock());
+                        }
+                        if (total_count < total_stock_count) {
+                            int new_count = ++total_count;
+                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
+                        }
+                    }
+                }
+            });
+            holder.minusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
+                        if (total_count > 1) {
+                            int new_count = --total_count;
+                            updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(), "" + new_count);
+                        }
+                    }
+                }
+            });
+
+            holder.removecartitem123.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(getApplicationContext(), "successs12345!!!", Toast.LENGTH_SHORT).show();
+                    removeMySingleCartItem(mycartlist.get(listPosition).getId());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mycartlist == null ? 0 : mycartlist.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
+            ImageView product_img, removecartitem123;
+            Button plusq, minusq;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.product_name = itemView.findViewById(R.id.product_name);
+                this.merchant_name = itemView.findViewById(R.id.merchant_name);
+                this.product_desc = itemView.findViewById(R.id.product_desc);
+                this.quant_tv = itemView.findViewById(R.id.quant_tv);
+
+                this.product_img = itemView.findViewById(R.id.product_img);
+                this.mainprice = itemView.findViewById(R.id.mainprice);
+                this.plusq = itemView.findViewById(R.id.plusq);
+                this.minusq = itemView.findViewById(R.id.minusq);
+                this.removecartitem123 = itemView.findViewById(R.id.removecartitem123);
+
+            }
+        }
+    }
 
     private class PlaceOrderAsc extends AsyncTask<String, String, String> {
         @Override
@@ -1008,7 +1099,7 @@ public class CheckOutAct extends AppCompatActivity {
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
-                Log.e("PlaceOrderURL4", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&merchant_id=" + merchant_id_comma_sep + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + AllAddedAddressAct.address1_str + "&address_2=" + AllAddedAddressAct.address2_str + "&city=" + AllAddedAddressAct.city_str + "&state=" + AllAddedAddressAct.state_str + "&postcode=" + zipcode_code_str + "&timezone=" + time_zone + "&payment_method=Card&ngcash=" + ngcash_send_str + "&card_id=" + SelectPaymentMethodAct.card_id + "&card_number=" + SelectPaymentMethodAct.card_number + "&card_brand=" + SelectPaymentMethodAct.card_brand + "&shipping_price=" + shipping_price + "&customer_id=" + SelectPaymentMethodAct.customer_id+"&currency="+mySession.getValueOf(MySession.CurrencyCode));
+                Log.e("PlaceOrderURL4", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&merchant_id=" + merchant_id_comma_sep + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + AllAddedAddressAct.address1_str + "&address_2=" + AllAddedAddressAct.address2_str + "&city=" + AllAddedAddressAct.city_str + "&state=" + AllAddedAddressAct.state_str + "&postcode=" + zipcode_code_str + "&timezone=" + time_zone + "&payment_method=Card&ngcash=" + ngcash_send_str + "&card_id=" + SelectPaymentMethodAct.card_id + "&card_number=" + SelectPaymentMethodAct.card_number + "&card_brand=" + SelectPaymentMethodAct.card_brand + "&shipping_price=" + shipping_price + "&customer_id=" + SelectPaymentMethodAct.customer_id + "&currency=" + mySession.getValueOf(MySession.CurrencyCode));
 
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
@@ -1110,102 +1201,6 @@ public class CheckOutAct extends AppCompatActivity {
 
 
         }
-    }
-
-    private void removeMySingleCartItem(String id) {
-
-        Toast.makeText(getApplicationContext(),id,Toast.LENGTH_SHORT).show();
-        swipeToRefresh.setRefreshing(true);
-        progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().removeSinglecartItem(id);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                progresbar.setVisibility(View.GONE);
-                //  swipeToRefresh.setRefreshing(false);
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("Remove Cart >", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-
-                            if (!apickeck) {
-                                getMyCartDetail();
-                            }
-
-                        }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-                progresbar.setVisibility(View.GONE);
-                // swipeToRefresh.setRefreshing(false);
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-
-    private void updateMyCartItemQuantity(String id, String quantity) {
-        //swipeToRefresh.setRefreshing(true);
-        progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().updatCartItem(user_id, id, quantity);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progresbar.setVisibility(View.GONE);
-                // swipeToRefresh.setRefreshing(false);
-                if (response.isSuccessful()) {
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("Update Cart>", " >" + responseData);
-                        if (object.getString("status").equals("1")) {
-
-                            if (!apickeck) {
-                                getMyCartDetail();
-                            }
-
-                        }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Log error here since request failed
-                t.printStackTrace();
-
-                progresbar.setVisibility(View.GONE);
-                // swipeToRefresh.setRefreshing(false);
-                Log.e("TAG", t.toString());
-            }
-        });
-    }
-
-    private String product_quantity_comm = "";
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
     }
 
 }

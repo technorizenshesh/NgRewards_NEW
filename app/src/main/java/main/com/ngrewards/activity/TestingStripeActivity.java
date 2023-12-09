@@ -3,20 +3,22 @@ package main.com.ngrewards.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import main.com.ngrewards.R;
 
 public class TestingStripeActivity extends AppCompatActivity {
-    String url ="http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";
+    String url = "http://connect.stripe.com/express/oauth/authorize?redirect_uri=https://myngrewards.com/demo/test-payment-page/&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq";
     //https://connect.stripe.com/express/oauth/authorize?response_type=code&client_id=ca_DtpgsTKByfhAwa5P8oYfWT2CXNXaCnTq&scope=read_write
     private TextView stripeaccount;
     private WebView stripewebview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class TestingStripeActivity extends AppCompatActivity {
     }
 
     private void idinit() {
-        stripewebview= (WebView) findViewById(R.id.stripewebview);
+        stripewebview = (WebView) findViewById(R.id.stripewebview);
 
 
         stripewebview.getSettings().setJavaScriptEnabled(true);
@@ -52,11 +54,12 @@ public class TestingStripeActivity extends AppCompatActivity {
         stripewebview.loadUrl(pdfURL);
 
     }
+
     private class Callback extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(
                 WebView view, String url) {
-            return(false);
+            return (false);
         }
     }
 

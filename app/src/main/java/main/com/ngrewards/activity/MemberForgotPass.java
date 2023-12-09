@@ -2,7 +2,6 @@ package main.com.ngrewards.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,14 +39,14 @@ public class MemberForgotPass extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
-         setContentView(R.layout.activity_forgot_pass);
-         backlay = findViewById(R.id.backlay);
-         progresbar = findViewById(R.id.progresbar);
-         email_id = findViewById(R.id.email_id);
-         submit_tv = findViewById(R.id.submit_tv);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_forgot_pass);
+        backlay = findViewById(R.id.backlay);
+        progresbar = findViewById(R.id.progresbar);
+        email_id = findViewById(R.id.email_id);
+        submit_tv = findViewById(R.id.submit_tv);
 
-         submit_tv.setOnClickListener(new View.OnClickListener() {
+        submit_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 email_str = email_id.getText().toString();

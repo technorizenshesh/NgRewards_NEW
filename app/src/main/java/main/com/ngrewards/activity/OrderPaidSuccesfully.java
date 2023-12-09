@@ -3,8 +3,9 @@ package main.com.ngrewards.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,18 +21,18 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 
 public class OrderPaidSuccesfully extends AppCompatActivity {
 
+    MySession mySession;
     private String user_id, merchant_id, amount, tip_amount, employee_name,
             employee_id, ngcash, card_id, card_number, card_brand, customer_id;
     private String reciept_url;
     private String order_cart_id;
     private String merchant_number;
-    MySession mySession ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_paid_succesfully);
-mySession =new MySession(this);
+        mySession = new MySession(this);
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null && !bundle.isEmpty()) {
@@ -79,7 +80,7 @@ mySession =new MySession(this);
         param.put("customer_id", customer_id);
         param.put("type", "order");
         param.put("order_cart_id", order_cart_id);
-        param.put("currency",mySession.getValueOf(MySession.CurrencyCode));
+        param.put("currency", mySession.getValueOf(MySession.CurrencyCode));
 //ToDo{PENDING_WORK}
         new ApiCallBuilder().build(this).setUrl(BaseUrl.orderPayBill()).setParam(param).isShowProgressBar(true).execute(new ApiCallBuilder.onResponse() {
             @Override

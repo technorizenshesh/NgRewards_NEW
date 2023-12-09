@@ -1,11 +1,7 @@
 package main.com.ngrewards.fragments;
 
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +39,9 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
  */
 public class FragmentMenuCart extends Fragment {
 
+    private final ArrayList<ModelItem> arrayList = new ArrayList<>();
     private FragmentMemberMenuBinding binding;
     private ModelMenuSetting data;
-    private final ArrayList<ModelItem> arrayList = new ArrayList<>();
     private String user_id;
     private String total_quantity;
     private String total_price, tax, tax_amount, amount_due;
@@ -50,7 +50,8 @@ public class FragmentMenuCart extends Fragment {
     private TextView special;
     private String dhf;
     private TextView tv_other_note;
-private  MySession mySession;
+    private MySession mySession;
+
     public FragmentMenuCart() {
 
     }
@@ -65,7 +66,7 @@ private  MySession mySession;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member_menu, container, false);
-         mySession = new MySession(getActivity());
+        mySession = new MySession(getActivity());
         String user_log_data = mySession.getKeyAlldata();
 
         if (user_log_data != null) {
@@ -119,9 +120,9 @@ private  MySession mySession;
                                 amount_due = object.getString("amount_due");
                                 binding.tvItemCount.setText("Items(" + total_quantity + ")");
                                 binding.tvTex.setText("Tax(" + tax + "%)");
-                                binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign)  + tax_amount);
-                                binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign)  + amount_due);
-                                binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign)  + total_price);
+                                binding.tvTexPrice.setText(mySession.getValueOf(MySession.CurrencySign) + tax_amount);
+                                binding.tvAmountDuePrice.setText(mySession.getValueOf(MySession.CurrencySign) + amount_due);
+                                binding.tvItemTotal.setText(mySession.getValueOf(MySession.CurrencySign) + total_price);
                                 binding.footer.setVisibility(total_quantity.equals("0") ? View.GONE : View.VISIBLE);
                                 JSONArray array = object.getJSONArray("result");
 
@@ -156,90 +157,6 @@ private  MySession mySession;
 
                     }
                 });
-    }
-
-    class SubMenuAdapter extends RecyclerView.Adapter<SubMenuAdapter.MyViewHolder> {
-        private final String name;
-        ArrayList<ModelItem> items;
-
-        public SubMenuAdapter(ArrayList<ModelItem> items, String name) {
-            this.items = items;
-            this.name = name;
-
-        }
-
-        @NonNull
-        @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_cart_menu, viewGroup, false);
-            return new MyViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int possion) {
-            TextView tv_name = holder.itemView.findViewById(R.id.tv_name);
-            TextView tv_descri = holder.itemView.findViewById(R.id.tv_descri);
-            TextView tv_price = holder.itemView.findViewById(R.id.tv_price);
-            TextView tv_qty = holder.itemView.findViewById(R.id.tv_qty);
-            TextView tv_count = holder.itemView.findViewById(R.id.tv_count);
-            ImageView image = holder.itemView.findViewById(R.id.image);
-            ImageView img_add = holder.itemView.findViewById(R.id.img_add);
-            ImageView img_remove = holder.itemView.findViewById(R.id.img_remove);
-            ImageView img_delete = holder.itemView.findViewById(R.id.img_delete);
-
-            tv_other_note = holder.itemView.findViewById(R.id.tv_other_note);
-            special = holder.itemView.findViewById(R.id.special);
-
-            //   special.setText(name);
-
-            tv_name.setText(items.get(possion).getTitle());
-            tv_descri.setText(items.get(possion).getDescription());
-            tv_price.setText(mySession.getValueOf(MySession.CurrencySign)  + items.get(possion).getPrice());
-            tv_qty.setText("(" + items.get(possion).getNewquantity() + ")");
-            tv_other_note.setText("" + items.get(possion).getOther_notes());
-
-            special.setText("" + items.get(possion).getOther_notes());
-
-
-            tv_other_note.setVisibility(items.get(possion).getOther_notes().isEmpty() ? View.GONE : View.VISIBLE);
-            tv_count.setText(items.get(possion).getNewquantity());
-            tv_qty.setVisibility(items.get(possion).getNewquantity().equals("0") ? View.GONE : View.VISIBLE);
-            Glide.with(getActivity()).load(BaseUrl.image_baseurl + items.get(possion).getMenu_image()).into(image);
-
-            holder.itemView.setOnClickListener(v -> {
-                new FragmentItemDetails().setData(items.get(possion), FragmentMenuCart.this::getMenuList).show(getChildFragmentManager(), "");
-            });
-
-            img_add.setOnClickListener(v -> {
-                int count = Integer.parseInt(items.get(possion).getNewquantity());
-                count++;
-                addUpdateQty(possion, count);
-
-            });
-            img_remove.setOnClickListener(v -> {
-                int count1 = Integer.parseInt(items.get(possion).getNewquantity());
-                count1--;
-                addUpdateQty(possion, count1);
-            });
-            img_delete.setOnClickListener(v -> {
-                addUpdateQty(possion, 0);
-                // DeleteItem(possion);
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-
-        class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public MyViewHolder(@NonNull View itemView) {
-                super(itemView);
-            }
-        }
     }
 
     private void addUpdateQty(int pos, int count) {
@@ -287,7 +204,7 @@ private  MySession mySession;
 
         Log.e("item.getOther_special()", "" + "otehernotes" + othernotes);
 
-        for(ModelItem item : arrayList) {
+        for (ModelItem item : arrayList) {
             itemIds.append(item.getId() + ",");
             prices.append(item.getPrice() + ",");
             quantities.append(item.getNewquantity() + ",");
@@ -379,5 +296,89 @@ private  MySession mySession;
                     }
 
                 });
+    }
+
+    class SubMenuAdapter extends RecyclerView.Adapter<SubMenuAdapter.MyViewHolder> {
+        private final String name;
+        ArrayList<ModelItem> items;
+
+        public SubMenuAdapter(ArrayList<ModelItem> items, String name) {
+            this.items = items;
+            this.name = name;
+
+        }
+
+        @NonNull
+        @Override
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_cart_menu, viewGroup, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int possion) {
+            TextView tv_name = holder.itemView.findViewById(R.id.tv_name);
+            TextView tv_descri = holder.itemView.findViewById(R.id.tv_descri);
+            TextView tv_price = holder.itemView.findViewById(R.id.tv_price);
+            TextView tv_qty = holder.itemView.findViewById(R.id.tv_qty);
+            TextView tv_count = holder.itemView.findViewById(R.id.tv_count);
+            ImageView image = holder.itemView.findViewById(R.id.image);
+            ImageView img_add = holder.itemView.findViewById(R.id.img_add);
+            ImageView img_remove = holder.itemView.findViewById(R.id.img_remove);
+            ImageView img_delete = holder.itemView.findViewById(R.id.img_delete);
+
+            tv_other_note = holder.itemView.findViewById(R.id.tv_other_note);
+            special = holder.itemView.findViewById(R.id.special);
+
+            //   special.setText(name);
+
+            tv_name.setText(items.get(possion).getTitle());
+            tv_descri.setText(items.get(possion).getDescription());
+            tv_price.setText(mySession.getValueOf(MySession.CurrencySign) + items.get(possion).getPrice());
+            tv_qty.setText("(" + items.get(possion).getNewquantity() + ")");
+            tv_other_note.setText("" + items.get(possion).getOther_notes());
+
+            special.setText("" + items.get(possion).getOther_notes());
+
+
+            tv_other_note.setVisibility(items.get(possion).getOther_notes().isEmpty() ? View.GONE : View.VISIBLE);
+            tv_count.setText(items.get(possion).getNewquantity());
+            tv_qty.setVisibility(items.get(possion).getNewquantity().equals("0") ? View.GONE : View.VISIBLE);
+            Glide.with(getActivity()).load(BaseUrl.image_baseurl + items.get(possion).getMenu_image()).into(image);
+
+            holder.itemView.setOnClickListener(v -> {
+                new FragmentItemDetails().setData(items.get(possion), FragmentMenuCart.this::getMenuList).show(getChildFragmentManager(), "");
+            });
+
+            img_add.setOnClickListener(v -> {
+                int count = Integer.parseInt(items.get(possion).getNewquantity());
+                count++;
+                addUpdateQty(possion, count);
+
+            });
+            img_remove.setOnClickListener(v -> {
+                int count1 = Integer.parseInt(items.get(possion).getNewquantity());
+                count1--;
+                addUpdateQty(possion, count1);
+            });
+            img_delete.setOnClickListener(v -> {
+                addUpdateQty(possion, 0);
+                // DeleteItem(possion);
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
     }
 }

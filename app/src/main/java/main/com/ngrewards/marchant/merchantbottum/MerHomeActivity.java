@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 
@@ -332,7 +333,8 @@ public class MerHomeActivity extends MerchantBaseActivity {
         Context context;
         ArrayList<MerOrderBean> orderBeanArrayList;
         ArrayList<MerOrderBean> searchmerchantListBeanArrayList;
-MySession mySessione;
+        MySession mySessione;
+
         public ActivityRecAdp(Activity myContacts, ArrayList<MerOrderBean> orderBeanArrayList) {
             this.context = myContacts;
             this.orderBeanArrayList = orderBeanArrayList;
@@ -396,7 +398,7 @@ MySession mySessione;
                 Log.e("TAG", "onBindViewHolder: " + orderBeanArrayList.get(position).getType());
                 if (orderBeanArrayList.get(position).getType() != null &&
                         orderBeanArrayList.get(position).getType().equalsIgnoreCase("Paybill")) {
-                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign)+orderBeanArrayList.get(position).getTotal_amount());
+                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
                     holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                     holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
                     String mytime = orderBeanArrayList.get(position).getCreated_date();
@@ -461,7 +463,7 @@ MySession mySessione;
 
                 } else {
 
-                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign) +orderBeanArrayList.get(position).getTotal_amount());
+                    holder.total_order_price.setText(mySessione.getValueOf(MySession.CurrencySign) + orderBeanArrayList.get(position).getTotal_amount());
                     holder.order_id.setText(orderBeanArrayList.get(position).getSearch_id());
                     holder.order_category.setText("" + orderBeanArrayList.get(position).getType());
                     holder.total_order_price.setTextColor(getResources().getColor(R.color.black));

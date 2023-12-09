@@ -19,9 +19,6 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -46,6 +43,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 
@@ -103,48 +104,44 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EMIManualActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_QR_SCAN = 3;
+    private final String ngcash_app_str = "";
+    private final String order_guset_No = "";
+    private final String order_Table_No = "";
+    private final String order_Address_Id = "";
+    private final String order_special_request = "";
+    private final String order_Date = "";
+    private final String order_Time = "";
+    public String card_id = "", time_zone = "", member_ngcash = "", apply_ngcassh = "0", card_number = "", card_brand = "", customer_id = "";
+    public ArrayList<MemberDetail> memberDetailArrayList;
+    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    int count = 0;
+    int count1 = 0;
+    KeyStore keyStore;
+    String KEY_NAME = "NgRewards", order_id = "", employee_id = "", employee_name = "", status_touchid
+            = "", user_id = "", merchant_id = "", merchant_name = "", merchant_number = "";
+    Cipher cipher;
+    CreditCardFormatTextWatcher tv, tv2;
+    CustomCardAdp customCardAdp;
     private TextView tenPer, fifteenPer, twentyPer, otherPer;
     private RelativeLayout backlay;
     private EditText dueamount_et, tipamount_et, ngcashavb;
     private RadioButton creditcard_rbut;
     private RadioButton paypalbut;
     private TextView total_amt, merchantname;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
     private ProgressBar progresbar;
     private AutoCompleteTextView merchant_num_auto;
     private TextView paybill_tv, textView;
     private Myapisession myapisession;
-    int count = 0;
-    int count1 = 0;
     private MySession mySession;
     private MySavedCardInfo mySavedCardInfo;
-    KeyStore keyStore;
-    String KEY_NAME = "NgRewards",order_id="", employee_id = "", employee_name = "", status_touchid
-            = "", user_id = "", merchant_id = "", merchant_name = "", merchant_number = "";
-    Cipher cipher;
     private ImageView cardimg;
     private TextView cardnumber, avbngcash, applytv, card_amount_tv;
     private LinearLayout cardlay;
     private RelativeLayout addcardlay;
-    CreditCardFormatTextWatcher tv, tv2;
-    CustomCardAdp customCardAdp;
     private ArrayList<CardBean> cardBeanArrayList;
     private ExpandableHeightListView savedcardlist;
-    private final String ngcash_app_str = "";
-    private final String order_guset_No = "";
-    private final String order_Table_No = "";
-    public String card_id = "", time_zone = "", member_ngcash = "", apply_ngcassh = "0", card_number = "", card_brand = "", customer_id = "";
     private double ngcash_val = 0, total_amt_calculate = 0, apply_ng_cash = 0;
-    private ImageView qrcode;
-    private AutoCompleteTextView edt_name;
-    private static final int REQUEST_CODE_QR_SCAN = 3;
-    private MerchantListBean MerchantData;
-    private String sub_total_price;
-    private String phone;
-    private final String order_Address_Id = "";
-    private final String order_special_request = "";
-    private final String order_Date = "";
-    private final String order_Time = "";
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -154,9 +151,9 @@ public class EMIManualActivity extends AppCompatActivity {
 
                     String ngcash_str = intent.getExtras().getString("ngcash");
                     if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("null") || ngcash_str.equalsIgnoreCase("0")) {
-                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00 Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00 Available");
                     } else {
-                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + ngcash_str + " Available");
+                        avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + ngcash_str + " Available");
                         ngcash_val = Double.parseDouble(ngcash_str);
                     }
                 }
@@ -166,6 +163,11 @@ public class EMIManualActivity extends AppCompatActivity {
             }
         }
     };
+    private ImageView qrcode;
+    private AutoCompleteTextView edt_name;
+    private MerchantListBean MerchantData;
+    private String sub_total_price;
+    private String phone;
     private String due_amount_str = "";
     private String tip_amt_str = "";
     private String order_cart_id;
@@ -176,7 +178,6 @@ public class EMIManualActivity extends AppCompatActivity {
     private String type;
     private TextView paybill_tv1;
     private double apply_ng;
-    public ArrayList<MemberDetail> memberDetailArrayList;
     private String username_str;
     private String who_invite_str;
     private String quantity;
@@ -190,6 +191,7 @@ public class EMIManualActivity extends AppCompatActivity {
     private String country_id;
     private ArrayList<String> distance_filter_list;
     private String edit_text_string = "";
+    private String fullname = "";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -314,7 +316,7 @@ public class EMIManualActivity extends AppCompatActivity {
                     fullname = jsonObject1.getString("fullname");
                     member_ngcash = jsonObject1.getString("member_ngcash");
                     ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
-                    Log.e("", "onCreate:  ngcash_valngcash_valngcash_val "+ngcash_val );
+                    Log.e("", "onCreate:  ngcash_valngcash_valngcash_val " + ngcash_val);
                 }
 
             } catch (JSONException ee) {
@@ -330,22 +332,22 @@ public class EMIManualActivity extends AppCompatActivity {
             " 1.71","order_id":"7484","key":"You have emi pending please pay now"}*/
             try {
                 JSONObject data = new JSONObject(getIntent().getExtras().getString("object"));
-                       merchant_id = data.getString("merchant_id");
-                    merchant_name = data.getString("merchant_business_name");
-                   merchant_number = data.getString("merchant_business_no");
-                    order_cart_id = data.getString("cart_id");
-                  sub_total_price = data.getString("split_amount_x");
-                   tax_price = data.getString("split_amount_x");
-                  total_amount_due = data.getString("split_amount_x");
-                  // type = data.getString("type");
-                   type = "payemi";
-                  quantity = data.getString("split_amount_x");
+                merchant_id = data.getString("merchant_id");
+                merchant_name = data.getString("merchant_business_name");
+                merchant_number = data.getString("merchant_business_no");
+                order_cart_id = data.getString("cart_id");
+                sub_total_price = data.getString("split_amount_x");
+                tax_price = data.getString("split_amount_x");
+                total_amount_due = data.getString("split_amount_x");
+                // type = data.getString("type");
+                type = "payemi";
+                quantity = data.getString("split_amount_x");
                 employee_sales_id = data.getString("split_amount_x");
                 employee_slaes_name = data.getString("split_amount_x");
                 order_id = data.getString("order_id");
 
             } catch (JSONException e) {
-               throw new RuntimeException(e);
+                throw new RuntimeException(e);
             }
             if (merchant_name != null) {
                 merchant_num_auto.setText("" + merchant_number);
@@ -359,7 +361,7 @@ public class EMIManualActivity extends AppCompatActivity {
             if (total_amount_due != null) {
 
                 dueamount_et.setText("" + total_amount_due);
-                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + total_amount_due);
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + total_amount_due);
                 card_amount_tv.setText(total_amount_due);
 
             }
@@ -590,7 +592,7 @@ public class EMIManualActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Log.e("TAG", "onResponse:  responseresponseresponse "+response );
+                    Log.e("TAG", "onResponse:  responseresponseresponse " + response);
                     try {
                         String responseData = response.body().toString();
 
@@ -616,11 +618,11 @@ public class EMIManualActivity extends AppCompatActivity {
                             if (member_ngcash == null || member_ngcash.equalsIgnoreCase("0")
                                     || member_ngcash.equalsIgnoreCase("") || member_ngcash.equalsIgnoreCase("0.0") ||
                                     member_ngcash.equalsIgnoreCase("null")) {
-                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) +"0.00");
+                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + "0.00");
 
                             } else {
 
-                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign)  + member_ngcash);
+                                avbngcash.setText(mySession.getValueOf(MySession.CurrencySign) + member_ngcash);
                                 ngcash_val = Double.parseDouble((member_ngcash.replace(",", "")));
                             }
 
@@ -672,7 +674,7 @@ public class EMIManualActivity extends AppCompatActivity {
     private void getUsername() {
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -708,8 +710,6 @@ public class EMIManualActivity extends AppCompatActivity {
             }
         });
     }
-
-    private String fullname = "";
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -791,7 +791,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
                 total_amt_calculate = tot;
 
-                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -822,14 +822,17 @@ public class EMIManualActivity extends AppCompatActivity {
         });
 
 
-
         tenPer.setOnClickListener(
                 v -> {
                     if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
-                        String due_amt =  dueamount_et.getText().toString();
-                        String tip_amt  = ""+Double.parseDouble(due_amt) * 10 / 100;
-                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
-                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        String due_amt = dueamount_et.getText().toString();
+                        String tip_amt = "" + Double.parseDouble(due_amt) * 10 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {
+                            tip_amt = "0.0";
+                        }
+                        if (due_amt.equalsIgnoreCase("")) {
+                            due_amt = "0.0";
+                        }
                         double sp_dob = Double.parseDouble(tip_amt);
                         double wait_dob = Double.parseDouble(due_amt);
                         double tot = sp_dob + wait_dob;
@@ -847,10 +850,14 @@ public class EMIManualActivity extends AppCompatActivity {
         fifteenPer.setOnClickListener(
                 v -> {
                     if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
-                        String due_amt =  dueamount_et.getText().toString();
-                        String tip_amt  = ""+Double.parseDouble(due_amt) * 15 / 100;
-                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
-                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        String due_amt = dueamount_et.getText().toString();
+                        String tip_amt = "" + Double.parseDouble(due_amt) * 15 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {
+                            tip_amt = "0.0";
+                        }
+                        if (due_amt.equalsIgnoreCase("")) {
+                            due_amt = "0.0";
+                        }
                         double sp_dob = Double.parseDouble(tip_amt);
                         double wait_dob = Double.parseDouble(due_amt);
                         double tot = sp_dob + wait_dob;
@@ -868,10 +875,14 @@ public class EMIManualActivity extends AppCompatActivity {
         twentyPer.setOnClickListener(
                 v -> {
                     if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
-                        String due_amt =  dueamount_et.getText().toString();
-                        String tip_amt  = ""+Double.parseDouble(due_amt) * 20 / 100;
-                        if (tip_amt.equalsIgnoreCase("")) {tip_amt = "0.0";}
-                        if (due_amt.equalsIgnoreCase("")) {due_amt = "0.0";}
+                        String due_amt = dueamount_et.getText().toString();
+                        String tip_amt = "" + Double.parseDouble(due_amt) * 20 / 100;
+                        if (tip_amt.equalsIgnoreCase("")) {
+                            tip_amt = "0.0";
+                        }
+                        if (due_amt.equalsIgnoreCase("")) {
+                            due_amt = "0.0";
+                        }
                         double sp_dob = Double.parseDouble(tip_amt);
                         double wait_dob = Double.parseDouble(due_amt);
                         double tot = sp_dob + wait_dob;
@@ -890,7 +901,7 @@ public class EMIManualActivity extends AppCompatActivity {
         otherPer.setOnClickListener(
                 v -> {
                     try {
-                        if (! dueamount_et.getText().toString().equalsIgnoreCase("")) {
+                        if (!dueamount_et.getText().toString().equalsIgnoreCase("")) {
                             tipamount_et.setEnabled(true);
                             tipamount_et.setText("");
                             tipamount_et.requestFocus();
@@ -931,7 +942,7 @@ public class EMIManualActivity extends AppCompatActivity {
                 double wait_dob = Double.parseDouble(due_amt);
                 double tot = sp_dob + wait_dob;
                 total_amt_calculate = tot;
-                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
 
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
@@ -940,7 +951,7 @@ public class EMIManualActivity extends AppCompatActivity {
                 }
             }
         });
-        tipamount_et.addTextChangedListener( new TextWatcher() {
+        tipamount_et.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
@@ -956,33 +967,33 @@ public class EMIManualActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + s.toString());
-                    String tip_amt = tipamount_et.getText().toString();
-                    String due_amt = dueamount_et.getText().toString();
-                    Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + tip_amt);
-                    Log.e("TAG", "afterTextChanged: due_amtdue_amt" + due_amt);
+                Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + s.toString());
+                String tip_amt = tipamount_et.getText().toString();
+                String due_amt = dueamount_et.getText().toString();
+                Log.e("TAG", "afterTextChanged: tip_amttip_amt  " + tip_amt);
+                Log.e("TAG", "afterTextChanged: due_amtdue_amt" + due_amt);
 
-                    if (tip_amt.equalsIgnoreCase("")) {
-                        tip_amt = "0.0";
-                    }
-                    if (due_amt.equalsIgnoreCase("")) {
-                        due_amt = "0.0";
-                    }
-
-                    double sp_dob = Double.parseDouble(tip_amt);
-                    double wait_dob = Double.parseDouble(due_amt);
-
-                    double tot = sp_dob + wait_dob;
-
-                    total_amt_calculate = tot;
-                    total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
-                    card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
-
-                    if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
-                        double amt = tot - apply_ng_cash;
-                        card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
-                    }
+                if (tip_amt.equalsIgnoreCase("")) {
+                    tip_amt = "0.0";
                 }
+                if (due_amt.equalsIgnoreCase("")) {
+                    due_amt = "0.0";
+                }
+
+                double sp_dob = Double.parseDouble(tip_amt);
+                double wait_dob = Double.parseDouble(due_amt);
+
+                double tot = sp_dob + wait_dob;
+
+                total_amt_calculate = tot;
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
+                card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
+
+                if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
+                    double amt = tot - apply_ng_cash;
+                    card_amount_tv.setText(String.format("%.2f", new BigDecimal(amt)));
+                }
+            }
 
         });
 
@@ -1049,7 +1060,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
                 double tot = sp_dob + wait_dob;
                 total_amt_calculate = tot;
-                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) +" " + String.format("%.2f", new BigDecimal(tot)));
+                total_amt.setText(mySession.getValueOf(MySession.CurrencySign) + " " + String.format("%.2f", new BigDecimal(tot)));
                 card_amount_tv.setText(String.format("%.2f", new BigDecimal(tot)));
                 if (applytv.getText().toString().equalsIgnoreCase(getResources().getString(R.string.applied))) {
                     double amt = tot - apply_ng_cash;
@@ -1129,7 +1140,7 @@ public class EMIManualActivity extends AppCompatActivity {
                         tip_amt_str = tipamount_et.getText().toString();
                         int TotalAmount = Integer.parseInt(due_amount_str);
 
-                  //      Toast.makeText(getApplicationContext(), "test123  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
+                        //      Toast.makeText(getApplicationContext(), "test123  : >>>  " + employee_id, Toast.LENGTH_SHORT).show();
 
                         merchant_number = merchant_num_auto.getText().toString();
 
@@ -1300,7 +1311,7 @@ public class EMIManualActivity extends AppCompatActivity {
                 }
           });*/
 
-             dueamount_et.setFilters(new InputFilter[]{
+        dueamount_et.setFilters(new InputFilter[]{
 
                 new DigitsKeyListener(Boolean.FALSE, Boolean.TRUE) {
                     final int beforeDecimal = 8;
@@ -1372,7 +1383,7 @@ public class EMIManualActivity extends AppCompatActivity {
 
     private void payBiilMerchant(String user_id, String merchant_id, String merchant_number, String due_amount_str, String tip_amt_str, String ngcash_app_str, String card_id, String card_number, String card_brand, String customer_id) {
         progresbar.setVisibility(View.VISIBLE);
-        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(mySession.getValueOf(MySession.CurrencyCode),user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
+        Call<ResponseBody> call = ApiClient.getApiInterface().payBillToMerchant(mySession.getValueOf(MySession.CurrencyCode), user_id, merchant_id, merchant_number, due_amount_str, tip_amt_str, ngcash_app_str, card_id, card_number, card_brand, customer_id, "Paybill", time_zone, employee_id, employee_name);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1568,8 +1579,8 @@ public class EMIManualActivity extends AppCompatActivity {
                     .build());
             keyGenerator.generateKey();
         } catch (NoSuchAlgorithmException |
-                InvalidAlgorithmParameterException
-                | CertificateException | IOException e) {
+                 InvalidAlgorithmParameterException
+                 | CertificateException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -1662,11 +1673,17 @@ public class EMIManualActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
     class GeoAutoCompleteAdapter1 extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l21 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l21 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter1(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -1782,8 +1799,8 @@ public class EMIManualActivity extends AppCompatActivity {
 
     public class CustomCardAdp extends BaseAdapter {
         Context context;
-        private LayoutInflater inflater = null;
         ArrayList<CardBean> cardBeanArrayList;
+        private LayoutInflater inflater = null;
 
         public CustomCardAdp(Context contexts, ArrayList<CardBean> cardBeanArrayList) {
             this.context = contexts;
@@ -1808,10 +1825,6 @@ public class EMIManualActivity extends AppCompatActivity {
         public long getItemId(int position) {
             // TODO Auto-generated method stub
             return position;
-        }
-
-        public class Holder {
-
         }
 
         @Override
@@ -1893,7 +1906,6 @@ public class EMIManualActivity extends AppCompatActivity {
                         cardBeanArrayList.get(pos).setDefaultCard(true);
 
 
-
                         customCardAdp = new CustomCardAdp(EMIManualActivity.this, cardBeanArrayList);
                         savedcardlist.setAdapter(customCardAdp);
                         savedcardlist.setSelection(position);
@@ -1904,13 +1916,17 @@ public class EMIManualActivity extends AppCompatActivity {
             });
             return rowView;
         }
+
+        public class Holder {
+
+        }
     }
 
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MerchantListBean> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MerchantListBean> l2, String lat, String lon) {
             this.context = context;
@@ -2017,12 +2033,6 @@ public class EMIManualActivity extends AppCompatActivity {
             return filter;
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
     }
 
     private class GetAddedCard extends AsyncTask<String, String, String> {

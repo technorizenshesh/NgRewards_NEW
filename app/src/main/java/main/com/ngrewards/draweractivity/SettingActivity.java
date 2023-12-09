@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -27,8 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;*/
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,22 +44,19 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import main.com.ngrewards.R;
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
 import main.com.ngrewards.activity.AccountTypeSelectionAct;
 import main.com.ngrewards.activity.AddMemberCard;
-import main.com.ngrewards.activity.SplashActivity;
 import main.com.ngrewards.activity.UpdateMemberCard;
-import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.androidmigx.MainTabActivity;
+import main.com.ngrewards.beanclasses.CardBean;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.ExpandableHeightListView;
 import main.com.ngrewards.constant.MySavedCardInfo;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.constant.Myapisession;
-import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 import main.com.ngrewards.restapi.ApiClient;
 import main.com.ngrewards.settingclasses.AboutNgReward;
 import main.com.ngrewards.settingclasses.CareeersAct;
@@ -489,17 +483,18 @@ public class SettingActivity extends AppCompatActivity {
                     if (language_list != null && !language_list.isEmpty()) {
                         if (!mySession.getValueOf(KEY_LANGUAGE)
                                 .equalsIgnoreCase(language_list.get(position).getSortname())) {
-                            selected_lang=language_list.get(position).getSortname();
+                            selected_lang = language_list.get(position).getSortname();
 
-                        }else {
-                             selected_lang = "";
+                        } else {
+                            selected_lang = "";
 
                         }
                     }
                 }
+
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    selected_lang="";
+                    selected_lang = "";
                 }
             });
 
@@ -511,7 +506,7 @@ public class SettingActivity extends AppCompatActivity {
                     mySession.setValueOf(KEY_LANGUAGE, selected_lang);
                     dialogSts.dismiss();
                     Intent i = new Intent(SettingActivity.this, MainTabActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
 

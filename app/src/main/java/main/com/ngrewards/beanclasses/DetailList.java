@@ -119,6 +119,10 @@ public class DetailList {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getStock() {
         return stock;
     }
@@ -157,10 +161,6 @@ public class DetailList {
 
     public void setAverageRating(String averageRating) {
         this.averageRating = averageRating;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getProductName() {

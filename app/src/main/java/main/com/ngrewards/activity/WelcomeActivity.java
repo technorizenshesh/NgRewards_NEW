@@ -2,15 +2,12 @@ package main.com.ngrewards.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -22,15 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;*/
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,46 +39,49 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.app.Config;
 import main.com.ngrewards.androidmigx.MainTabActivity;
 import main.com.ngrewards.constant.BaseUrl;
 import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 
 public class WelcomeActivity extends AppCompatActivity {
-    private TextView termscheck;
-    private CheckBox termscheck1;
-
-    private TextView allreadyaccount, createaccount;
-    private EditText member_email;
-    public static String member_email_str = "";
-    private ProgressBar progresbar;
-
     //code for lat long
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
-    LocationManager locationManager;
-    Location location;
-    private double latitude = 0, longitude = 0;
-    GPSTracker gpsTracker;
+    public static String member_email_str = "";
     private final String country_str = "";
     private final String country_id = "";
-
-   // private LoginButton loginButton;
-    private LinearLayout facebook_button;
+    LocationManager locationManager;
+    Location location;
+    GPSTracker gpsTracker;
     String facebook_name, facebook_email, facebook_id, facebook_image, face_gender, face_locale, facebook_lastname = "", face_username;
-   // private CallbackManager callbackManager;
+    private TextView termscheck;
+    private CheckBox termscheck1;
+    private TextView allreadyaccount, createaccount;
+    private EditText member_email;
+    private ProgressBar progresbar;
+    private double latitude = 0, longitude = 0;
+    // private LoginButton loginButton;
+    private LinearLayout facebook_button;
+    // private CallbackManager callbackManager;
     private MySession mySession;
-    private String firebase_regid = "";
+    private final String firebase_regid = "";
     private RelativeLayout backlay;
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   FacebookSdk.sdkInitialize(getApplicationContext());
+        //   FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_welcome);
 
-      //  callbackManager = CallbackManager.Factory.create();
+        //  callbackManager = CallbackManager.Factory.create();
         mySession = new MySession(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -106,7 +99,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-       // callbackManager.onActivityResult(requestCode, resultCode, data);
+        // callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -116,7 +109,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-            //    loginButton.performClick();
+                //    loginButton.performClick();
             }
         });
 
@@ -179,7 +172,7 @@ public class WelcomeActivity extends AppCompatActivity {
         termscheck1 = findViewById(R.id.termscheck1);
 
 
-      //  loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+        //  loginButton = (LoginButton) findViewById(R.id.login_button_fb);
         facebook_button = (LinearLayout) findViewById(R.id.facebook_button);
         progresbar = findViewById(R.id.progresbar);
         member_email = findViewById(R.id.member_email);
@@ -205,89 +198,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     }
-
-    private class CheckUsernameAvability extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
-
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "check_member.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("email", member_email_str);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progresbar.setVisibility(View.GONE);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-
-            } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    String result_chk = jsonObject.getString("status");
-                    if (result_chk.equalsIgnoreCase("1")) {
-                        Intent i = new Intent(WelcomeActivity.this, SliderActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(WelcomeActivity.this, "This email address is not available", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-
-        }
-    }
-
 
     private void facebookData() {
 
@@ -380,6 +290,88 @@ public class WelcomeActivity extends AppCompatActivity {
 //        request.setParameters(parameters);
 //        request.executeAsync();
 //    }
+
+    private class CheckUsernameAvability extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+                String postReceiverUrl = BaseUrl.baseurl + "check_member.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("email", member_email_str);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
+                return response;
+            } catch (UnsupportedEncodingException e1) {
+
+                e1.printStackTrace();
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String result_chk = jsonObject.getString("status");
+                    if (result_chk.equalsIgnoreCase("1")) {
+                        Intent i = new Intent(WelcomeActivity.this, SliderActivity.class);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, "This email address is not available", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
+    }
 
     private class SocialLogin extends AsyncTask<String, String, String> {
         @Override
@@ -513,13 +505,6 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public void onProviderDisabled(String provider) {
         }
-    }
-
-    public static boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
 }

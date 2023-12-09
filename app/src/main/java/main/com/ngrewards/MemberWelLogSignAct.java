@@ -3,10 +3,11 @@ package main.com.ngrewards;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.Utils.LocaleHelper;
 import main.com.ngrewards.Utils.Tools;
@@ -14,13 +15,15 @@ import main.com.ngrewards.activity.LoginActivity;
 import main.com.ngrewards.activity.SliderActivity;
 
 public class MemberWelLogSignAct extends AppCompatActivity {
-    private TextView login_tv,createaccount;
+    private TextView login_tv, createaccount;
 
     private RelativeLayout backlay;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +47,12 @@ public class MemberWelLogSignAct extends AppCompatActivity {
                 Intent i = new Intent(MemberWelLogSignAct.this, LoginActivity.class);
                 startActivity(i);
             }
-        });createaccount.setOnClickListener(new View.OnClickListener() {
+        });
+        createaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(MemberWelLogSignAct.this,SliderActivity.class);
+                Intent i = new Intent(MemberWelLogSignAct.this, SliderActivity.class);
                 startActivity(i);
             }
         });

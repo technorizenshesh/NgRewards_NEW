@@ -26,10 +26,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -53,9 +49,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,7 +97,6 @@ import main.com.ngrewards.constant.Myapisession;
 import main.com.ngrewards.drawlocation.MyTask;
 import main.com.ngrewards.drawlocation.WebOperations;
 import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
-import main.com.ngrewards.marchant.activity.StartYourListing;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity;
 import main.com.ngrewards.marchant.merchantbottum.MultiPhotoSelectActivity2;
 import main.com.ngrewards.restapi.ApiClient;
@@ -107,7 +106,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MerProfileActivity extends AppCompatActivity {
+    //code for lat long
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static ArrayList<GalleryBean> ImagePathArrayList;
+    public static ArrayList<String> ImagePathArrayList_str;
+    private final Integer THRESHOLD = 2;
     MySession mySession;
+    CountryListAdapter countryListAdapter;
+    ProgressBar progresbar;
+    LocationManager locationManager;
+    Location location;
+    GPSTracker gpsTracker;
+    boolean sts;
+    CategoryAdpters categoryAdpters;
+    String business_number = "", youtubelink_str = "", day_name_str = "", open_close_str = "", added_open_close_str = "", opening_hour_str = "", closing_hour_str = "", aded_day_name_str = "", add_open_str = "", add_close_str = "";
+    //  public static ArrayList<GalleryBean> galleryimagelist;
+    File[] filearray;
+    HorizontalAdapter horizontalAdapter;
     private String user_id = "";
     private RelativeLayout backlay;
     private CircleImageView user_img;
@@ -116,22 +132,11 @@ public class MerProfileActivity extends AppCompatActivity {
     private String address_tv_str = "", ImagePath = "", city_str = "", state_str = "", country_str = "", instalink_str = "", linkedinlink_str = "", bus_website_str = "", facebooklink_str = "", twittelink_str = "";
     private ArrayList<CountryBean> countryBeanArrayList, statelistbean, citylistbean;
     private Spinner state_spn, country_spn, city_spn;
-    CountryListAdapter countryListAdapter;
-    ProgressBar progresbar;
     private TextView update_tv;
     private double mer_latitude, mer_longitude;
-    //code for lat long
-    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
-    LocationManager locationManager;
-    Location location;
     private double latitude = 0, longitude = 0;
-    GPSTracker gpsTracker;
     private AutoCompleteTextView streetaddress;
-    boolean sts;
-    private final Integer THRESHOLD = 2;
     private int count = 0;
-    CategoryAdpters categoryAdpters;
     private ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private Spinner category_spinner;
     private String category_id = "";
@@ -140,13 +145,7 @@ public class MerProfileActivity extends AppCompatActivity {
     private TextView sunday_full_day, monday_full_day, tuesday_full_day, wednesday_full_day, thursday_full_day, friday_full_day, saturday_full_day;
     private String sunday_full_day_ststus = "DEFAULT", monday_full_day_ststus = "DEFAULT", tuesday_full_day_ststus = "DEFAULT", wednesday_full_day_ststus = "DEFAULT", thursday_full_day_ststus = "DEFAULT", friday_full_day_ststus = "DEFAULT", saturday_full_day_ststus = "DEFAULT";
     private String sunday_status_opcls = "OPEN", monday_status_opcls = "OPEN", tuesday_status_opcls = "OPEN", wednesday_status_opcls = "OPEN", thursday_status_opcls = "OPEN", friday_status_opcls = "OPEN", saturday_status_opcls = "OPEN";
-    String business_number = "", youtubelink_str = "", day_name_str = "", open_close_str = "", added_open_close_str = "", opening_hour_str = "", closing_hour_str = "", aded_day_name_str = "", add_open_str = "", add_close_str = "";
     private ImageView uploadimg;
-    public static ArrayList<GalleryBean> ImagePathArrayList;
-    public static ArrayList<String> ImagePathArrayList_str;
-    //  public static ArrayList<GalleryBean> galleryimagelist;
-    File[] filearray;
-    HorizontalAdapter horizontalAdapter;
     private RecyclerView business_galleryimage;
     private int remove_pos;
     private Myapisession myapisession;
@@ -255,8 +254,8 @@ public class MerProfileActivity extends AppCompatActivity {
         CategoryBeanList categoryBeanList = new CategoryBeanList();
         categoryBeanList.setCategoryId("0");
         categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+        categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         categoryBeanListArrayList.add(categoryBeanList);
         Call<ResponseBody> call = ApiClient.getApiInterface().getBusnessCategory();
         call.enqueue(new Callback<ResponseBody>() {
@@ -789,49 +788,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         }
     }
 
-    public class CategoryAdpters extends BaseAdapter {
-        Context context;
-        LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
-
-        public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
-            this.context = applicationContext;
-            this.categoryBeanLists = categoryBeanLists;
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-            return categoryBeanLists == null ? 0 : categoryBeanLists.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.spinner_layout, null);
-            TextView names = (TextView) view.findViewById(R.id.name_tv);
-            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
-            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
-                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
-            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
-                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
-            } else {
-                names.setText(categoryBeanLists.get(i).getCategoryName());
-            }
-            return view;
-        }
-    }
-
     private void removeImages(final int remove_pos, String id) {
         //http://testing.bigclicki.com/webservice/loginapp?email=0&password=0
         Log.e("loginCall >", " > FIRST");
@@ -874,83 +830,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         });
     }
 
-    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
-
-        private ArrayList<Bitmap> horizontalList;
-        private final ArrayList<GalleryBean> ImagePathArray;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            public ImageView ProductImageImagevies, remove_images;
-            //   RelativeLayout RLRemovePhoto;
-
-            public MyViewHolder(View view) {
-                super(view);
-
-                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
-                remove_images = (ImageView) view.findViewById(R.id.remove_images);
-                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
-
-            }
-        }
-
-
-        public HorizontalAdapter(ArrayList<GalleryBean> ImagePathArray) {
-            this.horizontalList = horizontalList;
-            this.ImagePathArray = ImagePathArray;
-        }
-
-        @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.business_lay_img, parent, false);
-
-            return new HorizontalAdapter.MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-            if (ImagePathArray.get(position) != null) {
-
-                if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
-                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getGallery_image())));
-                } else {
-                    String product_img = ImagePathArray.get(position).getGallery_image();
-                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-                    } else {
-
-                        Glide.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
-
-                    }
-                }
-
-            }
-
-            holder.remove_images.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
-                        ImagePathArrayList.remove(position);
-                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
-                        business_galleryimage.setAdapter(horizontalAdapter);
-                        horizontalAdapter.notifyDataSetChanged();
-                    } else {
-                        remove_pos = position;
-                        removeImages(remove_pos, ImagePathArray.get(position).getId());
-                    }
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return ImagePathArray == null ? 0 : ImagePathArray.size();
-
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -977,23 +856,22 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                             ToolsShowDialog(getApplicationContext(), e.getLocalizedMessage());
                         }
                     } else {
-                    try {
+                        try {
 
 
-
-                    Uri selectedImage = data.getData();
-                    //getPath(selectedImage);
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String FinalPath = cursor.getString(columnIndex);
-                    cursor.close();
-                    String ImagePath = getPath(selectedImage);
-                    decodeFile(ImagePath);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                            Uri selectedImage = data.getData();
+                            //getPath(selectedImage);
+                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                            cursor.moveToFirst();
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            String FinalPath = cursor.getString(columnIndex);
+                            cursor.close();
+                            String ImagePath = getPath(selectedImage);
+                            decodeFile(ImagePath);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case 2:
@@ -1169,6 +1047,383 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
     }
 
+    @SuppressLint("Range")
+    public String getPath(Uri uri) {
+        String path = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            //  Log.e("image_path.===..", "" + path);
+        }
+        cursor.close();
+        return path;
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateToStr = format.format(today);
+        ContextWrapper cw = new ContextWrapper(MerProfileActivity.this);
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mypath.getAbsolutePath();
+    }
+
+    public void decodeFile(String filePath) {
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, o);
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 1024;
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
+        ImagePath = saveToInternalStorage(bitmap);
+        Log.e("DECODE PATH", "ff " + ImagePath);
+        user_img.setImageBitmap(bitmap);
+    }
+
+    public void addTime(final String time_set_tv) {
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(MerProfileActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        int hour = hourOfDay;
+                        int fullhour = hourOfDay;
+                        int minutes = minute;
+                        String timeSet = "";
+                        if (hour > 12) {
+                            hour -= 12;
+                            timeSet = "PM";
+                        } else if (hour == 0) {
+                            hour += 12;
+                            timeSet = "AM";
+                        } else if (hour == 12) {
+                            timeSet = "PM";
+                        } else {
+                            timeSet = "AM";
+                        }
+                        String min = "";
+                        if (minutes < 10)
+                            min = "0" + minutes;
+                        else
+                            min = String.valueOf(minutes);
+                        String time_str = "" + hour + ":" + min + " " + timeSet;
+                        if (time_set_tv.equalsIgnoreCase("Sun")) {
+                            sundayopen.setText("" + time_str);
+                        } else if (time_set_tv.equalsIgnoreCase("Suncls")) {
+                            sundayclose.setText("" + time_str);
+                        } else if (time_set_tv.equalsIgnoreCase("Mon")) {
+                            mondayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Moncls")) {
+                            mondayclose.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Tus")) {
+                            tuesdayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Tuscls")) {
+                            tuesdayclose.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Wed")) {
+                            wednesdayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Wedcls")) {
+                            wednesdayclose.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Thu")) {
+                            thursdayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Thucls")) {
+                            thursdayclose.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Fri")) {
+                            fridayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Fricls")) {
+                            fridayclose.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Sat")) {
+                            saturdayopen.setText("" + time_str);
+
+                        } else if (time_set_tv.equalsIgnoreCase("Satcls")) {
+                            saturdayclose.setText("" + time_str);
+
+                        }
+                        Calendar c = Calendar.getInstance();
+                        Date date = c.getTime();
+
+
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+    }
+
+    private void selectImage() {
+        final Dialog dialogSts = new Dialog(MerProfileActivity.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.select_img_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button camera = (Button) dialogSts.findViewById(R.id.camera);
+        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
+        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+        gallary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 1);
+
+            }
+        });
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 2);
+
+            }
+        });
+        cont_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+        dialogSts.show();
+    }
+
+    private void checkGps() {
+        gpsTracker = new GPSTracker(MerProfileActivity.this);
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+
+            }
+        } else {
+
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+            } else {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
+
+            }
+        }
+
+
+    }
+
+    private void selectImageMultiple() {
+        final Dialog dialogSts = new Dialog(MerProfileActivity.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.select_img_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button camera = (Button) dialogSts.findViewById(R.id.camera);
+        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
+        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
+        gallary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+
+                if (Build.VERSION.SDK_INT >= 33) {
+                    Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity2.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity.class);
+                    startActivity(i);
+                }
+
+            }
+        });
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+                if (ImagePathArrayList.size() < 7) {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, 3);
+                } else {
+                    Toast.makeText(MerProfileActivity.this, getResources().getString(R.string.alreadyadded), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        cont_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+        dialogSts.show();
+    }
+
+    public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
+        Context context;
+        LayoutInflater inflter;
+
+        public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
+            this.context = applicationContext;
+            this.categoryBeanLists = categoryBeanLists;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return categoryBeanLists == null ? 0 : categoryBeanLists.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.spinner_layout, null);
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+            } else {
+                names.setText(categoryBeanLists.get(i).getCategoryName());
+            }
+            return view;
+        }
+    }
+
+    private class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+        private final ArrayList<GalleryBean> ImagePathArray;
+        private ArrayList<Bitmap> horizontalList;
+
+        public HorizontalAdapter(ArrayList<GalleryBean> ImagePathArray) {
+            this.horizontalList = horizontalList;
+            this.ImagePathArray = ImagePathArray;
+        }
+
+        @Override
+        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.business_lay_img, parent, false);
+
+            return new HorizontalAdapter.MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            if (ImagePathArray.get(position) != null) {
+
+                if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
+                    holder.ProductImageImagevies.setImageURI(Uri.fromFile(new File(ImagePathArray.get(position).getGallery_image())));
+                } else {
+                    String product_img = ImagePathArray.get(position).getGallery_image();
+                    if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+                    } else {
+
+                        Glide.with(MerProfileActivity.this).load(product_img).placeholder(R.drawable.placeholder).into(holder.ProductImageImagevies);
+
+                    }
+                }
+
+            }
+
+            holder.remove_images.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ImagePathArray.get(position).getId().equalsIgnoreCase("0")) {
+                        ImagePathArrayList.remove(position);
+                        horizontalAdapter = new HorizontalAdapter(ImagePathArrayList);
+                        business_galleryimage.setAdapter(horizontalAdapter);
+                        horizontalAdapter.notifyDataSetChanged();
+                    } else {
+                        remove_pos = position;
+                        removeImages(remove_pos, ImagePathArray.get(position).getId());
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return ImagePathArray == null ? 0 : ImagePathArray.size();
+
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public ImageView ProductImageImagevies, remove_images;
+            //   RelativeLayout RLRemovePhoto;
+
+            public MyViewHolder(View view) {
+                super(view);
+
+                ProductImageImagevies = (ImageView) view.findViewById(R.id.productimage);
+                remove_images = (ImageView) view.findViewById(R.id.remove_images);
+                //    RLRemovePhoto = (RelativeLayout) view.findViewById(R.id.RLRemovePhoto);
+
+            }
+        }
+    }
 
     private class GetProfile extends AsyncTask<String, String, String> {
         @Override
@@ -1465,8 +1720,8 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                                 categoryBeanList.setCategoryId("0");
                                 categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+                                categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+                                categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                                 categoryBeanListArrayList.add(categoryBeanList);
                                 JSONObject object = new JSONObject(myapisession.getKeyMerchantcate());
                                 Log.e("loginCall >", " >" + myapisession.getKeyMerchantcate());
@@ -1506,7 +1761,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
         }
     }
-
 
     private class GetCountryList extends AsyncTask<String, String, String> {
         @Override
@@ -1829,10 +2083,9 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
         private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
 
         public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
             this.context = applicationContext;
@@ -1870,74 +2123,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
             return view;
         }
-    }
-
-    @SuppressLint("Range")
-    public String getPath(Uri uri) {
-        String path = null;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        if (cursor.moveToFirst()) {
-            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            //  Log.e("image_path.===..", "" + path);
-        }
-        cursor.close();
-        return path;
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        Date today = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-        String dateToStr = format.format(today);
-        ContextWrapper cw = new ContextWrapper(MerProfileActivity.this);
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(directory, "profile_" + dateToStr + ".JPEG");
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return mypath.getAbsolutePath();
-    }
-
-
-    public void decodeFile(String filePath) {
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, o);
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 1024;
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                break;
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath, o2);
-        ImagePath = saveToInternalStorage(bitmap);
-        Log.e("DECODE PATH", "ff " + ImagePath);
-        user_img.setImageBitmap(bitmap);
     }
 
     public class UpdateProfile extends AsyncTask<String, String, String> {
@@ -2077,124 +2262,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
 
     }
 
-    public void addTime(final String time_set_tv) {
-        final Calendar c = Calendar.getInstance();
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(MerProfileActivity.this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        int hour = hourOfDay;
-                        int fullhour = hourOfDay;
-                        int minutes = minute;
-                        String timeSet = "";
-                        if (hour > 12) {
-                            hour -= 12;
-                            timeSet = "PM";
-                        } else if (hour == 0) {
-                            hour += 12;
-                            timeSet = "AM";
-                        } else if (hour == 12) {
-                            timeSet = "PM";
-                        } else {
-                            timeSet = "AM";
-                        }
-                        String min = "";
-                        if (minutes < 10)
-                            min = "0" + minutes;
-                        else
-                            min = String.valueOf(minutes);
-                        String time_str = "" + hour + ":" + min + " " + timeSet;
-                        if (time_set_tv.equalsIgnoreCase("Sun")) {
-                            sundayopen.setText("" + time_str);
-                        } else if (time_set_tv.equalsIgnoreCase("Suncls")) {
-                            sundayclose.setText("" + time_str);
-                        } else if (time_set_tv.equalsIgnoreCase("Mon")) {
-                            mondayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Moncls")) {
-                            mondayclose.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Tus")) {
-                            tuesdayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Tuscls")) {
-                            tuesdayclose.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Wed")) {
-                            wednesdayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Wedcls")) {
-                            wednesdayclose.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Thu")) {
-                            thursdayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Thucls")) {
-                            thursdayclose.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Fri")) {
-                            fridayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Fricls")) {
-                            fridayclose.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Sat")) {
-                            saturdayopen.setText("" + time_str);
-
-                        } else if (time_set_tv.equalsIgnoreCase("Satcls")) {
-                            saturdayclose.setText("" + time_str);
-
-                        }
-                        Calendar c = Calendar.getInstance();
-                        Date date = c.getTime();
-
-
-                    }
-                }, mHour, mMinute, false);
-        timePickerDialog.show();
-    }
-
-    private void selectImage() {
-        final Dialog dialogSts = new Dialog(MerProfileActivity.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.select_img_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button camera = (Button) dialogSts.findViewById(R.id.camera);
-        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
-        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-        gallary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 1);
-
-            }
-        });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 2);
-
-            }
-        });
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-        dialogSts.show();
-    }
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -2218,11 +2285,11 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private List<String> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
         private final WebOperations wo;
         private final String lat;
         private final String lon;
+        private List<String> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;
@@ -2297,7 +2364,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
-                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
+                        wo.setUrl("https://maps.googleapis.com/maps/api/place/autocomplete/json?key="+getString(R.string.googlekey)+"&input=" + constraint.toString().trim().replaceAll(" ", "+") + "&location=" + lat + "," + lon + "+&radius=20000&types=geocode&sensor=true");
                         String result = null;
                         try {
                             result = new MyTask(wo, 3).execute().get();
@@ -2380,7 +2447,7 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         protected String doInBackground(String... strings) {
             String address = streetaddress_str.trim().replaceAll(" ", "+");
             Log.e("Murchant Location >>>", "" + streetaddress_str);
-            String postReceiverUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyDQhXBxYiOPm-aGspwuKueT3CfBOIY3SJs";
+            String postReceiverUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key="+getString(R.string.googlekey);
 
             try {
                 //  String postReceiverUrl = "https://api.ctlf.co.uk/";
@@ -2457,79 +2524,6 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
             }
 
         }
-    }
-
-    private void checkGps() {
-        gpsTracker = new GPSTracker(MerProfileActivity.this);
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-
-            }
-        }
-
-
-    }
-
-    private void selectImageMultiple() {
-        final Dialog dialogSts = new Dialog(MerProfileActivity.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.select_img_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button camera = (Button) dialogSts.findViewById(R.id.camera);
-        Button gallary = (Button) dialogSts.findViewById(R.id.gallary);
-        TextView cont_find = (TextView) dialogSts.findViewById(R.id.cont_find);
-        gallary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-
-                if (Build.VERSION.SDK_INT >= 33) {
-                    Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity2.class);
-                    startActivity(i);
-                }else {
-                Intent i = new Intent(MerProfileActivity.this, MultiPhotoSelectActivity.class);
-                startActivity(i);}
-
-            }
-        });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-                if (ImagePathArrayList.size() < 7) {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, 3);
-                } else {
-                    Toast.makeText(MerProfileActivity.this, getResources().getString(R.string.alreadyadded), Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-        cont_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-        dialogSts.show();
     }
 
 }

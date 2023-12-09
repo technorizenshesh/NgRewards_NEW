@@ -20,9 +20,6 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,22 +37,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-   
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-/*
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-*/
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,44 +89,44 @@ import main.com.ngrewards.marchant.activity.MerchantSignupSlider;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
 
 public class MarchantLogin extends AppCompatActivity {
-    private RelativeLayout backlay;
-    private TextView bytaping, dontaccount, login_tv, marforgot, login_with_touch;
-    private EditText mobilenum, password_et;
-    private String mobilenum_str = "", password_str = "", firebase_regid = "";
-    public static String country_str = "", country_id = "";
-    MySession mySession;
-    Myapisession myapisession;
-    private ProgressBar progresbar;
-    private Spinner country_spn;
-    CountryListAdapter countryListAdapter;
-    //private LoginButton loginButton;
-    private LinearLayout facebook_button;
-    String facebook_name, facebook_email, facebook_id, facebook_image, face_gender, face_locale, facebook_lastname = "", face_username;
-    //private CallbackManager callbackManager;
-    private ArrayList<CountryBean> countryBeanArrayList;
     //code for lat long
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static String country_str = "", country_id = "";
+    MySession mySession;
+    Myapisession myapisession;
+    CountryListAdapter countryListAdapter;
+    String facebook_name, facebook_email, facebook_id, facebook_image, face_gender, face_locale, facebook_lastname = "", face_username;
     LocationManager locationManager;
     Location location;
-    private double latitude = 0, longitude = 0;
     GPSTracker gpsTracker;
     KeyStore keyStore;
     // Variable used for storing the key in the Android Keystore container
     String KEY_NAME = "androidHive";
     Cipher cipher;
     TextView textView;
+    private RelativeLayout backlay;
+    private TextView bytaping, dontaccount, login_tv, marforgot, login_with_touch;
+    private EditText mobilenum, password_et;
+    private String mobilenum_str = "", password_str = "", firebase_regid = "";
+    private ProgressBar progresbar;
+    private Spinner country_spn;
+    //private LoginButton loginButton;
+    private LinearLayout facebook_button;
+    //private CallbackManager callbackManager;
+    private ArrayList<CountryBean> countryBeanArrayList;
+    private double latitude = 0, longitude = 0;
     private TextView privacy_policy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    //    FacebookSdk.sdkInitialize(getApplicationContext());
+        //    FacebookSdk.sdkInitialize(getApplicationContext());
         // AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_marchant_login);
         mySession = new MySession(this);
         myapisession = new Myapisession(this);
-      //  callbackManager = CallbackManager.Factory.create();
+        //  callbackManager = CallbackManager.Factory.create();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(MarchantLogin.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MarchantLogin.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -151,8 +138,8 @@ public class MarchantLogin extends AppCompatActivity {
 
         clickevet();
 
-      //  if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
-            new GetCountryList().execute();
+        //  if (myapisession.getKeyCountry() == null || myapisession.getKeyCountry().equalsIgnoreCase("")) {
+        new GetCountryList().execute();
 //        } else {
 //            JSONObject jsonObject = null;
 //            try {
@@ -262,7 +249,7 @@ public class MarchantLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               // loginButton.performClick();
+                // loginButton.performClick();
             }
         });
 /*
@@ -283,7 +270,7 @@ public class MarchantLogin extends AppCompatActivity {
 
     private void idint() {
 
-    //    loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+        //    loginButton = (LoginButton) findViewById(R.id.login_button_fb);
         facebook_button = (LinearLayout) findViewById(R.id.facebook_button);
         country_spn = findViewById(R.id.country_spn);
         login_with_touch = findViewById(R.id.login_with_touch);
@@ -335,104 +322,37 @@ public class MarchantLogin extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
-       // callbackManager.onActivityResult(requestCode, resultCode, data);
+        // callbackManager.onActivityResult(requestCode, resultCode, data);
 
 
     }
 
-    private class LoginAsc extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progresbar.setVisibility(View.VISIBLE);
+    private void checkGps() {
+        gpsTracker = new GPSTracker(MarchantLogin.this);
+        if (gpsTracker.canGetLocation()) {
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
+            if (latitude == 0.0) {
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
 
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
+        } else {
 
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                String postReceiverUrl = BaseUrl.baseurl + "merchant_login.php?";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("business_no", mobilenum_str);
-                params.put("password", password_str);
-                params.put("latitude", latitude);
-                params.put("longitude", longitude);
-                params.put("country", country_str);
-                params.put("country_id", country_id);
-                params.put("device_token", firebase_regid);
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
-
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progresbar.setVisibility(View.GONE);
-            if (result == null) {
-            } else if (result.isEmpty()) {
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
 
             } else {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    String result_chk = jsonObject.getString("status");
-                    if (result_chk.equalsIgnoreCase("1")) {
-                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ "+result);
-
-                        mySession.setlogindata(result);
-                        mySession.signinusers(true);
-
-                        Intent i = new Intent(MarchantLogin.this, MerchantBottumAct.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(MarchantLogin.this, "Invalid Credential", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                latitude = SplashActivity.latitude;
+                longitude = SplashActivity.longitude;
+                Log.e("LAT", "" + latitude);
+                Log.e("LON", "" + longitude);
 
             }
-
-
         }
+
+
     }
 
 /*    private void facebookData() {
@@ -525,6 +445,275 @@ public class MarchantLogin extends AppCompatActivity {
         request.executeAsync();
     }*/
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void fingerPrintLay() {
+        final Dialog dialogSts = new Dialog(MarchantLogin.this, R.style.DialogSlideAnim);
+        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSts.setCancelable(false);
+        dialogSts.setContentView(R.layout.fingerprint_lay);
+        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+
+
+        textView = (TextView) dialogSts.findViewById(R.id.errorText);
+        TextView cancel_tv = (TextView) dialogSts.findViewById(R.id.cancel_tv);
+// Check whether the device has a Fingerprint sensor.
+        if (!fingerprintManager.isHardwareDetected()) {
+            /**
+             * An error message will be displayed if the device does not contain the fingerprint hardware.
+             * However if you plan to implement a default authentication method,
+             * you can redirect the user to a default authentication activity from here.
+             * Example:
+             * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
+             * startActivity(intent);
+             */
+            textView.setText(getString(R.string.your_device_does_not_have_a_fingerprint_sensor));
+        } else {
+            // Checks whether fingerprint permission is set on manifest
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                textView.setText(getString(R.string.fingerprint_authentication_permission_not_enabled));
+            } else {
+                // Check whether at least one fingerprint is registered
+                if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    textView.setText(getString(R.string.register_at_least_one_fingerprint_in_settings));
+                } else {
+                    // Checks whether lock screen security is enabled or not
+                    if (!keyguardManager.isKeyguardSecure()) {
+                        textView.setText(getString(R.string.lock_screen_security_not_enabled_in_settings));
+                    } else {
+                        generateKey();
+
+
+                        if (cipherInit()) {
+                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                            FingerprintHandler helper = new FingerprintHandler(MarchantLogin.this, textView, "Merchant");
+                            helper.startAuth(fingerprintManager, cryptoObject);
+                        }
+                    }
+                }
+            }
+        }
+        cancel_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSts.dismiss();
+            }
+        });
+        dialogSts.show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void generateKey() {
+        try {
+            keyStore = KeyStore.getInstance("AndroidKeyStore");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        KeyGenerator keyGenerator;
+        try {
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException("Failed to get KeyGenerator instance", e);
+        }
+
+
+        try {
+            keyStore.load(null);
+            keyGenerator.init(new
+                    KeyGenParameterSpec.Builder(KEY_NAME,
+                    KeyProperties.PURPOSE_ENCRYPT |
+                            KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build());
+            keyGenerator.generateKey();
+        } catch (NoSuchAlgorithmException |
+                 InvalidAlgorithmParameterException
+                 | CertificateException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean cipherInit() {
+        try {
+            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Failed to get Cipher", e);
+        }
+
+
+        try {
+            keyStore.load(null);
+            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME,
+                    null);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
+        }
+    }
+
+    public static class CountryListAdapter extends BaseAdapter {
+        private final ArrayList<CountryBean> values;
+        Context context;
+        LayoutInflater inflter;
+
+        public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
+            this.context = applicationContext;
+            this.values = values;
+
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+
+            return values == null ? 0 : values.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.country_item_lay_flag, null);
+
+            TextView names = (TextView) view.findViewById(R.id.name_tv);
+            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
+            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
+            if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
+
+            } else {
+                Glide.with(context)
+                        .load(values.get(i).getFlag_url())
+                        .thumbnail(0.5f)
+                        .override(50, 50)
+                        .centerCrop()
+
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+                        .into(country_flag);
+            }
+
+
+            names.setText(values.get(i).getName());
+
+
+            return view;
+        }
+    }
+
+    private class LoginAsc extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progresbar.setVisibility(View.VISIBLE);
+
+            try {
+                super.onPreExecute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String postReceiverUrl = BaseUrl.baseurl + "merchant_login.php?";
+                URL url = new URL(postReceiverUrl);
+                Map<String, Object> params = new LinkedHashMap<>();
+                params.put("business_no", mobilenum_str);
+                params.put("password", password_str);
+                params.put("latitude", latitude);
+                params.put("longitude", longitude);
+                params.put("country", country_str);
+                params.put("country_id", country_id);
+                params.put("device_token", firebase_regid);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                String urlParameters = postData.toString();
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+                writer.write(urlParameters);
+                writer.flush();
+                String response = "";
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                writer.close();
+                reader.close();
+                Log.e("Json Login Response", ">>>>>>>>>>>>" + response);
+                return response;
+            } catch (UnsupportedEncodingException e1) {
+
+                e1.printStackTrace();
+            } catch (IOException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progresbar.setVisibility(View.GONE);
+            if (result == null) {
+            } else if (result.isEmpty()) {
+
+            } else {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String result_chk = jsonObject.getString("status");
+                    if (result_chk.equalsIgnoreCase("1")) {
+                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ " + result);
+
+                        mySession.setlogindata(result);
+                        mySession.signinusers(true);
+
+                        Intent i = new Intent(MarchantLogin.this, MerchantBottumAct.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(MarchantLogin.this, "Invalid Credential", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
+    }
+
     private class SocialLogin extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -607,7 +796,7 @@ public class MarchantLogin extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String status = jsonObject.getString("status");
                     if (status.equalsIgnoreCase("1")) {
-                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ "+result);
+                        Log.e("", "jsonObjectjsonObjectjsonObjectjsonObject:------ " + result);
                         mySession.setlogindata(result);
                         mySession.signinusers(true);
 
@@ -735,92 +924,6 @@ public class MarchantLogin extends AppCompatActivity {
         }
     }
 
-    public static class CountryListAdapter extends BaseAdapter {
-        Context context;
-
-        LayoutInflater inflter;
-        private final ArrayList<CountryBean> values;
-
-        public CountryListAdapter(Context applicationContext, ArrayList<CountryBean> values) {
-            this.context = applicationContext;
-            this.values = values;
-
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-
-            return values == null ? 0 : values.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.country_item_lay_flag, null);
-
-            TextView names = (TextView) view.findViewById(R.id.name_tv);
-            ImageView country_flag = (ImageView) view.findViewById(R.id.country_flag);
-            //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
-            if (values.get(i).getFlag_url() == null || values.get(i).getFlag_url().equalsIgnoreCase("")) {
-
-            } else {
-                Glide.with(context)
-                        .load(values.get(i).getFlag_url())
-                        .thumbnail(0.5f)
-                        .override(50, 50)
-                        .centerCrop()
-                         
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                         
-                        .into(country_flag);
-            }
-
-
-            names.setText(values.get(i).getName());
-
-
-            return view;
-        }
-    }
-
-    private void checkGps() {
-        gpsTracker = new GPSTracker(MarchantLogin.this);
-        if (gpsTracker.canGetLocation()) {
-            latitude = gpsTracker.getLatitude();
-            longitude = gpsTracker.getLongitude();
-            if (latitude == 0.0) {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-
-            }
-        } else {
-
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                latitude = SplashActivity.latitude;
-                longitude = SplashActivity.longitude;
-                Log.e("LAT", "" + latitude);
-                Log.e("LON", "" + longitude);
-
-            }
-        }
-
-
-    }
-
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -838,124 +941,6 @@ public class MarchantLogin extends AppCompatActivity {
 
         @Override
         public void onProviderDisabled(String provider) {
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void fingerPrintLay() {
-        final Dialog dialogSts = new Dialog(MarchantLogin.this, R.style.DialogSlideAnim);
-        dialogSts.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSts.setCancelable(false);
-        dialogSts.setContentView(R.layout.fingerprint_lay);
-        dialogSts.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-
-
-        textView = (TextView) dialogSts.findViewById(R.id.errorText);
-        TextView cancel_tv = (TextView) dialogSts.findViewById(R.id.cancel_tv);
-// Check whether the device has a Fingerprint sensor.
-        if (!fingerprintManager.isHardwareDetected()) {
-            /**
-             * An error message will be displayed if the device does not contain the fingerprint hardware.
-             * However if you plan to implement a default authentication method,
-             * you can redirect the user to a default authentication activity from here.
-             * Example:
-             * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
-             * startActivity(intent);
-             */
-            textView.setText(getString(R.string.your_device_does_not_have_a_fingerprint_sensor));
-        } else {
-            // Checks whether fingerprint permission is set on manifest
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                textView.setText(getString(R.string.fingerprint_authentication_permission_not_enabled));
-            } else {
-                // Check whether at least one fingerprint is registered
-                if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    textView.setText(getString(R.string.register_at_least_one_fingerprint_in_settings));
-                } else {
-                    // Checks whether lock screen security is enabled or not
-                    if (!keyguardManager.isKeyguardSecure()) {
-                        textView.setText(getString(R.string.lock_screen_security_not_enabled_in_settings));
-                    } else {
-                        generateKey();
-
-
-                        if (cipherInit()) {
-                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                            FingerprintHandler helper = new FingerprintHandler(MarchantLogin.this, textView, "Merchant");
-                            helper.startAuth(fingerprintManager, cryptoObject);
-                        }
-                    }
-                }
-            }
-        }
-        cancel_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogSts.dismiss();
-            }
-        });
-        dialogSts.show();
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    protected void generateKey() {
-        try {
-            keyStore = KeyStore.getInstance("AndroidKeyStore");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        KeyGenerator keyGenerator;
-        try {
-            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException("Failed to get KeyGenerator instance", e);
-        }
-
-
-        try {
-            keyStore.load(null);
-            keyGenerator.init(new
-                    KeyGenParameterSpec.Builder(KEY_NAME,
-                    KeyProperties.PURPOSE_ENCRYPT |
-                            KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(
-                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build());
-            keyGenerator.generateKey();
-        } catch (NoSuchAlgorithmException |
-                InvalidAlgorithmParameterException
-                | CertificateException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public boolean cipherInit() {
-        try {
-            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException("Failed to get Cipher", e);
-        }
-
-
-        try {
-            keyStore.load(null);
-            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME,
-                    null);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
-            return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 }

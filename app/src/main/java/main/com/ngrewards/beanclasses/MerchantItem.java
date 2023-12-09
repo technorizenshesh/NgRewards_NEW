@@ -34,12 +34,21 @@ public class MerchantItem {
     @SerializedName("total_earning_with_shipping")
     @Expose
     private String total_earning_with_shipping;
+
     public List<MerchantItemList> getResult() {
         return result;
     }
 
+    public void setResult(List<MerchantItemList> result) {
+        this.result = result;
+    }
+
     public String getTotal_earning() {
         return total_earning;
+    }
+
+    public void setTotal_earning(String total_earning) {
+        this.total_earning = total_earning;
     }
 
     public String getTotal_earning_with_shipping() {
@@ -48,10 +57,6 @@ public class MerchantItem {
 
     public void setTotal_earning_with_shipping(String total_earning_with_shipping) {
         this.total_earning_with_shipping = total_earning_with_shipping;
-    }
-
-    public void setTotal_earning(String total_earning) {
-        this.total_earning = total_earning;
     }
 
     public String getActiveProductCount() {
@@ -76,10 +81,6 @@ public class MerchantItem {
 
     public void setUnsoldProductCount(String unsoldProductCount) {
         this.unsoldProductCount = unsoldProductCount;
-    }
-
-    public void setResult(List<MerchantItemList> result) {
-        this.result = result;
     }
 
     public String getMessage() {

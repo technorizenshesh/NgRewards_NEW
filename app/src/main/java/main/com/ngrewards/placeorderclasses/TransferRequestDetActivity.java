@@ -3,7 +3,6 @@ package main.com.ngrewards.placeorderclasses;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,9 +28,6 @@ import main.com.ngrewards.fragments.FragmentWebView;
 
 public class TransferRequestDetActivity extends AppCompatActivity {
 
-    private RelativeLayout backlay;
-    private ImageView sharebut;
-    private TextView ngwal_tv, member_message, type_head, reqest_type, ngcashredeem, username_tv, member_name, tipamount_tv, due_amount, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
     private final String type = "";
     private final String amount_trans_by_card = "";
     private final String tip_str = "";
@@ -43,6 +41,9 @@ public class TransferRequestDetActivity extends AppCompatActivity {
     private final String merchant_number_str = "";
     private final String address_tv_str = "";
     private final String cardnumber_tv_str = "";
+    private RelativeLayout backlay;
+    private ImageView sharebut;
+    private TextView ngwal_tv, member_message, type_head, reqest_type, ngcashredeem, username_tv, member_name, tipamount_tv, due_amount, order_id, merchant_name, merchant_number, date_tv, address_tv, total_amt_tv, cardnumber_tv;
     private String comment = "";
     private String transfer_request_user_id = "";
     private String user_id = "";
@@ -58,10 +59,12 @@ public class TransferRequestDetActivity extends AppCompatActivity {
     private Button btn_strip_receipt, btn_order;
     private String reciept_url;
     private String member_id;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +91,7 @@ public class TransferRequestDetActivity extends AppCompatActivity {
         }
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null && !bundle.isEmpty()) {
+        if (bundle != null && !bundle.isEmpty()) {
             date_tv_str = bundle.getString("date_tv");
             ngcash_str = bundle.getString("ngcash_str");
             reciept_url = bundle.getString("reciept_url");
@@ -97,10 +100,10 @@ public class TransferRequestDetActivity extends AppCompatActivity {
             total_amt_tv_str = bundle.getString("total_amt_tv_str");
             due_amt_tv_str = bundle.getString("due_amt_tv_str");
             comment = bundle.getString("comment");
-            }
+        }
 
-         idinit();
-         clickevent();
+        idinit();
+        clickevent();
     }
 
     private void clickevent() {
@@ -128,19 +131,18 @@ public class TransferRequestDetActivity extends AppCompatActivity {
         reqest_type = findViewById(R.id.reqest_type);
         type_head = findViewById(R.id.type_head);
 
-        if (type!=null&&type.equalsIgnoreCase("Transfer")){
-            reqest_type.setText(""+type);
-            String text = merchant_contact_name_str+" transferred "+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str+" to you";
+        if (type != null && type.equalsIgnoreCase("Transfer")) {
+            reqest_type.setText("" + type);
+            String text = merchant_contact_name_str + " transferred " + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str + " to you";
 
-            if (!transfer_request_user_id.equalsIgnoreCase(user_id)){
-                text = "Transfer of "+mySession.getValueOf(MySession.CurrencySign)+" "+ due_amt_tv_str+" to "+merchant_contact_name_str;
+            if (!transfer_request_user_id.equalsIgnoreCase(user_id)) {
+                text = "Transfer of " + mySession.getValueOf(MySession.CurrencySign) + " " + due_amt_tv_str + " to " + merchant_contact_name_str;
             }
             type_head.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 
-        }
-        else {
-            reqest_type.setText(""+type);
-            type_head.setText(""+merchant_contact_name_str+getString(R.string.send_request_for)+mySession.getValueOf(MySession.CurrencySign)+due_amt_tv_str);
+        } else {
+            reqest_type.setText("" + type);
+            type_head.setText("" + merchant_contact_name_str + getString(R.string.send_request_for) + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
         }
 
         member_message = findViewById(R.id.member_message);
@@ -164,29 +166,27 @@ public class TransferRequestDetActivity extends AppCompatActivity {
             new FragmentWebView().setData(getString(R.string.receipt), reciept_url).show(getSupportFragmentManager(), "");
         });
 
-        member_name.setText(getString(R.string.name_colan) +merchant_contact_name_str);
-        member_message.setText(getString(R.string.message) +comment);
+        member_name.setText(getString(R.string.name_colan) + merchant_contact_name_str);
+        member_message.setText(getString(R.string.message) + comment);
         username_tv.setText(getString(R.string.username_at_the_rad) + merchant_name_str);
 
         order_id.setText("#" + order_id_str);
-        if (amount_trans_by_card==null||amount_trans_by_card.equalsIgnoreCase("")||amount_trans_by_card.equalsIgnoreCase("0")||amount_trans_by_card.equalsIgnoreCase("0.00")){
+        if (amount_trans_by_card == null || amount_trans_by_card.equalsIgnoreCase("") || amount_trans_by_card.equalsIgnoreCase("0") || amount_trans_by_card.equalsIgnoreCase("0.00")) {
             visalay.setVisibility(View.GONE);
             ngwal_tv.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             visalay.setVisibility(View.VISIBLE);
             ngwal_tv.setVisibility(View.GONE);
         }
 
-        if (merchant_name_str==null||merchant_name_str.equalsIgnoreCase("")||merchant_name_str.equalsIgnoreCase("null")){
-            merchant_name.setText(""+getResources().getString(R.string.staticmerchantname));
-        }
-        else {
+        if (merchant_name_str == null || merchant_name_str.equalsIgnoreCase("") || merchant_name_str.equalsIgnoreCase("null")) {
+            merchant_name.setText("" + getResources().getString(R.string.staticmerchantname));
+        } else {
             merchant_name.setText("" + merchant_name_str);
         }
-        merchant_number.setText(getString(R.string.merchant_no)+ merchant_number_str);
+        merchant_number.setText(getString(R.string.merchant_no) + merchant_number_str);
         try {
-            String mytime=date_tv_str;
+            String mytime = date_tv_str;
             SimpleDateFormat dateFormat = new SimpleDateFormat(
                     "yyyy-MM-dd hh:mm:ss");
             Date myDate = null;
@@ -194,24 +194,23 @@ public class TransferRequestDetActivity extends AppCompatActivity {
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
             String finalDate = timeFormat.format(myDate);
-            date_tv.setText(getString(R.string.date)+finalDate);
+            date_tv.setText(getString(R.string.date) + finalDate);
 
             System.out.println(finalDate);
-        }catch (Exception e){
-            Log.e("EXC TRUE"," RRR");
-            date_tv.setText(getString(R.string.date)+date_tv_str);
+        } catch (Exception e) {
+            Log.e("EXC TRUE", " RRR");
+            date_tv.setText(getString(R.string.date) + date_tv_str);
 
         }
         address_tv.setText(getString(R.string.address) + address_tv_str + "\n" + shipaddress_2_str);
-           total_amt_tv.setText(getString(R.string.total)+mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
-        due_amount.setText(getString(R.string.amountdue)+mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
-             tipamount_tv.setText(getString(R.string.tip)+mySession.getValueOf(MySession.CurrencySign) + tip_str);
-        if (ngcash_str==null||ngcash_str.equalsIgnoreCase("")||ngcash_str.equalsIgnoreCase("0")){
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- "+mySession.getValueOf(MySession.CurrencySign)+" 0.00");
+        total_amt_tv.setText(getString(R.string.total) + mySession.getValueOf(MySession.CurrencySign) + total_amt_tv_str);
+        due_amount.setText(getString(R.string.amountdue) + mySession.getValueOf(MySession.CurrencySign) + due_amt_tv_str);
+        tipamount_tv.setText(getString(R.string.tip) + mySession.getValueOf(MySession.CurrencySign) + tip_str);
+        if (ngcash_str == null || ngcash_str.equalsIgnoreCase("") || ngcash_str.equalsIgnoreCase("0")) {
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- " + mySession.getValueOf(MySession.CurrencySign) + " 0.00");
 
-        }
-        else {
-            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem)+" :- "+mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
+        } else {
+            ngcashredeem.setText(getResources().getString(R.string.ngcashredeem) + " :- " + mySession.getValueOf(MySession.CurrencySign) + ngcash_str);
 
         }
         if (cardbrand_str != null) {

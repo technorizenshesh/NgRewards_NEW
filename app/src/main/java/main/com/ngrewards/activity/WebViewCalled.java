@@ -4,22 +4,23 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import main.com.ngrewards.R;
 import main.com.ngrewards.androidmigx.MainTabActivity;
 
 public class WebViewCalled extends AppCompatActivity {
 
+    private final String postUrl = "https://api.androidhive.info/webview/index.html";
     private String reciept_url;
     private WebView webView;
-    private final String postUrl = "https://api.androidhive.info/webview/index.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

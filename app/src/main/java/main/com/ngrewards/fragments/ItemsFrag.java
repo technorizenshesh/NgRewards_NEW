@@ -8,10 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,9 +26,13 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,19 +63,18 @@ import retrofit2.Response;
 
 public class ItemsFrag extends Fragment {
     View v;
-
+    RecyclerView.LayoutManager recyclerViewLayoutManager;
+    SwipeRefreshLayout swipeToRefresh;
+    ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private GridView item_product;
     private ItemProductGridAdp itemProductGridAdp;
     private RecyclerView item_product_rec;
-    RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ProgressBar progresbar;
     private ArrayList<MerchantItemList> soldItemListArrayList;
     private Myapisession myapisession;
     private MySession mySession;
-    SwipeRefreshLayout swipeToRefresh;
     private String user_id = "", rating_filter_str = "", fill_category_id = "", price_type_str = "", fill_category_id_loc = "";
     private TextView filter_tv, noitemtv;
-    ArrayList<CategoryBeanList> categoryBeanListArrayList;
     private EditText search_et_home;
 
     private String result;
@@ -89,6 +88,7 @@ public class ItemsFrag extends Fragment {
         // Required empty public constructor
         this.result = result;
     }
+
     protected void attachBaseContext(Context base) {
         super.onAttach(LocaleHelper.onAttach(base));
     }
@@ -196,157 +196,6 @@ public class ItemsFrag extends Fragment {
         }
     }
 
-    class ItemProductGridAdp extends RecyclerView.Adapter<ItemProductGridAdp.MyViewHolder> {
-        ArrayList<MerchantItemList> soldItemListArrayList;
-        ArrayList<MerchantItemList> searchsoldItemListArrayList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView price_split,merchant_name, rating_count, product_desc, shipping_info,
-                    product_name, mainprice, price_discount, total_bought;
-            ImageView product_img;
-            RatingBar rating;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.total_bought = itemView.findViewById(R.id.total_bought);
-                this.price_discount = itemView.findViewById(R.id.price_discount);
-                this.product_desc = itemView.findViewById(R.id.product_desc);
-                this.product_name = itemView.findViewById(R.id.product_name);
-                this.mainprice = itemView.findViewById(R.id.mainprice);
-                this.product_img = itemView.findViewById(R.id.product_img);
-                this.shipping_info = itemView.findViewById(R.id.shipping_info);
-                this.price_split = itemView.findViewById(R.id.price_split);
-                this.rating = itemView.findViewById(R.id.rating);
-                this.rating_count = itemView.findViewById(R.id.rating_count);
-                this.merchant_name = itemView.findViewById(R.id.merchant_name);
-            }
-        }
-
-        public ItemProductGridAdp(ArrayList<MerchantItemList> soldItemListArrayList) {
-            this.soldItemListArrayList = soldItemListArrayList;
-            this.searchsoldItemListArrayList = new ArrayList<>();
-            searchsoldItemListArrayList.addAll(soldItemListArrayList);
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_item_productlay, parent, false);
-            MyViewHolder myViewHolder = new MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        public void filter(String charText) {
-            //charText = charText.toLowerCase(Locale.getDefault());
-            if (charText == null) {
-
-            } else {
-                charText = charText.toLowerCase();
-                soldItemListArrayList.clear();
-                if (charText.length() == 0) {
-                    soldItemListArrayList.addAll(searchsoldItemListArrayList);
-                } else {
-                    for (MerchantItemList wp : searchsoldItemListArrayList) {
-                        if (wp.getProductName().toLowerCase().startsWith(charText))//.toLowerCase(Locale.getDefault())
-                        {
-                            soldItemListArrayList.add(wp);
-                        }
-                    }
-                }
-
-                notifyDataSetChanged();
-            }
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView")  int listPosition) {
-            holder.product_name.setText("" + soldItemListArrayList.get(listPosition).getProductName());
-            holder.product_desc.setText("" + soldItemListArrayList.get(listPosition).getProductDescription());
-            holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign) + soldItemListArrayList.get(listPosition).getPrice());
-            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign)  + soldItemListArrayList.get(listPosition).getPrice());
-            holder.shipping_info.setText("" + soldItemListArrayList.get(listPosition).getShipping_time());
-            if (soldItemListArrayList.get(listPosition).getBusiness_name() == null || soldItemListArrayList.get(listPosition).getBusiness_name().equalsIgnoreCase("")) {
-                holder.merchant_name.setText("by " + getResources().getString(R.string.staticmerchantname));
-
-            } else {
-                holder.merchant_name.setText("by " + soldItemListArrayList.get(listPosition).getBusiness_name());
-
-            }
-            //holder.mainprice.setText("" + soldItemListArrayList.get(listPosition).getSalePrice());
-            String rat_str = soldItemListArrayList.get(listPosition).getAverage_rating();
-            if (rat_str != null && !rat_str.equalsIgnoreCase("")) {
-                holder.rating.setRating(Float.parseFloat(rat_str));
-                holder.rating_count.setText("(" + soldItemListArrayList.get(listPosition).getReviewCount() + ")");
-            }
-
-            String product_img = soldItemListArrayList.get(listPosition).getThumbnailImage();
-            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-
-            } else {
-                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.product_img);
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String EMi = "NO";
-                    try {
-                        String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
-                        if (spliting!=null &&!spliting.equalsIgnoreCase("")) {
-                            EMi="YES";
-                        }}catch (Exception e){
-                        Log.e("TAG", "EMiEMiEMi: "+e.getLocalizedMessage());
-                        Log.e("TAG", "EMiEMiEMi: "+e.getMessage());
-                    }
-
-                    Log.e("PRO ID", " >" + soldItemListArrayList.get(listPosition).getShare_link());
-                    Log.e("PRO ss", " >" + soldItemListArrayList.get(listPosition).getProductName());
-                    Intent i = new Intent(getActivity(), FragItemDetails.class);
-                    Log.e("TAG", "EMiEMiEMi: "+EMi);
-
-                    i.putExtra("product_id", soldItemListArrayList.get(listPosition).getId());
-                    i.putExtra("EMI",EMi);
-                    i.putExtra("product_name", soldItemListArrayList.get(listPosition).getProductName());
-                    i.putExtra("product_description", soldItemListArrayList.get(listPosition).getProductDescription());
-                    i.putExtra("product_thumbimg", soldItemListArrayList.get(listPosition).getThumbnailImage());
-                    i.putExtra("product_price", soldItemListArrayList.get(listPosition).getPrice());
-                    i.putExtra("share_link", soldItemListArrayList.get(listPosition).getShare_link());
-                    i.putExtra("merchant_name_str", soldItemListArrayList.get(listPosition).getBusiness_name());
-                    startActivity(i);
-                }
-            });
-            Log.e("TAG",
-                    "onBindViewHolder:listPositionlistPosition" +soldItemListArrayList.get(listPosition).getSplit_amount());
-
-
-            try {
-                String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
-                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +spliting);
-                if (spliting!=null &&!spliting.equalsIgnoreCase("")){
-                    String []  splitings = spliting.split(",");
-                    Log.e("TAG", "onBindViewHolder:splitingssplitings " +splitings[0]);
-                    Log.e("TAG", "onBindViewHolder:splitingssplitings " +soldItemListArrayList.get(listPosition).getProductId()+"  " +
-                                    " ghdfhjgjmfj   "+soldItemListArrayList.get(listPosition).getId());
-                    holder.price_split.setVisibility(View.VISIBLE);
-                    holder.price_split.setText("Or in "+splitings.length+" easy Payments");
-
-                }
-            }catch (Exception e){
-                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +e.getMessage());
-                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " +e.getLocalizedMessage());
-
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            // return 4;
-            return soldItemListArrayList == null ? 0 : soldItemListArrayList.size();
-        }
-    }
-
-
     private void getSoldItems() {
         Log.e("FILTER DATA >>", " >> user_id =" + user_id + "  fill_category_id>" + fill_category_id + " rr>>" + rating_filter_str);
 
@@ -379,8 +228,7 @@ public class ItemsFrag extends Fragment {
                         itemProductGridAdp = new ItemProductGridAdp(soldItemListArrayList);
                         item_product_rec.setAdapter(itemProductGridAdp);
 
-                        if(!result.equalsIgnoreCase(""))
-                        {
+                        if (!result.equalsIgnoreCase("")) {
                             gotoDetails();
                         }
 
@@ -405,37 +253,33 @@ public class ItemsFrag extends Fragment {
         });
     }
 
-
-    public void gotoDetails()
-    {
+    public void gotoDetails() {
 
         MerchantItemList soldItem = null;
 
-        for(MerchantItemList soldMyItem:soldItemListArrayList)
-        {
+        for (MerchantItemList soldMyItem : soldItemListArrayList) {
 
-            if(result.equalsIgnoreCase(soldMyItem.getId()))
-            {
+            if (result.equalsIgnoreCase(soldMyItem.getId())) {
                 soldItem = soldMyItem;
             }
 
         }
 
-        if(soldItem!=null)
-        {
+        if (soldItem != null) {
             String EMi = "NO";
             try {
-                Log.e("TAG", "EMiEMiEMi: "+EMi);
+                Log.e("TAG", "EMiEMiEMi: " + EMi);
 
                 String spliting = soldItem.getSplit_amount();
-                if (spliting!=null &&!spliting.equalsIgnoreCase("")) {
-                    EMi="YES";
-                }}catch (Exception e){
-                Log.e("TAG", "EMiEMiEMi: "+e.getLocalizedMessage());
-                Log.e("TAG", "EMiEMiEMi: "+e.getMessage());
+                if (spliting != null && !spliting.equalsIgnoreCase("")) {
+                    EMi = "YES";
+                }
+            } catch (Exception e) {
+                Log.e("TAG", "EMiEMiEMi: " + e.getLocalizedMessage());
+                Log.e("TAG", "EMiEMiEMi: " + e.getMessage());
             }
             Intent i = new Intent(getActivity(), FragItemDetails.class);
-            Log.e("TAG", "EMiEMiEMi: "+EMi);
+            Log.e("TAG", "EMiEMiEMi: " + EMi);
 
             i.putExtra("EMI", EMi);
             i.putExtra("product_id", soldItem.getId());
@@ -472,8 +316,8 @@ public class ItemsFrag extends Fragment {
                 CategoryBeanList categoryBeanList = new CategoryBeanList();
                 categoryBeanList.setCategoryId("0");
                 categoryBeanList.setCategoryName(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
-categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_spanish(getString(R.string.selectcat));
+                categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
                 categoryBeanListArrayList.add(categoryBeanList);
 
                 JSONObject object = new JSONObject(myapisession.getProductdata());
@@ -570,11 +414,161 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
         dialogSts.show();
     }
 
+    class ItemProductGridAdp extends RecyclerView.Adapter<ItemProductGridAdp.MyViewHolder> {
+        ArrayList<MerchantItemList> soldItemListArrayList;
+        ArrayList<MerchantItemList> searchsoldItemListArrayList;
+
+        public ItemProductGridAdp(ArrayList<MerchantItemList> soldItemListArrayList) {
+            this.soldItemListArrayList = soldItemListArrayList;
+            this.searchsoldItemListArrayList = new ArrayList<>();
+            searchsoldItemListArrayList.addAll(soldItemListArrayList);
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                               int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_item_productlay, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        public void filter(String charText) {
+            //charText = charText.toLowerCase(Locale.getDefault());
+            if (charText == null) {
+
+            } else {
+                charText = charText.toLowerCase();
+                soldItemListArrayList.clear();
+                if (charText.length() == 0) {
+                    soldItemListArrayList.addAll(searchsoldItemListArrayList);
+                } else {
+                    for (MerchantItemList wp : searchsoldItemListArrayList) {
+                        if (wp.getProductName().toLowerCase().startsWith(charText))//.toLowerCase(Locale.getDefault())
+                        {
+                            soldItemListArrayList.add(wp);
+                        }
+                    }
+                }
+
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") int listPosition) {
+            holder.product_name.setText("" + soldItemListArrayList.get(listPosition).getProductName());
+            holder.product_desc.setText("" + soldItemListArrayList.get(listPosition).getProductDescription());
+            holder.price_discount.setText(mySession.getValueOf(MySession.CurrencySign) + soldItemListArrayList.get(listPosition).getPrice());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + soldItemListArrayList.get(listPosition).getPrice());
+            holder.shipping_info.setText("" + soldItemListArrayList.get(listPosition).getShipping_time());
+            if (soldItemListArrayList.get(listPosition).getBusiness_name() == null || soldItemListArrayList.get(listPosition).getBusiness_name().equalsIgnoreCase("")) {
+                holder.merchant_name.setText("by " + getResources().getString(R.string.staticmerchantname));
+
+            } else {
+                holder.merchant_name.setText("by " + soldItemListArrayList.get(listPosition).getBusiness_name());
+
+            }
+            //holder.mainprice.setText("" + soldItemListArrayList.get(listPosition).getSalePrice());
+            String rat_str = soldItemListArrayList.get(listPosition).getAverage_rating();
+            if (rat_str != null && !rat_str.equalsIgnoreCase("")) {
+                holder.rating.setRating(Float.parseFloat(rat_str));
+                holder.rating_count.setText("(" + soldItemListArrayList.get(listPosition).getReviewCount() + ")");
+            }
+
+            String product_img = soldItemListArrayList.get(listPosition).getThumbnailImage();
+            if (product_img == null || product_img.equalsIgnoreCase("") || product_img.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+
+            } else {
+                Glide.with(getActivity()).load(product_img).placeholder(R.drawable.placeholder).into(holder.product_img);
+            }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String EMi = "NO";
+                    try {
+                        String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
+                        if (spliting != null && !spliting.equalsIgnoreCase("")) {
+                            EMi = "YES";
+                        }
+                    } catch (Exception e) {
+                        Log.e("TAG", "EMiEMiEMi: " + e.getLocalizedMessage());
+                        Log.e("TAG", "EMiEMiEMi: " + e.getMessage());
+                    }
+
+                    Log.e("PRO ID", " >" + soldItemListArrayList.get(listPosition).getShare_link());
+                    Log.e("PRO ss", " >" + soldItemListArrayList.get(listPosition).getProductName());
+                    Intent i = new Intent(getActivity(), FragItemDetails.class);
+                    Log.e("TAG", "EMiEMiEMi: " + EMi);
+
+                    i.putExtra("product_id", soldItemListArrayList.get(listPosition).getId());
+                    i.putExtra("EMI", EMi);
+                    i.putExtra("product_name", soldItemListArrayList.get(listPosition).getProductName());
+                    i.putExtra("product_description", soldItemListArrayList.get(listPosition).getProductDescription());
+                    i.putExtra("product_thumbimg", soldItemListArrayList.get(listPosition).getThumbnailImage());
+                    i.putExtra("product_price", soldItemListArrayList.get(listPosition).getPrice());
+                    i.putExtra("share_link", soldItemListArrayList.get(listPosition).getShare_link());
+                    i.putExtra("merchant_name_str", soldItemListArrayList.get(listPosition).getBusiness_name());
+                    startActivity(i);
+                }
+            });
+            Log.e("TAG",
+                    "onBindViewHolder:listPositionlistPosition" + soldItemListArrayList.get(listPosition).getSplit_amount());
+
+
+            try {
+                String spliting = soldItemListArrayList.get(listPosition).getSplit_amount();
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " + spliting);
+                if (spliting != null && !spliting.equalsIgnoreCase("")) {
+                    String[] splitings = spliting.split(",");
+                    Log.e("TAG", "onBindViewHolder:splitingssplitings " + splitings[0]);
+                    Log.e("TAG", "onBindViewHolder:splitingssplitings " + soldItemListArrayList.get(listPosition).getProductId() + "  " +
+                            " ghdfhjgjmfj   " + soldItemListArrayList.get(listPosition).getId());
+                    holder.price_split.setVisibility(View.VISIBLE);
+                    holder.price_split.setText("Or in " + splitings.length + " easy Payments");
+
+                }
+            } catch (Exception e) {
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " + e.getMessage());
+                Log.e("TAG", "onBindViewHolder:splitingsplitingsplitingspliting " + e.getLocalizedMessage());
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            // return 4;
+            return soldItemListArrayList == null ? 0 : soldItemListArrayList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView price_split, merchant_name, rating_count, product_desc, shipping_info,
+                    product_name, mainprice, price_discount, total_bought;
+            ImageView product_img;
+            RatingBar rating;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.total_bought = itemView.findViewById(R.id.total_bought);
+                this.price_discount = itemView.findViewById(R.id.price_discount);
+                this.product_desc = itemView.findViewById(R.id.product_desc);
+                this.product_name = itemView.findViewById(R.id.product_name);
+                this.mainprice = itemView.findViewById(R.id.mainprice);
+                this.product_img = itemView.findViewById(R.id.product_img);
+                this.shipping_info = itemView.findViewById(R.id.shipping_info);
+                this.price_split = itemView.findViewById(R.id.price_split);
+                this.rating = itemView.findViewById(R.id.rating);
+                this.rating_count = itemView.findViewById(R.id.rating_count);
+                this.merchant_name = itemView.findViewById(R.id.merchant_name);
+            }
+        }
+    }
 
     public class CategoryAdpters extends BaseAdapter {
+        private final ArrayList<CategoryBeanList> categoryBeanLists;
         Context context;
         LayoutInflater inflter;
-        private final ArrayList<CategoryBeanList> categoryBeanLists;
 
         public CategoryAdpters(Context applicationContext, ArrayList<CategoryBeanList> categoryBeanLists) {
             this.context = applicationContext;
@@ -605,12 +599,12 @@ categoryBeanList.setCategory_name_hindi(getString(R.string.selectcat));
             //  TextView countryname = (TextView) view.findViewById(R.id.countryname);
             if (categoryBeanLists.get(i).getCategoryId().equals("982")) {
                 if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("es")) {
-                names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
-            } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
-                names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
-            } else {
-                names.setText(categoryBeanLists.get(i).getCategoryName());
-            }
+                    names.setText(categoryBeanLists.get(i).getCategory_name_spanish());
+                } else if (mySession.getValueOf(KEY_LANGUAGE).equalsIgnoreCase("hi")) {
+                    names.setText(categoryBeanLists.get(i).getCategory_name_hindi());
+                } else {
+                    names.setText(categoryBeanLists.get(i).getCategoryName());
+                }
             } else {
                 names.setVisibility(View.GONE);
             }

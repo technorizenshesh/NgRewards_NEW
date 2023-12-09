@@ -18,16 +18,6 @@ import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
-import androidx.annotation.RequiresApi;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -37,8 +27,17 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,33 +82,33 @@ import retrofit2.Response;
 
 public class MerchantDetailAct extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ScrollView scrollView;
-    private RelativeLayout backlay;
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static String latitude_str = "0", longitude_str = "0", merchant_id = "", merchant_img_str = "", merchant_name_str = "";
+    public static ArrayList<MerchantListBean> merchantListBeanArrayList;
     private final String phone_number_str = "";
     private final String business_category_name_str = "";
     private final String distance_str = "";
     private final String merchant_location_str = "";
-    private String user_id = "";
-    private String merchant_number_str = "";
-    public static String latitude_str = "0", longitude_str = "0", merchant_id = "", merchant_img_str = "", merchant_name_str = "";
-    private TextView businesscategory_name, distance_tv, merchant_name_head, merchant_name, merchant_number, location_tv, paybill;
-    private ProgressBar progresbar;
-    public static ArrayList<MerchantListBean> merchantListBeanArrayList;
-    private ImageView user_img;
-    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
     LocationManager locationManager;
     Location location;
-    private double latitude = 0, longitude = 0;
     GPSTracker gpsTracker;
-    private TextView sss;
     KeyStore keyStore;
     String KEY_NAME = "NgRewards", status_touchid = "", merchant_contact_name = "";
     Cipher cipher;
     TextView textView, open_close_status;
     MySession mySession;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ScrollView scrollView;
+    private RelativeLayout backlay;
+    private String user_id = "";
+    private String merchant_number_str = "";
+    private TextView businesscategory_name, distance_tv, merchant_name_head, merchant_name, merchant_number, location_tv, paybill;
+    private ProgressBar progresbar;
+    private ImageView user_img;
+    private double latitude = 0, longitude = 0;
+    private TextView sss;
     private ImageView messagess;
     private String employee_sales_id;
     private String employee_slaes_name;
@@ -117,6 +116,7 @@ public class MerchantDetailAct extends AppCompatActivity {
     private String closing_time;
 
     private Boolean navigateTest = false;
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -151,7 +151,6 @@ public class MerchantDetailAct extends AppCompatActivity {
                     status_touchid = jsonObject1.getString("touch_status");
 
 
-
                 }
             } catch (JSONException ee) {
                 ee.printStackTrace();
@@ -168,8 +167,7 @@ public class MerchantDetailAct extends AppCompatActivity {
 
             user_id = bundle.getString("user_id");
 
-            if(user_id.contains("demo"))
-            {
+            if (user_id.contains("demo")) {
                 navigateTest = true;
             }
 
@@ -354,41 +352,11 @@ public class MerchantDetailAct extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
 
-        if(navigateTest)
-        {
+        if (navigateTest) {
             navigateTest = false;
             viewPager.setCurrentItem(2);
         }
 
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
     }
 
     private void checkGps() {
@@ -417,26 +385,6 @@ public class MerchantDetailAct extends AppCompatActivity {
         }
 
 
-    }
-
-    private class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -528,12 +476,11 @@ public class MerchantDetailAct extends AppCompatActivity {
                     .build());
             keyGenerator.generateKey();
         } catch (NoSuchAlgorithmException |
-                InvalidAlgorithmParameterException
-                | CertificateException | IOException e) {
+                 InvalidAlgorithmParameterException
+                 | CertificateException | IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @TargetApi(Build.VERSION_CODES.M)
     public boolean cipherInit() {
@@ -554,6 +501,55 @@ public class MerchantDetailAct extends AppCompatActivity {
             return false;
         } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Failed to init Cipher", e);
+        }
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    private class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location location) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
         }
     }
 }

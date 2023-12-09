@@ -9,15 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +29,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,7 +51,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,31 +93,30 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
         com.google.android.gms.location.LocationListener,
         ResultCallback<LocationSettingsResult> {
 
-    private final Integer THRESHOLD = 2;
-    private int count = 0;
-    private FrameLayout contentFrameLayout;
-    private GoogleMap gMap;
-    GPSTracker gpsTracker;
-    private double longitude = 0.0, latitude = 0.0;
-    int initial_flag = 0;
-    String address_complete = "";
-    private AutoCompleteTextView pickuplocation;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 0; // in Milliseconds
+    public static LatLng orderlatlong;
+    private final Integer THRESHOLD = 2;
+    GPSTracker gpsTracker;
+    int initial_flag = 0;
+    String address_complete = "";
     Location location;
     Location location_ar;
     LocationManager locationManager;
-    private GoogleApiClient googleApiClient;
     boolean click_sts = false;
+    SwipeRefreshLayout swipeToRefresh;
+    MySession mySession;
+    private int count = 0;
+    private FrameLayout contentFrameLayout;
+    private GoogleMap gMap;
+    private double longitude = 0.0, latitude = 0.0;
+    private AutoCompleteTextView pickuplocation;
+    private GoogleApiClient googleApiClient;
     private ImageView clear_pick_ic;
     private ProgressBar progresbar;
-    public static LatLng orderlatlong;
-
     //cart dynamic
     private RecyclerView mycartlist;
-    SwipeRefreshLayout swipeToRefresh;
     private String user_id = "";
-    MySession mySession;
     private ArrayList<CartListBean> cartListBeanArrayList;
     private MycartAdapter mycartAdapter;
     private TextView total_amount, nocartitem, place_order_but;
@@ -180,107 +177,6 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-
-     class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
-        ArrayList<CartListBean> mycartlist;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
-            ImageView product_img, removecartitem;
-            Button plusq, minusq;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                this.product_name = itemView.findViewById(R.id.product_name);
-                this.merchant_name = itemView.findViewById(R.id.merchant_name);
-                this.product_desc = itemView.findViewById(R.id.product_desc);
-                this.quant_tv = itemView.findViewById(R.id.quant_tv);
-
-                this.product_img = itemView.findViewById(R.id.product_img);
-                this.mainprice = itemView.findViewById(R.id.mainprice);
-                this.plusq = itemView.findViewById(R.id.plusq);
-                this.minusq = itemView.findViewById(R.id.minusq);
-                this.removecartitem = itemView.findViewById(R.id.removecartitem);
-
-            }
-        }
-
-        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
-            this.mycartlist = mycartlist;
-        }
-
-        @Override
-        public MycartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.custom_cart_item_lay, parent, false);
-            MycartAdapter.MyViewHolder myViewHolder = new MycartAdapter.MyViewHolder(view);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
-            holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
-            holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
-            holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
-            holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
-            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
-
-            String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
-            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
-                Glide.with(PlaceOrderAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
-            }
-
-
-            holder.plusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_stock_count = 0;
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
-                        if (mycartlist.get(listPosition).getProductDetail().getStock() != null && !mycartlist.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")) {
-                            total_stock_count = Integer.parseInt(mycartlist.get(listPosition).getProductDetail().getStock());
-
-                        }
-                        if (total_count < total_stock_count) {
-                            int new_count = ++total_count;
-                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
-                        }
-
-                    }
-
-                }
-            });
-
-            holder.minusq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
-                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
-                        if (total_count > 1) {
-                            int new_count = --total_count;
-                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
-                        }
-
-                    }
-                }
-            });
-            holder.removecartitem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //  removeMySingleCartItem(mycartlist.get(listPosition).getId());
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            //return 4;
-            return mycartlist == null ? 0 : mycartlist.size();
-        }
-    }
-
-
     private void getMyCartDetail() {
         swipeToRefresh.setRefreshing(true);
         //progresbar.setVisibility(View.VISIBLE);
@@ -304,7 +200,7 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
                         }
                         if (cartListBeanArrayList == null || cartListBeanArrayList.isEmpty() || cartListBeanArrayList.size() == 0) {
                             // nocartitem.setVisibility(View.VISIBLE);
-                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign)+" 0.00");
+                            total_amount.setText(mySession.getValueOf(MySession.CurrencySign) + " 0.00");
                             mycartAdapter = new MycartAdapter(cartListBeanArrayList);
                             mycartlist.setAdapter(mycartAdapter);
                             mycartAdapter.notifyDataSetChanged();
@@ -334,7 +230,6 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
             }
         });
     }
-
 
     private void clickevetn() {
         clear_pick_ic.setOnClickListener(new View.OnClickListener() {
@@ -504,14 +399,219 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    private void getLatLong() {
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        location_ar = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (location_ar != null) {
+            //Getting longitude and latitude
+            longitude = location_ar.getLongitude();
+            latitude = location_ar.getLatitude();
+            System.out.println("-------------getCurrentLocation--------------" + latitude + " , " + latitude);
+           /* address_complete = loadAddress(latitude, longitude);
+            pickuplocation.setText(address_complete);*/
+
+
+        } else {
+            System.out.println("----------------geting Location from GPS----------------");
+
+            location_ar = gpsTracker.getLocation();
+            if (location_ar == null) {
+
+
+            } else {
+                longitude = location_ar.getLongitude();
+                latitude = location_ar.getLatitude();
+                Log.e("Lat >>", "GPS " + latitude);
+                /*address_complete = loadAddress(latitude, longitude);
+                pickuplocation.setText(address_complete);*/
+            }
+            System.out.println("-------------getCurrentLocation--------------" + latitude + " , " + longitude);
+            //moving the map to location
+
+        }
+    }
+
+    private void autocompleteView() {
+        pickuplocation.setThreshold(THRESHOLD);
+        pickuplocation.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    loadData(pickuplocation.getText().toString());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //    updateLocationUI();
+
+    }
+
+    class MycartAdapter extends RecyclerView.Adapter<MycartAdapter.MyViewHolder> {
+        ArrayList<CartListBean> mycartlist;
+
+        public MycartAdapter(ArrayList<CartListBean> mycartlist) {
+            this.mycartlist = mycartlist;
+        }
+
+        @Override
+        public MycartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                             int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.custom_cart_item_lay, parent, false);
+            MycartAdapter.MyViewHolder myViewHolder = new MycartAdapter.MyViewHolder(view);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MycartAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
+            holder.product_desc.setText("" + mycartlist.get(listPosition).getProductDetail().getProductDescription());
+            holder.product_name.setText("" + mycartlist.get(listPosition).getProductDetail().getProductName());
+            holder.merchant_name.setText("" + mycartlist.get(listPosition).getUserDetails().get(0).getBusinessName());
+            holder.quant_tv.setText("" + mycartlist.get(listPosition).getQuantity());
+            holder.mainprice.setText(mySession.getValueOf(MySession.CurrencySign) + mycartlist.get(listPosition).getProductDetail().getProduct_cart_price());
+
+            String image_url = mycartlist.get(listPosition).getProductDetail().getThumbnailImage();
+            if (image_url != null && !image_url.equalsIgnoreCase("") && !image_url.equalsIgnoreCase(BaseUrl.image_baseurl)) {
+                Glide.with(PlaceOrderAct.this).load(image_url).placeholder(R.drawable.placeholder).into(holder.product_img);
+            }
+
+
+            holder.plusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                        int total_stock_count = 0;
+                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
+                        if (mycartlist.get(listPosition).getProductDetail().getStock() != null && !mycartlist.get(listPosition).getProductDetail().getStock().equalsIgnoreCase("")) {
+                            total_stock_count = Integer.parseInt(mycartlist.get(listPosition).getProductDetail().getStock());
+
+                        }
+                        if (total_count < total_stock_count) {
+                            int new_count = ++total_count;
+                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
+                        }
+
+                    }
+
+                }
+            });
+
+            holder.minusq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mycartlist.get(listPosition).getQuantity() != null && !mycartlist.get(listPosition).getQuantity().equalsIgnoreCase("")) {
+                        int total_count = Integer.parseInt(mycartlist.get(listPosition).getQuantity());
+                        if (total_count > 1) {
+                            int new_count = --total_count;
+                            // updateMyCartItemQuantity(mycartlist.get(listPosition).getProductId(),""+new_count );
+                        }
+
+                    }
+                }
+            });
+            holder.removecartitem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //  removeMySingleCartItem(mycartlist.get(listPosition).getId());
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            //return 4;
+            return mycartlist == null ? 0 : mycartlist.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView product_name, mainprice, merchant_name, product_desc, quant_tv;
+            ImageView product_img, removecartitem;
+            Button plusq, minusq;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                this.product_name = itemView.findViewById(R.id.product_name);
+                this.merchant_name = itemView.findViewById(R.id.merchant_name);
+                this.product_desc = itemView.findViewById(R.id.product_desc);
+                this.quant_tv = itemView.findViewById(R.id.quant_tv);
+
+                this.product_img = itemView.findViewById(R.id.product_img);
+                this.mainprice = itemView.findViewById(R.id.mainprice);
+                this.plusq = itemView.findViewById(R.id.plusq);
+                this.minusq = itemView.findViewById(R.id.minusq);
+                this.removecartitem = itemView.findViewById(R.id.removecartitem);
+
+            }
+        }
+    }
+
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private List<String> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
         private final WebOperations wo;
         private final String lat;
         private final String lon;
+        private List<String> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, List<String> l2, String lat, String lon) {
             this.context = context;
@@ -628,113 +728,6 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
                 e.printStackTrace();
             }
         }
-    }
-
-    private void getLatLong() {
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        location_ar = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    }
-
-    private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        if (location_ar != null) {
-            //Getting longitude and latitude
-            longitude = location_ar.getLongitude();
-            latitude = location_ar.getLatitude();
-            System.out.println("-------------getCurrentLocation--------------" + latitude + " , " + latitude);
-           /* address_complete = loadAddress(latitude, longitude);
-            pickuplocation.setText(address_complete);*/
-
-
-        } else {
-            System.out.println("----------------geting Location from GPS----------------");
-
-            location_ar = gpsTracker.getLocation();
-            if (location_ar == null) {
-
-
-            } else {
-                longitude = location_ar.getLongitude();
-                latitude = location_ar.getLatitude();
-                Log.e("Lat >>", "GPS " + latitude);
-                /*address_complete = loadAddress(latitude, longitude);
-                pickuplocation.setText(address_complete);*/
-            }
-            System.out.println("-------------getCurrentLocation--------------" + latitude + " , " + longitude);
-            //moving the map to location
-
-        }
-    }
-
-    private void autocompleteView() {
-        pickuplocation.setThreshold(THRESHOLD);
-        pickuplocation.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    loadData(pickuplocation.getText().toString());
-                }
-            }
-        });
-    }
-
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        //    updateLocationUI();
-
     }
 
     private class MyLocationListener implements LocationListener {
@@ -880,7 +873,7 @@ public class PlaceOrderAct extends AppCompatActivity implements OnMapReadyCallba
             try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "place_order.php?";
-                Log.e("Place URL", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + order_address + "&address_2=" + streat_address + "&city=&state=&postcode=" + zipcode_code_str + "&timezone=" + time_zone+"&currency="+mySession.getValueOf(MySession.CurrencyCode));
+                Log.e("Place URL", " URL TRUE " + postReceiverUrl + "user_id=" + user_id + "&product_id=" + product_id_comma + "&quantity=" + product_quantity_comm + "&email=" + email_str + "&first_name=" + fullname_str + "&last_name=&company=&phone=" + phone_str + "&address_1=" + order_address + "&address_2=" + streat_address + "&city=&state=&postcode=" + zipcode_code_str + "&timezone=" + time_zone + "&currency=" + mySession.getValueOf(MySession.CurrencyCode));
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("user_id", user_id);

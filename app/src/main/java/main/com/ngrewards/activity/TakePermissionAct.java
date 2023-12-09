@@ -2,18 +2,20 @@ package main.com.ngrewards.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import main.com.ngrewards.R;
 
 public class TakePermissionAct extends AppCompatActivity {
 
-    private CheckBox locationchaeeck,cameras,contactss;
+    private CheckBox locationchaeeck, cameras, contactss;
     private TextView start_tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +25,11 @@ public class TakePermissionAct extends AppCompatActivity {
         start_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (contactss.isChecked()&&cameras.isChecked()&&locationchaeeck.isChecked()){
-                    Intent i = new Intent(TakePermissionAct.this,AccountTypeSelectionAct.class);
+                if (contactss.isChecked() && cameras.isChecked() && locationchaeeck.isChecked()) {
+                    Intent i = new Intent(TakePermissionAct.this, AccountTypeSelectionAct.class);
                     startActivity(i);
-                }
-                else {
-                    Toast.makeText(TakePermissionAct.this,getResources().getString(R.string.needtoallow),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TakePermissionAct.this, getResources().getString(R.string.needtoallow), Toast.LENGTH_LONG).show();
                 }
 
             }

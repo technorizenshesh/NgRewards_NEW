@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -17,6 +15,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,14 +34,14 @@ import main.com.ngrewards.constant.MySession;
 
 public class StripeExpressAcountAct extends AppCompatActivity {
     ScheduledExecutorService scheduleTaskExecutor;
+    boolean loadingFinished = true;
+    boolean redirect = false;
+    BroadcastReceiver mRegistrationBroadcastReceiver;
     private RelativeLayout backlay;
     private WebView stripewebview;
     private MySession mySession;
     private String user_id = "";
-    boolean loadingFinished = true;
-    boolean redirect = false;
     private ProgressBar progressabar;
-    BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,16 +131,17 @@ public class StripeExpressAcountAct extends AppCompatActivity {
         backlay = findViewById(R.id.backlay);
         stripewebview = findViewById(R.id.stripewebview);
         stripewebview.clearCache(true);
-        String stripeurl="";
-if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
-    https://connect.stripe.com/oauth/v2/authorize?" +
-    stripeurl= BaseUrl.STRIPE_OAUTH_URL+ user_id +
-            "&response_type=code&scope=read_write&country=" +
-            mySession.getValueOf(MySession.CountryId) +
-            "&currency=" + mySession.getValueOf(MySession.CurrencyCode);
-}else {
+        String stripeurl = "";
+        if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")) {
+            //connect.stripe.com/oauth/v2/authorize?" +
+            stripeurl = BaseUrl.STRIPE_OAUTH_URL + user_id +
+                    "&response_type=code&scope=read_write&country=" +
+                    mySession.getValueOf(MySession.CountryId) +
+                    "&currency=" + mySession.getValueOf(MySession.CurrencyCode);
+        } else {
 
-         stripeurl = BaseUrl.STRIPE_OAUTH_URL + user_id;}
+            stripeurl = BaseUrl.STRIPE_OAUTH_URL + user_id;
+        }
        /* stripewebview.getSettings().setJavaScriptEnabled(true);
         stripewebview.getSettings().setPluginState(WebSettings.PluginState.ON);
         stripewebview.setWebViewClient(new Callback());
@@ -149,7 +151,7 @@ if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
 
         stripewebview.loadUrl(stripeurl);*/
 
-        Log.e("", "idinit: stripeurlstripeurl     "+stripeurl );
+        Log.e("", "idinit: stripeurlstripeurl     " + stripeurl);
 
         stripewebview.getSettings().setLoadsImagesAutomatically(true);
         stripewebview.getSettings().setJavaScriptEnabled(true);
@@ -206,6 +208,11 @@ if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        scheduleTaskExecutor.shutdown();
+    }
 
     private class HelloWebViewClient extends WebViewClient {
         @Override
@@ -214,13 +221,6 @@ if (!mySession.getValueOf(MySession.CurrencyCode).equalsIgnoreCase("USD")){
             return true;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        scheduleTaskExecutor.shutdown();
-    }
-
 
     private class Callback extends WebViewClient {
         @Override

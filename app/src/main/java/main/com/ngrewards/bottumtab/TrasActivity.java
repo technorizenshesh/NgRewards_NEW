@@ -31,7 +31,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -199,7 +198,7 @@ public class TrasActivity extends Fragment {
                             activity_list.setAdapter(activityRecAdp);
                             activityRecAdp.notifyDataSetChanged();
 
-                        } catch (Exception  e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 

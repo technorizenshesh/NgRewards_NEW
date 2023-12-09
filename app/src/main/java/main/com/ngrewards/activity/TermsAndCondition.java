@@ -3,11 +3,12 @@ package main.com.ngrewards.activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import main.com.ngrewards.R;
 
@@ -56,21 +57,19 @@ public class TermsAndCondition extends AppCompatActivity {
 
         if (status.equals("privacy")) {
 
-            w.loadUrl("http://com/privacy-policy/?v=7516fd43adaa");
-        }
-
-        else {
+            w.loadUrl("http://myngrewards.com/privacy-policy/?v=7516fd43adaa");
+        } else {
 
             w.loadUrl("https://myngrewards.com/terms-and-conditions/");
         }
 
 
-         w.getSettings().setJavaScriptEnabled(true);
+        w.getSettings().setJavaScriptEnabled(true);
 
-         w.setWebViewClient(new WebViewClient());
+        w.setWebViewClient(new WebViewClient());
 
 
-         w.setWebViewClient(new WebViewClient() {
+        w.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String urlNewString) {
                 if (!loadingFinished) {

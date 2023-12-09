@@ -88,13 +88,16 @@ public interface ApiInterface {
     Call<ResponseBody> getMerchnantReview(@Query("user_id") String user_id, @Query("merchant_id") String merchant_id);
 
     @GET("member_list.php?")
-    Call<ResponseBody> getMembersusername(@Query("user_id") String user_id,@Query("country_id") String country_id);
+    Call<ResponseBody> getMembersusername(@Query("user_id") String user_id, @Query("country_id") String country_id);
+
+    @GET("update_member_touch_id.php?")
+    Call<ResponseBody> update_member_touch_id(@Query("member_id") String user_id, @Query("touch_status") String touch_status);
 
     @GET("category_lists.php?")
     Call<ResponseBody> getCategory();
 
-   //  @GET("offer_category_lists.php?")
-     @GET("business_category_lists.php?")
+    //  @GET("offer_category_lists.php?")
+    @GET("business_category_lists.php?")
     Call<ResponseBody> getOfferCategory();
 
     @GET("business_category_lists.php?")
@@ -159,7 +162,7 @@ public interface ApiInterface {
     Call<ResponseBody> notification_emi(@QueryMap Map<String, String> paramHashMap);
 
     @GET("pay_bill.php?")
-    Call<ResponseBody> payBillToMerchant(@Query("currency") String currency,@Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);
+    Call<ResponseBody> payBillToMerchant(@Query("currency") String currency, @Query("member_id") String user_id, @Query("merchant_id") String merchant_id, @Query("merchant_no") String merchant_number, @Query("amount") String due_amount_str, @Query("tip_amount") String tip_amt_str, @Query("ngcash") String ngcash_app_str, @Query("card_id") String card_id, @Query("card_number") String card_number, @Query("card_brand") String card_brand, @Query("customer_id") String customer_id, @Query("type") String type, @Query("timezone") String timezone, @Query("employee_id") String employee_id, @Query("employee_name") String employee_name);
 
     /*/*pay_bill_emi.php?member_id=\(USER_DEFAULT.value(forKey: MemberID)!)&merchant_id=\(self.strMerchntId!)
     &merchant_no=\(text_Search.text!)&amount=\(text_AmountDue.text!)&tip_amount=\(strAmountTip!)&ngcash=\
@@ -193,6 +196,7 @@ public interface ApiInterface {
 
     @GET("merchant_commission_list_for_member.php?")
     Call<ResponseBody> getCommissionData(@Query("how_invite_you") String how_invite_you);
+
     @GET("get_merchant_referral.php?")
     Call<ResponseBody> get_merchant_referral(@Query("how_invite_you") String how_invite_you);
 
@@ -221,6 +225,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("deactivate_account_memeber.php")
     Call<ResponseBody> deleteMyAccount(@FieldMap Map<String, String> paramHashMap);
+
     @Multipart
     @POST("insert_chat.php")
     Call<ResponseBody> insert_chat(

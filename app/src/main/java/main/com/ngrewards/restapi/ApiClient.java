@@ -17,30 +17,30 @@ public class ApiClient {
     private static Retrofit retrofit = null;
     private static ApiInterface apiInterface = null;
 
-      public static Retrofit getClient() {
-        if (retrofit==null) {
-          okhttp3.logging.HttpLoggingInterceptor interceptor = new okhttp3.logging.HttpLoggingInterceptor();
-          interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    public static Retrofit getClient() {
+        if (retrofit == null) {
+            okhttp3.logging.HttpLoggingInterceptor interceptor = new okhttp3.logging.HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-          OkHttpClient.Builder builder = new OkHttpClient.Builder();
-          builder.connectTimeout(50, TimeUnit.SECONDS) // connect timeout
-                  .writeTimeout(50, TimeUnit.SECONDS) // write timeout
-                  .readTimeout(50, TimeUnit.SECONDS)
-                  .addInterceptor(interceptor); // read timeout
-          OkHttpClient client = builder.build();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(50, TimeUnit.SECONDS) // connect timeout
+                    .writeTimeout(50, TimeUnit.SECONDS) // write timeout
+                    .readTimeout(50, TimeUnit.SECONDS)
+                    .addInterceptor(interceptor); // read timeout
+            OkHttpClient client = builder.build();
 
-          retrofit = new Retrofit.Builder()
-                  .baseUrl(BASE_URL)
-                  .addConverterFactory(GsonConverterFactory.create())
-                  .client(client)
-                  .build();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
         }
-          return retrofit;
-      }
+        return retrofit;
+    }
 
-    public static ApiInterface getApiInterface(){
-       if (apiInterface==null)
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    public static ApiInterface getApiInterface() {
+        if (apiInterface == null)
+            apiInterface = ApiClient.getClient().create(ApiInterface.class);
         return apiInterface;
     }
 }

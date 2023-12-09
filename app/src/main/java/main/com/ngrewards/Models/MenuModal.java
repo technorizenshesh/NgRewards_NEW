@@ -11,12 +11,16 @@ public class MenuModal {
     private String list;
     private String image;
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
@@ -24,8 +28,8 @@ public class MenuModal {
         this.title = title;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitleDiscription() {
+        return titleDiscription;
     }
 
     public void setTitleDiscription(String titleDiscription) {
@@ -33,8 +37,8 @@ public class MenuModal {
         this.titleDiscription = titleDiscription;
     }
 
-    public String getTitleDiscription() {
-        return titleDiscription;
+    public String getPrice() {
+        return price;
     }
 
     public void setPrice(String price) {
@@ -42,8 +46,8 @@ public class MenuModal {
         this.price = price;
     }
 
-    public String getPrice() {
-        return price;
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
@@ -52,8 +56,8 @@ public class MenuModal {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public String getList() {
+        return list;
     }
 
     public void setList(String list) {
@@ -61,16 +65,12 @@ public class MenuModal {
         this.list = list;
     }
 
-    public String getList() {
-        return list;
+    public String getImage() {
+        return image;
     }
 
     public void setImage(String image) {
 
         this.image = image;
-    }
-
-    public String getImage() {
-        return image;
     }
 }

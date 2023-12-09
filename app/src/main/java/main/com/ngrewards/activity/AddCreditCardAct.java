@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.model.Card;
 import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
@@ -49,25 +49,37 @@ import main.com.ngrewards.stripepaymentclasses.CreditCardFormatTextWatcher;
 import main.com.ngrewards.stripepaymentclasses.Utils;
 
 public class AddCreditCardAct extends AppCompatActivity {
-    private EditText cardname, cardnumber,security_code;
-    private String cardname_str="", cardnumber_str="",security_code_str="";
-    private TextView addcardbut;
-    private RelativeLayout backlay;
+    private final boolean status_match = false;
+    private final String accountid = "";
     ArrayList<String> listOfPattern;
     ArrayList<String> modellist;
     ArrayList<String> datelist;
+    int month, year_int;
+    CreditCardFormatTextWatcher tv;
+    private EditText cardname, cardnumber, security_code;
+    private String cardname_str = "", cardnumber_str = "", security_code_str = "";
+    private TextView addcardbut;
+    private RelativeLayout backlay;
     private Spinner yearspinner, datespinner;
     private String expiryyear_str = "", date_str = "", user_id = "";
     private BasicCustomAdp basicCustomAdp;
     private ProgressBar progressBar;
     private MySession mySession;
-    private final boolean status_match = false;
-    int month, year_int;
-    private final String accountid = "";
     private String token_id = "";
     private String email_str = "";
 
-    CreditCardFormatTextWatcher tv;
+    private static int getLastModelYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -10);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private static int getThisYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, 0);
+        return prevYear.get(Calendar.YEAR);
+    }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -103,11 +115,11 @@ public class AddCreditCardAct extends AppCompatActivity {
             int nextyear = thisyear + i;
             modellist.add("" + nextyear);
         }
-       // modellist.add("" + thisyear);
+        // modellist.add("" + thisyear);
         for (int i = 1; i < 13; i++) {
             String dates = String.valueOf(i);
-            if (i<10){
-                dates = "0"+dates;
+            if (i < 10) {
+                dates = "0" + dates;
             }
             datelist.add("" + dates);
         }
@@ -128,7 +140,7 @@ public class AddCreditCardAct extends AppCompatActivity {
         idinti();
         clickevent();
 
-      //  new CreateStripeAccount().execute();
+        //  new CreateStripeAccount().execute();
     }
 
     private void clickevent() {
@@ -143,28 +155,24 @@ public class AddCreditCardAct extends AppCompatActivity {
         addcardbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardname_str= cardname.getText().toString();
-                cardnumber_str= cardnumber.getText().toString();
-                security_code_str= security_code.getText().toString();
-                if (cardname_str==null||cardname_str.equalsIgnoreCase("")){
-                  Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.entercardname),Toast.LENGTH_LONG).show();
-                }
-                else if (cardnumber_str==null||cardnumber_str.equalsIgnoreCase("")){
-                    Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.entercardnumber),Toast.LENGTH_LONG).show();
+                cardname_str = cardname.getText().toString();
+                cardnumber_str = cardnumber.getText().toString();
+                security_code_str = security_code.getText().toString();
+                if (cardname_str == null || cardname_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.entercardname), Toast.LENGTH_LONG).show();
+                } else if (cardnumber_str == null || cardnumber_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.entercardnumber), Toast.LENGTH_LONG).show();
 
-                }
-                else if (date_str==null||date_str.equalsIgnoreCase("")){
-                    Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.selectexpdate),Toast.LENGTH_LONG).show();
+                } else if (date_str == null || date_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.selectexpdate), Toast.LENGTH_LONG).show();
 
-                }
-                else if (expiryyear_str==null||expiryyear_str.equalsIgnoreCase("")){
-                    Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.selexpyear),Toast.LENGTH_LONG).show();
+                } else if (expiryyear_str == null || expiryyear_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.selexpyear), Toast.LENGTH_LONG).show();
 
-                } else if (expiryyear_str==null||expiryyear_str.equalsIgnoreCase("")){
-                    Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.selexpyear),Toast.LENGTH_LONG).show();
+                } else if (expiryyear_str == null || expiryyear_str.equalsIgnoreCase("")) {
+                    Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.selexpyear), Toast.LENGTH_LONG).show();
 
-                }
-                else {
+                } else {
 
                     month = Integer.parseInt(date_str);
                     year_int = Integer.parseInt(expiryyear_str);
@@ -180,17 +188,18 @@ public class AddCreditCardAct extends AppCompatActivity {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
                                     progressBar.setVisibility(View.GONE);
-                                    Log.e("Token",">>" + token);
+                                    Log.e("Token", ">>" + token);
 
                                     token_id = token.getId();
                                     paymentwithcard();
 
                                 }
+
                                 public void onError(Exception error) {
                                     progressBar.setVisibility(View.GONE);
-                                    Log.e("Eeeeeeeeeeeeeeerrrrr",">>" + error.toString());
+                                    Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.toString());
                                     // Show localized error message
-                                    Toast.makeText(AddCreditCardAct.this,  error.getMessage(),
+                                    Toast.makeText(AddCreditCardAct.this, error.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
 
@@ -211,6 +220,7 @@ public class AddCreditCardAct extends AppCompatActivity {
             }
         });
     }
+
     public void onClickSomething(String cardNumber, int cardExpMonth, int cardExpYear, String cardCVC) {
         CardParams cardParams = new CardParams(cardNumber, cardExpMonth, cardExpYear, cardCVC);
 
@@ -261,33 +271,26 @@ public class AddCreditCardAct extends AppCompatActivity {
         datespinner.setAdapter(basicCustomAdp);
     }
 
-    private static int getLastModelYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, -10);
-        return prevYear.get(Calendar.YEAR);
-    }
+    private void paymentwithcard() {
+        // Tag used to cancel the request
+        if (Utils.isConnected(getApplicationContext())) {
 
-    private static int getThisYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, 0);
-        return prevYear.get(Calendar.YEAR);
-    }
+            new CreateTestPayment().execute();
 
+        } else {
+            Toast.makeText(getApplicationContext(), "Please Cheeck network conection..", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -338,6 +341,11 @@ public class AddCreditCardAct extends AppCompatActivity {
 
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
         }
     }
 
@@ -410,15 +418,14 @@ public class AddCreditCardAct extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = null;
                     jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")){
-                        Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.cardaddedsuc),Toast.LENGTH_LONG).show();
-                    finish();
-                    }
-                    else {
-                        Toast.makeText(AddCreditCardAct.this,getResources().getString(R.string.somethingwrong),Toast.LENGTH_LONG).show();
+                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
+                        Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.cardaddedsuc), Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(AddCreditCardAct.this, getResources().getString(R.string.somethingwrong), Toast.LENGTH_LONG).show();
 
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -426,20 +433,6 @@ public class AddCreditCardAct extends AppCompatActivity {
             }
 
 
-        }
-    }
-
-
-    private void paymentwithcard() {
-        // Tag used to cancel the request
-        if(Utils.isConnected(getApplicationContext())){
-
-             new CreateTestPayment().execute();
-
-        }
-
-        else {
-            Toast.makeText(getApplicationContext(), "Please Cheeck network conection..", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -458,15 +451,15 @@ public class AddCreditCardAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-        try {
+            try {
                 //String postReceiverUrl = BaseUrl.baseurl + "payment.php?";
-               // String postReceiverUrl = BaseUrl.baseurl + "stripe_split_payment.php?";
+                // String postReceiverUrl = BaseUrl.baseurl + "stripe_split_payment.php?";
                 String postReceiverUrl = BaseUrl.baseurl + "stripe_spilit.php?";
                 //String postReceiverUrl = BaseUrl.baseurl + "stripe_charge.php?";
                 URL url = new URL(postReceiverUrl);
                 Map<String, Object> params = new LinkedHashMap<>();
                 params.put("total_amount", "1");
-           //     params.put("currency", "USD");
+                //     params.put("currency", "USD");
                 params.put("currency", mySession.getValueOf(MySession.CurrencyCode));
                 params.put("token", token_id);
                 params.put("cart_id", "1");
@@ -537,7 +530,7 @@ public class AddCreditCardAct extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-       try {
+            try {
 
                 String postReceiverUrl = BaseUrl.baseurl + "create_external_account.php?";
                 URL url = new URL(postReceiverUrl);
@@ -592,8 +585,8 @@ public class AddCreditCardAct extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.getString("status").equalsIgnoreCase("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                        String customer_id =  jsonObject1.getString("id");
-                        Log.e("customer_id >> ", " >> "+customer_id);
+                        String customer_id = jsonObject1.getString("id");
+                        Log.e("customer_id >> ", " >> " + customer_id);
                         //  new TransferAmount().execute(customer_id);
                     }
                 } catch (JSONException e) {

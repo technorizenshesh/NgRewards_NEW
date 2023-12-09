@@ -31,16 +31,14 @@
                 android:background="@color/greyborder"
                 android:visibility="visible" />
 
-
              <TabWidget
                  android:id="@android:id/tabs"
-                 android:layout_width="match_parent"
+                 android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
                  android:layout_alignParentBottom="true"
                  android:gravity="fill"
                  android:padding="5dp"
                  android:theme="@style/TabWidgetTheme" />
-
         </RelativeLayout>
 
     </TabHost>

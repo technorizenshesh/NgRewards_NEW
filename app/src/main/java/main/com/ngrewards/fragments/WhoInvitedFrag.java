@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.gson.Gson;
 
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import main.com.ngrewards.R;
-import main.com.ngrewards.activity.MemberTransfer;
 import main.com.ngrewards.activity.PreferenceConnector;
 import main.com.ngrewards.activity.SliderActivity;
 import main.com.ngrewards.beanclasses.MemberBean;
@@ -55,6 +55,7 @@ public class WhoInvitedFrag extends Fragment {
     private static final int REQUEST_CODE_QR_SCAN = 3;
     public static AutoCompleteTextView whoinvite;
     public static String who_invite_id;
+    private final boolean sts = false;
     int count = 0;
     View v;
     private CircleImageView picked_user_img;
@@ -62,8 +63,7 @@ public class WhoInvitedFrag extends Fragment {
     private ProgressBar progresbar;
     private ArrayList<MemberDetail> memberDetailArrayList;
     private Myapisession myapisession;
-    private final boolean sts = false;
-    private  String user_id="",country_id="";
+    private String user_id = "", country_id = "";
     private MySession mySession;
 
     public WhoInvitedFrag() {
@@ -175,7 +175,7 @@ public class WhoInvitedFrag extends Fragment {
         Log.e("User name list>", " >GET NAME");
         progresbar.setVisibility(View.VISIBLE);
         memberDetailArrayList = new ArrayList<>();
-        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id,mySession.getValueOf(MySession.CountryId));
+        Call<ResponseBody> call = ApiClient.getApiInterface().getMembersusername(user_id, mySession.getValueOf(MySession.CountryId));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -238,8 +238,8 @@ public class WhoInvitedFrag extends Fragment {
     class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         private final Activity context;
-        private ArrayList<MemberDetail> l2 = new ArrayList<>();
         private final LayoutInflater layoutInflater;
+        private ArrayList<MemberDetail> l2 = new ArrayList<>();
 
         public GeoAutoCompleteAdapter(Activity context, ArrayList<MemberDetail> l2, String lat, String lon) {
             this.context = context;
@@ -282,7 +282,6 @@ public class WhoInvitedFrag extends Fragment {
                                 InputMethodManager.HIDE_NOT_ALWAYS);
 
                         whoinvite.setText(l2.get(i).getAffiliateName());
-
 
 
                         who_invite_id = l2.get(i).getAffiliateNumber();

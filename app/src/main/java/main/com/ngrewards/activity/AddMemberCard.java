@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.Stripe;
-import com.stripe.android.model.Card;
 import com.stripe.android.model.CardParams;
 import com.stripe.android.model.Token;
 
@@ -53,34 +53,47 @@ import main.com.ngrewards.stripepaymentclasses.Utils;
 
 public class AddMemberCard extends AppCompatActivity {
 
+    private final boolean asc_sts = true;
+    private final String card_id = "";
+    private final String email_str = "";
+    private final String accountid = "";
+    private final String stripe_account_id = "";
+    int month, year_int;
+    ArrayList<String> modellist;
+    ArrayList<String> datelist;
+    CreditCardFormatTextWatcher tv, tv2;
     private RelativeLayout backlay;
     private EditText email_address;
     private CheckBox acceptcondition;
     private TextView submit, myaccountemail, addcardbut;
     private ProgressBar prgressbar;
-    private final boolean asc_sts = true;
     private MySession mySession;
     private LinearLayout alreadyavbacountlay, accountcreate, adddebitcardlay;
     private EditText cardname, cardnumber, security_code;
     private String cardname_str = "", cardnumber_str = "", security_code_str = "";
     private Spinner yearspinner, datespinner;
-    private final String card_id = "";
-    private final String email_str = "";
-    private final String accountid = "";
-    private final String stripe_account_id = "";
     private BasicCustomAdp basicCustomAdp;
-    int month, year_int;
     private String expiryyear_str = "";
     private String date_str = "";
     private String user_id = "";
     private String token_id = "";
-    ArrayList<String> modellist;
-    ArrayList<String> datelist;
-    CreditCardFormatTextWatcher tv, tv2;
     private TextView savedcardnumber, validdate, cardbrand, cardtype;
     private LinearLayout savecardlay;
     private ImageView delete_card;
     private MySavedCardInfo mySavedCardInfo;
+
+    private static int getLastModelYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -10);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private static int getThisYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, 0);
+        return prevYear.get(Calendar.YEAR);
+    }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
@@ -119,8 +132,8 @@ public class AddMemberCard extends AppCompatActivity {
         // modellist.add("" + thisyear);
         for (int i = 1; i < 13; i++) {
             String dates = String.valueOf(i);
-            if (i<10){
-                dates = "0"+dates;
+            if (i < 10) {
+                dates = "0" + dates;
             }
             datelist.add("" + dates);
         }
@@ -193,13 +206,14 @@ public class AddMemberCard extends AppCompatActivity {
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.getMessage());
                                     Log.e("Eeeeeeeeeeeeeeerrrrr", ">>" + error.getCause());
                                     // Show localized error message
-                                    Toast.makeText(AddMemberCard.this,  error.getMessage(),
+                                    Toast.makeText(AddMemberCard.this, error.getMessage(),
                                             Toast.LENGTH_LONG
                                     ).show();
 
 
                                 }
-                            });}
+                            });
+                }
             }
         });
 
@@ -222,6 +236,68 @@ public class AddMemberCard extends AppCompatActivity {
             prgressbar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Please Cheeck network conection..", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void idninit() {
+        cardtype = findViewById(R.id.cardtype);
+        cardbrand = findViewById(R.id.cardbrand);
+        delete_card = findViewById(R.id.delete_card);
+        validdate = findViewById(R.id.validdate);
+        savecardlay = findViewById(R.id.savecardlay);
+        savedcardnumber = findViewById(R.id.savedcardnumber);
+        adddebitcardlay = findViewById(R.id.adddebitcardlay);
+        addcardbut = findViewById(R.id.addcardbut);
+        accountcreate = findViewById(R.id.accountcreate);
+        myaccountemail = findViewById(R.id.myaccountemail);
+        alreadyavbacountlay = findViewById(R.id.alreadyavbacountlay);
+        prgressbar = findViewById(R.id.prgressbar);
+        submit = findViewById(R.id.submit);
+        backlay = findViewById(R.id.backlay);
+        acceptcondition = findViewById(R.id.acceptcondition);
+        email_address = findViewById(R.id.email_address);
+
+
+        security_code = findViewById(R.id.security_code);
+
+        datespinner = findViewById(R.id.datespinner);
+        yearspinner = findViewById(R.id.yearspinner);
+
+        yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                expiryyear_str = modellist.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        datespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                date_str = datelist.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        backlay = findViewById(R.id.backlay);
+        cardname = findViewById(R.id.cardname);
+        cardnumber = findViewById(R.id.cardnumber);
+
+        tv = new CreditCardFormatTextWatcher(cardnumber);
+        tv2 = new CreditCardFormatTextWatcher(savedcardnumber);
+        cardnumber.addTextChangedListener(tv);
+        savedcardnumber.addTextChangedListener(tv2);
+
+        basicCustomAdp = new BasicCustomAdp(AddMemberCard.this, android.R.layout.simple_spinner_item, modellist);
+        yearspinner.setAdapter(basicCustomAdp);
+        basicCustomAdp = new BasicCustomAdp(AddMemberCard.this, android.R.layout.simple_spinner_item, datelist);
+        datespinner.setAdapter(basicCustomAdp);
     }
 
     private class CreateCardCustomer extends AsyncTask<String, String, String> {
@@ -296,7 +372,7 @@ public class AddMemberCard extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.getString("status").equalsIgnoreCase("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                       // JSONObject jsonObject2 = jsonObject1.getJSONObject("sources");
+                        // JSONObject jsonObject2 = jsonObject1.getJSONObject("sources");
                         String customer_id = jsonObject1.getString("id");
                         Log.e("customer_id >> ", " >> " + customer_id);
                         mySavedCardInfo.clearCardData();
@@ -306,8 +382,8 @@ public class AddMemberCard extends AppCompatActivity {
                         Toast.makeText(AddMemberCard.this, getResources().getString(R.string.cardaddedsuc), Toast.LENGTH_LONG).show();
                         finish();
                     } else {
-                        Toast.makeText(AddMemberCard.this, ""+jsonObject.getString("result"), Toast.LENGTH_LONG).show();
-                        Log.e("Exception >> "," >> "+jsonObject.getString("result"));
+                        Toast.makeText(AddMemberCard.this, "" + jsonObject.getString("result"), Toast.LENGTH_LONG).show();
+                        Log.e("Exception >> ", " >> " + jsonObject.getString("result"));
 
                     }
                 } catch (JSONException e) {
@@ -319,95 +395,15 @@ public class AddMemberCard extends AppCompatActivity {
         }
     }
 
-    private void idninit() {
-        cardtype = findViewById(R.id.cardtype);
-        cardbrand = findViewById(R.id.cardbrand);
-        delete_card = findViewById(R.id.delete_card);
-        validdate = findViewById(R.id.validdate);
-        savecardlay = findViewById(R.id.savecardlay);
-        savedcardnumber = findViewById(R.id.savedcardnumber);
-        adddebitcardlay = findViewById(R.id.adddebitcardlay);
-        addcardbut = findViewById(R.id.addcardbut);
-        accountcreate = findViewById(R.id.accountcreate);
-        myaccountemail = findViewById(R.id.myaccountemail);
-        alreadyavbacountlay = findViewById(R.id.alreadyavbacountlay);
-        prgressbar = findViewById(R.id.prgressbar);
-        submit = findViewById(R.id.submit);
-        backlay = findViewById(R.id.backlay);
-        acceptcondition = findViewById(R.id.acceptcondition);
-        email_address = findViewById(R.id.email_address);
-
-
-        security_code = findViewById(R.id.security_code);
-
-        datespinner = findViewById(R.id.datespinner);
-        yearspinner = findViewById(R.id.yearspinner);
-
-        yearspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                expiryyear_str = modellist.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        datespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                date_str = datelist.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        backlay = findViewById(R.id.backlay);
-        cardname = findViewById(R.id.cardname);
-        cardnumber = findViewById(R.id.cardnumber);
-
-        tv = new CreditCardFormatTextWatcher(cardnumber);
-        tv2 = new CreditCardFormatTextWatcher(savedcardnumber);
-        cardnumber.addTextChangedListener(tv);
-        savedcardnumber.addTextChangedListener(tv2);
-
-        basicCustomAdp = new BasicCustomAdp(AddMemberCard.this, android.R.layout.simple_spinner_item, modellist);
-        yearspinner.setAdapter(basicCustomAdp);
-        basicCustomAdp = new BasicCustomAdp(AddMemberCard.this, android.R.layout.simple_spinner_item, datelist);
-        datespinner.setAdapter(basicCustomAdp);
-    }
-
-    private static int getLastModelYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, -10);
-        return prevYear.get(Calendar.YEAR);
-    }
-
-    private static int getThisYear() {
-        Calendar prevYear = Calendar.getInstance();
-        prevYear.add(Calendar.YEAR, 0);
-        return prevYear.get(Calendar.YEAR);
-    }
-
-
     public class BasicCustomAdp extends ArrayAdapter<String> {
+        private final ArrayList<String> carmodel;
         Context context;
         Activity activity;
-        private final ArrayList<String> carmodel;
 
         public BasicCustomAdp(Context context, int resourceId, ArrayList<String> carmodel) {
             super(context, resourceId);
             this.context = context;
             this.carmodel = carmodel;
-        }
-
-        private class ViewHolder {
-            TextView headername;
-            TextView cartype;
         }
 
         @Override
@@ -458,6 +454,11 @@ public class AddMemberCard extends AppCompatActivity {
 
             holder.cartype.setText("" + carmodel.get(position));
             return convertView;
+        }
+
+        private class ViewHolder {
+            TextView headername;
+            TextView cartype;
         }
     }
 }

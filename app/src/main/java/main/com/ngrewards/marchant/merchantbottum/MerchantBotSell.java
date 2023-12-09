@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +16,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -238,9 +239,11 @@ public class MerchantBotSell extends MerchantBaseActivity {
 
         getSoldItems();
     }
+
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
+
     private void getSoldItems() {
         swipeToRefresh.setRefreshing(true);
         //progresbar.setVisibility(View.VISIBLE);
