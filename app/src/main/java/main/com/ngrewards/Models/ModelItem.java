@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class ModelItem {
     String id, title, description, menu_image, price, menu_id, merchant_id, p_quantity, newquantity, other_notes;
     private String special;
-    private ArrayList<String> newquantity123;
+    private ArrayList<String> newquantity123=new ArrayList<>();
     private String p_NewQuanitity;
-    private ArrayList<String> p_quantitynew;
+    private ArrayList<String> p_quantitynew=new ArrayList<>();
     private String aNew;
     private String newquantity1234;
 

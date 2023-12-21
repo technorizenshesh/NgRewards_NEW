@@ -1,5 +1,6 @@
 package main.com.ngrewards.fragments;
 
+import static main.com.ngrewards.androidmigx.MainTabActivity.DEEP_LINK_URL;
 import static main.com.ngrewards.constant.MySession.KEY_LANGUAGE;
 
 import android.annotation.SuppressLint;
@@ -78,12 +79,12 @@ public class OffersFrag extends Fragment {
     ArrayList<Boolean> selecteded;
     OffersAdpter offersAdpter;
     SwipeRefreshLayout swipeToRefresh;
-    ArrayList<CategoryBeanList> categoryBeanListArrayList;
+    ArrayList<CategoryBeanList> categoryBeanListArrayList=new ArrayList<>();
     GPSTracker gpsTracker;
     private ListView item_product;
     private RecyclerView offers_product_rec;
     private ProgressBar progresbar;
-    private ArrayList<OfferBeanList> offerBeanListArrayList;
+    private ArrayList<OfferBeanList> offerBeanListArrayList=new ArrayList<>();
     private MySession mySession;
     private Myapisession myapisession;
     private String user_id = "", fill_category_id = "", rating_filter_str = "", distance_filter_str = "", fill_category_id_loc = "", like_filter_str = "";
@@ -421,6 +422,7 @@ public class OffersFrag extends Fragment {
         }
 
         if (offerItem != null) {
+            result="";
             Intent i = new Intent(getActivity(), MerchantDetailAct.class);
             i.putExtra("user_id", user_id + "demo");
             i.putExtra("merchant_contact_name", offerItem.getContact_name());
@@ -764,7 +766,7 @@ public class OffersFrag extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+        public void onBindViewHolder(final MyViewHolder holder, @SuppressLint("RecyclerView") final int listPosition) {
             mySession = new MySession(context);
             Log.e("TAG", "onBindViewHolder:  mySession.getValueOf(MySession.CurrencySign) " + mySession.getValueOf(MySession.CurrencySign));
             if (offerBeanLists.get(listPosition).getOffer_discount_price() == null) {
@@ -819,11 +821,12 @@ public class OffersFrag extends Fragment {
                     try {
                         DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                                 .setLink(Uri.parse("https://www.ngrewards.com/data/Offer?" + offerBeanLists.get(listPosition).getMerchant_id()))
-                                // Open links with this a
-                                .setDynamicLinkDomain("ngtechn.page.link")
-                                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                                // Open links with com.example.ios on iOS
-                                .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
+                                .setDomainUriPrefix("https://ngtechn.page.link")
+                                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                                        .setFallbackUrl(Uri.parse(DEEP_LINK_URL)
+                                                .normalizeScheme()).build())
+                                .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward")
+                                        .setFallbackUrl(Uri.parse(DEEP_LINK_URL)).build())
                                 .buildDynamicLink();
                         Uri dynamicLinkUri = dynamicLink.getUri();
                         Log.d("TAG", "onCreate: " + dynamicLinkUri);

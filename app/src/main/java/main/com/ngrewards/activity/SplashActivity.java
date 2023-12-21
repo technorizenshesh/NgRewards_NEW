@@ -39,10 +39,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -67,6 +68,7 @@ import main.com.ngrewards.constant.GPSTracker;
 import main.com.ngrewards.constant.MySession;
 import main.com.ngrewards.marchant.merchantbottum.MerHomeActivity;
 import main.com.ngrewards.marchant.merchantbottum.MerchantBottumAct;
+import main.com.ngrewards.service.MyFirebaseMessagingService;
 
 public class SplashActivity extends AppCompatActivity implements
         //http://main.com.ngrewards/?productId=1
@@ -131,6 +133,9 @@ public class SplashActivity extends AppCompatActivity implements
                     reult_intent_mem = "item" + reult_intent_mem;
                 } else if (param.contains("https://www.ngrewards.com/data/Merchent?")) {
                     reult_intent_mem = param.replace("https://www.ngrewards.com/data/Merchent?", "");
+                    reult_intent_mem = "merchant" + reult_intent_mem;
+                } else  if (param.contains("https://myngrewards.com/data/Merchent?")) {
+                    reult_intent_mem = param.replace("https://myngrewards.com/data/Merchent?", "");
                     reult_intent_mem = "merchant" + reult_intent_mem;
                 } else if (param.contains("https://www.ngrewards.com/data/Offer?")) {
                     reult_intent_mem = param.replace("https://www.ngrewards.com/data/Offer?", "");
@@ -288,16 +293,15 @@ public class SplashActivity extends AppCompatActivity implements
     }
 
     private void displayFirebaseRegId() {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-            Log.d("deviceTokenUpdate()=>", "" + instanceIdResult.getToken());
+        FirebaseApp.initializeApp(SplashActivity.this);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("regId", instanceIdResult.getToken());
+            editor.putString("regId", task.getResult());
             editor.commit();
-            Log.d("deviceTokenUpdate()=>", "" + pref.getString("regId",""));
+            Log.d("deviceTokenUpdate()=>", "deviceTokenUpdate" + pref.getString("regId",""));
 
         });
-
     }
 
 

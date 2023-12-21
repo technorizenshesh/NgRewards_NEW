@@ -119,8 +119,6 @@ public class InviteActMain extends Fragment {
                 e.printStackTrace();
             }
         }
-
-        idinits();
         idinitui1();
         return root;
     }
@@ -132,9 +130,6 @@ public class InviteActMain extends Fragment {
         }
     }
 
-    private void idinits() {
-
-    }
 
     @Override
     public void onPause() {

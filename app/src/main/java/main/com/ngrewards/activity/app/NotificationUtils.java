@@ -158,14 +158,14 @@ public class NotificationUtils {
                     mContext,
                     0,
                     intent1,
-                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_MUTABLE);
+                    PendingIntent.FLAG_IMMUTABLE );
 
         } else {
             resultPendingIntent = PendingIntent.getActivity(
                     mContext,
                     0,
                     intent1,
-                    PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+                    PendingIntent.FLAG_ONE_SHOT );
         }
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(

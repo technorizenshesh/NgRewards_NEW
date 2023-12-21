@@ -280,6 +280,7 @@ public class ItemsFrag extends Fragment {
             }
             Intent i = new Intent(getActivity(), FragItemDetails.class);
             Log.e("TAG", "EMiEMiEMi: " + EMi);
+            result="";
 
             i.putExtra("EMI", EMi);
             i.putExtra("product_id", soldItem.getId());

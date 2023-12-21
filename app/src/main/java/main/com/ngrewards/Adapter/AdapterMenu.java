@@ -43,7 +43,7 @@ import main.com.ngrewards.draweractivity.AddMenuPublish;
  */
 public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.MyViewHolder> {
 
-    private final ArrayList<ModalMenuList> all_category_subcategory;
+    private ArrayList<ModalMenuList> all_category_subcategory=new ArrayList<>();
     private final IMethodCaller IMethode;
     private final Context activity;
     private final RecyclerViewClickListener1 mListener;

@@ -66,7 +66,7 @@ import www.develpoeramit.mapicall.ApiCallBuilder;
 public class Die_TakeOut extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE_QR_SCAN = 3;
-    public ArrayList<MemberDetail> memberDetailArrayList;
+    public ArrayList<MemberDetail> memberDetailArrayList  ;
     ArrayList<MerchantListBean> merchantListBeanArrayList;
     int count = 0;
     private RecyclerView re;

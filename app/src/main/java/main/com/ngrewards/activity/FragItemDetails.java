@@ -1,5 +1,7 @@
 package main.com.ngrewards.activity;
 
+import static main.com.ngrewards.androidmigx.MainTabActivity.DEEP_LINK_URL;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -390,9 +392,7 @@ public class FragItemDetails extends AppCompatActivity {
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception  e) {
                         e.printStackTrace();
                     }
                 }
@@ -645,11 +645,12 @@ public class FragItemDetails extends AppCompatActivity {
 
                     DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                             .setLink(Uri.parse("https://www.ngrewards.com/data/Ng?" + productDetailArrayList.get(0).getId()))
-                            .setDynamicLinkDomain("ngtechn.page.link")
-                            // Open links with this app on Android
-                            .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                            // Open links with com.example.ios on iOS
-                            .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
+                            .setDomainUriPrefix("https://ngtechn.page.link")
+                            .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                                    .setFallbackUrl(Uri.parse(DEEP_LINK_URL)
+                                            .normalizeScheme()).build())
+                            .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward")
+                                    .setFallbackUrl(Uri.parse(DEEP_LINK_URL)).build())
                             .buildDynamicLink();
 
                     Uri dynamicLinkUri = dynamicLink.getUri();
@@ -774,9 +775,7 @@ public class FragItemDetails extends AppCompatActivity {
                         }
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception  e) {
                         e.printStackTrace();
                     }
                 }

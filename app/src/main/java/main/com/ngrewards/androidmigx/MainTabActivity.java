@@ -89,6 +89,7 @@ import main.com.ngrewards.marchant.activity.MerchantNotificationActivity;
 
 public class MainTabActivity extends AppCompatActivity {
     private static final float END_SCALE = 0.85f;
+    public static  String DEEP_LINK_URL = "";
     public static String user_log_data = "", username_str, ngcash = "", user_id = "", currency_code = "",
             currency_sign = "", country_name = "", notification_data = "", notification_unseen_count, cart_unseen_count = "";
     public static String member_ngcash = "0";
@@ -1118,11 +1119,16 @@ public class MainTabActivity extends AppCompatActivity {
                         mySession.setValueOf(MySession.CurrencyCode, currency_code);
                         mySession.setValueOf(MySession.CurrencySign, currency_sign);
                         mySession.setValueOf(MySession.CountryName, country_name);
+                     String   username = jsonObject1.getString("username");
+                        String  id = jsonObject1.getString("id");
+                        String   affiliate_number = jsonObject1.getString("affiliate_number");
+
                         Log.e(TAG, "onCreate:  country_id   ----  " + mySession.getValueOf(MySession.CountryId));
                         Log.e(TAG, "onCreate:  currency_code   ----  " + mySession.getValueOf(MySession.CurrencyCode));
                         Log.e(TAG, "onCreate:  currency_sign   ----  " + mySession.getValueOf(MySession.CurrencySign));
                         Log.e(TAG, "onCreate:  country_name    ----  " + mySession.getValueOf(MySession.CountryName));
-
+                        DEEP_LINK_URL = "https://myngrewards.com/deep-link?affiliate_name=" + username + "&affiliate_no=" + id + "&how_invited_you=" + affiliate_number + "&country=" + mySession.getValueOf(MySession.CountryId) + "&source=app";
+                        Log.e(TAG, "DEEP_LINK_URLDEEP_LINK_URLDEEP_LINK_URLDEEP_LINK_URL: "+DEEP_LINK_URL );
                         if (unseen_count.equals("0")) {
                             reqcount.setVisibility(View.GONE);
 

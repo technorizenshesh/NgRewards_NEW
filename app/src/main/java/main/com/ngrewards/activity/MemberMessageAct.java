@@ -68,19 +68,19 @@ public class MemberMessageAct extends Fragment {
 
     MessageRecycladp messageRecycladp;
     RecyclerView mychat;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    ArrayList<MerchantListBean> merchantListBeanArrayList=new ArrayList<>();
     FrameLayout contentFrameLayout;
     View root;
     private ImageView write_to;
     private SwipeRefreshLayout swipeToRefresh;
     private RelativeLayout backlay, writelay;
-    private ArrayList<ConverSession> converSessionArrayList;
+    private ArrayList<ConverSession> converSessionArrayList=new ArrayList<>();
     private MySession mySession;
     private String user_id = "";
     private ProgressBar progresbar;
     private Myapisession myapisession;
     private int del_item_pos;
-    private ArrayList<MemberDetail> memberDetailArrayList;
+    private ArrayList<MemberDetail> memberDetailArrayList=new ArrayList<>();
     private String craete_profile;
 
     public static String fromBase64(String message) {
@@ -293,7 +293,7 @@ public class MemberMessageAct extends Fragment {
 
     public class MessageRecycladp extends RecyclerView.Adapter<MessageRecycladp.MyViewHolder> {
         Context context;
-        ArrayList<ConverSession> converSessionArrayList;
+        ArrayList<ConverSession> converSessionArrayList=new ArrayList<>();
 
         public MessageRecycladp(Activity myContacts, ArrayList<ConverSession> converSessionArrayList) {
             this.context = myContacts;

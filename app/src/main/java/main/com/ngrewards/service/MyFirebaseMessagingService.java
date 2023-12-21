@@ -9,6 +9,7 @@ import static main.com.ngrewards.activity.app.NotificationUtils.isAppIsInBackgro
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
@@ -277,5 +278,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public int generateRandom() {
         Random random = new Random();
         return random.nextInt(9999 - 1000) + 1000;
+    }
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("regId", s);
+        editor.commit();
+        Log.d("onNewToken()=>", "onNewTokenonNewTokenonNewTokenonNewToken----" + pref.getString("regId",""));
+
     }
 }

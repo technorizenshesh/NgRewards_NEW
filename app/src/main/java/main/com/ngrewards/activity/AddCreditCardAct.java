@@ -51,9 +51,9 @@ import main.com.ngrewards.stripepaymentclasses.Utils;
 public class AddCreditCardAct extends AppCompatActivity {
     private final boolean status_match = false;
     private final String accountid = "";
-    ArrayList<String> listOfPattern;
-    ArrayList<String> modellist;
-    ArrayList<String> datelist;
+    ArrayList<String> listOfPattern=new ArrayList<>();
+    ArrayList<String> modellist=new ArrayList<>();
+    ArrayList<String> datelist=new ArrayList<>();
     int month, year_int;
     CreditCardFormatTextWatcher tv;
     private EditText cardname, cardnumber, security_code;
@@ -283,7 +283,7 @@ public class AddCreditCardAct extends AppCompatActivity {
     }
 
     public class BasicCustomAdp extends ArrayAdapter<String> {
-        private final ArrayList<String> carmodel;
+        private ArrayList<String> carmodel=new ArrayList<>();
         Context context;
         Activity activity;
 

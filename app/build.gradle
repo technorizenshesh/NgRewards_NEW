@@ -23,7 +23,7 @@ android {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 69
+        versionCode 70
         versionName "11.09"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -35,18 +35,19 @@ android {
 
     buildTypes {
         debug{
-          // debuggable false
-         //  minifyEnabled true
-         //  shrinkResources true
-         //  proguardFiles getDefaultProguardFile(
-         //          'proguard-android-optimize.txt'),
-         //         'proguard-rules.pro'
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            signingConfig signingConfigs.release
 
         }
         release {
             debuggable false
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile(
                     'proguard-android-optimize.txt'),
                     'proguard-rules.pro'
@@ -149,12 +150,62 @@ dependencies {
 
 
 //firebase
-    implementation 'com.google.firebase:firebase-dynamic-links:17.0.0'
-    implementation 'com.google.firebase:firebase-messaging:17.6.0'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    //implementation 'com.google.firebase:firebase-dynamic-links:17.0.0'
+   // implementation 'com.google.firebase:firebase-messaging:17.6.0'
+   // implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation 'com.google.firebase:firebase-dynamic-links'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+
+
 
 
 
 
 }
 apply plugin: 'com.google.gms.google-services'
+/*
+Key Alis =  Ngrewards
+password == ngrewards123
+keystorepassword == ngrewards123
+
+keystore put in project folded name is ngrewardjks.jks
+
+//google account//
+user nname : ngrewardsllc@gmail.com
+pw : Join.Promote.Earn
+//google account//
+bas.......
+
+second pan lasst dblll
+
+bas.......
+//google account//
+
+
+fb pw console : ng123456789@
+
+place_or
+1.Card details Client
+5524 3338 5841 4627
+Valí thru: 11/23
+ manualat 415 ???>>>psput"member_id", user_id
+577
+
+2.Card details Client
+4817 7401 7701 9292
+Valí thru: 09/22
+465
+MyListener >>> striplive
+*/
+
+
+/*Merchant:
+ed58126
+123456
+
+Member:
+ngrewardsllc
+gen.admin$12*/

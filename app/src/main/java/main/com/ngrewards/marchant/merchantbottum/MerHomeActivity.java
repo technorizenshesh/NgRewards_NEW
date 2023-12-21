@@ -59,13 +59,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MerHomeActivity extends MerchantBaseActivity {
-    public static ArrayList<GalleryBean> ImagePathArrayList;
+    public static ArrayList<GalleryBean> ImagePathArrayList=new ArrayList<>();
     FrameLayout contentFrameLayout;
     ActivityRecAdp activityRecAdp;
     ProgressBar progresbar;
     private RecyclerView activity_list;
     private SwipeRefreshLayout swipeToRefresh;
-    private ArrayList<MerOrderBean> merOrderBeanArrayList;
+    private ArrayList<MerOrderBean> merOrderBeanArrayList=new ArrayList<>();
     private MySession mySession;
     private String user_id = "";
     private TextView notransmade;
@@ -277,10 +277,7 @@ public class MerHomeActivity extends MerchantBaseActivity {
 
                 return response;
 
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
 
                 e1.printStackTrace();
             }
@@ -331,8 +328,8 @@ public class MerHomeActivity extends MerchantBaseActivity {
 
     public class ActivityRecAdp extends RecyclerView.Adapter<ActivityRecAdp.MyViewHolder> {
         Context context;
-        ArrayList<MerOrderBean> orderBeanArrayList;
-        ArrayList<MerOrderBean> searchmerchantListBeanArrayList;
+        ArrayList<MerOrderBean> orderBeanArrayList  =new ArrayList<>();
+        ArrayList<MerOrderBean> searchmerchantListBeanArrayList=new ArrayList<>();;
         MySession mySessione;
 
         public ActivityRecAdp(Activity myContacts, ArrayList<MerOrderBean> orderBeanArrayList) {

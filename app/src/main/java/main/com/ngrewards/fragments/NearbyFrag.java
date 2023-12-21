@@ -1,5 +1,7 @@
 package main.com.ngrewards.fragments;
 
+import static main.com.ngrewards.androidmigx.MainTabActivity.DEEP_LINK_URL;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -80,11 +82,12 @@ import retrofit2.Response;
 public class NearbyFrag extends Fragment {
     View v;
     ProgressBar progresbar;
-    ArrayList<MerchantListBean> merchantListBeanArrayList;
+    ArrayList<MerchantListBean> merchantListBeanArrayList = new ArrayList<>();
     GPSTracker gpsTracker;
-    ArrayList<CategoryBeanList> categoryBeanListArrayList;
+    ArrayList<CategoryBeanList> categoryBeanListArrayList = new ArrayList<>();
+    ;
     private ListView near_marchant;
-    private RecyclerView near_marchant_rec;
+    private RecyclerView near_marchant_recxx;
     private CustomMarchantAdp customMarchantAdp;
     private DistanceAdapter distanceAdapter;
     private double latitude = 0, longitude = 0;
@@ -95,7 +98,8 @@ public class NearbyFrag extends Fragment {
     private Myapisession myapisession;
     private int current_offer_pos;
     private EditText search_et_home;
-    private ArrayList<String> distance_filter_list;
+    private ArrayList<String> distance_filter_list = new ArrayList<>();
+    ;
     private Bitmap mBitmap;
     private String openingtime;
     private String closingtime;
@@ -121,10 +125,19 @@ public class NearbyFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.nearby_frag_lay, container, false);
-
         mySession = new MySession(getActivity());
         myapisession = new Myapisession(getActivity());
-        distance_filter_list = new ArrayList<>();
+        search_et_home = getActivity().findViewById(R.id.search_et_home);
+        filter_tv = v.findViewById(R.id.filter_tv);
+        nomerchanttv = v.findViewById(R.id.nomerchanttv);
+        swipeToRefresh = v.findViewById(R.id.swipeToRefresh);
+        near_marchant_recxx = v.findViewById(R.id.near_marchant_rec);
+        LinearLayoutManager horizontalLayoutManagaer
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        near_marchant_recxx.setLayoutManager(horizontalLayoutManagaer);
+
+        near_marchant = v.findViewById(R.id.near_marchant);
+        progresbar = v.findViewById(R.id.progresbar);
         distance_filter_list.add("Any Distance");
         distance_filter_list.add("5.0");
         distance_filter_list.add("10.0");
@@ -173,17 +186,7 @@ public class NearbyFrag extends Fragment {
     }
 
     private void idinit() {
-        search_et_home = getActivity().findViewById(R.id.search_et_home);
-        filter_tv = v.findViewById(R.id.filter_tv);
-        nomerchanttv = v.findViewById(R.id.nomerchanttv);
-        swipeToRefresh = v.findViewById(R.id.swipeToRefresh);
-        near_marchant_rec = v.findViewById(R.id.near_marchant_rec);
-        LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        near_marchant_rec.setLayoutManager(horizontalLayoutManagaer);
 
-        near_marchant = v.findViewById(R.id.near_marchant);
-        progresbar = v.findViewById(R.id.progresbar);
         getNearMarchant();
 
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -248,65 +251,70 @@ public class NearbyFrag extends Fragment {
     }
 
     private void getNearMarchant() {
+        try {
+            SimpleDateFormat formatDate = new SimpleDateFormat("hh:mm a");
+            String timeav = formatDate.format(new Date());
+            String formattedDate = timeav.replace("a.m.", "AM").replace("p.m.", "PM");
+            Log.e("Current Time", " ." + formattedDate);
+            Log.e("Near", latitude + " , " + longitude + " Cou " + country_id + " D >" + distance_filter_str + " R >" + rating_filter_str + " ORDER " + like_filter_str + "cat_id>" + fill_category_id);
+            swipeToRefresh.setRefreshing(true);
+            merchantListBeanArrayList = new ArrayList<>();
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("hh:mm a");
+            Call<ResponseBody> call = ApiClient.getApiInterface().getNearMarchant
+                    ("" + latitude, "" + longitude, country_id, fill_category_id, user_id, formattedDate, distance_filter_str, rating_filter_str, like_filter_str);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    //progresbar.setVisibility(View.GONE);
+                    swipeToRefresh.setRefreshing(false);
+                    if (response.isSuccessful()) {
 
-        String timeav = formatDate.format(new Date());
-        String formattedDate = timeav.replace("a.m.", "AM").replace("p.m.", "PM");
-        Log.e("Current Time", " ." + formattedDate);
+                        try {
+                            String responseData = response.body().string();
+                            JSONObject object = new JSONObject(responseData);
+                            Log.e("Near Merchant  >", " >" + responseData);
 
-        Log.e("Near", latitude + " , " + longitude + " Cou " + country_id + " D >" + distance_filter_str + " R >" + rating_filter_str + " ORDER " + like_filter_str + "cat_id>" + fill_category_id);
-        swipeToRefresh.setRefreshing(true);
-        merchantListBeanArrayList = new ArrayList<>();
+                            if (object.getString("status").equals("1")) {
+                                MarchantBean successData = new Gson().fromJson(responseData, MarchantBean.class);
+                                if (successData.getResult() != null && !successData.getResult().isEmpty()) {
+                                    merchantListBeanArrayList.addAll(successData.getResult());
+                                    Log.e("merchantList", "" + merchantListBeanArrayList);
+                                }
+                            }
 
-        Call<ResponseBody> call = ApiClient.getApiInterface().getNearMarchant
-                ("" + latitude, "" + longitude, country_id, fill_category_id, user_id, formattedDate, distance_filter_str, rating_filter_str, like_filter_str);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //progresbar.setVisibility(View.GONE);
-                swipeToRefresh.setRefreshing(false);
-                if (response.isSuccessful()) {
+                            if (merchantListBeanArrayList == null ||
+                                    merchantListBeanArrayList.isEmpty()) {
+                                nomerchanttv.setVisibility(View.VISIBLE);
+                            } else {
+                                merchantListBeanArrayList.size();
+                                nomerchanttv.setVisibility(View.GONE);
+                            }
 
-                    try {
-                        String responseData = response.body().string();
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e("Near Merchant  >", " >" + responseData);
+                            customMarchantAdp = new CustomMarchantAdp(merchantListBeanArrayList);
+                            near_marchant_recxx.setAdapter(customMarchantAdp);
 
-                        if (object.getString("status").equals("1")) {
-                            MarchantBean successData = new Gson().fromJson(responseData, MarchantBean.class);
-                            merchantListBeanArrayList.addAll(successData.getResult());
-                            Log.e("merchantList", "" + merchantListBeanArrayList);
+                            if (!result.equalsIgnoreCase("")) {
+                                gotoMercent();
+                            }
+
+                            customMarchantAdp.notifyDataSetChanged();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
-                        if (merchantListBeanArrayList == null || merchantListBeanArrayList.isEmpty() || merchantListBeanArrayList.size() == 0) {
-                            nomerchanttv.setVisibility(View.VISIBLE);
-                        } else {
-                            nomerchanttv.setVisibility(View.GONE);
-                        }
-
-                        customMarchantAdp = new CustomMarchantAdp(merchantListBeanArrayList);
-                        near_marchant_rec.setAdapter(customMarchantAdp);
-
-                        if (!result.equalsIgnoreCase("")) {
-                            gotoMercent();
-                        }
-
-                        customMarchantAdp.notifyDataSetChanged();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
-                swipeToRefresh.setRefreshing(false);
-                Log.e("TAG", t.toString());
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+                    swipeToRefresh.setRefreshing(false);
+                    Log.e("TAG", t.toString());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkGps() {
@@ -334,21 +342,10 @@ public class NearbyFrag extends Fragment {
                         if (task.isSuccessful()) {
                             // Short link created
                             Uri shortLink = task.getResult().getShortLink();
-
                             Log.d("TAG", "onComplete: " + shortLink);
-
                             Uri flowchartLink = task.getResult().getPreviewLink();
-
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
-                            //  shareIntent.putExtra(Intent.EXTRA_STREAM, "" + bmpUri);
-//                            shareIntent.putExtra(Intent.EXTRA_TEXT, "" + merchantListBeanArrayList.get(listPosition).getMerchantImage()
-//                                    + " \n" + " \n " + "Merchant Name - " + merchantListBeanArrayList.get(listPosition).getBusinessName() +
-//                                    " \n" + " \n " + "Merchant Number - " + merchantListBeanArrayList.get(listPosition).getBusinessNo()
-//                                    + " \n" + " \n " + "Merchant Address - " + merchantListBeanArrayList.get(listPosition).getAddress() +
-//                                    " \n " + "\n " + merchantListBeanArrayList.get(listPosition).getShare_link() + BuildConfig.APPLICATION_ID);
-                            //shareIntent.setType("image/*");
-
                             shareIntent.putExtra(Intent.EXTRA_TEXT, shortLink + "");
                             shareIntent.setType("text/plain");
                             // Launch sharing dialog for image
@@ -538,15 +535,13 @@ public class NearbyFrag extends Fragment {
 
                             }
                             customMarchantAdp = new CustomMarchantAdp(merchantListBeanArrayList);
-                            near_marchant_rec.setAdapter(customMarchantAdp);
+                            near_marchant_recxx.setAdapter(customMarchantAdp);
 
                             customMarchantAdp.notifyDataSetChanged();
-                            near_marchant_rec.scrollToPosition(current_offer_pos);
+                            near_marchant_recxx.scrollToPosition(current_offer_pos);
                         }
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -571,9 +566,10 @@ public class NearbyFrag extends Fragment {
                 myMerchant = merchantListBean;
             }
         }
-
         if (myMerchant != null) {
             Intent i = new Intent(getActivity(), MerchantDetailAct.class);
+            result = "";
+
             i.putExtra("user_id", user_id);
             i.putExtra("merchant_id", myMerchant.getId());
             i.putExtra("opeaning_time", myMerchant.getOpening_time());
@@ -833,23 +829,20 @@ public class NearbyFrag extends Fragment {
                     Uri bmpUri = getLocalBitmapUri(holder.marchant_img);
                     // Get access to the URI for the bitmap
                     try {
-
                         if (bmpUri != null) {
-
                             DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                                     .setLink(Uri.parse("https://www.ngrewards.com/data/Merchent?" + merchantListBeanArrayList.get(listPosition).getId()))
-                                    .setDynamicLinkDomain("ngtechn.page.link")
-                                    // Open links with this app on Android
-                                    .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                                    // Open links with com.example.ios on iOS
-                                    .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward").build())
+                                    .setDomainUriPrefix("https://ngtechn.page.link")
+                                    .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                                            .setFallbackUrl(Uri.parse(DEEP_LINK_URL)
+                                                    .normalizeScheme()).build())
+                                    .setIosParameters(new DynamicLink.IosParameters.Builder("com.ios.ngreward")
+                                            .setFallbackUrl(Uri.parse(DEEP_LINK_URL)).build())
                                     .buildDynamicLink();
-
                             Uri dynamicLinkUri = dynamicLink.getUri();
+                            Log.d("TAG", "onCreate:000000000000000000000000 " + dynamicLinkUri);
 
-                            Log.d("TAG", "onCreate: " + dynamicLinkUri);
-
-                            shortenLongLink(dynamicLinkUri.toString());
+                            shortenLongLink(dynamicLinkUri.toString() + "&efr=1");
 
                         } else {
                             // ...sharing failed, handle error

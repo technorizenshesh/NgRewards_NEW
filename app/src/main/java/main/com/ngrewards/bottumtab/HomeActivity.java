@@ -82,6 +82,9 @@ public class HomeActivity extends Fragment {
         adapter.addFragment(new OffersFrag(offerItem), getResources().getString(R.string.offers));
         adapter.addFragment(new ItemsFrag(itemResult), getResources().getString(R.string.items));
         viewPager.setAdapter(adapter);
+        itemResult = "";
+        merchantItem = "";
+        offerItem = "";
         if (selectedPosition != -1) {
             viewPager.setCurrentItem(selectedPosition);
         }
@@ -91,9 +94,10 @@ public class HomeActivity extends Fragment {
     public void onResume() {
         Tools.reupdateResources(requireActivity());
         super.onResume();
-
         myapisession = new Myapisession(requireActivity());
         result = PreferenceConnector.readString(requireActivity(),
+                PreferenceConnector.reult_intent_mem, "");
+        PreferenceConnector.writeString(requireActivity(),
                 PreferenceConnector.reult_intent_mem, "");
         if (result.contains("item")) {
             selectedPosition = 2;
@@ -104,7 +108,12 @@ public class HomeActivity extends Fragment {
         } else if (result.contains("offer")) {
             selectedPosition = 1;
             offerItem = result.replace("offer", "");
+        } else {
+            itemResult = "";
+            merchantItem = "";
+            offerItem = "";
         }
+        result = "";
         idinita();
         clickevent();
         setupviewpager();

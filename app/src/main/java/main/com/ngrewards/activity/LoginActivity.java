@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout facebook_button;
     // private CallbackManager callbackManager;
     private Spinner country_spn;
-    private ArrayList<CountryBean> countryBeanArrayList;
+    private ArrayList<CountryBean> countryBeanArrayList=new ArrayList<>();
     private double latitude = 0, longitude = 0;
     private TextView sss;
     // private AccessToken accessToken;
@@ -233,10 +233,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login_tv.setOnClickListener(v -> {
-
             SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
             firebase_regid = pref.getString("regId", "");
-
             Log.e("firebase_regid >> ", " > " + firebase_regid);
             mobilenum_str = mobilenum.getText().toString();
             Log.e("mobilenum_str", mobilenum_str);
@@ -306,23 +304,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-     /*   loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-                FacebookSdk.sdkInitialize(getApplicationContext());
-                FacebookSdk.setIsDebugEnabled(true);
-                Log.d("AppLog", "key:" + FacebookSdk.getApplicationSignature(LoginActivity.this));
-                SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-                firebase_regid = pref.getString("regId", null);
-                Log.e("face firebase_regid >> ", " > " + firebase_regid);
-                facebookData();
-
-            }
-        });*/
 
         login_with_touch.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -710,11 +691,7 @@ public class LoginActivity extends AppCompatActivity {
                 params.put("country_name", country_str);
                 params.put("country_id", country_id);
                 params.put("device_token", firebase_regid);
-
-                Log.e("url>>>", url + " Device Token : " + firebase_regid);
-
                 StringBuilder postData = new StringBuilder();
-
                 for (Map.Entry<String, Object> param : params.entrySet()) {
                     if (postData.length() != 0) postData.append('&');
                     postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
@@ -965,7 +942,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public class CountryListAdapter extends BaseAdapter {
-        private final ArrayList<CountryBean> values;
+        private ArrayList<CountryBean> values=new ArrayList<>();
         Context context;
         LayoutInflater inflter;
 
@@ -1062,10 +1039,7 @@ public class LoginActivity extends AppCompatActivity {
                 reader.close();
                 Log.e("Json Country Response", ">>>>>>>>>>>>" + response);
                 return response;
-            } catch (UnsupportedEncodingException e1) {
-
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
 
                 e1.printStackTrace();
             }
