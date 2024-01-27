@@ -4,13 +4,13 @@ apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 android {
     signingConfigs {
         debug {
-            storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
+            storeFile file('C:\\Users\\tecno\\StudioProjects\\NgRewards_NEW\\ngrewardjks.jks')
             storePassword 'ngrewards123'
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
         }
         release {
-            storeFile file('/home/shubh23/StudioProjects/NgRewards_NEW/ngrewardjks.jks')
+            storeFile file('C:\\Users\\tecno\\StudioProjects\\NgRewards_NEW\\ngrewardjks.jks')
             storePassword 'ngrewards123'
             keyAlias 'Ngrewards'
             keyPassword 'ngrewards123'
@@ -23,8 +23,8 @@ android {
         applicationId "main.com.ngrewards"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 71
-        versionName "11.10.01"
+        versionCode 72
+        versionName "11.10.02"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         //multiDexEnabled true
